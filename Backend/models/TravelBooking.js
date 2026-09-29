@@ -4,7 +4,28 @@ const travelBookingSchema = new mongoose.Schema({
   packageId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'TourPackage',
-    required: true,
+    required: false,
+  },
+  vehicleType: {
+    type: String,
+    enum: ['4-seater', '6-seater', '12-seater', 'custom'],
+    default: '6-seater',
+  },
+  circuit: {
+    type: String,
+    default: 'Hill Stations & Temples',
+  },
+  pickupLocation: {
+    type: String,
+    default: 'Kathgodam / Mukteshwar',
+  },
+  tripDays: {
+    type: Number,
+    default: 1,
+  },
+  notes: {
+    type: String,
+    default: '',
   },
   guestDetails: {
     name: { type: String, required: true },
