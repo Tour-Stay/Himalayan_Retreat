@@ -116,7 +116,7 @@ const RoomDetails = () => {
           <div className="lg:col-span-7 space-y-8">
             <div>
               <span className="text-secondary text-xs font-semibold tracking-[0.25em] uppercase block mb-1">
-                Devbhoomi Retreat • 7,500 FT
+                The Kasar Himalayan Heights • 7,500 FT
               </span>
               <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl text-text-dark font-semibold mb-3">
                 {room.name}

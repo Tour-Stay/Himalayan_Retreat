@@ -105,6 +105,9 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
   };
 
   const today = new Date().toISOString().split('T')[0];
+  const maxDate = new Date();
+  maxDate.setFullYear(maxDate.getFullYear() + 2);
+  const maxDateStr = maxDate.toISOString().split('T')[0];
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -140,6 +143,7 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
             value={formData.checkInDate}
             onChange={handleChange}
             min={today}
+            max={maxDateStr}
             required
             className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-text-dark text-sm focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition"
           />
@@ -154,6 +158,7 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
             value={formData.checkOutDate}
             onChange={handleChange}
             min={formData.checkInDate || today}
+            max={maxDateStr}
             required
             className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-text-dark text-sm focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition"
           />

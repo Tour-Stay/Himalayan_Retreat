@@ -21,7 +21,7 @@ const BookingConfirmation = () => {
           Your Mountain Escape Awaits
         </h1>
         <p className="text-text-light text-sm sm:text-base leading-relaxed mb-6 font-light">
-          Thank you for choosing Devbhoomi Retreat. We are preparing your warm mountain suite for a memorable winter stay.
+          Thank you for choosing The Kasar Himalayan Heights. We are preparing your warm mountain suite for a memorable winter stay.
         </p>
 
         {/* Booking Card Details */}

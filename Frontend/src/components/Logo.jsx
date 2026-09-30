@@ -72,7 +72,7 @@ const Logo = ({ size = 36, className = '' }) => {
         <path id="logoCurve" d="M 20 81 A 38 38 0 0 0 80 81" fill="transparent" />
         <text fontFamily="'Inter', sans-serif" fontSize="6.5" fontWeight="700" fill="url(#logoCrestGold)" letterSpacing="3">
           <textPath href="#logoCurve" startOffset="50%" textAnchor="middle">
-            7,500 FT • MUKTESHWAR
+            7,500 FT • KASAR DEVI
           </textPath>
         </text>
       </svg>

@@ -150,7 +150,7 @@ const createTravelBooking = async (req, res) => {
       packageId: packageId || undefined,
       vehicleType: vehicleType || '6-seater',
       circuit: circuit || 'Hill Stations & Temples',
-      pickupLocation: pickupLocation || 'Kathgodam / Mukteshwar',
+      pickupLocation: pickupLocation || 'Kathgodam / Kasar Devi',
       tripDays: tripDays || 1,
       notes: notes || '',
       guestDetails,
@@ -187,6 +187,41 @@ const getAllTravelBookings = async (req, res) => {
   }
 };
 
+// @desc    Update travel booking status
+// @route   PUT /api/travel/bookings/:id/status
+// @access  Protected (Admin only)
+const updateTravelBookingStatus = async (req, res) => {
+  try {
+    const { status } = req.body;
+    const booking = await TravelBooking.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true }
+    );
+    if (!booking) {
+      return res.status(404).json({ message: 'Travel booking not found.' });
+    }
+    res.status(200).json({ message: 'Travel booking status updated.', booking });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error.', error: error.message });
+  }
+};
+
+// @desc    Delete a travel booking
+// @route   DELETE /api/travel/bookings/:id
+// @access  Protected (Admin only)
+const deleteTravelBooking = async (req, res) => {
+  try {
+    const booking = await TravelBooking.findByIdAndDelete(req.params.id);
+    if (!booking) {
+      return res.status(404).json({ message: 'Travel booking not found.' });
+    }
+    res.status(200).json({ message: 'Travel booking deleted successfully.' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error.', error: error.message });
+  }
+};
+
 module.exports = {
   getAllTours,
   getTourById,
@@ -195,4 +230,6 @@ module.exports = {
   deleteTour,
   createTravelBooking,
   getAllTravelBookings,
+  updateTravelBookingStatus,
+  deleteTravelBooking,
 };

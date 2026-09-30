@@ -64,8 +64,8 @@ const Home = () => {
   // High-altitude mountain photography (Zero river, zero low fog — pure mountain summits and snowy ridges)
   const galleryItems = [
     {
-      title: 'Winter Snowfall over Devbhoomi',
-      caption: 'Mukteshwar Mountain Ridge • 7,500 ft',
+      title: 'Winter Snowfall over Himalayan',
+      caption: 'Kasar Devi Mountain Ridge • 7,500 ft',
       src: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1200&q=85',
       span: 'md:col-span-2 md:row-span-2',
     },
@@ -105,7 +105,7 @@ const Home = () => {
     {
       name: 'Rajesh Nair',
       location: 'Bengaluru',
-      review: 'Spent a whole week here for a mountain workation. The 100 Mbps fiber Wi-Fi worked without a glitch even during cold rain, and the staff treats you like family. Truly the best retreat in Mukteshwar.',
+      review: 'Spent a whole week here for a mountain workation. The 100 Mbps fiber Wi-Fi worked without a glitch even during cold rain, and the staff treats you like family. Truly the best retreat in Kasar Devi.',
       rating: 5,
     },
     {
@@ -140,7 +140,7 @@ const Home = () => {
           </h2>
           <div className="w-16 h-1 bg-secondary mx-auto mb-8 rounded-full"></div>
           <p className="text-text-light leading-relaxed text-base sm:text-lg font-light mb-6">
-            Perched high above the pine and deodar forests of Mukteshwar at 7,500 feet, Devbhoomi Retreat is a luxury boutique escape shaped by the gentle rhythm of the Himalayas — where winter brings crisp snowfall, golden sunrises greet your bedside, and evenings unwind beside a crackling cedar fire.
+            Perched high above the pine and deodar forests of Kasar Devi at 7,500 feet, The Kasar Himalayan Heights is a luxury boutique escape shaped by the gentle rhythm of the Himalayas — where winter brings crisp snowfall, golden sunrises greet your bedside, and evenings unwind beside a crackling cedar fire.
           </p>
           <p className="text-text-light leading-relaxed text-base sm:text-lg font-light">
             With only 12 exclusive heated suites, every guest experiences personalized warmth, uninterrupted peace, and unhurried mountain luxury.
@@ -242,7 +242,7 @@ const Home = () => {
               Loved by Travellers
             </h2>
             <p className="text-text-light text-base sm:text-lg font-light leading-relaxed">
-              Read stories from travelers who made Devbhoomi Retreat their mountain home.
+              Read stories from travelers who made The Kasar Himalayan Heights their mountain home.
             </p>
           </div>
 
@@ -358,7 +358,7 @@ const Home = () => {
               Come, Stay a While
             </h2>
             <p className="text-text-light text-base sm:text-lg leading-relaxed font-light">
-              Tucked into the fragrant deodar pine ridges of Mukteshwar at 7,500 ft elevation. Whether you require Kathgodam station transfers, snow-chain 4×4 escorts, or bespoke fireside arrangements, our concierge is at your service 24/7.
+              Tucked into the fragrant deodar pine ridges of Kasar Devi at 7,500 ft elevation. Whether you require Kathgodam station transfers, snow-chain 4×4 escorts, or bespoke fireside arrangements, our concierge is at your service 24/7.
             </p>
 
             {/* Refined Luxury Concierge Action Pills with Proper Hover Response */}
@@ -383,7 +383,7 @@ const Home = () => {
               </a>
 
               <a
-                href="https://maps.google.com/?q=Mukteshwar,Uttarakhand"
+                href="https://maps.google.com/?q=Kasar Devi,Uttarakhand"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group btn-outline-luxury px-6 py-3.5 rounded-full text-xs uppercase tracking-wider inline-flex items-center gap-2.5"
@@ -419,12 +419,12 @@ const Home = () => {
                   7,500 FT Altitude
                 </h3>
                 <p className="text-text-light text-sm leading-relaxed font-light">
-                  Perched atop Mukteshwar Ridge, overlooking unbroken 180° panoramic vistas of the Trishul, Nanda Devi, and Panchachuli peaks.
+                  Perched atop Kasar Devi, overlooking unbroken 180° panoramic vistas of the Trishul, Nanda Devi, and Panchachuli peaks.
                 </p>
               </div>
 
               <div className="px-8 py-4 border-t border-gray-100 bg-[#FAF8F5]/60 text-xs text-text-dark/80 font-medium flex items-center justify-between">
-                <span>📍 Mukteshwar, Nainital District</span>
+                <span>📍 Kasar Devi, Almora</span>
                 <span className="text-secondary font-semibold">2,286m AMSL</span>
               </div>
             </div>

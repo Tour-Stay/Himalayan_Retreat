@@ -19,7 +19,7 @@ const seedAdmin = async () => {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('Connected to MongoDB...');
 
-    const adminEmail = process.env.ADMIN_EMAIL || 'admin@devbhoomi.com';
+    const adminEmail = process.env.ADMIN_EMAIL || 'admin@himalayan.com';
     const adminPassword = process.env.ADMIN_PASSWORD || 'Admin@2026Secure!';
 
     // Check if admin already exists

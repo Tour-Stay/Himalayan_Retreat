@@ -50,7 +50,7 @@ const Footer = () => {
               Receive Fresh Snowfall & Private Stay Alerts
             </h3>
             <p className="text-white/60 text-xs sm:text-sm mt-1.5 font-light">
-              Be notified when fresh snowfall blankets our Mukteshwar ridge, along with exclusive direct reservation perks.
+              Be notified when fresh snowfall blankets our Kasar Devi ridge, along with exclusive direct reservation perks.
             </p>
           </div>
 
@@ -59,7 +59,7 @@ const Footer = () => {
             {subscribed ? (
               <div className="flex items-center gap-2 text-forest bg-forest/10 px-6 py-3 rounded-full text-xs font-semibold border border-forest/30">
                 <CheckCircleIcon className="w-4 h-4 text-forest" />
-                <span>You are subscribed to Mukteshwar Snowfall Alerts.</span>
+                <span>You are subscribed to Kasar Devi Snowfall Alerts.</span>
               </div>
             ) : (
               <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-2 max-w-md w-full">
@@ -94,16 +94,16 @@ const Footer = () => {
               <Logo size={44} />
               <div>
                 <span className="text-white font-heading text-2xl font-semibold tracking-wide block leading-none group-hover:text-secondary transition-colors">
-                  Devbhoomi Retreat
+                  The Kasar Himalayan Heights
                 </span>
                 <span className="text-secondary/80 text-[10px] tracking-[0.25em] uppercase font-sans font-medium">
-                  Mukteshwar • 7,500 FT ELEVATION
+                  Kasar Devi • 7,500 FT ELEVATION
                 </span>
               </div>
             </Link>
 
             <p className="text-xs sm:text-sm leading-relaxed text-white/65 font-light mb-6 pr-4">
-              An ultra-boutique mountain sanctuary perched above the oak and pine forests of Mukteshwar. Twelve heated suites framing 180° Himalayan snow peaks, cedar bonfires, and tranquil Kumaoni hospitality.
+              An ultra-boutique mountain sanctuary perched above the oak and pine forests of Kasar Devi. Twelve heated suites framing 180° Himalayan snow peaks, cedar bonfires, and tranquil Kumaoni hospitality.
             </p>
 
             <div className="flex flex-wrap items-center gap-2">
@@ -168,7 +168,7 @@ const Footer = () => {
             <div className="space-y-2 text-xs text-white/70 font-light mb-4">
               <p className="flex items-start gap-2">
                 <MapPinIcon className="w-4 h-4 text-secondary flex-shrink-0 mt-0.5" />
-                <span>Mukteshwar Ridge, Nainital District, Uttarakhand 263138</span>
+                <span>Kasar Devi, Almora, Uttarakhand 263138</span>
               </p>
               <p className="flex items-center gap-2">
                 <PhoneIcon className="w-3.5 h-3.5 text-secondary flex-shrink-0" />
@@ -184,8 +184,8 @@ const Footer = () => {
             <div className="rounded-2xl overflow-hidden border border-white/15 bg-white/5 p-2 shadow-lg group">
               <div className="relative h-24 rounded-xl overflow-hidden bg-gray-800">
                 <iframe
-                  title="Devbhoomi Retreat Mukteshwar Location Map"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13892.685764592822!2d79.63!3d29.47!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39a0a1b1c5b3e8b1%3A0x1234567890abcdef!2sMukteshwar%2C%20Uttarakhand!5e0!3m2!1sen!2sin!4v1234567890"
+                  title="The Kasar Himalayan Heights Kasar Devi Location Map"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13892.685764592822!2d79.63!3d29.47!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39a0a1b1c5b3e8b1%3A0x1234567890abcdef!2sKasar Devi%2C%20Uttarakhand!5e0!3m2!1sen!2sin!4v1234567890"
                   width="100%"
                   height="100%"
                   style={{ border: 0, filter: 'contrast(1.05) saturate(1.1)' }}
@@ -197,7 +197,7 @@ const Footer = () => {
               <div className="pt-2 flex items-center justify-between px-1">
                 <span className="text-[11px] text-secondary font-medium">📍 7,500 ft Elevation</span>
                 <a
-                  href="https://maps.google.com/?q=Mukteshwar,Uttarakhand"
+                  href="https://maps.google.com/?q=Kasar Devi,Uttarakhand"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[11px] text-white/70 hover:text-white font-medium flex items-center gap-1 group-hover:text-secondary transition-colors"
@@ -215,7 +215,7 @@ const Footer = () => {
       {/* 3. Bottom Bar */}
       <div className="border-t border-white/10 py-6 px-4">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/50">
-          <p>© {new Date().getFullYear()} Devbhoomi Retreat. All rights reserved. Mukteshwar, Uttarakhand.</p>
+          <p>© {new Date().getFullYear()} The Kasar Himalayan Heights. All rights reserved. Kasar Devi, Uttarakhand.</p>
           <div className="flex items-center gap-6">
             <span className="text-white/40">Luxury Mountain Sanctuary</span>
             <button

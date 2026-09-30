@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 const check = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URI);
-    const admin = await Admin.findOne({ email: 'admin@devbhoomi.com' }) || await Admin.findOne({});
+    const admin = await Admin.findOne({ email: 'admin@himalayan.com' }) || await Admin.findOne({});
     if (!admin) {
       console.log('No admin found in database!');
     } else {

@@ -29,7 +29,7 @@ const TravelFooter = () => {
 
   const circuitLinks = [
     { name: 'Kainchi Dham Ashram Darshan', path: '#destinations' },
-    { name: 'Mukteshwar Dham & Chauli Ki Jali', path: '#destinations' },
+    { name: 'Kasar Devi Dham & Chauli Ki Jali', path: '#destinations' },
     { name: 'Jageshwar Mahamrityunjaya Shrines', path: '#destinations' },
     { name: 'Nainital Lake & Peaks Tour', path: '#destinations' },
     { name: 'Kausani 300-km Peak Panorama', path: '#destinations' },
@@ -94,10 +94,10 @@ const TravelFooter = () => {
               <Logo size={44} />
               <div>
                 <span className="text-white font-heading text-2xl font-semibold tracking-wide block leading-none group-hover:text-secondary transition-colors">
-                  Devbhoomi Expeditions
+                  Himalayan Expeditions
                 </span>
                 <span className="text-secondary/80 text-[10px] tracking-[0.25em] uppercase font-sans font-medium">
-                  MUKTESHWAR • MOUNTAIN FLEET & TOURS
+                  KASAR DEVI • MOUNTAIN FLEET & TOURS
                 </span>
               </div>
             </Link>
@@ -162,7 +162,7 @@ const TravelFooter = () => {
             <div className="space-y-2 text-xs text-white/70 font-light mb-4">
               <p className="flex items-start gap-2">
                 <MapPinIcon className="w-4 h-4 text-secondary flex-shrink-0 mt-0.5" />
-                <span>Mukteshwar Ridge & Kathgodam Station Base, Uttarakhand 263138</span>
+                <span>Kasar Devi & Kathgodam Station Base, Uttarakhand 263138</span>
               </p>
               <p className="flex items-center gap-2">
                 <PhoneIcon className="w-3.5 h-3.5 text-secondary flex-shrink-0" />
@@ -178,8 +178,8 @@ const TravelFooter = () => {
             <div className="rounded-2xl overflow-hidden border border-white/15 bg-white/5 p-2 shadow-lg group">
               <div className="relative h-24 rounded-xl overflow-hidden bg-gray-800">
                 <iframe
-                  title="Devbhoomi Expeditions Mukteshwar & Kumaon Road Map"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13892.685764592822!2d79.63!3d29.47!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39a0a1b1c5b3e8b1%3A0x1234567890abcdef!2sMukteshwar%2C%20Uttarakhand!5e0!3m2!1sen!2sin!4v1234567890"
+                  title="Himalayan Expeditions Kasar Devi & Kumaon Road Map"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13892.685764592822!2d79.63!3d29.47!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39a0a1b1c5b3e8b1%3A0x1234567890abcdef!2sKasar Devi%2C%20Uttarakhand!5e0!3m2!1sen!2sin!4v1234567890"
                   width="100%"
                   height="100%"
                   style={{ border: 0, filter: 'contrast(1.05) saturate(1.1)' }}
@@ -191,7 +191,7 @@ const TravelFooter = () => {
               <div className="pt-2 flex items-center justify-between px-1">
                 <span className="text-[11px] text-secondary font-medium">📍 7,500 ft Mountain Base</span>
                 <a
-                  href="https://maps.google.com/?q=Mukteshwar,Uttarakhand"
+                  href="https://maps.google.com/?q=Kasar Devi,Uttarakhand"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[11px] text-white/70 hover:text-white font-medium flex items-center gap-1 group-hover:text-secondary transition-colors"
@@ -209,7 +209,7 @@ const TravelFooter = () => {
       {/* 3. Bottom Bar */}
       <div className="border-t border-white/10 py-6 px-4">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/50">
-          <p>© {new Date().getFullYear()} Devbhoomi Expeditions. All rights reserved. Himalayan Fleet Division of Devbhoomi Retreat.</p>
+          <p>© {new Date().getFullYear()} Himalayan Expeditions. All rights reserved. Himalayan Fleet Division of The Kasar Himalayan Heights.</p>
           <div className="flex items-center gap-6">
             <Link to="/" className="text-secondary hover:text-white transition-colors duration-200 font-semibold inline-flex items-center gap-1">
               <span>Hotel Sanctuary</span>
