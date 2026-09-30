@@ -51,7 +51,7 @@ const AdminLogin = () => {
             </div>
           </div>
           <span className="text-[10px] text-secondary font-bold tracking-[0.25em] uppercase block mb-1">
-            Devbhoomi Retreat & Expeditions
+            The Kasar Himalayan Heights & Expeditions
           </span>
           <h1 className="font-heading text-3xl text-text-dark font-semibold">Staff Operations</h1>
           <p className="text-text-light text-xs font-light mt-1">High-Altitude Alpine Chalets • 7,500 FT</p>
@@ -74,7 +74,7 @@ const AdminLogin = () => {
               onChange={(e) => setEmail(e.target.value)}
               required
               className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-[#FBF9F5] text-text-dark text-sm focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition"
-              placeholder="admin@devbhoomi.com"
+              placeholder="admin@himalayan.com"
             />
           </div>
 

@@ -15,6 +15,7 @@ import {
   ArrowUpRightIcon,
   CheckCircleIcon,
   ShieldCheckIcon,
+  StarIcon,
 } from '../components/Icons';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
@@ -41,7 +42,9 @@ const AdminDashboard = () => {
   const [rooms, setRooms] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [travelBookings, setTravelBookings] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [lightboxState, setLightboxState] = useState({ open: false, photos: [], index: 0 });
 
   // Form state for adding/editing a room
   const [isAddingRoom, setIsAddingRoom] = useState(false);
@@ -58,6 +61,20 @@ const AdminDashboard = () => {
   const [roomImages, setRoomImages] = useState(null);
   const [addLoading, setAddLoading] = useState(false);
 
+  // Form state for adding/editing a tour package
+  const [tours, setTours] = useState([]);
+  const [isAddingTour, setIsAddingTour] = useState(false);
+  const [editingTourId, setEditingTourId] = useState(null);
+  const [newTour, setNewTour] = useState({
+    title: '',
+    destination: 'Chardham & High Himalayas',
+    duration: '5 Days / 4 Nights',
+    pricePerPerson: '',
+    itinerary: '',
+    inclusions: 'Comfortable SUV Transport, Breakfast, Premium Stays',
+  });
+  const [tourImages, setTourImages] = useState(null);
+
   // Redirect if not logged in
   useEffect(() => {
     if (!isAdminLoggedIn) {
@@ -70,15 +87,19 @@ const AdminDashboard = () => {
     try {
       const config = { headers: { Authorization: `Bearer ${token}` } };
       
-      const [roomsRes, bookingsRes, travelRes] = await Promise.all([
+      const [roomsRes, bookingsRes, travelRes, reviewsRes, toursRes] = await Promise.all([
         axios.get(`${API_URL}/hotel/rooms`),
         axios.get(`${API_URL}/hotel/bookings`, config),
-        axios.get(`${API_URL}/travel/bookings`, config).catch(() => ({ data: [] }))
+        axios.get(`${API_URL}/travel/bookings`, config).catch(() => ({ data: [] })),
+        axios.get(`${API_URL}/travel/reviews/admin`, config).catch(() => ({ data: [] })),
+        axios.get(`${API_URL}/travel/tours`).catch(() => ({ data: [] }))
       ]);
       
       setRooms(roomsRes.data || []);
       setBookings(bookingsRes.data || []);
       setTravelBookings(travelRes.data || []);
+      setReviews(reviewsRes.data || []);
+      setTours(toursRes.data || []);
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error);
       if (error.response?.status === 401) {
@@ -190,6 +211,142 @@ const AdminDashboard = () => {
     }
   };
 
+  const resetTourForm = () => {
+    setNewTour({
+      title: '',
+      destination: 'Chardham & High Himalayas',
+      duration: '5 Days / 4 Nights',
+      pricePerPerson: '',
+      itinerary: '',
+      inclusions: 'Comfortable SUV Transport, Breakfast, Premium Stays',
+    });
+    setTourImages(null);
+    setEditingTourId(null);
+    setIsAddingTour(false);
+  };
+
+  const handleEditTourClick = (tour) => {
+    setNewTour({
+      title: tour.title,
+      destination: tour.destination,
+      duration: tour.duration,
+      pricePerPerson: tour.pricePerPerson,
+      itinerary: tour.itinerary,
+      inclusions: tour.inclusions,
+    });
+    setEditingTourId(tour._id);
+    setIsAddingTour(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleDeleteTour = async (tourId) => {
+    if (!window.confirm('Are you sure you want to delete this tour package?')) return;
+    try {
+      await axios.delete(`${API_URL}/travel/tours/${tourId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      fetchData();
+    } catch (error) {
+      console.error('Failed to delete tour:', error);
+      alert('Failed to delete tour package.');
+    }
+  };
+
+  const handleSaveTour = async (e) => {
+    e.preventDefault();
+    setAddLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append('title', newTour.title);
+      formData.append('destination', newTour.destination);
+      formData.append('duration', newTour.duration);
+      formData.append('pricePerPerson', newTour.pricePerPerson);
+      formData.append('itinerary', newTour.itinerary);
+      formData.append('inclusions', newTour.inclusions);
+
+      if (tourImages && tourImages.length > 0) {
+        for (let i = 0; i < tourImages.length; i++) {
+          formData.append('images', tourImages[i]);
+        }
+      }
+
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      if (editingTourId) {
+        await axios.put(`${API_URL}/travel/tours/${editingTourId}`, formData, config);
+      } else {
+        await axios.post(`${API_URL}/travel/tours`, formData, config);
+      }
+
+      resetTourForm();
+      fetchData();
+    } catch (error) {
+      console.error('Failed to save tour:', error);
+      alert('Failed to save tour package.');
+    } finally {
+      setAddLoading(false);
+    }
+  };
+
+  const handleDeleteReview = async (reviewId) => {
+    if (!window.confirm('Are you sure you want to permanently delete this guest review?')) {
+      return;
+    }
+    try {
+      await axios.delete(`${API_URL}/travel/reviews/${reviewId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      fetchData();
+    } catch (error) {
+      console.error('Failed to delete review:', error);
+      alert('Failed to delete review.');
+    }
+  };
+
+  const handleToggleReviewApproval = async (reviewId) => {
+    try {
+      await axios.put(`${API_URL}/travel/reviews/${reviewId}/approve`, {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      fetchData();
+    } catch (error) {
+      console.error('Failed to toggle review approval:', error);
+      alert('Failed to update review status.');
+    }
+  };
+
+  const handleUpdateBookingStatus = async (id, status, type) => {
+    try {
+      const endpoint = type === 'hotel' ? `/hotel/bookings/${id}/status` : `/travel/bookings/${id}/status`;
+      await axios.put(`${API_URL}${endpoint}`, { status }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      fetchData();
+    } catch (error) {
+      console.error('Failed to update booking status:', error);
+      alert('Failed to update booking status.');
+    }
+  };
+
+  const handleDeleteBooking = async (id, type) => {
+    if (!window.confirm('Are you sure you want to delete this booking permanently?')) return;
+    try {
+      const endpoint = type === 'hotel' ? `/hotel/bookings/${id}` : `/travel/bookings/${id}`;
+      await axios.delete(`${API_URL}${endpoint}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      fetchData();
+    } catch (error) {
+      console.error('Failed to delete booking:', error);
+      alert('Failed to delete booking.');
+    }
+  };
+
   // Filtered rooms based on search
   const filteredRooms = rooms.filter((r) =>
     r.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -217,14 +374,14 @@ const AdminDashboard = () => {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="font-heading text-xl sm:text-2xl font-semibold tracking-tight text-white">
-                  Devbhoomi Operations Command
+                  Himalayan Operations Command
                 </h1>
                 <span className="text-[10px] bg-secondary text-primary font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
                   Admin
                 </span>
               </div>
               <p className="text-secondary text-xs font-medium flex items-center gap-2 mt-0.5">
-                <span>Mukteshwar Ridge (7,500 FT)</span>
+                <span>Kasar Devi (7,500 FT)</span>
                 <span>•</span>
                 <span>Almora Hub Fleet</span>
               </p>
@@ -384,6 +541,36 @@ const AdminDashboard = () => {
                 {travelBookings.length}
               </span>
             </button>
+
+            <button
+              onClick={() => setActiveTab('reviews')}
+              className={`py-3 px-5 rounded-2xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 ${
+                activeTab === 'reviews'
+                  ? 'bg-primary text-white shadow-md'
+                  : 'bg-white text-text-dark border border-gray-200 hover:border-secondary'
+              }`}
+            >
+              <StarIcon className={`w-4 h-4 ${activeTab === 'reviews' ? 'text-secondary' : 'text-gray-400'}`} />
+              <span>Guest Reviews</span>
+              <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${activeTab === 'reviews' ? 'bg-secondary text-primary' : 'bg-gray-100 text-text-dark'}`}>
+                {reviews.length}
+              </span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('tours')}
+              className={`py-3 px-5 rounded-2xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 ${
+                activeTab === 'tours'
+                  ? 'bg-primary text-white shadow-md'
+                  : 'bg-white text-text-dark border border-gray-200 hover:border-secondary'
+              }`}
+            >
+              <MapPinIcon className={`w-4 h-4 ${activeTab === 'tours' ? 'text-secondary' : 'text-gray-400'}`} />
+              <span>Tour Packages</span>
+              <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${activeTab === 'tours' ? 'bg-secondary text-primary' : 'bg-gray-100 text-text-dark'}`}>
+                {tours.length}
+              </span>
+            </button>
           </div>
 
           {activeTab === 'rooms' && (
@@ -482,6 +669,7 @@ const AdminDashboard = () => {
                         placeholder="e.g. 4499"
                         value={newRoom.pricePerNight}
                         onChange={(e) => setNewRoom({ ...newRoom, pricePerNight: e.target.value })}
+                        onWheel={(e) => e.target.blur()}
                         className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-[#FBF9F5] text-text-dark font-mono font-bold text-sm focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary"
                       />
                     </div>
@@ -514,6 +702,7 @@ const AdminDashboard = () => {
                         max="8"
                         value={newRoom.adults}
                         onChange={(e) => setNewRoom({ ...newRoom, adults: e.target.value })}
+                        onWheel={(e) => e.target.blur()}
                         className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-[#FBF9F5] text-text-dark text-sm focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary"
                       />
                     </div>
@@ -528,6 +717,7 @@ const AdminDashboard = () => {
                         max="6"
                         value={newRoom.children}
                         onChange={(e) => setNewRoom({ ...newRoom, children: e.target.value })}
+                        onWheel={(e) => e.target.blur()}
                         className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-[#FBF9F5] text-text-dark text-sm focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary"
                       />
                     </div>
@@ -827,7 +1017,7 @@ const AdminDashboard = () => {
                   Hotel Stay Reservations
                 </h2>
                 <p className="text-xs text-text-light">
-                  Direct online room bookings and check-in schedules for Devbhoomi Retreat.
+                  Direct online room bookings and check-in schedules for The Kasar Himalayan Heights.
                 </p>
               </div>
               <span className="text-xs font-bold px-3 py-1 rounded-full bg-secondary/15 text-primary self-start sm:self-auto border border-secondary/30">
@@ -849,7 +1039,7 @@ const AdminDashboard = () => {
                   </thead>
                   <tbody className="divide-y divide-gray-100 text-xs sm:text-sm">
                     {bookings.map((booking) => (
-                      <tr key={booking._id} className="hover:bg-gray-50/50 transition-colors">
+                      <tr key={booking._id} className={`hover:bg-gray-50/50 transition-all duration-300 ${booking.status === 'cancelled' ? 'opacity-40 grayscale' : ''}`}>
                         <td className="px-6 py-4">
                           <p className="font-semibold text-text-dark">{booking.guestDetails?.name}</p>
                           <p className="text-xs text-text-light">{booking.guestDetails?.email}</p>
@@ -878,28 +1068,44 @@ const AdminDashboard = () => {
                         </td>
 
                         <td className="px-6 py-4">
-                          <div className="flex flex-col gap-1.5 items-start">
-                            <span
-                              className={`inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full ${
-                                booking.status === 'confirmed'
-                                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                                  : booking.status === 'pending'
-                                  ? 'bg-amber-50 text-amber-700 border border-amber-200'
-                                  : 'bg-red-50 text-red-700 border border-red-200'
+                          <div className="flex flex-col gap-2 items-start">
+                            <select
+                              value={booking.status || 'pending'}
+                              onChange={(e) => handleUpdateBookingStatus(booking._id, e.target.value, 'hotel')}
+                              className={`text-xs font-bold px-2.5 py-1 rounded-full border outline-none cursor-pointer ${
+                                booking.status === 'completed'
+                                  ? 'bg-blue-50 text-blue-700 border-blue-200'
+                                  : booking.status === 'confirmed'
+                                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                  : booking.status === 'cancelled'
+                                  ? 'bg-red-50 text-red-700 border-red-200'
+                                  : 'bg-amber-50 text-amber-700 border-amber-200'
                               }`}
                             >
-                              {(booking.status || 'confirmed').toUpperCase()}
-                            </span>
-                            {booking.guestDetails?.phone && (
-                              <a
-                                href={`https://wa.me/${booking.guestDetails.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Namaste ${booking.guestDetails.name}! Re: Your reservation at Devbhoomi Retreat (${booking.roomName || 'Suite'}):`)}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-[11px] text-emerald-700 hover:text-emerald-800 font-semibold flex items-center gap-1 hover:underline"
+                              <option value="pending">PENDING</option>
+                              <option value="confirmed">CONFIRMED</option>
+                              <option value="completed">COMPLETED</option>
+                              <option value="cancelled">CANCELLED</option>
+                            </select>
+
+                            <div className="flex items-center gap-3 mt-1">
+                              {booking.guestDetails?.phone && (
+                                <a
+                                  href={`https://wa.me/${booking.guestDetails.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Namaste ${booking.guestDetails.name}! Re: Your reservation at The Kasar Himalayan Heights (${booking.roomName || 'Suite'}):`)}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-[11px] text-emerald-700 hover:text-emerald-800 font-semibold flex items-center gap-1 hover:underline"
+                                >
+                                  <span>WhatsApp Guest ↗</span>
+                                </a>
+                              )}
+                              <button
+                                onClick={() => handleDeleteBooking(booking._id, 'hotel')}
+                                className="text-[11px] text-red-500 hover:text-red-700 font-semibold hover:underline"
                               >
-                                <span>WhatsApp Guest ↗</span>
-                              </a>
-                            )}
+                                Delete
+                              </button>
+                            </div>
                           </div>
                         </td>
                       </tr>
@@ -953,7 +1159,7 @@ const AdminDashboard = () => {
                   </thead>
                   <tbody className="divide-y divide-gray-100 text-xs sm:text-sm">
                     {travelBookings.map((tBooking) => (
-                      <tr key={tBooking._id} className="hover:bg-gray-50/50 transition-colors">
+                      <tr key={tBooking._id} className={`hover:bg-gray-50/50 transition-all duration-300 ${tBooking.status === 'cancelled' ? 'opacity-40 grayscale' : ''}`}>
                         <td className="px-6 py-4">
                           <p className="font-semibold text-text-dark">{tBooking.guestDetails?.name}</p>
                           <p className="text-xs text-text-light">{tBooking.guestDetails?.phone}</p>
@@ -994,29 +1200,45 @@ const AdminDashboard = () => {
                         </td>
 
                         <td className="px-6 py-4">
-                          <div className="flex flex-col gap-1.5 items-start">
-                            <span
-                              className={`inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full ${
-                                tBooking.paymentStatus === 'paid'
-                                  ? 'bg-green-50 text-green-700 border border-green-200'
-                                  : tBooking.paymentStatus === 'confirmed'
-                                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                                  : 'bg-amber-50 text-amber-700 border border-amber-200'
+                          <div className="flex flex-col gap-2 items-start">
+                            <select
+                              value={tBooking.status || 'pending'}
+                              onChange={(e) => handleUpdateBookingStatus(tBooking._id, e.target.value, 'travel')}
+                              className={`text-xs font-bold px-2.5 py-1 rounded-full border outline-none cursor-pointer ${
+                                tBooking.status === 'completed'
+                                  ? 'bg-blue-50 text-blue-700 border-blue-200'
+                                  : tBooking.status === 'confirmed'
+                                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                  : tBooking.status === 'cancelled'
+                                  ? 'bg-red-50 text-red-700 border-red-200'
+                                  : 'bg-amber-50 text-amber-700 border-amber-200'
                               }`}
                             >
-                              {(tBooking.paymentStatus || 'pending').toUpperCase()}
-                            </span>
-                            {tBooking.guestDetails?.phone && (
-                              <a
-                                href={`https://wa.me/${tBooking.guestDetails.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Namaste ${tBooking.guestDetails.name}! Regarding your Devbhoomi travel booking (${tBooking.vehicleType} from ${tBooking.pickupLocation}):`)}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-[11px] text-emerald-700 hover:text-emerald-800 font-semibold flex items-center gap-1 hover:underline"
+                              <option value="pending">PENDING</option>
+                              <option value="confirmed">CONFIRMED</option>
+                              <option value="completed">COMPLETED</option>
+                              <option value="cancelled">CANCELLED</option>
+                            </select>
+
+                            <div className="flex items-center gap-3 mt-1">
+                              {tBooking.guestDetails?.phone && (
+                                <a
+                                  href={`https://wa.me/${tBooking.guestDetails.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Namaste ${tBooking.guestDetails.name}! Regarding your Himalayan travel booking (${tBooking.vehicleType} from ${tBooking.pickupLocation}):`)}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-[11px] text-emerald-700 hover:text-emerald-800 font-semibold flex items-center gap-1 hover:underline"
+                                >
+                                  <MessageIcon className="w-3.5 h-3.5" />
+                                  <span>WhatsApp Guest ↗</span>
+                                </a>
+                              )}
+                              <button
+                                onClick={() => handleDeleteBooking(tBooking._id, 'travel')}
+                                className="text-[11px] text-red-500 hover:text-red-700 font-semibold hover:underline"
                               >
-                                <MessageIcon className="w-3.5 h-3.5" />
-                                <span>WhatsApp Guest ↗</span>
-                              </a>
-                            )}
+                                Delete
+                              </button>
+                            </div>
                           </div>
                         </td>
                       </tr>
@@ -1033,6 +1255,380 @@ const AdminDashboard = () => {
                 </table>
               </div>
             </div>
+          </div>
+        )}
+        {/* ========================================================================= */}
+        {/* 6. TAB 4: GUEST REVIEWS MANAGEMENT */}
+        {/* ========================================================================= */}
+        {activeTab === 'reviews' && (
+          <div>
+            <div className="mb-6">
+              <h2 className="font-heading text-xl sm:text-2xl text-text-dark font-semibold">
+                Guest Reviews Management
+              </h2>
+              <p className="text-xs text-text-light">
+                Manage, approve, or delete travel stories submitted by guests.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-sm">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse min-w-[900px]">
+                  <thead>
+                    <tr className="bg-gray-50 border-b border-gray-200 text-xs font-semibold text-text-dark uppercase tracking-wider">
+                      <th className="px-6 py-4">Reviewer Details</th>
+                      <th className="px-6 py-4">Trip Info</th>
+                      <th className="px-6 py-4">Rating & Story</th>
+                      <th className="px-6 py-4 text-center">Status</th>
+                      <th className="px-6 py-4 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100 text-sm">
+                    {reviews.map((rev) => (
+                      <tr key={rev._id} className="hover:bg-gray-50/50 transition-colors">
+                        <td className="px-6 py-4">
+                          <p className="font-heading text-base font-semibold text-text-dark">{rev.name}</p>
+                          <p className="text-xs text-text-light font-medium mt-0.5">{rev.email}</p>
+                          <span className="text-[10px] text-secondary mt-1 block">
+                            {new Date(rev.createdAt).toLocaleDateString()}
+                          </span>
+                        </td>
+
+                        <td className="px-6 py-4 text-xs">
+                          <p className="font-semibold text-text-dark">{rev.location || 'N/A'}</p>
+                          <p className="text-text-light">{rev.tripType || 'N/A'}</p>
+                          {rev.photos && rev.photos.length > 0 && (
+                            <button
+                              onClick={() => setLightboxState({ open: true, photos: rev.photos, index: 0 })}
+                              className="mt-2 text-[10px] bg-secondary/10 text-secondary font-bold px-2 py-0.5 rounded-full hover:bg-secondary/20 transition-all cursor-pointer inline-flex items-center gap-1"
+                            >
+                              📸 {rev.photos.length} Photo{rev.photos.length > 1 ? 's' : ''}
+                            </button>
+                          )}
+                        </td>
+
+                        <td className="px-6 py-4">
+                          <div className="flex gap-0.5 text-secondary mb-1.5">
+                            {[...Array(rev.rating || 5)].map((_, i) => (
+                              <StarIcon key={i} className="w-3.5 h-3.5 fill-secondary" />
+                            ))}
+                          </div>
+                          <p className="text-xs text-text-light max-w-xs line-clamp-3 italic">
+                            "{rev.review}"
+                          </p>
+                        </td>
+
+                        <td className="px-6 py-4 text-center">
+                          <button
+                            onClick={() => handleToggleReviewApproval(rev._id)}
+                            className={`inline-block px-3 py-1 text-[11px] font-bold uppercase tracking-wider rounded-full cursor-pointer transition-all ${
+                              rev.isApproved
+                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100'
+                                : 'bg-gray-100 text-gray-500 border border-gray-200 hover:bg-gray-200'
+                            }`}
+                          >
+                            {rev.isApproved ? 'Approved Live' : 'Hidden Pending'}
+                          </button>
+                        </td>
+
+                        <td className="px-6 py-4 text-right">
+                          <button
+                            onClick={() => handleDeleteReview(rev._id)}
+                            className="px-3.5 py-1.5 rounded-xl border border-red-200 text-red-600 hover:bg-red-50 text-xs font-semibold transition-all cursor-pointer"
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                    {reviews.length === 0 && (
+                      <tr>
+                        <td colSpan="5" className="px-6 py-12 text-center text-text-light text-sm">
+                          No guest reviews available.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* =================== PHOTO LIGHTBOX =================== */}
+        {lightboxState.open && lightboxState.photos.length > 0 && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/80 backdrop-blur-md animate-fade-in"
+            onClick={() => setLightboxState({ ...lightboxState, open: false })}
+          >
+            <button
+              onClick={() => setLightboxState({ ...lightboxState, open: false })}
+              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 text-text-dark flex items-center justify-center text-lg font-bold hover:bg-white shadow-lg cursor-pointer z-10"
+            >
+              ✕
+            </button>
+
+            {lightboxState.photos.length > 1 && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLightboxState(prev => ({
+                    ...prev,
+                    index: prev.index === 0 ? prev.photos.length - 1 : prev.index - 1
+                  }));
+                }}
+                className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 text-text-dark flex items-center justify-center text-xl font-bold hover:bg-white shadow-lg cursor-pointer z-10"
+              >
+                ←
+              </button>
+            )}
+
+            <img
+              src={lightboxState.photos[lightboxState.index]}
+              alt={`Review photo ${lightboxState.index + 1}`}
+              onClick={(e) => e.stopPropagation()}
+              style={{ maxWidth: '90vw', maxHeight: '85vh' }}
+              className="object-contain rounded-2xl shadow-2xl"
+            />
+
+            {lightboxState.photos.length > 1 && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLightboxState(prev => ({
+                    ...prev,
+                    index: prev.index === prev.photos.length - 1 ? 0 : prev.index + 1
+                  }));
+                }}
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 text-text-dark flex items-center justify-center text-xl font-bold hover:bg-white shadow-lg cursor-pointer z-10"
+              >
+                →
+              </button>
+            )}
+
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/50 backdrop-blur text-white px-4 py-1.5 rounded-full text-sm font-semibold">
+              {lightboxState.index + 1} / {lightboxState.photos.length}
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* 7. TAB 5: TOUR PACKAGES CATALOG */}
+        {/* ========================================================================= */}
+        {activeTab === 'tours' && (
+          <div>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+              <div>
+                <h2 className="font-heading text-xl sm:text-2xl text-text-dark font-semibold">
+                  Tour Packages Catalog
+                </h2>
+                <p className="text-xs text-text-light">
+                  Manage fixed itinerary tours displayed on the Travel page.
+                </p>
+              </div>
+              {!isAddingTour && (
+                <button
+                  onClick={() => setIsAddingTour(true)}
+                  className="px-5 py-2.5 bg-primary text-white text-sm font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5 cursor-pointer flex items-center justify-center gap-2"
+                >
+                  <SparklesIcon className="w-4 h-4" />
+                  <span>Add New Tour</span>
+                </button>
+              )}
+            </div>
+
+            {isAddingTour ? (
+              <div className="bg-white p-6 sm:p-8 rounded-3xl border border-gray-200 shadow-sm animate-fade-in relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-1.5 h-full bg-secondary"></div>
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="font-heading text-xl font-bold text-text-dark">
+                    {editingTourId ? 'Edit Tour Package' : 'Create New Tour Package'}
+                  </h3>
+                  <button
+                    onClick={resetTourForm}
+                    className="text-text-light hover:text-text-dark font-semibold text-sm px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                </div>
+
+                <form onSubmit={handleSaveTour} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-xs font-bold text-text-dark uppercase tracking-wider mb-2">Package Title</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. Grand Chardham Circuit"
+                        value={newTour.title}
+                        onChange={(e) => setNewTour({ ...newTour, title: e.target.value })}
+                        className="w-full bg-gray-50 border border-gray-200 px-4 py-3 rounded-2xl text-sm focus:outline-none focus:border-secondary focus:bg-white transition-colors"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-text-dark uppercase tracking-wider mb-2">Destination / Region</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. Kedarnath, Badrinath"
+                        value={newTour.destination}
+                        onChange={(e) => setNewTour({ ...newTour, destination: e.target.value })}
+                        className="w-full bg-gray-50 border border-gray-200 px-4 py-3 rounded-2xl text-sm focus:outline-none focus:border-secondary focus:bg-white transition-colors"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-text-dark uppercase tracking-wider mb-2">Duration</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. 5 Days / 4 Nights"
+                        value={newTour.duration}
+                        onChange={(e) => setNewTour({ ...newTour, duration: e.target.value })}
+                        className="w-full bg-gray-50 border border-gray-200 px-4 py-3 rounded-2xl text-sm focus:outline-none focus:border-secondary focus:bg-white transition-colors"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-text-dark uppercase tracking-wider mb-2">Price Per Person (₹)</label>
+                      <input
+                        type="number"
+                        required
+                        min="0"
+                        onWheel={(e) => e.target.blur()}
+                        value={newTour.pricePerPerson}
+                        onChange={(e) => setNewTour({ ...newTour, pricePerPerson: e.target.value })}
+                        className="w-full bg-gray-50 border border-gray-200 px-4 py-3 rounded-2xl text-sm focus:outline-none focus:border-secondary focus:bg-white transition-colors"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-text-dark uppercase tracking-wider mb-2">Short Itinerary / Highlights</label>
+                    <textarea
+                      required
+                      rows="3"
+                      value={newTour.itinerary}
+                      onChange={(e) => setNewTour({ ...newTour, itinerary: e.target.value })}
+                      className="w-full bg-gray-50 border border-gray-200 px-4 py-3 rounded-2xl text-sm focus:outline-none focus:border-secondary focus:bg-white transition-colors resize-none"
+                    ></textarea>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-text-dark uppercase tracking-wider mb-2">Key Inclusions (Comma separated)</label>
+                    <input
+                      type="text"
+                      required
+                      value={newTour.inclusions}
+                      onChange={(e) => setNewTour({ ...newTour, inclusions: e.target.value })}
+                      className="w-full bg-gray-50 border border-gray-200 px-4 py-3 rounded-2xl text-sm focus:outline-none focus:border-secondary focus:bg-white transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-text-dark uppercase tracking-wider mb-2">Cover Images (Required on New)</label>
+                    <input
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      onChange={(e) => setTourImages(e.target.files)}
+                      className="block w-full text-sm text-text-light file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-primary file:text-white hover:file:bg-primary/90 file:cursor-pointer"
+                    />
+                    <p className="text-[10px] text-text-light mt-1.5">Max 10 images. High quality landscape recommended.</p>
+                  </div>
+
+                  <div className="flex justify-end pt-4 border-t border-gray-100">
+                    <button
+                      type="submit"
+                      disabled={addLoading}
+                      className="px-8 py-3 bg-secondary text-primary font-bold text-sm rounded-2xl hover:bg-[#F2B04A] transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {addLoading ? 'Saving...' : editingTourId ? 'Update Tour Package' : 'Publish Tour Package'}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            ) : (
+              <div className="bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-sm">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse min-w-[800px]">
+                    <thead>
+                      <tr className="bg-gray-50 border-b border-gray-200 text-xs font-semibold text-text-dark uppercase tracking-wider">
+                        <th className="px-6 py-4">Tour / Destination</th>
+                        <th className="px-6 py-4">Duration & Price</th>
+                        <th className="px-6 py-4">Highlights</th>
+                        <th className="px-6 py-4 text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100 text-xs sm:text-sm">
+                      {tours.map((tour) => {
+                        const thumb = tour.imageURLs?.[0] || '/placeholder-room.svg';
+                        return (
+                          <tr key={tour._id} className="hover:bg-gray-50/50 transition-colors">
+                            <td className="px-6 py-4">
+                              <div className="flex items-center gap-3.5">
+                                <div className="w-14 h-14 rounded-xl overflow-hidden bg-gray-100 shrink-0 border border-gray-200 shadow-xs">
+                                  <img
+                                    src={thumb}
+                                    alt={tour.title}
+                                    className="w-full h-full object-cover"
+                                    onError={(e) => {
+                                      e.target.onerror = null;
+                                      e.target.src = '/placeholder-room.svg';
+                                    }}
+                                  />
+                                </div>
+                                <div>
+                                  <p className="font-heading text-base font-semibold text-text-dark">{tour.title}</p>
+                                  <span className="text-[10px] text-secondary font-semibold uppercase tracking-wider block">
+                                    {tour.destination}
+                                  </span>
+                                </div>
+                              </div>
+                            </td>
+
+                            <td className="px-6 py-4">
+                              <p className="font-semibold text-text-dark">{tour.duration}</p>
+                              <p className="font-mono font-bold text-primary text-sm mt-0.5">
+                                ₹{Number(tour.pricePerPerson).toLocaleString('en-IN')} <span className="text-[10px] text-text-light font-sans font-normal">/pp</span>
+                              </p>
+                            </td>
+
+                            <td className="px-6 py-4">
+                              <p className="text-xs text-text-light max-w-xs line-clamp-2">
+                                {tour.itinerary}
+                              </p>
+                            </td>
+
+                            <td className="px-6 py-4 text-right whitespace-nowrap">
+                              <div className="inline-flex items-center gap-2">
+                                <button
+                                  onClick={() => handleEditTourClick(tour)}
+                                  className="px-3.5 py-1.5 rounded-full border border-primary/30 text-primary text-xs font-semibold hover:bg-primary hover:text-white transition-all cursor-pointer"
+                                >
+                                  Edit
+                                </button>
+                                <button
+                                  onClick={() => handleDeleteTour(tour._id)}
+                                  className="px-3.5 py-1.5 rounded-full border border-red-200 text-red-600 text-xs font-semibold hover:bg-red-50 transition-all cursor-pointer"
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                      {tours.length === 0 && (
+                        <tr>
+                          <td colSpan="4" className="px-6 py-12 text-center text-text-light text-sm">
+                            No tour packages created yet. Click "Add New Tour" to build your catalog.
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
           </div>
         )}
 

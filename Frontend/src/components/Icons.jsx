@@ -1,4 +1,4 @@
-// Modern Luxury SVG Icon set for Devbhoomi Retreat
+// Modern Luxury SVG Icon set for The Kasar Himalayan Heights
 export const MountainIcon = ({ className = "w-5 h-5" }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
     <path d="m8 3 4 8 5-5 5 15H2L8 3z" />

@@ -1,7 +1,7 @@
-# 🏔️ Devbhoomi Retreat & Expeditions
+# 🏔️ The Kasar Himalayan Heights & Expeditions
 
 > **Luxury Boutique Mountain Hotel & Chauffeured Himalayan Travel**  
-> **Hotel Base:** Mukteshwar Ridge, Nainital District, Uttarakhand, India *(7,500 ft elevation)*  
+> **Hotel Base:** Kasar Devi, Almora, Uttarakhand, India *(7,500 ft elevation)*  
 > **Expeditions Hub:** Almora Station Base, Uttarakhand, India  
 > **Concept:** High-altitude alpine chalet framing 180° Himalayan snow peaks (Trishul, Nanda Devi & Panchachuli), paired with chauffeured mountain travel across Kumaon & Garhwal.
 
@@ -9,14 +9,14 @@
 
 ## 🌟 Executive Summary
 
-**Devbhoomi Retreat & Expeditions** is an enterprise-grade, full-stack hospitality and mountain travel web platform. Built with modern web architecture (React 19, Vite, Tailwind CSS v4, Node.js, Express, and MongoDB Atlas), the platform provides two isolated luxury experiences:
+**The Kasar Himalayan Heights & Expeditions** is an enterprise-grade, full-stack hospitality and mountain travel web platform. Built with modern web architecture (React 19, Vite, Tailwind CSS v4, Node.js, Express, and MongoDB Atlas), the platform provides two isolated luxury experiences:
 
-1. **Devbhoomi Retreat (Hotel Experience):**
+1. **The Kasar Himalayan Heights (Hotel Experience):**
    - Bespoke alpine chalet aesthetic inspired by Aman and Oberoi Wildflower Hall.
    - Heated mountain suites, 180° snow peak balconies, live winter snowfall particle engine.
    - Real-time stay cost calculator, quick-view suite modals, and direct reservation flow.
 
-2. **Devbhoomi Expeditions (Tour & Travel Experience):**
+2. **Himalayan Expeditions (Tour & Travel Experience):**
    - Dedicated chauffeured mountain fleet: **4-Seater Sedans**, **6-Seater SUVs**, and **12-Seater Luxury Minibuses**.
    - **Almora as Default Starting Station & Origin Base** with real road distances calibrated for Uttarakhand hill circuits and sacred pilgrimage dhams.
    - **Interactive Distance & Vehicle Fare Calculator**: Real-time pricing based on route distance (km), vehicle per-km tariff, driver mountain allowance, and state tolls.
@@ -129,7 +129,7 @@ All route distances and tariffs originate from the central Kumaon hub of **Almor
 | **Jageshwar Mahamrityunjaya Dham** | Sacred 124 Jyotirlinga Shrines | 35 km | 70 km |
 | **Kainchi Dham Ashram** | Neem Karoli Baba Ashram | 45 km | 90 km |
 | **Ranikhet Orchards & Kasar Devi** | Cosmic Ridge & Tea Gardens | 46 km | 92 km |
-| **Mukteshwar Dham & Chauli Ki Jali** | Himalayan Ridge & Cliffs | 50 km | 100 km |
+| **Kasar Devi Dham & Chauli Ki Jali** | Himalayan Ridge & Cliffs | 50 km | 100 km |
 | **Kausani Himalayan Panorama** | 300 km Snow Peak Vista | 52 km | 104 km |
 | **Nainital Lake & Naina Devi** | Colonial Lake & Sacred Temple | 63 km | 126 km |
 | **Kathgodam Railway Station** | Shatabdi / Ranikhet Express Base | 85 km | 170 km |
@@ -272,9 +272,9 @@ npm run dev
 ## 📞 Concierge & Reservations
 
 - **WhatsApp Concierge:** [+91 96906 21247](https://wa.me/919690621247)
-- **Hotel Location:** Mukteshwar Ridge, Nainital District, Uttarakhand, India
+- **Hotel Location:** Kasar Devi, Almora, Uttarakhand, India
 - **Travel Hub Base:** Almora Station Base, Uttarakhand, India
 
 ---
 
-*Crafted with high-altitude alpine passion for Devbhoomi Uttarakhand.*
+*Crafted with high-altitude alpine passion for Himalayan Uttarakhand.*

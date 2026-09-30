@@ -77,7 +77,7 @@ const RoomModal = ({ room, isOpen, onClose, onBookNow }) => {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-100">
             <div>
               <span className="text-secondary text-xs uppercase tracking-[0.25em] font-bold block mb-1">
-                Devbhoomi Retreat Residence
+                The Kasar Himalayan Heights Residence
               </span>
               <h2 className="font-heading text-2xl sm:text-3xl font-semibold text-text-dark">
                 {room.name}

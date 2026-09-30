@@ -60,10 +60,10 @@ const Navbar = () => {
           <Logo size={40} />
           <div className="flex flex-col">
             <span className="text-white font-heading text-xl sm:text-2xl font-normal tracking-wide group-hover:text-secondary transition-colors duration-300 leading-tight">
-              Devbhoomi Retreat
+              The Kasar Himalayan Heights
             </span>
             <span className="text-secondary/85 text-[10px] tracking-[0.25em] uppercase font-sans font-medium">
-              Mukteshwar • 7,500 FT
+              Kasar Devi • 7,500 FT
             </span>
           </div>
         </Link>

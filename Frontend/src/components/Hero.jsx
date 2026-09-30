@@ -8,14 +8,14 @@ const Hero = () => {
 
   const heroBackgrounds = [
     {
-      name: 'Devbhoomi Mountain Chalet',
+      name: 'Himalayan Mountain Chalet',
       url: '/hero-hotel.jpg',
       label: 'Luxury Mountain Hotel Resort perched on snow ridge with Himalayan peaks',
     },
     {
       name: 'Winter Snow Resort',
       url: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=2560&q=90',
-      label: 'Mukteshwar Snow Sanctuary',
+      label: 'Kasar Devi Snow Sanctuary',
     },
     {
       name: 'Golden Himalayan Peaks',

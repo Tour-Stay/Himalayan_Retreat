@@ -46,7 +46,7 @@ const TravelNavbar = () => {
           <Logo size={38} />
           <div className="flex flex-col">
             <span className="text-white font-heading text-lg sm:text-xl font-normal tracking-wide group-hover:text-secondary transition-colors duration-300 leading-tight">
-              Devbhoomi Expeditions
+              Himalayan Expeditions
             </span>
             <span className="text-secondary/85 text-[10px] tracking-[0.25em] uppercase font-sans font-medium">
               Mountain Fleet & Tours

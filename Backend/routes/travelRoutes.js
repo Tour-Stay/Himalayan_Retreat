@@ -10,7 +10,17 @@ const {
   deleteTour,
   createTravelBooking,
   getAllTravelBookings,
+  updateTravelBookingStatus,
+  deleteTravelBooking,
 } = require('../controllers/travelController');
+const {
+  getAllReviews,
+  getAdminReviews,
+  createReview,
+  updateReview,
+  toggleReviewApproval,
+  deleteReview,
+} = require('../controllers/reviewController');
 
 // ========================
 // PUBLIC ROUTES (Customer)
@@ -19,6 +29,13 @@ router.get('/tours', getAllTours);              // Fetch all tour packages
 router.get('/tours/:id', getTourById);         // Fetch a specific tour
 router.post('/bookings', createTravelBooking); // Create a new travel booking
 
+// ========================
+// REVIEW ROUTES (Public + Email-Verified Edit)
+// ========================
+router.get('/reviews', getAllReviews);                                         // Fetch all approved reviews
+router.post('/reviews', upload.array('photos', 5), createReview);             // Submit a new review (up to 5 photos)
+router.put('/reviews/:id', upload.array('photos', 5), updateReview);          // Edit own review (email-verified)
+
 // ============================
 // PROTECTED ROUTES (Admin only)
 // ============================
@@ -26,5 +43,11 @@ router.post('/tours', authMiddleware, upload.array('images', 10), addTour);  // 
 router.put('/tours/:id', authMiddleware, updateTour);    // Edit a tour package
 router.delete('/tours/:id', authMiddleware, deleteTour); // Delete a tour package
 router.get('/bookings', authMiddleware, getAllTravelBookings); // View all travel bookings
+router.put('/bookings/:id/status', authMiddleware, updateTravelBookingStatus); // Update status
+router.delete('/bookings/:id', authMiddleware, deleteTravelBooking); // Delete booking
+router.get('/reviews/admin', authMiddleware, getAdminReviews); // Fetch ALL reviews (approved & pending)
+router.put('/reviews/:id/approve', authMiddleware, toggleReviewApproval); // Toggle approval status
+router.delete('/reviews/:id', authMiddleware, deleteReview);  // Admin delete review
 
 module.exports = router;
+

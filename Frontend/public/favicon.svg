@@ -66,7 +66,7 @@
   <path id="curve" d="M 20 81 A 38 38 0 0 0 80 81" fill="transparent" />
   <text font-family="'Inter', sans-serif" font-size="6.5" font-weight="700" fill="url(#crestGold)" letter-spacing="3">
     <textPath href="#curve" startOffset="50%" text-anchor="middle">
-      7,500 FT • MUKTESHWAR
+      7,500 FT • KASAR DEVI
     </textPath>
   </text>
 </svg>

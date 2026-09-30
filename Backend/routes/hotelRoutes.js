@@ -10,6 +10,8 @@ const {
   deleteRoom,
   createBooking,
   getAllBookings,
+  updateBookingStatus,
+  deleteBooking,
 } = require('../controllers/hotelController');
 
 // ========================
@@ -26,5 +28,7 @@ router.post('/rooms', authMiddleware, upload.array('images', 10), addRoom);  // 
 router.put('/rooms/:id', authMiddleware, updateRoom);    // Update room details/price
 router.delete('/rooms/:id', authMiddleware, deleteRoom); // Delete a room
 router.get('/bookings', authMiddleware, getAllBookings);  // View all reservations
+router.put('/bookings/:id/status', authMiddleware, updateBookingStatus); // Update booking status
+router.delete('/bookings/:id', authMiddleware, deleteBooking); // Delete booking
 
 module.exports = router;

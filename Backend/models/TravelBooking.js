@@ -17,7 +17,7 @@ const travelBookingSchema = new mongoose.Schema({
   },
   pickupLocation: {
     type: String,
-    default: 'Kathgodam / Mukteshwar',
+    default: 'Kathgodam / Kasar Devi',
   },
   tripDays: {
     type: Number,
@@ -47,6 +47,11 @@ const travelBookingSchema = new mongoose.Schema({
   paymentStatus: {
     type: String,
     enum: ['pending', 'paid', 'failed'],
+    default: 'pending',
+  },
+  status: {
+    type: String,
+    enum: ['pending', 'confirmed', 'completed', 'cancelled'],
     default: 'pending',
   },
 }, { timestamps: true });

@@ -1,6 +1,7 @@
 import { useState, useId } from 'react';
 import axios from 'axios';
 import SnowEffect from '../components/SnowEffect';
+import TravelReviews from '../components/TravelReviews';
 import {
   CarIcon,
   UsersIcon,
@@ -61,7 +62,7 @@ const fleetData = [
       'Panoramic Mountain View Glass Windows',
       'High Clearance for Rugged Forest Roads & Ghats',
     ],
-    idealFor: 'Multi-day hill station tours (Mukteshwar, Almora, Ranikhet, Kausani).',
+    idealFor: 'Multi-day hill station tours (Kasar Devi, Almora, Ranikhet, Kausani).',
   },
   {
     id: '12-seater',
@@ -125,14 +126,14 @@ const destinationsData = [
   },
   {
     id: 'mukteshwar-dham',
-    name: 'Mukteshwar Dham & Chauli Ki Jali',
+    name: 'Kasar Devi Dham & Chauli Ki Jali',
     category: 'temple',
     categoryLabel: 'Ancient Hilltop Shivalaya',
     kmFromAlmora: 50,
     duration: 'Local Full Day',
     distance: '50 km from Almora (1.8 hrs)',
-    description: '350-year-old Shiva shrine perched at the highest peak of Mukteshwar (7,500 ft) overlooking Chauli Ki Jali cliff and Trishul peaks.',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Chauli_Ki_Jali%2C_Mukteshwar.jpg/1280px-Chauli_Ki_Jali%2C_Mukteshwar.jpg',
+    description: '350-year-old Shiva shrine perched at the highest peak of Kasar Devi (7,500 ft) overlooking Chauli Ki Jali cliff and Trishul peaks.',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Chauli_Ki_Jali%2C_Kasar Devi.jpg/1280px-Chauli_Ki_Jali%2C_Kasar Devi.jpg',
     highlights: ['Ancient Shiva Lingam', 'Chauli Ki Jali Cliff Vistas', 'Trishul Peak View', 'Sunset Horizon'],
   },
   {
@@ -311,7 +312,7 @@ const TourAndTravel = () => {
       .map((d) => `${d.name} (${d.kmFromAlmora} km)`)
       .join(', ') || 'Custom Mountain Circuit';
 
-    const message = `Namaste Devbhoomi Expeditions! 🙏\n\nI would like to book a private mountain vehicle:\n` +
+    const message = `Namaste Himalayan Expeditions! 🙏\n\nI would like to book a private mountain vehicle:\n` +
       `• Starting Station: ${originStation}\n` +
       `• Vehicle: ${currentFleet.title} (${currentFleet.seats} Seater)\n` +
       `• Vehicle Tariff: ₹${fareEstimate.perKmRate}/km\n` +
@@ -410,7 +411,7 @@ const TourAndTravel = () => {
           <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
             <div className="shimmer-badge inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-pill-dark text-secondary text-xs sm:text-sm font-semibold tracking-[0.25em] uppercase border border-secondary/30 shadow-lg">
               <SparklesIcon className="w-4 h-4 text-secondary animate-pulse" />
-              <span>Devbhoomi Expeditions • Private Mountain Fleet</span>
+              <span>Himalayan Expeditions • Private Mountain Fleet</span>
             </div>
 
             <button
@@ -744,7 +745,7 @@ const TourAndTravel = () => {
                     <option value="Almora Mall Road / Taxi Stand">Almora Mall Road / Taxi Stand</option>
                     <option value="Almora Kasar Devi Ridge">Almora Kasar Devi Ridge</option>
                     <option value="Almora Bus Station (ISBT)">Almora Bus Station (ISBT)</option>
-                    <option value="Devbhoomi Retreat Chauffeur Hub">Devbhoomi Retreat Chauffeur Hub</option>
+                    <option value="The Kasar Himalayan Heights Chauffeur Hub">The Kasar Himalayan Heights Chauffeur Hub</option>
                   </select>
                 </div>
               </div>
@@ -1330,7 +1331,7 @@ const TourAndTravel = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <span className="inline-block px-3.5 py-1 rounded-full bg-cream text-secondary text-xs font-semibold tracking-[0.25em] uppercase mb-4 border border-secondary/30 shadow-xs">
-              Devbhoomi Hospitality & Safety
+              Himalayan Hospitality & Safety
             </span>
             <h2 className="font-heading text-3xl sm:text-5xl text-text-dark font-medium tracking-tight mb-4">
               Mountain Driving Excellence
@@ -1365,67 +1366,9 @@ const TourAndTravel = () => {
       </section>
 
       {/* ========================================================================= */}
-      {/* 7. GUEST REVIEWS (Matching Home.jsx Testimonials) */}
+      {/* 7. DYNAMIC GUEST REVIEWS (Photo Uploads + Email-Verified Editing) */}
       {/* ========================================================================= */}
-      <section className="py-24 px-4 bg-cream">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="inline-block px-3.5 py-1 rounded-full bg-white text-secondary text-xs font-semibold tracking-[0.25em] uppercase mb-4 border border-secondary/30 shadow-xs">
-              Travel Stories
-            </span>
-            <h2 className="font-heading text-3xl sm:text-5xl text-text-dark font-medium tracking-tight mb-4">
-              Pilgrims & Explorers Say
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-md">
-              <div className="flex gap-1 text-secondary mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <StarIcon key={i} className="w-4 h-4 fill-secondary text-secondary" />
-                ))}
-              </div>
-              <p className="text-text-light text-sm italic leading-relaxed mb-6 font-light">
-                "Our trip to Kainchi Dham and Jageshwar Dham was sublime. Our driver Mohan ji drove with extreme care on winding mountain roads. The Innova Crysta was spotless with room heating."
-              </p>
-              <div>
-                <strong className="text-text-dark text-sm block">Rajesh & Suman Gupta</strong>
-                <span className="text-secondary text-xs">Delhi NCR • Kainchi Dham Pilgrimage</span>
-              </div>
-            </div>
-
-            <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-md">
-              <div className="flex gap-1 text-secondary mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <StarIcon key={i} className="w-4 h-4 fill-secondary text-secondary" />
-                ))}
-              </div>
-              <p className="text-text-light text-sm italic leading-relaxed mb-6 font-light">
-                "We booked the 12-seater Urbania for our extended family vacation across Nainital and Mukteshwar. The Maharaja pushback seats and high roof made 6 hours in the hills feel effortless."
-              </p>
-              <div>
-                <strong className="text-text-dark text-sm block">Kapoor Family Reunion</strong>
-                <span className="text-secondary text-xs">Mumbai • 12-Seater Kumaon Circuit</span>
-              </div>
-            </div>
-
-            <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-md">
-              <div className="flex gap-1 text-secondary mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <StarIcon key={i} className="w-4 h-4 fill-secondary text-secondary" />
-                ))}
-              </div>
-              <p className="text-text-light text-sm italic leading-relaxed mb-6 font-light">
-                "Smooth pickup directly at Kathgodam railway station. The driver held a name-board and took us straight to Devbhoomi Retreat without any delays. Truly 5-star mountain hospitality."
-              </p>
-              <div>
-                <strong className="text-text-dark text-sm block">Dr. Alok Verma</strong>
-                <span className="text-secondary text-xs">Lucknow • Kathgodam Station Transfer</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <TravelReviews />
 
       {/* ========================================================================= */}
       {/* 8. BOOKING CONFIRMATION MODAL */}
@@ -1441,7 +1384,7 @@ const TourAndTravel = () => {
               Mountain Journey Reserved!
             </h3>
             <p className="text-text-light text-center text-xs sm:text-sm mb-6 font-light leading-relaxed">
-              Your inquiry has been registered with Devbhoomi Retreat. Our mountain transport manager will contact you within 30 minutes to confirm vehicle assignment and chauffeur details.
+              Your inquiry has been registered with The Kasar Himalayan Heights. Our mountain transport manager will contact you within 30 minutes to confirm vehicle assignment and chauffeur details.
             </p>
 
             <div className="p-4 rounded-2xl bg-cream border border-gray-200 mb-6 space-y-2 text-xs">

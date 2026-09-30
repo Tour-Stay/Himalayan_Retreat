@@ -43,7 +43,7 @@ const AllRooms = () => {
         {/* Page Header */}
         <div className="text-center mb-12">
           <span className="text-secondary text-xs sm:text-sm font-semibold tracking-[0.25em] uppercase mb-3 block">
-            Devbhoomi Accommodations
+            Himalayan Accommodations
           </span>
           <h1 className="font-heading text-4xl sm:text-5xl text-text-dark font-semibold mb-4">
             Heated Mountain Suites

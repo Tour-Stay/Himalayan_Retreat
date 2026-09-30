@@ -5,6 +5,10 @@ import { mockRooms } from '../data/mockRooms';
 const HeroBookingBar = ({ onSearch, onBookSuite }) => {
   const today = new Date().toISOString().split('T')[0];
   const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+  
+  const maxDate = new Date();
+  maxDate.setFullYear(maxDate.getFullYear() + 2);
+  const maxDateStr = maxDate.toISOString().split('T')[0];
 
   const [checkIn, setCheckIn] = useState(today);
   const [checkOut, setCheckOut] = useState(tomorrow);
@@ -60,6 +64,7 @@ const HeroBookingBar = ({ onSearch, onBookSuite }) => {
             type="date"
             value={checkIn}
             min={today}
+            max={maxDateStr}
             onChange={(e) => setCheckIn(e.target.value)}
             className="w-full bg-transparent text-sm font-semibold text-text-dark focus:outline-none cursor-pointer"
           />
@@ -75,6 +80,7 @@ const HeroBookingBar = ({ onSearch, onBookSuite }) => {
             type="date"
             value={checkOut}
             min={checkIn || today}
+            max={maxDateStr}
             onChange={(e) => setCheckOut(e.target.value)}
             className="w-full bg-transparent text-sm font-semibold text-text-dark focus:outline-none cursor-pointer"
           />
