@@ -1,57 +1,122 @@
-cd b/* ============================
+/* ============================
    APP-LEVEL CUSTOM STYLES
    ============================ */
 
 /* Hover lift effect for cards */
 .card-hover {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
 }
 
 .card-hover:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  transform: translateY(-8px);
+  box-shadow: 0 25px 50px -12px rgba(15, 41, 30, 0.18);
+  border-color: rgba(203, 161, 71, 0.35);
 }
 
 /* Gold underline accent for headings */
 .heading-accent::after {
   content: '';
   display: block;
-  width: 60px;
+  width: 50px;
   height: 3px;
-  background: #e0c097;
-  margin-top: 12px;
+  background: #CBA147;
+  margin-top: 14px;
+  border-radius: 2px;
 }
 
 .heading-accent-center::after {
   content: '';
   display: block;
-  width: 60px;
+  width: 50px;
   height: 3px;
-  background: #e0c097;
-  margin: 12px auto 0;
+  background: #CBA147;
+  margin: 14px auto 0;
+  border-radius: 2px;
 }
 
 /* Smooth image zoom on hover */
 .img-zoom {
   overflow: hidden;
-  border-radius: 12px;
+  border-radius: 16px;
 }
 
 .img-zoom img {
-  transition: transform 0.5s ease;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .img-zoom:hover img {
   transform: scale(1.08);
 }
 
-/* Gradient overlay for hero sections */
-.hero-overlay {
+/* Luxury 3D Glassmorphism Cards */
+.glass-surface {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 20px 45px rgba(15, 41, 30, 0.07);
+}
+
+.glass-surface-dark {
+  background: rgba(15, 41, 30, 0.78);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+}
+
+.glass-pill {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+}
+
+.glass-pill-dark {
+  background: rgba(15, 41, 30, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+}
+
+/* Shimmer animation across badges & buttons */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+.shimmer-badge {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-badge::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
   background: linear-gradient(
-    to bottom,
-    rgba(26, 26, 46, 0.3) 0%,
-    rgba(26, 26, 46, 0.7) 100%
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.35),
+    transparent
   );
+  animation: shimmer 3s infinite;
+}
+
+/* Slow Ken Burns image scale for hero */
+@keyframes kenburns {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08) translateY(-1%); }
+  100% { transform: scale(1); }
+}
+
+.hero-kenburns {
+  animation: kenburns 24s ease-in-out infinite alternate;
 }
 
 /* Custom scrollbar */
@@ -60,14 +125,16 @@ cd b/* ============================
 }
 
 ::-webkit-scrollbar-track {
-  background: #faf7f2;
+  background: #FAFAF7;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #e0c097;
+  background: #CBA147;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #c9a77a;
+  background: #B38B35;
 }
+
+

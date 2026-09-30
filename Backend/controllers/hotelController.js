@@ -51,14 +51,23 @@ const addRoom = async (req, res) => {
       try { amenities = JSON.parse(amenities); } catch (e) {}
     }
 
-    // Upload images to Cloudinary (from memory, no local files)
+    // Upload images to Cloudinary (with automatic base64 fallback if Cloudinary credentials fail)
     let imageURLs = [];
     if (req.files && req.files.length > 0) {
-      const uploadPromises = req.files.map((file) =>
-        uploadToCloudinary(file.buffer, 'hotel-rooms')
-      );
-      const results = await Promise.all(uploadPromises);
-      imageURLs = results.map((result) => result.secure_url);
+      try {
+        const uploadPromises = req.files.map((file) =>
+          uploadToCloudinary(file.buffer, 'hotel-rooms')
+        );
+        const results = await Promise.all(uploadPromises);
+        imageURLs = results.map((result) => result.secure_url);
+      } catch (cloudErr) {
+        console.warn('⚠️ Cloudinary upload warning (using base64 fallback):', cloudErr.message || cloudErr);
+        // Fallback: convert file buffer to base64 data URI so image displays seamlessly
+        imageURLs = req.files.map((file) => {
+          const mime = file.mimetype || 'image/jpeg';
+          return `data:${mime};base64,${file.buffer.toString('base64')}`;
+        });
+      }
     }
 
     const room = await Room.create({

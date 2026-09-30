@@ -6,6 +6,9 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
+    "seed:admin": "node scripts/seedAdmin.js",
+    "check:admin": "node scripts/checkAdmin.js",
+    "drop:admin": "node scripts/dropAdmin.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

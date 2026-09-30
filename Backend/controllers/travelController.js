@@ -41,14 +41,22 @@ const addTour = async (req, res) => {
   try {
     const { title, destination, duration, pricePerPerson, itinerary, inclusions } = req.body;
 
-    // Upload images to Cloudinary (from memory, no local files)
+    // Upload images to Cloudinary (with automatic base64 fallback if Cloudinary credentials fail)
     let imageURLs = [];
     if (req.files && req.files.length > 0) {
-      const uploadPromises = req.files.map((file) =>
-        uploadToCloudinary(file.buffer, 'tour-packages')
-      );
-      const results = await Promise.all(uploadPromises);
-      imageURLs = results.map((result) => result.secure_url);
+      try {
+        const uploadPromises = req.files.map((file) =>
+          uploadToCloudinary(file.buffer, 'tour-packages')
+        );
+        const results = await Promise.all(uploadPromises);
+        imageURLs = results.map((result) => result.secure_url);
+      } catch (cloudErr) {
+        console.warn('⚠️ Cloudinary upload warning (using base64 fallback):', cloudErr.message || cloudErr);
+        imageURLs = req.files.map((file) => {
+          const mime = file.mimetype || 'image/jpeg';
+          return `data:${mime};base64,${file.buffer.toString('base64')}`;
+        });
+      }
     }
 
     const tour = await TourPackage.create({
@@ -114,31 +122,51 @@ const deleteTour = async (req, res) => {
 // @access  Public
 const createTravelBooking = async (req, res) => {
   try {
-    const { packageId, guestDetails, travelDate, travelers } = req.body;
-
-    // Validate the tour package exists
-    const tourPackage = await TourPackage.findById(packageId);
-    if (!tourPackage) {
-      return res.status(404).json({ message: 'Tour package not found.' });
-    }
-
-    // Calculate total amount
-    const totalAmount = travelers * tourPackage.pricePerPerson;
-
-    const booking = await TravelBooking.create({
+    const {
       packageId,
+      vehicleType,
+      circuit,
+      pickupLocation,
+      tripDays,
+      notes,
       guestDetails,
       travelDate,
       travelers,
-      totalAmount,
+      totalAmount: clientAmount,
+    } = req.body;
+
+    let tourPackage = null;
+    let finalAmount = clientAmount || 0;
+
+    // If packageId is provided, look up the package
+    if (packageId) {
+      tourPackage = await TourPackage.findById(packageId);
+      if (tourPackage && tourPackage.pricePerPerson) {
+        finalAmount = (travelers || 1) * tourPackage.pricePerPerson;
+      }
+    }
+
+    const booking = await TravelBooking.create({
+      packageId: packageId || undefined,
+      vehicleType: vehicleType || '6-seater',
+      circuit: circuit || 'Hill Stations & Temples',
+      pickupLocation: pickupLocation || 'Kathgodam / Mukteshwar',
+      tripDays: tripDays || 1,
+      notes: notes || '',
+      guestDetails,
+      travelDate,
+      travelers: travelers || 2,
+      totalAmount: finalAmount,
       paymentStatus: 'pending',
     });
 
-    // Send confirmation email (non-blocking — don't fail booking if email fails)
-    try {
-      await sendTravelBookingEmail(booking, tourPackage);
-    } catch (emailError) {
-      console.error('Email sending failed:', emailError.message);
+    // Send confirmation email (non-blocking)
+    if (tourPackage) {
+      try {
+        await sendTravelBookingEmail(booking, tourPackage);
+      } catch (emailError) {
+        console.error('Email sending failed:', emailError.message);
+      }
     }
 
     res.status(201).json({ message: 'Travel booking created successfully.', booking });
