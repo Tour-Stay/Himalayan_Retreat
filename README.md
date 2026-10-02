@@ -1,280 +1,458 @@
 # 🏔️ The Kasar Himalayan Heights & Expeditions
 
-> **Luxury Boutique Mountain Hotel & Chauffeured Himalayan Travel**  
-> **Hotel Base:** Kasar Devi, Almora, Uttarakhand, India *(7,500 ft elevation)*  
-> **Expeditions Hub:** Almora Station Base, Uttarakhand, India  
-> **Concept:** High-altitude alpine chalet framing 180° Himalayan snow peaks (Trishul, Nanda Devi & Panchachuli), paired with chauffeured mountain travel across Kumaon & Garhwal.
+> **High-Altitude Boutique Alpine Resort & Chauffeured Mountain Travel Ecosystem**  
+> **Resort Base:** Crank's Ridge, Kasar Devi, Almora, Uttarakhand, India *(6,942 FT Elevation)*  
+> **Expeditions Hub:** Almora Station Base Hub, Uttarakhand, India  
+> **Spiritual Center:** Kainchi Dham Ashram (45 km) • Jageshwar Dham (35 km) • Crank's Ridge (800 m)  
+> **Concept:** Intimate alpine chalets framing 180° Himalayan snow peaks (Trishul, Nanda Devi & Panchachuli), paired with chauffeured mountain travel across Dev Bhoomi Uttarakhand.
 
 ---
 
-## 🌟 Executive Summary
-
-**The Kasar Himalayan Heights & Expeditions** is an enterprise-grade, full-stack hospitality and mountain travel web platform. Built with modern web architecture (React 19, Vite, Tailwind CSS v4, Node.js, Express, and MongoDB Atlas), the platform provides two isolated luxury experiences:
-
-1. **The Kasar Himalayan Heights (Hotel Experience):**
-   - Bespoke alpine chalet aesthetic inspired by Aman and Oberoi Wildflower Hall.
-   - Heated mountain suites, 180° snow peak balconies, live winter snowfall particle engine.
-   - Real-time stay cost calculator, quick-view suite modals, and direct reservation flow.
-
-2. **Himalayan Expeditions (Tour & Travel Experience):**
-   - Dedicated chauffeured mountain fleet: **4-Seater Sedans**, **6-Seater SUVs**, and **12-Seater Luxury Minibuses**.
-   - **Almora as Default Starting Station & Origin Base** with real road distances calibrated for Uttarakhand hill circuits and sacred pilgrimage dhams.
-   - **Interactive Distance & Vehicle Fare Calculator**: Real-time pricing based on route distance (km), vehicle per-km tariff, driver mountain allowance, and state tolls.
-   - Dual booking modes: Instant WhatsApp concierge dispatch and direct database reservation.
-
-3. **Secure Operations & Management Suite (Admin Portal):**
-   - Protected with JWT authentication, Argon/Bcrypt hashing with secondary password pepper protection.
-   - Comprehensive dashboard managing Hotel Suites, Room Bookings, and Tour & Travel Fleet Bookings.
+## 📖 Table of Contents
+1. [About the Project](#-about-the-project)
+2. [Platform Architecture & Ports](#-platform-architecture--ports)
+3. [Technology Stack](#-technology-stack)
+4. [Project Directory Structure](#-project-directory-structure)
+5. [Core Features & Modules](#-core-features--modules)
+6. [Mountain Travel & Fare Calculation Engine](#-mountain-travel--fare-calculation-engine)
+7. [Centralized Asset Inventory (19 Verified Files)](#-centralized-asset-inventory-19-verified-files)
+8. [Client Photography Wishlist](#-client-photography-wishlist)
+9. [REST API Documentation](#-rest-api-documentation)
+10. [Environment Variables Setup](#-environment-variables-setup)
+11. [Installation & Local Setup](#-installation--local-setup)
+12. [Security & Production Hardening](#-security--production-hardening)
+13. [Contact & Concierge](#-contact--concierge)
 
 ---
 
-## 📁 Repository Architecture
+## 🌟 About the Project
+
+**The Kasar Himalayan Heights & Expeditions** is an enterprise-grade full-stack hospitality and mountain travel platform. Rooted in the sacred tranquility of Kumaon's **Crank’s Ridge** (6,942 FT), the project blends **Devotional Reverence** (honoring Sri Neem Karoli Baba Maharaj and ancient Shiva shrines) with **Quiet Alpine Luxury** (heated cedar chalets, stone fireplaces, satvik regional dining, and reliable chauffeured mountain transport).
+
+### Geographical & Spiritual Significance
+- **Kasar Devi & Crank’s Ridge (800 m walk):** Resting on a scientifically recognized geomagnetic belt shared only with Stonehenge and Machu Picchu, famous since Swami Vivekananda’s 1890 meditation.
+- **Kainchi Dham Ashram (45 km / ~1.5 hrs):** World-renowned sanctuary founded by Sri Neem Karoli Baba Maharaj beside the Kshipra river.
+- **Jageshwar Mahamrityunjaya Dham (35 km / ~1.2 hrs):** Ancient cluster of 124 8th-century Nagara stone Jyotirlinga temples nestled in dense deodar forests.
+- **180° Snow Peak Horizon:** Clear, unobstructed views of Mount Trishul (7,120 m) and Mount Nanda Devi (7,816 m).
+
+---
+
+## 🏛️ Platform Architecture & Ports
+
+The platform is designed as an isolated **multi-frontend monorepo** with a centralized shared library and a hardened REST API backend:
 
 ```text
-Himalayan_Retreat/
-├── Backend/                                # Node.js + Express + MongoDB Atlas API
-│   ├── config/                             # Database & cloud storage configs
-│   │   ├── cloudinary.js                   # Cloudinary asset uploads
-│   │   ├── db.js                           # MongoDB connection via Mongoose
-│   │   └── emailService.js                 # Automated guest confirmation emails
-│   ├── controllers/                        # Route business logic
-│   │   ├── authController.js               # Admin authentication & token generation
-│   │   ├── hotelController.js              # Suite CRUD & reservation handlers
-│   │   └── travelController.js             # Travel bookings & tour package handlers
-│   ├── middleware/                         # Express middlewares
-│   │   ├── authMiddleware.js               # JWT bearer token verification
-│   │   └── uploadMiddleware.js             # Multer in-memory file handler
-│   ├── models/                             # Mongoose database schemas
-│   │   ├── Admin.js                        # Staff credential schema
-│   │   ├── Booking.js                      # Hotel room booking schema
-│   │   ├── Room.js                         # Hotel suite catalog schema
-│   │   ├── TourPackage.js                  # Pre-packaged tour schema
-│   │   └── TravelBooking.js                # Chauffeured travel booking schema
-│   ├── routes/                             # API endpoints
-│   │   ├── authRoutes.js                   # /api/auth
-│   │   ├── hotelRoutes.js                  # /api/hotel
-│   │   └── travelRoutes.js                 # /api/travel
-│   ├── scripts/                            # Operational database scripts
-│   │   ├── checkAdmin.js                   # Verifies existing admin credentials & pepper
-│   │   ├── dropAdmin.js                    # Clears admin collection safely
-│   │   └── seedAdmin.js                    # Seeds initial admin credentials
-│   ├── .env.example                        # Backend environment variable template
-│   ├── index.js                            # Express server entry point (Port 5000)
-│   └── package.json
-│
-├── Frontend/                               # React 19 + Vite 6 + Tailwind CSS v4
-│   ├── public/                             # Public static assets & SVGs
-│   │   ├── favicon.svg                     # Custom mountain crest vector tab icon
-│   │   ├── hero-hotel.jpg                  # High-resolution alpine chalet hero
-│   │   ├── logo.svg                        # Standalone vector crest emblem
-│   │   ├── placeholder-room.jpg            # Suite fallback banner
-│   │   └── placeholder-room.svg            # Minimal SVG fallback asset
-│   ├── src/
-│   │   ├── assets/                         # Local imagery and assets
-│   │   ├── components/                     # Modular, reusable UI components
-│   │   │   ├── AmenitiesGrid.jsx           # Winter heating, power backup & geysers
-│   │   │   ├── BookingForm.jsx             # Hotel stay date & guest booking form
-│   │   │   ├── Experiences.jsx             # Bonfire, sunrise & trail showcases
-│   │   │   ├── Footer.jsx                  # Hotel footer with newsletter & links
-│   │   │   ├── Hero.jsx                    # High-altitude hero with live snowfall
-│   │   │   ├── HeroBookingBar.jsx          # Hotel floating reservation bar
-│   │   │   ├── Icons.jsx                   # Curated luxury SVG vector icons
-│   │   │   ├── Loader.jsx                  # Mountain crest loading spinner
-│   │   │   ├── Logo.jsx                    # Scalable vector crest logo
-│   │   │   ├── Navbar.jsx                  # Frosted glass luxury hotel navigation
-│   │   │   ├── RoomCard.jsx                # Suite card with image carousel
-│   │   │   ├── RoomModal.jsx               # Suite quick-view modal dialog
-│   │   │   ├── SnowEffect.jsx              # Canvas-based snowfall particle animation
-│   │   │   ├── SuiteShowcase.jsx           # Split-screen editorial suite showcase
-│   │   │   ├── TestimonialCard.jsx         # Guest review card component
-│   │   │   ├── TiltCard.jsx                # Interactive 3D perspective card wrapper
-│   │   │   ├── TravelFooter.jsx            # Tour & Travel dedicated footer
-│   │   │   ├── TravelNavbar.jsx            # Tour & Travel dedicated navigation
-│   │   │   └── WhatsAppButton.jsx          # Floating WhatsApp concierge trigger
-│   │   ├── context/
-│   │   │   └── AuthContext.jsx             # Staff session & token state management
-│   │   ├── data/
-│   │   │   └── mockRooms.js                # Offline fallback suite dataset
-│   │   ├── pages/
-│   │   │   ├── AdminDashboard.jsx          # Management panel (Rooms, Bookings, Travel)
-│   │   │   ├── AdminLogin.jsx              # Secure staff sign-in
-│   │   │   ├── AllRooms.jsx                # Complete heated suite catalog with filters
-│   │   │   ├── BookingConfirmation.jsx     # Hotel reservation success summary
-│   │   │   ├── Home.jsx                    # Primary luxury hotel landing page
-│   │   │   ├── RoomDetails.jsx             # Individual suite detail & gallery view
-│   │   │   └── TourAndTravel.jsx           # Complete chauffeured expeditions page
-│   │   ├── App.css
-│   │   ├── App.jsx                         # Dynamic layout & route configuration
-│   │   ├── index.css                       # Luxury design tokens, typography & buttons
-│   │   └── main.jsx
-│   ├── .env.example                        # Frontend environment variable template
-│   ├── index.html                          # PWA meta, Google Fonts (Playfair & Inter)
-│   ├── package.json
-│   └── vite.config.js
-│
-├── .gitignore                              # Comprehensive multi-tier gitignore
-└── README.md
+┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                   HIMALAYAN RETREAT PLATFORM                                     │
+├───────────────────────────────┬─────────────────────────────────┬────────────────────────────────┤
+│ 🌐 LANDING PAGE (Port 5173)   │ 🏨 BOUTIQUE HOTEL (Port 5174)   │ 🚕 TRAVEL PORTAL (Port 5175)   │
+│ Devotional Heritage, Routes,  │ Heated Alpine Suites, Room      │ Mountain Fleet, Live Fare      │
+│ 3-Day Plan & Dynamic Booking  │ Tariffs, Dining & Reservations  │ Calculator & Temple Circuits   │
+├───────────────────────────────┴─────────────────────────────────┴────────────────────────────────┤
+│ 🛡️ ADMIN COMMAND PORTAL (Port 5176): Staff Operations, Room CRUD, Reservations & Travel Dispatch  │
+├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 📦 @shared PACKAGE: Shared UI Components, Icons, Layouts, Centralized Asset Registry, Utilities  │
+├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ ⚙️ BACKEND REST API (Port 5000): Express 5, Node.js, MongoDB Atlas, Cloudinary & Email Service   │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
----
-
-## 🚕 Tour & Travel Mountain Fare Calculation Engine
-
-### Default Starting Station: Almora, Uttarakhand
-All route distances and tariffs originate from the central Kumaon hub of **Almora Station Base**.
-
-#### Verified Road Distances from Almora Base:
-| Destination Circuit | Category | One-Way Distance | Round-Trip (RT) Distance |
-|:---|:---|:---:|:---:|
-| **Jageshwar Mahamrityunjaya Dham** | Sacred 124 Jyotirlinga Shrines | 35 km | 70 km |
-| **Kainchi Dham Ashram** | Neem Karoli Baba Ashram | 45 km | 90 km |
-| **Ranikhet Orchards & Kasar Devi** | Cosmic Ridge & Tea Gardens | 46 km | 92 km |
-| **Kasar Devi Dham & Chauli Ki Jali** | Himalayan Ridge & Cliffs | 50 km | 100 km |
-| **Kausani Himalayan Panorama** | 300 km Snow Peak Vista | 52 km | 104 km |
-| **Nainital Lake & Naina Devi** | Colonial Lake & Sacred Temple | 63 km | 126 km |
-| **Kathgodam Railway Station** | Shatabdi / Ranikhet Express Base | 85 km | 170 km |
-| **Grand Chardham Circuit** | Yamunotri, Gangotri, Kedarnath, Badrinath | 475 km | 950 km |
-
-### Vehicle Fleet Tariff Matrix:
-| Fleet Class | Vehicle Models | Seating Capacity | Luggage Capacity | Mountain Tariff |
-|:---|:---|:---:|:---:|:---:|
-| **Mountain Sedan** | Maruti Dzire / Toyota Etios | 4 Guests | 2 Large + 2 Cabin | **₹14 / km** |
-| **Luxury SUV** | Toyota Innova Crysta / Ertiga ZXi | 6 Guests | 4 Large + Roof Carrier | **₹18 / km** |
-| **Luxury Minibus** | Force Urbania / Tempo Traveller | 12 Guests | 10+ Large Bay Bags | **₹26 / km** |
-
-### Mathematical Pricing Formula:
-$$\text{Total Fare} = \left(\text{Route Distance (km)} \times \text{Vehicle Rate / km}\right) + \left(₹500 \times \text{Trip Days}\right) + \text{State Tolls \& Permits}$$
-
-- **Route Modes:**
-  - 🔄 **Round Trip (Return to Almora):** $2 \times \text{One-Way Distance}$
-  - ➡️ **One-Way Drop / Transfer:** $1 \times \text{One-Way Distance}$
-- **Interactive Custom Distance:** Guests can select destinations or override distance directly via the interactive range slider (20 km – 1,000 km) and direct numerical kilometer input.
-- **Inclusions:** 100% Uttarakhand commercial passenger permits, FastTag, fuel, and chauffeur hill night lodging. Zero hidden ghat surcharges.
+| Micro-Application | Port | Responsibility |
+| :--- | :---: | :--- |
+| **Landing Portal** | `5173` | Grand brand entry, Neem Karoli Baba devotional hero, Dev Bhoomi 4 pillars, route planner, dynamic WhatsApp booking form, and luxury sandstone footer. |
+| **Hotel Portal** | `5174` | Dedicated boutique resort web app, heated alpine chalets, live winter snowfall canvas engine, room filters, and stay booking modal. |
+| **Travel Portal** | `5175` | Dedicated mountain expedition web app, Almora base hub circuits, dynamic vehicle fare calculator, community guest reviews. |
+| **Admin Portal** | `5176` | Executive staff command desk, live KPI counters, dual view suite tables, suite CRUD modal with drag-and-drop dropzone, 1-click WhatsApp dispatch. |
+| **Backend REST API** | `5000` | Node.js + Express 5 backend with MongoDB Atlas, JWT authentication, rate limiting, and asset pipeline. |
 
 ---
 
 ## 🛠️ Technology Stack
 
-| Layer | Technologies |
-|:---|:---|
-| **Frontend Framework** | React 19, Vite 6 |
-| **Styling & Design System** | Tailwind CSS v4, Custom CSS Utilities (`.btn-gold`, `.glass-surface`, `.glass-pill-dark`) |
-| **Typography** | Playfair Display (Serif Headings), Inter (Sans-serif Body), JetBrains Mono (Tariffs & Numbers) |
-| **Routing** | React Router v6 (Isolated Layout for Hotel vs Travel) |
-| **Backend Runtime** | Node.js, Express.js |
-| **Database** | MongoDB Atlas via Mongoose ODM |
-| **Security & Auth** | JSON Web Tokens (JWT), Bcrypt, Password Pepper Hashing, Helmet HTTP Headers, Rate Limiting |
-| **Storage & Media** | Cloudinary API, Wikimedia Commons (Authentic Himalayan Heritage) |
+### Frontend Ecosystem
+- **Core:** React 19, Vite 8, React Router DOM 7
+- **Styling & Design System:** Tailwind CSS v4 (`@tailwindcss/vite`), Vanilla CSS design tokens (`tokens.css`, `base.css`)
+- **Typography:**
+  - *Headings & Titles:* Playfair Display, Cormorant Garamond, Cinzel Roman
+  - *Body Text:* Raleway, Inter
+  - *Devotional Sanskrit:* Rozha One, Tiro Devanagari Hindi
+  - *Numerals & Tariffs:* Lining numerals with clean sans-serif ampersands (`CleanAmp` fallback)
+- **Visual FX & Interactions:** Canvas-based realistic snowfall particle engine, 3D tilt perspective cards, animated SVG chevrons (zero emojis/stickers).
+- **HTTP Client:** Axios with standardized interceptors in `@shared/services/apiClient.js`.
+
+### Backend Ecosystem
+- **Runtime & Server:** Node.js, Express 5
+- **Database & ODM:** MongoDB Atlas via Mongoose 9
+- **Authentication & Security:** JSON Web Tokens (JWT), Bcrypt with server-side secret password pepper, Helmet HTTP security headers, Express Rate Limiting, Mongo Sanitize.
+- **File & Media Handling:** Multer in-memory upload buffer + Cloudinary CDN pipeline with automatic fallback to Base64 Data URIs during third-party downtime.
+- **Email Service:** Nodemailer automated guest confirmation dispatch.
 
 ---
 
-## ⚙️ Environment Configuration
+## 📂 Project Directory Structure
 
-### 1. Backend Configuration (`Backend/.env`)
-Copy `Backend/.env.example` to `Backend/.env` and update your values:
+```text
+Himalayan_Retreat/
+├── Backend/                                # Node.js + Express 5 API Server (Port 5000)
+│   ├── config/
+│   │   ├── cloudinary.js                   # Cloudinary CDN initialization & credentials
+│   │   ├── db.js                           # MongoDB Atlas connection via Mongoose
+│   │   └── emailService.js                 # Automated email delivery service
+│   ├── controllers/
+│   │   ├── authController.js               # Staff sign-in & JWT generation
+│   │   ├── hotelController.js              # Suite CRUD & room reservation processing
+│   │   ├── reviewController.js             # Guest travel reviews & approval moderation
+│   │   └── travelController.js             # Chauffeured travel booking & circuit handlers
+│   ├── middleware/
+│   │   ├── authMiddleware.js               # JWT bearer token verification
+│   │   └── uploadMiddleware.js             # Multer in-memory buffer handler
+│   ├── models/
+│   │   ├── Admin.js                        # Staff credential schema with salt+pepper
+│   │   ├── Booking.js                      # Hotel room booking reservation schema
+│   │   ├── Room.js                         # Heated suite catalog schema
+│   │   ├── TourPackage.js                  # Pre-packaged travel circuit schema
+│   │   ├── TravelBooking.js                # Chauffeured travel booking schema
+│   │   └── TravelReview.js                 # Community review & photo schema
+│   ├── routes/
+│   │   ├── authRoutes.js                   # /api/auth endpoints
+│   │   ├── hotelRoutes.js                  # /api/hotel endpoints
+│   │   └── travelRoutes.js                 # /api/travel endpoints
+│   ├── scripts/
+│   │   ├── checkAdmin.js                   # Admin verification CLI script
+│   │   ├── dropAdmin.js                    # Database cleanup script
+│   │   └── seedAdmin.js                    # Initial admin provisioning script
+│   ├── .env.example                        # Backend environment template
+│   ├── index.js                            # Express server entry point
+│   └── package.json
+│
+├── Frontend/                               # React 19 Multi-Frontend Monorepo
+│   ├── landing/                            # Micro-App 1: Main Brand Portal (Port 5173)
+│   │   ├── public/                         # Static icons & vectors
+│   │   ├── src/
+│   │   │   ├── components/
+│   │   │   │   ├── LandingNavbar.jsx       # Sticky header with hover/click dropdowns
+│   │   │   │   ├── HeroMaharajji.jsx       # Sacred Baba Neem Karoli arch hero
+│   │   │   │   ├── DevBhoomiSection.jsx    # 4 spiritual pillars & resort architecture
+│   │   │   │   ├── RouteDistancePlanner.jsx# Almora hub distance tabs with cab CTA
+│   │   │   │   ├── HotelGatewaySection.jsx # Heated suites showcase & Satvik cafe
+│   │   │   │   ├── TravelGatewaySection.jsx# Fleet showcase & fixed route tariffs
+│   │   │   │   ├── PilgrimageItinerary.jsx # 3-day sample pilgrimage schedule
+│   │   │   │   ├── VisitorFaqSection.jsx   # Practical Q&A with SVG accordion
+│   │   │   │   └── ConciergeEnquirySection.jsx # 100% dynamic WhatsApp booking form
+│   │   │   ├── content/
+│   │   │   │   └── landing.content.js      # Centralized editable content
+│   │   │   ├── data/
+│   │   │   │   └── landingData.js          # Verified route, suite, and fleet datasets
+│   │   │   ├── App.jsx                     # Landing page layout & auto-reveal
+│   │   │   ├── index.css                   # Tailwind v4 imports & custom typography
+│   │   │   └── main.jsx
+│   │   ├── index.html
+│   │   └── vite.config.js
+│   │
+│   ├── hotel/                              # Micro-App 2: Boutique Resort (Port 5174)
+│   │   ├── src/
+│   │   │   ├── components/                 # RoomCard, RoomModal, BookingForm, SnowEffect
+│   │   │   ├── pages/                      # Home, AllRooms, RoomDetails, Confirmation
+│   │   │   ├── App.jsx
+│   │   │   └── main.jsx
+│   │   ├── index.html
+│   │   └── vite.config.js
+│   │
+│   ├── travel/                             # Micro-App 3: Mountain Travel (Port 5175)
+│   │   ├── src/
+│   │   │   ├── components/                 # TravelNavbar, TravelFooter, FareCalculator
+│   │   │   ├── pages/                      # TourAndTravel, CommunityReviews
+│   │   │   ├── App.jsx
+│   │   │   └── main.jsx
+│   │   ├── index.html
+│   │   └── vite.config.js
+│   │
+│   ├── admin/                              # Micro-App 4: Operations Desk (Port 5176)
+│   │   ├── src/
+│   │   │   ├── pages/
+│   │   │   │   ├── AdminLogin.jsx          # Protected staff login with rate limiting
+│   │   │   │   └── AdminDashboard.jsx      # KPI metrics, suite CRUD modal, dual view
+│   │   │   ├── App.jsx
+│   │   │   └── main.jsx
+│   │   ├── index.html
+│   │   └── vite.config.js
+│   │
+│   ├── shared/                             # Centralized Shared Package (@shared)
+│   │   ├── assets/
+│   │   │   └── images/                     # 19 centralized, deduplicated image assets
+│   │   ├── components/
+│   │   │   ├── ArchImage.jsx               # Reverent arch-framed portrait wrapper
+│   │   │   ├── BackToTop.jsx               # Smooth scroll-to-top luxury button
+│   │   │   ├── Button.jsx                  # Standardized brand button
+│   │   │   ├── Container.jsx               # Responsive editorial grid container
+│   │   │   ├── Icons.jsx                   # Handcrafted SVG vector icons (Zero emojis)
+│   │   │   ├── Logo.jsx                    # Scalable mountain crest vector emblem
+│   │   │   ├── Modal.jsx                   # Accessible modal dialog
+│   │   │   └── TiltCard.jsx                # Interactive 3D perspective wrapper
+│   │   ├── constants/
+│   │   │   ├── assets.js                   # Single source of truth for all images
+│   │   │   └── siteConfig.js               # Cross-app URL mappings & coordinates
+│   │   ├── layout/
+│   │   │   ├── AnnouncementBar.jsx         # Dismissible top notice ribbon
+│   │   │   ├── SiteFooter.jsx              # Warm Sandstone & Pearl Ivory luxury footer
+│   │   │   └── SiteHeader.jsx              # Standalone universal header
+│   │   ├── services/
+│   │   │   └── apiClient.js                # Pre-configured Axios API client
+│   │   ├── styles/
+│   │   │   ├── base.css                    # Global typography & animation utilities
+│   │   │   └── tokens.css                  # Color palette tokens & font-face rules
+│   │   └── index.js                        # Barrel exports for `@shared` import alias
+│   │
+│   ├── .env.example                        # Frontend cross-port environment template
+│   └── package.json                        # Root workspace scripts & dependencies
+│
+├── .gitignore
+└── README.md
+```
+
+---
+
+## 🎯 Core Features & Modules
+
+### 1. Dynamic Concierge Booking Form ([ConciergeEnquirySection.jsx](file:///d:/Himalayan_Retreat/Frontend/landing/src/components/ConciergeEnquirySection.jsx))
+- **Smart Reactive Fields:**
+  - Selecting **"Room Stay Only"** hides cab options and displays check-in/out date pickers, room categories, room counts, and guest numbers.
+  - Selecting **"Cab / Travel Only"** hides room fields and displays travel date, pickup hub, destination route, vehicle model, and passenger count.
+  - Selecting **"Both Room Stay & Mountain Cab"** reveals the complete joint pilgrimage package form.
+- **Custom WhatsApp Message Generator:** Generates a pre-formatted, bulleted WhatsApp message routed to the concierge number (`+91 96906 21247`).
+
+### 2. Dev Bhoomi & Shrines Section ([DevBhoomiSection.jsx](file:///d:/Himalayan_Retreat/Frontend/landing/src/components/DevBhoomiSection.jsx))
+- 4 rich spiritual cards highlighting Kasar Devi (800m walk), Kainchi Dham (45 km), Jageshwar Dham (35 km), and Trishul/Nanda Devi peaks.
+- Includes a dedicated "At Our Retreat" contextual bridge for every holy site.
+- Architecture showcase featuring authentic daylight and winter snow photography.
+
+### 3. Boutique Hotel Showcase ([HotelGatewaySection.jsx](file:///d:/Himalayan_Retreat/Frontend/landing/src/components/HotelGatewaySection.jsx))
+- Real suite bedroom photos: Nanda Devi Panoramic Suite, Cedar Alpine Chalet, and Crank's Ridge Attic Suite.
+- Live tariff switcher, dimensions, and amenities list.
+- Satvik Dining & Cafe card featuring the real signboard photo (`caption.jpg`).
+
+### 4. Harmonized Luxury Site Footer ([SiteFooter.jsx](file:///d:/Himalayan_Retreat/Frontend/shared/layout/SiteFooter.jsx))
+- Styled in the website's signature **Warm Sandstone & Pearl Ivory** palette (`bg-gradient-to-b from-[#FAF6EF] via-[#F5EFE6] to-[#EFE7DA]`).
+- Pre-footer concierge callout strip with direct WhatsApp and phone dialers.
+- 4-column editorial layout: Brand & Philosophy, Resort & Stay, Cabs & Tours, and Concierge & Locations.
+- Sacred Himalayan peaks strip and reverent Sanskrit chant: `॥ ॐ श्री नीब करौरी महाराजाय नमः ॥`.
+
+---
+
+## 🚕 Mountain Travel & Fare Calculation Engine
+
+### Default Starting Hub: Almora, Uttarakhand (6,942 FT)
+All travel circuits and tariffs are calibrated from the central Kumaon hub of **Almora Station Base**.
+
+#### Verified Road Distances & Driving Times:
+| Destination Circuit | Spiritual / Scenic Category | One-Way Distance | Driving Time | Road Condition |
+| :--- | :--- | :---: | :---: | :--- |
+| **Kainchi Dham Ashram** | Sri Neem Karoli Baba Ashram | **45 km** | ~ 1.5 hrs | Smooth NH-109 Paved Highway |
+| **Jageshwar Mahamrityunjaya** | 124 Ancient 8th-c. Jyotirlinga Shrines | **35 km** | ~ 1.2 hrs | Scenic Pine & Cedar Forest Road |
+| **Kasar Devi & Crank's Ridge** | Geomagnetic Belt & Meditation Caves | **800 m** | 5 mins walk | Direct Pine Needle Ridge Trail |
+| **Kathgodam Railway Station** | Primary Broad-Gauge Railhead | **85 km** | ~ 3.0 hrs | Well-Maintained Hill Highway |
+| **Pantnagar Airport (PGH)** | Nearest Regional Airport | **120 km** | ~ 4.0 hrs | Plains to Ghat Mountain Transition |
+| **Binsar Wildlife Sanctuary** | 300 km Snow Peak Crests | **22 km** | ~ 45 mins | Sanctuary Forest Ridge Road |
+| **Mukteshwar Dham & Cliffs** | 350-Year-Old Shiva Temple | **48 km** | ~ 1.8 hrs | Mountain Orchard Ridge Road |
+| **Ranikhet Cantonment** | Army Greens & Apple Orchards | **46 km** | ~ 1.5 hrs | Gentle Valley Hill Highway |
+| **New Delhi / NCR** | Capital Highway Corridor | **375 km** | ~ 8.5 hrs | Expressway to Foothills Ascent |
+
+#### Vehicle Fleet Tariff Matrix:
+| Fleet Class | Vehicle Models | Seating | Luggage | Per-Km Rate | Kathgodam Drop |
+| :--- | :--- | :---: | :---: | :---: | :---: |
+| **Mountain Sedan** | Maruti Dzire / Toyota Etios | 4 Guests | 2 Large + 2 Cabin | **₹14 / km** | **₹3,800** |
+| **Luxury SUV** | Toyota Innova Crysta | 6 Guests | 4 Large + Roof Carrier | **₹18 / km** | **₹5,500** |
+| **Luxury Minibus** | Force Urbania | 12 Guests | 10+ Large Suitcases | **₹26 / km** | **₹9,800** |
+
+$$\text{Total Fare} = \left(\text{Route Distance (km)} \times \text{Vehicle Rate/km}\right) + \left(₹500 \times \text{Trip Days}\right) + \text{State Tolls \& Permits}$$
+
+*All tariffs include vehicle fuel, state commercial permits, FastTag, and chauffeur lodging allowance. Zero hidden charges.*
+
+---
+
+## 📸 Centralized Asset Inventory (19 Verified Files)
+
+All images are consolidated in [`Frontend/shared/assets/images`](file:///d:/Himalayan_Retreat/Frontend/shared/assets/images) and exported via [`Frontend/shared/constants/assets.js`](file:///d:/Himalayan_Retreat/Frontend/shared/constants/assets.js):
+
+| Category | File Name | Export Identifier | Usage Location |
+| :--- | :--- | :--- | :--- |
+| **Holy Sites** | `neem-karoli-baba.jpg` | `babaPortraitImg` | Hero Section reverent arch portrait |
+| | `Kainchi-Dham.webp` | `kainchiWebp` | Dev Bhoomi pillar & Kainchi Darshan card |
+| | `kainchi-dham.jpg` | `kainchiJpg` | High-res alternate ashram perspective |
+| | `Jageshwar-Mahamrityunjaya-Dham.jpg` | `jageshwarImg` | Jageshwar 124 Jyotirlinga temples card |
+| | `kasar-devi-temple.jpg` | `kasarTempleImg` | Kasar Devi & Crank's Ridge cosmic belt |
+| | `Trishul-&-Nanda-Devi.jpg` | `trishulPeaksImg` | Trishul (7,120m) & Nanda Devi vista |
+| **Resort Exterior** | `hotel-best-pic.jpg` | `hotelBestPic` | Daytime chalet resort architecture (6,942 FT) |
+| | `hotel-in-snow.jpg` | `hotelInSnow` | Winter snowfall over the resort pine ridge |
+| | `hotel-at-night.jpg` | `hotelAtNight` | Warm amber night illumination of the chalet |
+| **Room Interiors** | `snow-view-suite.jpg` | `snowViewSuiteImg` | Nanda Devi Signature Heated Suite bedroom |
+| | `chalet-suite.jpg` | `chaletSuiteImg` | Cedar Alpine Family Chalet bedroom |
+| | `attic-suite.jpg` | `atticSuiteImg` | Crank's Ridge Attic Glass Suite pine interior |
+| **Resort Amenities**| `caption.jpg` | `captionImg` | Satvik Dining & Cafe featuring resort signboard |
+| | `corridor-at-day.jpg` | `corridorDay` | Wood-paneled alpine interior corridor |
+| | `corridor-at-night.jpg` | `corridorNight` | Cozy night-lit interior guest hallway |
+| | `gamezone.jpg` | `gamezoneImg` | Indoor family entertainment & recreational hall |
+| **Mountain Fleet** | `innova-crysta.jpg` | `innovaImg` | Toyota Innova Crysta (6-seater luxury SUV) |
+| | `mountain-sedan.jpg` | `sedanImg` | Maruti Suzuki Dzire (4-seater mountain sedan) |
+| | `luxury-minibus.jpg` | `minibusImg` | Force Urbania (12-seater executive carrier) |
+
+---
+
+## 📋 Client Photography Wishlist
+
+To bring all sub-pages and gallery modals to 100% full production fidelity, the following authentic photographs are requested from the client:
+
+### 1. Suite Bathrooms & Cozy In-Room Details
+- [ ] **En-Suite Bathroom Details:** High-pressure shower cubicles, 24/7 hot water geysers, organic toiletries, and clean stone/wood finishes.
+- [ ] **Private Balcony in Action:** Morning tea setup on the private balcony with Mount Trishul / Nanda Devi glowing in the dawn light.
+- [ ] **Stone Fireplace:** Evening photo of the stone fireplace lit with fragrant pine logs in the Cedar Suite.
+
+### 2. Dining & Satvik Cuisine
+- [ ] **Authentic Kumaoni Thali:** Traditional local meal (Bhatt ki Churkani, Gahat ki Dal, Mandua rotis, Kumaoni Raita, and Buransh flower squash).
+- [ ] **Terrace Breakfast Spread:** Hot parathas, mountain honey, and herbal tea overlooking the valley.
+- [ ] **Evening Bonfire Experience:** Guests gathered around the outdoor pine bonfire under a starry Himalayan sky.
+
+### 3. Surroundings & Experiences
+- [ ] **Resort Walking Trail:** Footpath leading directly from the retreat onto Crank's Ridge pine trails towards the Kasar Devi Temple.
+- [ ] **Sunset / Dusk Horizon:** Golden sunset illuminating the Almora valley and Himalayan silhouette.
+- [ ] **Meditation Deck / Yoga Corner:** Quiet morning meditation scene on the open lawn or attic balcony.
+
+### 4. Mountain Travel & Chauffeurs
+- [ ] **Chauffeur Meet-and-Greet:** Native hill driver welcoming guests with luggage assistance at Kathgodam Railway Station.
+- [ ] **Vehicle on Forest Ghat Road:** Innova Crysta or Force Urbania navigating the scenic deodar forest between Almora and Jageshwar.
+
+---
+
+## 📡 REST API Documentation
+
+### 🔐 Authentication (`/api/auth`)
+| Method | Endpoint | Description | Access |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/auth/login` | Staff admin authentication (returns JWT token) | Public (Rate Limited) |
+
+### 🏨 Hotel Suites & Bookings (`/api/hotel`)
+| Method | Endpoint | Description | Access |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/hotel/rooms` | Retrieve all suites in catalog | Public |
+| `GET` | `/api/hotel/rooms/:id` | Retrieve single suite details by ID | Public |
+| `POST` | `/api/hotel/rooms` | Create a new suite (file upload + Data URI fallback) | Protected (Admin) |
+| `PUT` | `/api/hotel/rooms/:id` | Update an existing suite | Protected (Admin) |
+| `DELETE` | `/api/hotel/rooms/:id` | Delete a suite from catalog | Protected (Admin) |
+| `POST` | `/api/hotel/bookings` | Submit room booking reservation | Public |
+| `GET` | `/api/hotel/bookings` | Retrieve all guest reservations | Protected (Admin) |
+| `PUT` | `/api/hotel/bookings/:id/status` | Update booking status (`confirmed`, `cancelled`, etc.) | Protected (Admin) |
+| `DELETE` | `/api/hotel/bookings/:id` | Remove a booking record | Protected (Admin) |
+
+### 🚕 Tour & Travel Expeditions (`/api/travel`)
+| Method | Endpoint | Description | Access |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/travel/tours` | List all curated tour packages | Public |
+| `GET` | `/api/travel/tours/:id` | Retrieve single tour package | Public |
+| `POST` | `/api/travel/bookings` | Submit a chauffeured vehicle reservation | Public |
+| `GET` | `/api/travel/bookings` | Retrieve all travel fleet bookings | Protected (Admin) |
+| `PUT` | `/api/travel/bookings/:id/status` | Update travel booking status | Protected (Admin) |
+| `DELETE` | `/api/travel/bookings/:id` | Remove a travel booking | Protected (Admin) |
+| `GET` | `/api/travel/reviews` | Fetch approved community travel reviews | Public |
+| `POST` | `/api/travel/reviews` | Submit guest review with up to 5 photos | Public |
+| `PUT` | `/api/travel/reviews/:id/approve` | Toggle review approval status | Protected (Admin) |
+| `DELETE` | `/api/travel/reviews/:id` | Delete a travel review | Protected (Admin) |
+
+---
+
+## ⚙️ Environment Variables Setup
+
+### Backend Environment (`Backend/.env`)
 ```env
 PORT=5000
 MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/himalayan_retreat?retryWrites=true&w=majority
-JWT_SECRET=your_secure_jwt_secret_here
-PASSWORD_PEPPER=your_password_pepper_secret_here
+JWT_SECRET=your_super_secret_jwt_key
+PASSWORD_PEPPER=your_password_pepper_key
 CLOUDINARY_URL=cloudinary://<api_key>:<api_secret>@<cloud_name>
 ```
 
-### 2. Frontend Configuration (`Frontend/.env`)
-Copy `Frontend/.env.example` to `Frontend/.env` (optional in development; defaults to `http://localhost:5000/api`):
+### Frontend Environment (`Frontend/.env`)
 ```env
+VITE_LANDING_URL=http://localhost:5173
+VITE_HOTEL_URL=http://localhost:5174
+VITE_TRAVEL_URL=http://localhost:5175
+VITE_ADMIN_URL=http://localhost:5176
 VITE_API_URL=http://localhost:5000/api
 ```
 
 ---
 
-## 🚀 Local Development Setup
+## 🚀 Installation & Local Setup
 
-### Prerequisites
-- Node.js (v18.0.0 or higher recommended)
-- npm (v9.0.0 or higher)
-- MongoDB Atlas cluster URI or local MongoDB instance
+### 1. Prerequisites
+- **Node.js:** v18.0.0 or higher
+- **npm:** v9.0.0 or higher
+- **MongoDB:** Active MongoDB Atlas URI or local MongoDB instance
 
-### 1. Clone & Install
+### 2. Clone Repository
 ```bash
 git clone https://github.com/<your-username>/Himalayan_Retreat.git
 cd Himalayan_Retreat
 ```
 
-### 2. Backend Setup
+### 3. Backend Setup & Admin Seed
 ```bash
 cd Backend
 npm install
 
-# Seed Initial Admin Account
-node scripts/seedAdmin.js
+# Provision initial admin credentials
+npm run seed:admin
 
-# Start Development API Server
+# Start development server (Port 5000)
 npm run dev
 ```
-* Backend runs on: `http://localhost:5000`
-* Health Check: `http://localhost:5000/` returns `"Backend API is running!"`
 
-### 3. Frontend Setup
-In a new terminal window:
+### 4. Frontend Launch Options
+From the project root or `Frontend/` folder, run individual applications:
+
+```bash
+# Terminal 1: Landing Page (Port 5173)
+cd Frontend/landing && npm install && npm run dev
+
+# Terminal 2: Boutique Hotel Resort (Port 5174)
+cd Frontend/hotel && npm install && npm run dev
+
+# Terminal 3: Chauffeured Mountain Travel (Port 5175)
+cd Frontend/travel && npm install && npm run dev
+
+# Terminal 4: Admin Command Portal (Port 5176)
+cd Frontend/admin && npm install && npm run dev
+```
+
+Alternatively, from the `Frontend/` root folder:
 ```bash
 cd Frontend
 npm install
-
-# Start Vite Development Server
-npm run dev
+npm run dev:landing   # Runs landing on 5173
+npm run dev:hotel     # Runs hotel on 5174
+npm run dev:travel    # Runs travel on 5175
+npm run dev:admin     # Runs admin on 5176
 ```
-* Frontend runs on: `http://localhost:5173`
 
 ---
 
-## 📡 REST API Reference
+## 🔒 Security & Production Hardening
 
-### 🔐 Authentication (`/api/auth`)
-| Method | Endpoint | Description | Access |
-|:---|:---|:---|:---|
-| `POST` | `/api/auth/login` | Staff admin authentication (returns JWT token) | Public (Rate Limited) |
-
-### 🏨 Hotel Suites & Bookings (`/api/hotel`)
-| Method | Endpoint | Description | Access |
-|:---|:---|:---|:---|
-| `GET` | `/api/hotel/rooms` | Retrieve all hotel rooms and suites | Public |
-| `GET` | `/api/hotel/rooms/:id` | Retrieve single room details by ID | Public |
-| `POST` | `/api/hotel/rooms` | Add a new suite (supports image upload) | Protected (Admin) |
-| `PUT` | `/api/hotel/rooms/:id` | Update an existing suite | Protected (Admin) |
-| `DELETE` | `/api/hotel/rooms/:id` | Delete a suite | Protected (Admin) |
-| `POST` | `/api/hotel/bookings` | Create a new room booking reservation | Public |
-| `GET` | `/api/hotel/bookings` | View all hotel reservations | Protected (Admin) |
-
-### 🚕 Tour & Travel Expeditions (`/api/travel`)
-| Method | Endpoint | Description | Access |
-|:---|:---|:---|:---|
-| `GET` | `/api/travel/tours` | List all curated tour packages | Public |
-| `GET` | `/api/travel/tours/:id` | Retrieve single tour package | Public |
-| `POST` | `/api/travel/bookings` | Submit a chauffeured vehicle reservation | Public |
-| `GET` | `/api/travel/bookings` | View all travel fleet bookings | Protected (Admin) |
-| `POST` | `/api/travel/tours` | Add a new tour package | Protected (Admin) |
-| `PUT` | `/api/travel/tours/:id` | Update tour package | Protected (Admin) |
-| `DELETE` | `/api/travel/tours/:id` | Delete tour package | Protected (Admin) |
+1. **Password Salt + Pepper:** Passwords hashed with Bcrypt combined with an out-of-band server-side pepper key.
+2. **Brute Force Defense:** Sensitive auth endpoints protected by `express-rate-limit` (10 attempts per 15 minutes per IP).
+3. **HTTP Header Hardening:** `helmet` middleware enforces modern Content Security Policies and X-Frame-Options.
+4. **Data Sanitization:** Strict Mongoose schemas and `express-mongo-sanitize` prevent NoSQL injection.
+5. **Resilient Upload Engine:** Automatic base64 fallback ensures uninterrupted room/tour creation during Cloudinary rate limits or network issues.
 
 ---
 
-## 🔒 Security Best Practices Implemented
-
-1. **Password Salt + Pepper**: Passwords are saved with bcrypt salting plus an out-of-band server-side environment pepper key, protecting against offline dictionary and rainbow table attacks.
-2. **Brute Force Protection**: Express rate limiting on sensitive routes (`/api/auth/login`) limits attempts to 10 per 15 minutes per IP.
-3. **HTTP Header Hardening**: Helmet middleware sets security headers including Content-Security-Policy and X-Frame-Options.
-4. **Environment Isolation**: Production `.env` files are strictly excluded from version control via multi-tier `.gitignore` patterns.
-5. **NoSQL Protection**: Strict Mongoose schema typing prevents unvetted query parameter injection.
-
----
-
-## 📞 Concierge & Reservations
+## 📞 Contact & Concierge
 
 - **WhatsApp Concierge:** [+91 96906 21247](https://wa.me/919690621247)
-- **Hotel Location:** Kasar Devi, Almora, Uttarakhand, India
-- **Travel Hub Base:** Almora Station Base, Uttarakhand, India
+- **Direct Phone:** `+91 96906 21247`
+- **Email:** `concierge@kasarhimalayanheights.com`
+- **Hotel Location:** The Kasar Himalayan Heights, Crank's Ridge, Kasar Devi, Almora, Uttarakhand 263601 *(6,942 FT)*
+- **Travel Hub Base:** Almora Station Base Hub, Uttarakhand, India
 
 ---
 
-*Crafted with high-altitude alpine passion for Himalayan Uttarakhand.*
+*॥ ॐ श्री नीब करौरी महाराजाय नमः ॥ • Dedicated with reverence to Dev Bhoomi Uttarakhand.*

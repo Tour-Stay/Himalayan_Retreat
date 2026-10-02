@@ -59,13 +59,45 @@ const addTour = async (req, res) => {
       }
     }
 
+    let parsedDuration = duration;
+    if (typeof parsedDuration === 'string') {
+      try {
+        parsedDuration = JSON.parse(parsedDuration);
+      } catch (e) {
+        const dMatch = parsedDuration.match(/(\d+)\s*Day/i);
+        const nMatch = parsedDuration.match(/(\d+)\s*Night/i);
+        parsedDuration = {
+          days: dMatch ? Number(dMatch[1]) : 1,
+          nights: nMatch ? Number(nMatch[1]) : 0,
+        };
+      }
+    }
+
+    let parsedItinerary = itinerary;
+    if (typeof parsedItinerary === 'string') {
+      try {
+        parsedItinerary = JSON.parse(parsedItinerary);
+      } catch (e) {
+        parsedItinerary = [{ day: 1, description: parsedItinerary }];
+      }
+    }
+
+    let parsedInclusions = inclusions;
+    if (typeof parsedInclusions === 'string') {
+      try {
+        parsedInclusions = JSON.parse(parsedInclusions);
+      } catch (e) {
+        parsedInclusions = parsedInclusions.split(',').map((s) => s.trim()).filter(Boolean);
+      }
+    }
+
     const tour = await TourPackage.create({
       title,
       destination,
-      duration,
+      duration: parsedDuration,
       pricePerPerson,
-      itinerary,
-      inclusions,
+      itinerary: parsedItinerary,
+      inclusions: parsedInclusions,
       imageURLs,
     });
 
@@ -85,7 +117,35 @@ const updateTour = async (req, res) => {
       return res.status(404).json({ message: 'Tour package not found.' });
     }
 
-    const updatedTour = await TourPackage.findByIdAndUpdate(req.params.id, req.body, {
+    const updateData = { ...req.body };
+    if (updateData.duration && typeof updateData.duration === 'string') {
+      try {
+        updateData.duration = JSON.parse(updateData.duration);
+      } catch (e) {
+        const dMatch = updateData.duration.match(/(\d+)\s*Day/i);
+        const nMatch = updateData.duration.match(/(\d+)\s*Night/i);
+        updateData.duration = {
+          days: dMatch ? Number(dMatch[1]) : 1,
+          nights: nMatch ? Number(nMatch[1]) : 0,
+        };
+      }
+    }
+    if (updateData.itinerary && typeof updateData.itinerary === 'string') {
+      try {
+        updateData.itinerary = JSON.parse(updateData.itinerary);
+      } catch (e) {
+        updateData.itinerary = [{ day: 1, description: updateData.itinerary }];
+      }
+    }
+    if (updateData.inclusions && typeof updateData.inclusions === 'string') {
+      try {
+        updateData.inclusions = JSON.parse(updateData.inclusions);
+      } catch (e) {
+        updateData.inclusions = updateData.inclusions.split(',').map((s) => s.trim()).filter(Boolean);
+      }
+    }
+
+    const updatedTour = await TourPackage.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
       runValidators: true,
     });

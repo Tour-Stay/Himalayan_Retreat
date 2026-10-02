@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+/* ===============================================================
+   THE KASAR HIMALAYAN HEIGHTS — DEVOTIONAL + LUXURY DESIGN TOKENS
+   =============================================================== */
+
+@theme {
+  /* Warm Devotional + Luxury Backgrounds */
+  --color-ivory: #FDFBF7;
+  --color-ivory-warm: #FAF6EF;
+  --color-ivory-surface: #F5EFE6;
+  --color-cream: #FAFAF7;
+
+  /* Primary Reverent Maroon / Sindoor */
+  --color-maroon: #7C1D23;
+  --color-maroon-dark: #5C151A;
+  --color-maroon-light: #9B2830;
+  --color-primary: #7C1D23;
+
+  /* Saffron & Marigold Accents */
+  --color-saffron: #E58A2B;
+  --color-saffron-muted: #D97706;
+  --color-saffron-light: #FDE8C8;
+
+  /* Muted Antique Gold Lines & Buttons */
+  --color-gold: #C5A059;
+  --color-gold-muted: #B8934A;
+  --color-gold-light: #DFCA9B;
+  --color-gold-border: rgba(197, 160, 89, 0.3);
+  --color-secondary: #C5A059;
+
+  /* Deep Himalayan Blue-Slate (Contrast Sections) */
+  --color-slate-mountain: #1B2838;
+  --color-slate-deep: #131D29;
+  --color-slate-midnight: #0F1722;
+
+  /* Charcoal-Brown Typography */
+  --color-charcoal: #2C2523;
+  --color-charcoal-muted: #6B615E;
+  --color-charcoal-faint: #9E9490;
+  --color-text-dark: #2C2523;
+  --color-text-light: #6B615E;
+
+  /* Typography (Aligned with Luxury Reference Sites) */
+  --font-serif: 'CleanAmp', 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+  --font-cinzel: 'CleanAmp', 'Cinzel', Georgia, serif;
+  --font-devanagari: 'Rozha One', 'Tiro Devanagari Hindi', 'Playfair Display', Georgia, serif;
+  --font-sans: 'Raleway', 'Inter', system-ui, sans-serif;
+  --font-mono: 'Raleway', 'Inter', system-ui, sans-serif;
+  --font-heading: 'CleanAmp', 'Playfair Display', 'Cinzel', 'Cormorant Garamond', serif;
+  --font-body: 'Raleway', 'Inter', system-ui, sans-serif;
+}
+
+@font-face {
+  font-family: 'CleanAmp';
+  src: local('Raleway'), local('Inter'), local('Segoe UI'), local('Roboto'), local('Arial'), local('Helvetica Neue');
+  unicode-range: U+0026;
+  font-style: normal;
+}
