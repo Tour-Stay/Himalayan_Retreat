@@ -85,7 +85,7 @@ const HeroBookingBar = ({ onSearch }) => {
         <div className="lg:col-span-3 px-4 py-2 rounded-2xl hover:bg-gold/10 transition-colors cursor-pointer border sm:border-0 border-gold/20">
           <label className="text-[10px] text-charcoal-muted uppercase tracking-widest font-semibold flex items-center gap-1.5 mb-1 font-mono">
             <BedIcon className="w-3.5 h-3.5 text-gold" />
-            <span>Suite Category</span>
+            <span>Select Room</span>
           </label>
           <select
             value={selectedSuite}
@@ -106,7 +106,7 @@ const HeroBookingBar = ({ onSearch }) => {
             type="submit"
             className="group w-full py-3.5 px-6 rounded-2xl sm:rounded-full text-xs uppercase tracking-widest font-semibold bg-maroon hover:bg-maroon-dark text-ivory flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 shadow-md"
           >
-            <span>Check Rates</span>
+            <span>Check Availability</span>
             <ArrowUpRightIcon className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5" />
           </button>
         </div>
@@ -117,15 +117,15 @@ const HeroBookingBar = ({ onSearch }) => {
         <div className="flex items-center gap-4">
           <span className="flex items-center gap-1">
             <CheckCircleIcon className="w-3.5 h-3.5 text-gold" />
-            <span>Direct Rate Guarantee</span>
+            <span>Best Direct Rate</span>
           </span>
           <span className="hidden sm:inline-flex items-center gap-1">
             <CheckCircleIcon className="w-3.5 h-3.5 text-gold" />
-            <span>Complimentary Mountain Breakfast</span>
+            <span>Free Hot Breakfast</span>
           </span>
           <span className="hidden md:inline-flex items-center gap-1">
             <CheckCircleIcon className="w-3.5 h-3.5 text-gold" />
-            <span>Free Cancellation 48h</span>
+            <span>Free Cancellation 48h Prior</span>
           </span>
         </div>
 

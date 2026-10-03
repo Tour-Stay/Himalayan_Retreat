@@ -22,19 +22,19 @@ const SiteFooter = () => {
   };
 
   return (
-    <footer className="bg-gradient-to-b from-[#FAF6EF] via-[#F5EFE6] to-[#EFE7DA] text-[#2C2523] border-t-2 border-[#C5A059]/40 font-sans selection:bg-[#C5A059]/30 selection:text-[#7C1D23]">
+    <footer className="bg-[#FAF6EF] text-[#2C2523] border-t border-[#C5A059]/30 font-sans selection:bg-[#C5A059]/30 selection:text-[#7C1D23]">
       {/* 1. TOP CONCIERGE CALLOUT STRIP (Warm Ivory with Gold Border) */}
-      <div className="bg-[#FDFBF7] border-b border-[#C5A059]/25 py-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-6">
-          <div className="text-center lg:text-left">
-            <span className="text-xs uppercase tracking-[0.2em] text-[#7C1D23] font-cinzel font-semibold block mb-1">
-              Personalized Mountain Hospitality • 24/7 Desk
+      <div className="bg-[#FDFBF7] border-b border-[#C5A059]/20 py-10 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
+          <div className="text-center lg:text-left max-w-2xl">
+            <span className="text-[11px] uppercase tracking-[0.25em] text-[#C5A059] font-mono font-semibold block mb-2">
+              Himalayan Reverence & Solitude • 6,942 FT Elevation
             </span>
-            <h3 className="font-serif text-2xl sm:text-3xl text-[#2C2523] font-medium tracking-tight">
-              Planning your visit to Kainchi Dham or Kasar Devi?
+            <h3 className="font-serif text-2xl sm:text-4xl text-[#2C2523] font-medium tracking-tight leading-snug">
+              Where silence is not emptiness, but presence.
             </h3>
-            <p className="text-sm text-[#5C5350] mt-1 max-w-2xl font-normal">
-              Our Almora concierge team is at your service to reserve heated chalets, arrange Kathgodam pickups, and plan custom temple tours.
+            <p className="text-sm sm:text-base text-[#5C5350] mt-2 font-light leading-relaxed">
+              Perched on the ancient pine crest of Crank&apos;s Ridge. Our Almora concierge is at your service 24/7 to reserve heated chalets, arrange Kathgodam railhead pickups, and guide your journey to Kainchi Dham &amp; Jageshwar.
             </p>
           </div>
 
@@ -42,20 +42,20 @@ const SiteFooter = () => {
             <button
               type="button"
               onClick={handleWhatsAppClick}
-              className="px-5 py-3 rounded-full text-xs uppercase tracking-wider font-bold bg-[#25D366] hover:bg-[#1EBE5D] text-[#FFFFFF] shadow-md hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer hover:scale-102"
+              className="px-6 py-3.5 rounded-full text-xs uppercase tracking-widest font-semibold bg-[#7C1D23] hover:bg-[#5C151A] text-[#FAF6EF] shadow-md hover:shadow-lg transition-all flex items-center gap-2.5 cursor-pointer border border-[#C5A059]/30 hover:scale-102"
               title="Chat with Concierge on WhatsApp"
             >
-              <WhatsAppIcon className="w-4 h-4 text-white" />
+              <WhatsAppIcon className="w-4 h-4 text-[#C5A059]" />
               <span>WhatsApp Concierge</span>
             </button>
 
             <a
               href={`tel:${SITE_CONFIG.conciergePhone}`}
-              className="px-5 py-3 rounded-full text-xs uppercase tracking-wider font-semibold border border-[#7C1D23]/40 bg-[#FAF6EF] hover:bg-[#7C1D23] text-[#2C2523] hover:text-[#FDFBF7] transition-all flex items-center gap-2 cursor-pointer hover:scale-102 shadow-xs"
+              className="px-6 py-3.5 rounded-full text-xs uppercase tracking-widest font-semibold border border-[#C5A059]/50 bg-[#FAF6EF] hover:bg-[#C5A059]/15 text-[#2C2523] transition-all flex items-center gap-2.5 cursor-pointer shadow-xs"
               title="Call Almora Desk"
             >
               <PhoneIcon className="w-4 h-4 text-[#7C1D23]" />
-              <span className="font-numeral font-bold tracking-wide">{SITE_CONFIG.conciergePhone}</span>
+              <span className="font-mono font-bold tracking-wider">{SITE_CONFIG.conciergePhone}</span>
             </a>
           </div>
         </div>
@@ -277,26 +277,26 @@ const SiteFooter = () => {
                 </div>
               </div>
 
-              <div className="pt-2 border-t border-[#C5A059]/25 space-y-2">
+              <div className="pt-2 border-t border-[#C5A059]/25 space-y-2.5">
                 <div className="flex items-center gap-2.5">
                   <PhoneIcon className="w-4 h-4 text-[#7C1D23] flex-shrink-0" />
                   <a
                     href={`tel:${SITE_CONFIG.conciergePhone}`}
-                    className="text-[#2C2523] hover:text-[#7C1D23] font-numeral font-bold tracking-wide transition-colors"
+                    className="text-[#2C2523] hover:text-[#7C1D23] font-mono font-bold tracking-wide transition-colors"
                   >
                     {SITE_CONFIG.conciergePhone}
                   </a>
                 </div>
 
                 <div className="flex items-center gap-2.5">
-                  <WhatsAppIcon className="w-4 h-4 text-[#25D366] flex-shrink-0" />
+                  <WhatsAppIcon className="w-4 h-4 text-[#7C1D23] flex-shrink-0" />
                   <a
                     href={`https://wa.me/${SITE_CONFIG.whatsappNumber}`}
                     target="_blank"
                     rel="noreferrer"
                     className="text-[#2C2523] hover:text-[#7C1D23] transition-colors"
                   >
-                    WhatsApp: <span className="font-numeral font-bold text-[#2C2523]">{SITE_CONFIG.whatsappDisplay}</span>
+                    WhatsApp: <span className="font-mono font-bold text-[#2C2523]">{SITE_CONFIG.whatsappDisplay}</span>
                   </a>
                 </div>
 

@@ -16,7 +16,17 @@ const SiteHeader = ({ currentApp = 'landing' }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navGroups = [
+  // Context-aware navigation groups
+  const hotelNavGroups = [
+    { label: 'The Suites', href: '/#rooms' },
+    { label: 'At a Glance', href: '/#glance' },
+    { label: 'The Experience', href: '/#experiences' },
+    { label: 'Amenities', href: '/#amenities' },
+    { label: 'Our Story', href: '/#philosophy' },
+    { label: 'Travel & Fleet', href: APP_URLS.travel },
+  ];
+
+  const landingNavGroups = [
     {
       label: 'Dev Bhoomi',
       items: [
@@ -60,6 +70,8 @@ const SiteHeader = ({ currentApp = 'landing' }) => {
       href: `${APP_URLS.landing}#contact`,
     },
   ];
+
+  const navGroups = currentApp === 'hotel' ? hotelNavGroups : landingNavGroups;
 
   return (
     <header className="sticky top-0 z-40 w-full transition-all duration-300">
@@ -172,26 +184,39 @@ const SiteHeader = ({ currentApp = 'landing' }) => {
             ))}
           </nav>
 
-          {/* Two Direct Action Buttons (Hotel & Travel) */}
+          {/* Context-aware Action Buttons */}
           <div className="hidden sm:flex items-center gap-2.5">
-            <a
-              href={APP_URLS.hotel}
-              className={`px-4 py-2 rounded-full text-xs uppercase tracking-wider font-semibold transition-all cursor-pointer shadow-xs ${currentApp === 'hotel'
-                  ? 'bg-maroon text-ivory border border-gold/40 shadow-sm'
-                  : 'bg-maroon hover:bg-maroon-dark text-ivory border border-gold/30'
-                }`}
-            >
-              Stay at Kasar Resort ↗
-            </a>
-            <a
-              href={APP_URLS.travel}
-              className={`px-4 py-2 rounded-full text-xs uppercase tracking-wider font-semibold transition-all cursor-pointer border ${currentApp === 'travel'
-                  ? 'bg-gold/25 border-gold text-charcoal'
-                  : 'border-gold/50 hover:bg-gold/15 text-charcoal hover:text-maroon'
-                }`}
-            >
-              Mountain Travel ↗
-            </a>
+            {currentApp === 'hotel' ? (
+              <>
+                <a
+                  href="/rooms"
+                  className="px-4 py-2 rounded-full text-xs uppercase tracking-wider font-semibold border border-gold/40 hover:bg-gold/10 text-charcoal transition-all"
+                >
+                  All Suites
+                </a>
+                <a
+                  href="/#book"
+                  className="px-5 py-2.5 rounded-full text-xs uppercase tracking-widest font-semibold bg-maroon hover:bg-maroon-dark text-ivory border border-gold/30 shadow-md transition-all hover:scale-102"
+                >
+                  Reserve a Suite
+                </a>
+              </>
+            ) : (
+              <>
+                <a
+                  href={APP_URLS.hotel}
+                  className="px-4 py-2 rounded-full text-xs uppercase tracking-wider font-semibold bg-maroon hover:bg-maroon-dark text-ivory border border-gold/30 shadow-xs transition-all"
+                >
+                  Stay at Kasar Resort ↗
+                </a>
+                <a
+                  href={APP_URLS.travel}
+                  className="px-4 py-2 rounded-full text-xs uppercase tracking-wider font-semibold border border-gold/50 hover:bg-gold/15 text-charcoal hover:text-maroon transition-all"
+                >
+                  Mountain Travel ↗
+                </a>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -244,18 +269,39 @@ const SiteHeader = ({ currentApp = 'landing' }) => {
             </div>
           ))}
           <div className="pt-2 flex flex-col gap-2">
-            <a
-              href={APP_URLS.hotel}
-              className="w-full text-center py-3 rounded-full text-xs uppercase tracking-wider font-semibold bg-maroon text-ivory shadow-md"
-            >
-              Stay at Kasar Resort ↗
-            </a>
-            <a
-              href={APP_URLS.travel}
-              className="w-full text-center py-3 rounded-full text-xs uppercase tracking-wider font-semibold border border-gold/50 text-charcoal hover:bg-gold/10"
-            >
-              Mountain Expeditions ↗
-            </a>
+            {currentApp === 'hotel' ? (
+              <>
+                <a
+                  href="/#book"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full text-center py-3 rounded-full text-xs uppercase tracking-wider font-semibold bg-maroon text-ivory shadow-md"
+                >
+                  Reserve a Suite
+                </a>
+                <a
+                  href="/rooms"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full text-center py-3 rounded-full text-xs uppercase tracking-wider font-semibold border border-gold/50 text-charcoal hover:bg-gold/10"
+                >
+                  View All Heated Suites
+                </a>
+              </>
+            ) : (
+              <>
+                <a
+                  href={APP_URLS.hotel}
+                  className="w-full text-center py-3 rounded-full text-xs uppercase tracking-wider font-semibold bg-maroon text-ivory shadow-md"
+                >
+                  Stay at Kasar Resort ↗
+                </a>
+                <a
+                  href={APP_URLS.travel}
+                  className="w-full text-center py-3 rounded-full text-xs uppercase tracking-wider font-semibold border border-gold/50 text-charcoal hover:bg-gold/10"
+                >
+                  Mountain Expeditions ↗
+                </a>
+              </>
+            )}
           </div>
         </div>
       )}

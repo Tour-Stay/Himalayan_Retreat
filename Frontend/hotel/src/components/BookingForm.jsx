@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { apiClient, ArrowUpRightIcon } from '@shared';
+import { apiClient, ArrowUpRightIcon, WhatsAppIcon, SITE_CONFIG } from '@shared';
 import { mockRooms } from '../data/mockRooms';
 
 const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
@@ -107,7 +107,7 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
       {/* Room Selector */}
       <div>
         <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5 font-mono">
-          Select Suite
+          Select Room
         </label>
         <select
           name="room"
@@ -244,19 +244,35 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
       )}
 
       {/* Submit Button */}
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full py-4 rounded-xl text-xs uppercase tracking-widest font-semibold bg-maroon hover:bg-maroon-dark text-ivory disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group transition-all duration-300 shadow-md"
-      >
-        <span>{loading ? 'Confirming Reservation...' : 'Reserve Your Mountain Suite'}</span>
-        {!loading && (
-          <ArrowUpRightIcon className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5" />
-        )}
-      </button>
+      <div className="space-y-2.5 pt-2">
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full py-4 rounded-xl text-xs uppercase tracking-widest font-semibold bg-maroon hover:bg-maroon-dark text-ivory disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group transition-all duration-300 shadow-md cursor-pointer"
+        >
+          <span>{loading ? 'Confirming Booking...' : 'Book Your Room Now'}</span>
+          {!loading && (
+            <ArrowUpRightIcon className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5" />
+          )}
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            const text = encodeURIComponent(
+              `Hello Kasar Himalayan Heights! I would like to book ${selectedRoomObj?.name || 'a room'} from ${formData.checkInDate || 'upcoming dates'} for ${formData.guests} guest(s).`
+            );
+            window.open(`https://wa.me/${SITE_CONFIG.whatsappNumber}?text=${text}`, '_blank');
+          }}
+          className="w-full py-3.5 rounded-xl text-xs uppercase tracking-widest font-semibold border border-gold/40 hover:bg-gold/10 text-charcoal flex items-center justify-center gap-2 transition-all duration-300 cursor-pointer"
+        >
+          <WhatsAppIcon className="w-4 h-4 text-maroon" />
+          <span>Book on WhatsApp</span>
+        </button>
+      </div>
 
       <p className="text-center text-[11px] text-charcoal-muted pt-1">
-        Direct rate guarantee • Free cancellation up to 48h prior • Complimentary organic mountain breakfast
+        Best rate guarantee • Free cancellation up to 48 hours prior • Free hot breakfast included
       </p>
     </form>
   );

@@ -6,75 +6,76 @@ const BookingConfirmation = () => {
   const booking = location.state?.booking;
 
   return (
-    <div className="pt-28 pb-24 px-4 min-h-screen flex items-center justify-center bg-ivory font-sans">
+    <div className="pt-28 pb-24 px-4 min-h-screen flex items-center justify-center bg-[#FDFBF7] font-sans">
       <Container size="sm">
-        <div className="w-full text-center bg-ivory-warm p-8 sm:p-12 rounded-3xl border border-gold/35 shadow-xl">
+        <div className="w-full text-center bg-[#FAF6EF]/60 p-8 sm:p-12 rounded-3xl border border-[#C5A059]/35 shadow-xl">
           {/* Success Icon */}
-          <div className="w-20 h-20 bg-gold/15 border border-gold/30 rounded-full flex items-center justify-center mx-auto mb-6 text-maroon">
-            <CheckCircleIcon className="w-10 h-10 text-maroon" />
+          <div className="w-20 h-20 bg-[#C5A059]/15 border border-[#C5A059]/30 rounded-full flex items-center justify-center mx-auto mb-6 text-[#7C1D23]">
+            <CheckCircleIcon className="w-10 h-10 text-[#7C1D23]" />
           </div>
 
-          <span className="text-gold text-xs uppercase tracking-[0.25em] font-semibold block mb-2 font-mono">
-            Reservation Confirmed
+          <span className="text-[#C5A059] text-xs uppercase tracking-[0.2em] font-semibold block mb-2 font-cinzel">
+            Booking Confirmed
           </span>
-          <h1 className="font-serif text-3xl sm:text-4xl text-charcoal font-medium mb-3">
-            Your Mountain Sanctuary Awaits
+          <h1 className="font-serif text-3xl sm:text-4xl text-[#2C2523] font-medium mb-3">
+            Your Room is Booked!
           </h1>
-          <p className="text-charcoal-muted text-sm sm:text-base leading-relaxed mb-6 font-light">
-            Thank you for choosing The Kasar Himalayan Heights. We are preparing your warm mountain suite for a peaceful stay.
+          <div className="w-16 h-0.5 bg-[#C5A059]/60 mx-auto my-4"></div>
+          <p className="text-[#5C5350] text-sm sm:text-base leading-relaxed mb-6 font-light font-sans">
+            Thank you for choosing The Kasar Himalayan Heights. We look forward to welcoming you for a warm and peaceful stay.
           </p>
 
           {/* Booking Card Details */}
           {booking && (
-            <div className="bg-ivory rounded-2xl p-6 mb-8 text-left border border-gold/25 text-sm space-y-3 font-sans">
-              <div className="flex justify-between items-center pb-2 border-b border-gold/15">
-                <span className="text-xs text-charcoal-muted uppercase tracking-wider font-mono">Booking ID</span>
-                <span className="font-mono font-semibold text-maroon">{booking.bookingId}</span>
+            <div className="bg-[#FDFBF7] rounded-2xl p-6 mb-8 text-left border border-[#C5A059]/25 text-sm space-y-3 font-sans">
+              <div className="flex justify-between items-center pb-2 border-b border-[#C5A059]/15">
+                <span className="text-xs text-[#6B615E] uppercase tracking-wider font-cinzel">Booking ID</span>
+                <span className="font-mono font-bold text-[#7C1D23]">{booking.bookingId}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-charcoal-muted">Suite Reserved:</span>
-                <span className="font-medium text-charcoal">{booking.roomName}</span>
+                <span className="text-[#6B615E]">Room Booked:</span>
+                <span className="font-medium text-[#2C2523]">{booking.roomName}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-charcoal-muted">Guest:</span>
-                <span className="font-medium text-charcoal">{booking.guestDetails?.name}</span>
+                <span className="text-[#6B615E]">Guest Name:</span>
+                <span className="font-medium text-[#2C2523]">{booking.guestDetails?.name}</span>
               </div>
               {booking.checkInDate && (
                 <div className="flex justify-between items-center">
-                  <span className="text-charcoal-muted">Dates:</span>
-                  <span className="font-medium text-charcoal">
+                  <span className="text-[#6B615E]">Dates:</span>
+                  <span className="font-medium text-[#2C2523] font-numeral">
                     {booking.checkInDate} to {booking.checkOutDate} ({booking.nights} {booking.nights === 1 ? 'night' : 'nights'})
                   </span>
                 </div>
               )}
-              <div className="flex justify-between items-center pt-2 border-t border-gold/15 text-base font-semibold">
-                <span className="text-charcoal">Total Amount:</span>
-                <span className="text-maroon font-serif text-xl">₹{booking.totalAmount?.toLocaleString()}</span>
+              <div className="flex justify-between items-center pt-2 border-t border-[#C5A059]/15 text-base font-semibold">
+                <span className="text-[#2C2523]">Total Amount:</span>
+                <span className="text-[#7C1D23] font-serif text-2xl font-numeral">₹{booking.totalAmount?.toLocaleString()}</span>
               </div>
             </div>
           )}
 
-          <div className="p-4 rounded-xl bg-ivory text-xs text-charcoal-muted mb-8 border border-gold/20 flex items-center justify-center gap-2">
-            <span>✦</span>
-            <span>A detailed confirmation and mountain driving directions have been sent to your contact.</span>
+          <div className="p-4 rounded-xl bg-[#FDFBF7] text-xs text-[#6B615E] mb-8 border border-[#C5A059]/20 flex items-center justify-center gap-2">
+            <span className="text-[#C5A059]">✦</span>
+            <span>A confirmation message and driving directions have been sent to your contact details.</span>
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               to="/"
-              className="w-full sm:w-auto bg-maroon hover:bg-maroon-dark text-ivory px-8 py-3.5 rounded-full font-semibold text-xs uppercase tracking-wider transition-colors shadow-md"
+              className="w-full sm:w-auto px-8 py-3.5 rounded-full font-semibold text-xs font-sans uppercase tracking-wider bg-[#7C1D23] hover:bg-[#5C151A] text-[#FDFBF7] shadow-md transition-all hover:scale-102"
             >
-              Back to Hotel Home
+              Back to Home
             </Link>
             <a
               href={`https://wa.me/${SITE_CONFIG.whatsappNumber}?text=${encodeURIComponent(
-                `Hello Kasar Himalayan Heights Concierge, I have a reservation with ID: ${booking?.bookingId || ''}`
+                `Hello Kasar Himalayan Heights, I have a booking with ID: ${booking?.bookingId || ''}`
               )}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full sm:w-auto border border-gold/40 text-charcoal hover:bg-gold/10 px-8 py-3.5 rounded-full font-semibold text-xs uppercase tracking-wider transition-colors"
+              className="w-full sm:w-auto px-8 py-3.5 rounded-full font-semibold text-xs font-sans uppercase tracking-wider border border-[#C5A059] bg-[#FAF6EF] hover:bg-[#C5A059]/20 text-[#2C2523] hover:text-[#7C1D23] transition-all shadow-xs hover:scale-102"
             >
-              Contact Concierge on WhatsApp
+              Chat on WhatsApp
             </a>
           </div>
         </div>

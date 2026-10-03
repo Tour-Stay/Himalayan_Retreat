@@ -6,12 +6,17 @@ const TravelGatewaySection = () => {
   const [activeFleetIdx, setActiveFleetIdx] = useState(0);
 
   return (
-    <section id="travel-gateway" className="py-16 sm:py-24 px-4 bg-[#FAF6EF]/60 border-b border-[#C5A059]/20">
+    <section id="travel-gateway" className="py-16 sm:py-24 px-4 bg-gradient-to-b from-[#FAF6EF]/60 via-[#FFF5EC]/40 to-[#FAF6EF]/60 border-b border-[#C5A059]/20 relative overflow-hidden">
+      {/* Subtle sacred symbol watermark */}
+      <div className="absolute top-12 -left-4 text-[#C84B0F]/[0.025] text-[160px] font-devanagari select-none pointer-events-none leading-none z-0">
+        🔱
+      </div>
+
       <Container size="lg">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6 relative z-10">
           <div>
-            <span className="text-xs font-sans text-[#C5A059] uppercase tracking-wider font-semibold block mb-2">
-              Private Mountain Cabs • Almora Base
+            <span className="text-xs font-sans text-[#C84B0F] uppercase tracking-wider font-semibold block mb-2 flex items-center gap-1.5">
+              <span className="text-sm">🪔</span> Private Mountain Cabs • Almora Base
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl text-[#2C2523] font-medium">
               Reliable Cabs <span className="font-sans font-light">&</span> Mountain Travel
@@ -97,7 +102,7 @@ const TravelGatewaySection = () => {
               <div className="p-4 rounded-xl bg-[#FAF6EF] border border-[#C5A059]/25 mb-6 text-sm text-[#2C2523] space-y-2">
                 <div className="flex justify-between items-center">
                   <span className="text-[#6B615E]">Kathgodam to Kasar Devi:</span>
-                  <strong className="text-[#7C1D23] font-numeral text-base font-bold">{fleetData[activeFleetIdx].rateKathgodam}</strong>
+                  <strong className="text-[#C84B0F] font-numeral text-base font-bold">{fleetData[activeFleetIdx].rateKathgodam}</strong>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-[#6B615E]">Delhi to Kasar Devi:</span>
@@ -114,7 +119,7 @@ const TravelGatewaySection = () => {
                 href={`${APP_URLS.travel}#calculator`}
                 target="_blank"
                 rel="noreferrer"
-                className="flex-1 py-3 rounded-full text-center text-xs font-sans uppercase tracking-wider font-semibold bg-[#7C1D23] text-[#FDFBF7] hover:bg-[#5C151A] transition-all shadow-md"
+                className="flex-1 py-3 rounded-full text-center text-xs font-sans uppercase tracking-wider font-semibold bg-gradient-to-r from-[#C84B0F] to-[#7C1D23] hover:from-[#E05A1B] hover:to-[#9E3304] text-[#FDFBF7] transition-all shadow-md border border-[#C5A059]/30"
               >
                 Calculate Trip Fare ↗
               </a>
@@ -122,7 +127,7 @@ const TravelGatewaySection = () => {
                 href={APP_URLS.travel}
                 target="_blank"
                 rel="noreferrer"
-                className="flex-1 py-3 rounded-full text-center text-xs font-sans uppercase tracking-wider font-semibold border border-[#C5A059] bg-[#FAF6EF] text-[#2C2523] hover:text-[#7C1D23] hover:bg-[#C5A059]/20 transition-all"
+                className="flex-1 py-3 rounded-full text-center text-xs font-sans uppercase tracking-wider font-semibold border border-[#C84B0F]/40 bg-[#FAF6EF] text-[#2C2523] hover:text-[#C84B0F] transition-all"
               >
                 View All Vehicles ↗
               </a>

@@ -16,10 +16,15 @@ const VisitorFaqSection = () => {
   const [openFaqIdx, setOpenFaqIdx] = useState(0);
 
   return (
-    <section id="faq" className="py-16 sm:py-24 px-4 bg-[#FAF6EF]/60 border-b border-[#C5A059]/20">
+    <section id="faq" className="py-16 sm:py-24 px-4 bg-gradient-to-b from-[#FAF6EF]/60 via-[#FFF6EC]/40 to-[#FAF6EF]/60 border-b border-[#C5A059]/20 relative overflow-hidden">
+      {/* Subtle sacred symbol watermark */}
+      <div className="absolute top-10 right-6 text-[#C84B0F]/[0.025] text-[160px] font-devanagari select-none pointer-events-none leading-none z-0">
+        ॐ
+      </div>
+
       <Container size="md">
         <SectionHeading
-          subtitle="Help & Details"
+          subtitle="॥ 🪔 Travel Help & FAQs 🪔 ॥"
           title="Frequently Asked Questions"
           description="Helpful information on visiting Kasar Devi, traveling to Kainchi Dham, room heating in winter, and cab pickups."
         />

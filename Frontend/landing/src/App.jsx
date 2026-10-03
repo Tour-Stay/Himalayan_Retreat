@@ -30,6 +30,7 @@ function App() {
         message={LANDING_CONTENT.announcement.message}
         linkText={LANDING_CONTENT.announcement.linkText}
         linkHref={LANDING_CONTENT.announcement.linkHref}
+        className="bg-gradient-to-r from-[#9E3304] via-[#B83E0A] to-[#7C1D23] border-b border-[#DFCA9B]/35 shadow-sm"
       />
 
       {/* 2. Live Horizontal Navbar (Desktop Bar + Hover/Click Dropdowns + 2 Action Buttons) */}

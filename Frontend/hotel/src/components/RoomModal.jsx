@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BedIcon, SnowIcon, ArrowUpRightIcon, CheckCircleIcon } from '@shared';
+import { BedIcon, SnowIcon, ArrowUpRightIcon, CheckCircleIcon, snowViewSuiteImg } from '@shared';
 
 const RoomModal = ({ room, isOpen, onClose, onBookNow }) => {
   const [activeImage, setActiveImage] = useState(0);
@@ -20,7 +20,7 @@ const RoomModal = ({ room, isOpen, onClose, onBookNow }) => {
 
   if (!isOpen || !room) return null;
 
-  const images = room.imageURLs?.length > 0 ? room.imageURLs : ['https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=800&q=80'];
+  const images = room.imageURLs?.length > 0 ? room.imageURLs : [snowViewSuiteImg];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto animate-fade-in font-sans">
@@ -115,7 +115,7 @@ const RoomModal = ({ room, isOpen, onClose, onBookNow }) => {
           {/* Amenities Grid */}
           <div>
             <h3 className="text-xs font-semibold uppercase tracking-wider text-charcoal mb-3 font-mono">
-              Included Amenities & Alpine Heating
+              Room Facilities &amp; Heating
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
               {(room.amenities || ['Room Heater', 'Geyser', 'Wi-Fi', 'Balcony']).map((amenity, i) => (
@@ -144,7 +144,7 @@ const RoomModal = ({ room, isOpen, onClose, onBookNow }) => {
               }}
               className="group w-full sm:w-auto px-8 py-3.5 rounded-full text-xs uppercase tracking-wider font-semibold bg-maroon hover:bg-maroon-dark text-ivory flex items-center justify-center gap-2 transition-colors shadow-md"
             >
-              <span>Reserve This Suite</span>
+              <span>Book This Room</span>
               <ArrowUpRightIcon className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5" />
             </button>
           </div>

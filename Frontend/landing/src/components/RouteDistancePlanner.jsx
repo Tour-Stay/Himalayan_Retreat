@@ -33,10 +33,15 @@ const RouteDistancePlanner = () => {
   const currentRoutes = (routeData && routeData[activeRouteTab]) || [];
 
   return (
-    <section id="routes" className="py-16 sm:py-24 px-4 bg-[#FAF6EF]/50">
+    <section id="routes" className="py-16 sm:py-24 px-4 bg-gradient-to-b from-[#FDFBF7] via-[#FFF6EC]/50 to-[#FDFBF7] relative overflow-hidden">
+      {/* Subtle sacred symbol watermark */}
+      <div className="absolute top-12 left-6 text-[#C84B0F]/[0.025] text-[160px] font-devanagari select-none pointer-events-none leading-none z-0">
+        🔱
+      </div>
+
       <Container size="lg">
         <SectionHeading
-          subtitle="Distances & Travel Times"
+          subtitle="॥ 🪔 Distances & Travel Times 🪔 ॥"
           title="Popular Routes & Driving Times from Almora"
           description="Clear road distances, driving times, and reliable cab options for popular places around Kasar Devi and Almora."
         />
@@ -50,8 +55,8 @@ const RouteDistancePlanner = () => {
               onClick={() => setActiveRouteTab(tab.key)}
               className={`px-5 py-2.5 rounded-full text-xs font-sans uppercase tracking-wider font-semibold transition-all duration-300 cursor-pointer ${
                 activeRouteTab === tab.key
-                  ? 'bg-[#2C2523] text-[#FDFBF7] shadow-md'
-                  : 'bg-transparent text-[#5C5350] border border-[#C5A059]/25 hover:border-[#C5A059]/50 hover:text-[#2C2523]'
+                  ? 'bg-gradient-to-r from-[#C84B0F] to-[#7C1D23] text-[#FDFBF7] shadow-md border border-[#C5A059]/30'
+                  : 'bg-transparent text-[#5C5350] border border-[#C5A059]/25 hover:border-[#C84B0F]/40 hover:text-[#C84B0F]'
               }`}
             >
               {cleanAmp(tab.label)}
@@ -64,7 +69,7 @@ const RouteDistancePlanner = () => {
           {currentRoutes.map((item, idx) => (
             <div
               key={idx}
-              className="card-hover bg-[#FDFBF7] rounded-2xl p-6 sm:p-7 border border-[#C5A059]/20 flex flex-col justify-between"
+              className="card-hover bg-[#FDFBF7] rounded-2xl p-6 sm:p-7 border border-[#C5A059]/20 hover:border-[#C84B0F]/35 flex flex-col justify-between transition-all duration-300"
             >
               <div>
                 <div className="flex items-start justify-between gap-4 mb-4">
@@ -72,12 +77,12 @@ const RouteDistancePlanner = () => {
                     <h4 className="font-serif text-xl sm:text-[1.35rem] font-medium text-[#2C2523] leading-snug">
                       {cleanAmp(item.name)}
                     </h4>
-                    <span className="text-xs font-sans text-[#C5A059] font-medium block mt-1">
+                    <span className="text-xs font-sans text-[#C84B0F] font-medium block mt-1">
                       {cleanAmp(item.dedication)}
                     </span>
                   </div>
                   <div className="text-right flex-shrink-0">
-                    <span className="font-numeral text-2xl sm:text-3xl font-bold text-[#7C1D23] block leading-tight tracking-tight">
+                    <span className="font-numeral text-2xl sm:text-3xl font-bold text-[#C84B0F] block leading-tight tracking-tight">
                       {item.distance}
                     </span>
                     <span className="text-xs font-sans text-[#6B615E] font-medium block mt-0.5">
@@ -92,11 +97,11 @@ const RouteDistancePlanner = () => {
 
                 <div className="space-y-1.5 text-xs text-[#2C2523] bg-[#FAF6EF] p-3 rounded-xl border border-[#C5A059]/15 font-sans">
                   <div>
-                    <span className="text-[#C5A059] font-semibold uppercase tracking-wider text-[11px]">Route: </span>
+                    <span className="text-[#C84B0F] font-semibold uppercase tracking-wider text-[11px]">Route: </span>
                     <span>{item.route}</span>
                   </div>
                   <div>
-                    <span className="text-[#C5A059] font-semibold uppercase tracking-wider text-[11px]">Recommended: </span>
+                    <span className="text-[#C84B0F] font-semibold uppercase tracking-wider text-[11px]">Recommended: </span>
                     <span>{item.recommendedVehicle}</span>
                   </div>
                 </div>
@@ -109,7 +114,7 @@ const RouteDistancePlanner = () => {
                 <button
                   type="button"
                   onClick={() => handleRouteBookClick(item.name)}
-                  className="group px-4 py-1.5 rounded-full text-xs font-sans font-semibold text-[#7C1D23] hover:bg-[#7C1D23] hover:text-[#FDFBF7] transition-all duration-300 flex items-center gap-1.5 cursor-pointer border border-[#7C1D23]/30 hover:border-[#7C1D23]"
+                  className="group px-4 py-1.5 rounded-full text-xs font-sans font-semibold text-[#C84B0F] hover:bg-gradient-to-r hover:from-[#C84B0F] hover:to-[#7C1D23] hover:text-[#FDFBF7] transition-all duration-300 flex items-center gap-1.5 cursor-pointer border border-[#C84B0F]/30 hover:border-transparent"
                 >
                   <span>Book Cab</span>
                   <span className="text-xs leading-none group-hover:translate-x-0.5 transition-transform">↗</span>
@@ -121,8 +126,8 @@ const RouteDistancePlanner = () => {
 
         <div className="mt-10 text-center">
           <p className="text-sm text-[#6B615E] font-sans">
-            Need a custom route or itinerary? Call our Almora team at{' '}
-            <a href={`tel:${SITE_CONFIG.conciergePhone}`} className="text-[#7C1D23] font-numeral font-bold hover:underline tracking-wide">
+            Need a custom route or pilgrimage itinerary? Call our Almora team at{' '}
+            <a href={`tel:${SITE_CONFIG.conciergePhone}`} className="text-[#C84B0F] font-numeral font-bold hover:underline tracking-wide">
               {SITE_CONFIG.conciergePhone}
             </a>
           </p>

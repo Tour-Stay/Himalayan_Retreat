@@ -11,41 +11,49 @@ import hotelInSnow from '@shared/assets/images/hotel-in-snow.jpg';
 const DevBhoomiSection = () => {
   const spiritualPillars = [
     {
-      id: 'kasar',
-      badge: 'Cosmic Energy & Silence',
-      title: 'Kasar Devi & Crank’s Ridge',
-      subtitle: 'Altitude 6,942 FT • 800m Walk',
-      icon: <CompassIcon className="w-5 h-5" />,
-      image: kasarTempleImg,
-      desc: 'Known worldwide for its unique peaceful energy, Kasar Devi rests on a rare geomagnetic belt shared only with Stonehenge and Machu Picchu. In 1890, Swami Vivekananda walked here to meditate in deep silence. Today, travelers and families still find an extraordinary natural calm along its fragrant pine ridge.',
-      projectLink: 'Our chalets are located directly on this peaceful ridge, just steps away from the temple footpath.',
-    },
-    {
       id: 'kainchi',
       badge: 'Divine Grace & Service',
+      saffronTag: '॥ श्री नीब करौरी महाराज धाम ॥',
+      aartiSchedule: 'Mangala Aarti: 5:30 AM • Sandhya Aarti: 6:30 PM • Daily Prasad',
       title: 'Kainchi Dham Ashram',
       subtitle: '45 km from Almora • ~1.5 hrs Drive',
-      icon: <SparklesIcon className="w-5 h-5" />,
+      icon: <SparklesIcon className="w-5 h-5 text-[#C84B0F]" />,
       image: kainchiImg,
       desc: 'Founded by Sri Neem Karoli Baba Maharaj in 1962 beside a quiet mountain river, Kainchi Dham is beloved across the world as a sanctuary of pure love, selfless service, and transformative grace. Pilgrims and seekers from all walks of life come for the peaceful daily aarti and blessed prasadam.',
-      projectLink: 'Our private cabs arrange early morning transfers to reach the ashram in time for peaceful morning prayers.',
+      projectLink: 'Our private cabs arrange early morning transfers to reach the ashram in time for peaceful morning prayers and aarti.',
     },
     {
       id: 'jageshwar',
       badge: '124 Ancient Shiva Temples',
+      saffronTag: '॥ जागेश्वर महामृत्युंजय ज्योतिर्लिंग ॥',
+      aartiSchedule: 'Rudrabhishek: 6:00 AM • Sandhya Maha Aarti: 7:00 PM',
       title: 'Jageshwar Mahamrityunjaya Dham',
       subtitle: '35 km from Almora • ~1.2 hrs Drive',
-      icon: <TempleIcon className="w-5 h-5" />,
+      icon: <TempleIcon className="w-5 h-5 text-[#C84B0F]" />,
       image: jageshwarImg,
       desc: 'Hidden in a breathtaking valley of ancient, giant deodar trees, Jageshwar Dham is an 8th-century stone temple complex dedicated to Lord Shiva. As one of the ancient Jyotirlinga shrines, the air here is filled with the scent of wet cedar, mountain streams, and centuries of quiet devotion.',
       projectLink: 'Enjoy a scenic day trip through deodar forests with our experienced local drivers.',
     },
     {
+      id: 'kasar',
+      badge: 'Cosmic Energy & Silence',
+      saffronTag: '॥ माँ कासार देवी शक्तिपीठ ॥',
+      aartiSchedule: 'Daily Aarti: 7:00 AM & 6:30 PM • Dhyan Kendra Open All Day',
+      title: 'Kasar Devi & Crank’s Ridge',
+      subtitle: 'Altitude 6,942 FT • 800m Walk',
+      icon: <CompassIcon className="w-5 h-5 text-[#C84B0F]" />,
+      image: kasarTempleImg,
+      desc: 'Known worldwide for its unique peaceful energy, Kasar Devi rests on a rare geomagnetic belt shared only with Stonehenge and Machu Picchu. In 1890, Swami Vivekananda walked here to meditate in deep silence. Today, travelers and families still find an extraordinary natural calm along its fragrant pine ridge.',
+      projectLink: 'Our chalets are located directly on this peaceful ridge, just steps away from the temple footpath.',
+    },
+    {
       id: 'peaks',
       badge: 'Sacred Himalayan Crests',
+      saffronTag: '॥ त्रिशूल एवं नन्दा देवी दर्शन ॥',
+      aartiSchedule: 'Brahma Muhurta Darshan: 5:00 AM – 6:30 AM Golden Peak Glow',
       title: 'Trishul & Nanda Devi Panoramas',
       subtitle: '180° Snow Peak Horizon',
-      icon: <MountainIcon className="w-5 h-5" />,
+      icon: <MountainIcon className="w-5 h-5 text-[#C84B0F]" />,
       image: trishulPeaksImg,
       desc: 'The northern skyline is crowned by Mount Trishul (7,120m — the trident of Lord Shiva) and Mount Nanda Devi (7,816m — the revered goddess mountain of Uttarakhand). Watching the dawn sun turn these eternal snow giants into glowing gold is a deeply moving experience.',
       projectLink: 'Every room and private balcony at our retreat faces directly toward this sacred 180° Himalayan view.',
@@ -53,23 +61,33 @@ const DevBhoomiSection = () => {
   ];
 
   return (
-    <section id="uttarakhand" className="py-20 sm:py-28 px-4 bg-gradient-to-b from-[#FDFBF7] via-[#FAF6EF]/70 to-[#FDFBF7] border-b border-[#C5A059]/20 relative overflow-hidden">
-      {/* Subtle ambient lighting */}
-      <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-[#C5A059]/[0.05] rounded-full blur-[140px] pointer-events-none"></div>
+    <section id="uttarakhand" className="py-20 sm:py-28 px-4 bg-gradient-to-b from-[#FDFBF7] via-[#FFF6EC]/70 to-[#FDFBF7] border-b border-[#C5A059]/20 relative overflow-hidden">
+      {/* Subtle ambient lighting with warm saffron glow */}
+      <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-[#C84B0F]/[0.07] rounded-full blur-[140px] pointer-events-none"></div>
       <div className="absolute bottom-10 left-0 w-[400px] h-[400px] bg-[#7C1D23]/[0.04] rounded-full blur-[120px] pointer-events-none"></div>
+
+      {/* Subtle sacred symbols watermark (understated & serene) */}
+      <div className="absolute top-20 -left-6 text-[#C84B0F]/[0.035] text-[180px] font-devanagari select-none pointer-events-none leading-none z-0">
+        🔱
+      </div>
+      <div className="absolute bottom-24 -right-6 text-[#C84B0F]/[0.035] text-[200px] font-devanagari select-none pointer-events-none leading-none z-0">
+        ॐ
+      </div>
 
       <Container size="lg">
         {/* Section Devotional Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C5A059]/15 border border-[#C5A059]/30 text-[#7C1D23] text-xs font-sans font-semibold tracking-wider uppercase mb-4">
-            <span>॥ देवभूमि उत्तराखण्ड • The Sacred Himalayan Realm ॥</span>
+        <div className="text-center max-w-3xl mx-auto mb-16 relative z-10">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#C84B0F]/15 via-[#C5A059]/20 to-[#C84B0F]/15 border border-[#C84B0F]/35 text-[#C84B0F] text-xs font-sans font-bold tracking-wider uppercase mb-4 shadow-xs">
+            <span className="text-amber-500 animate-pulse text-xs">🪔</span>
+            <span>॥ ॐ • देवभूमि उत्तराखण्ड • The Sacred Himalayan Realm • ॐ ॥</span>
+            <span className="text-amber-500 animate-pulse text-xs">🪔</span>
           </div>
 
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-[#2C2523] font-medium tracking-tight leading-tight mb-4">
             Dev Bhoomi — The Spiritual Heart of the Himalayas
           </h2>
 
-          <div className="w-20 h-0.5 bg-[#C5A059]/50 mx-auto my-4"></div>
+          <div className="w-20 h-0.5 bg-gradient-to-r from-transparent via-[#C84B0F] to-transparent mx-auto my-4"></div>
 
           <p className="text-[#5C5350] text-base sm:text-lg leading-relaxed font-normal">
             For thousands of years, Uttarakhand has been revered as <em>Dev Bhoomi</em> — the Land of the Gods. It is the birthplace of sacred rivers, the abode of ancient Shiva shrines, and the mountain sanctuary where saints, yogis, and travelers come to find peace. Nestled high in Kumaon, Kasar Devi is the quiet, scenic center of this divine landscape.
@@ -81,7 +99,7 @@ const DevBhoomiSection = () => {
           {spiritualPillars.map((pillar) => (
             <div
               key={pillar.id}
-              className="card-hover bg-[#FDFBF7] rounded-3xl p-6 sm:p-7 border border-[#C5A059]/25 flex flex-col justify-between shadow-xs relative group overflow-hidden"
+              className="card-hover bg-[#FDFBF7] rounded-3xl p-6 sm:p-7 border border-[#C5A059]/25 hover:border-[#C84B0F]/40 flex flex-col justify-between shadow-xs relative group overflow-hidden transition-all duration-300"
             >
               <div>
                 {/* Authentic Picture */}
@@ -103,13 +121,33 @@ const DevBhoomiSection = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-9 h-9 rounded-xl bg-[#C5A059]/12 border border-[#C5A059]/30 flex items-center justify-center text-[#7C1D23] flex-shrink-0">
-                    {pillar.icon}
+                <div className="flex items-center justify-between gap-3 mb-2">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-[#C84B0F]/10 border border-[#C84B0F]/30 flex items-center justify-center text-[#C84B0F] flex-shrink-0">
+                      {pillar.icon}
+                    </div>
+                    <h3 className="font-serif text-2xl font-medium text-[#2C2523]">
+                      {pillar.title}
+                    </h3>
                   </div>
-                  <h3 className="font-serif text-2xl font-medium text-[#2C2523]">
-                    {pillar.title}
-                  </h3>
+                </div>
+
+                {/* Saffron Aarti & Darshan Schedule Ribbon */}
+                <div className="mt-2.5 mb-3 p-2.5 rounded-xl bg-gradient-to-r from-[#C84B0F]/10 via-[#FAF6EF] to-[#C84B0F]/5 border border-[#C84B0F]/25 flex items-start gap-2 text-xs">
+                  <span className="text-[#C84B0F] font-bold flex-shrink-0 mt-0.5">🪔</span>
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[#C84B0F] font-semibold text-[11px] font-sans uppercase tracking-wider">
+                        Darshan & Aarti Timings:
+                      </span>
+                      <span className="text-[11px] text-[#C84B0F] font-devanagari font-semibold">
+                        {pillar.saffronTag}
+                      </span>
+                    </div>
+                    <span className="text-[#2C2523] font-medium text-xs leading-tight block mt-0.5">
+                      {pillar.aartiSchedule}
+                    </span>
+                  </div>
                 </div>
 
                 <p className="text-[#5C5350] text-sm sm:text-base leading-relaxed mb-5 mt-2">
@@ -119,7 +157,7 @@ const DevBhoomiSection = () => {
 
               {/* How it relates to our project */}
               <div className="pt-4 border-t border-[#C5A059]/15 flex items-start gap-2.5 bg-[#FAF6EF]/60 -mx-6 -mb-6 sm:-mx-7 sm:-mb-7 p-4 sm:p-5 rounded-b-3xl">
-                <SparklesIcon className="w-4 h-4 text-[#C5A059] flex-shrink-0 mt-0.5" />
+                <SparklesIcon className="w-4 h-4 text-[#C84B0F] flex-shrink-0 mt-0.5" />
                 <p className="text-xs sm:text-sm text-[#2C2523] font-medium leading-snug">
                   <strong>At Our Retreat:</strong> {pillar.projectLink}
                 </p>
@@ -144,7 +182,7 @@ const DevBhoomiSection = () => {
               </h3>
 
               <p className="text-[#5C5350] text-base leading-relaxed mb-8">
-                We created The Kasar Himalayan Heights so spiritual travelers, couples, and families can explore the sacred shrines of Uttarakhand with complete peace of mind. Experience high-altitude quietude without giving up modern warmth and comfort.
+                We created The Kasar Himalayan Heights so pilgrims, couples, and families can visit the sacred temples of Uttarakhand with complete peace of mind. Enjoy peaceful mountain silence with warm heated rooms and friendly service.
               </p>
 
               {/* 3 Luxury Touches */}
@@ -192,18 +230,18 @@ const DevBhoomiSection = () => {
                   href={APP_URLS.hotel}
                   target="_blank"
                   rel="noreferrer"
-                  className="px-6 py-3 rounded-full text-xs font-sans uppercase tracking-wider font-semibold bg-[#7C1D23] hover:bg-[#5C151A] text-[#FDFBF7] transition-all shadow-md inline-flex items-center gap-2"
+                  className="px-6 py-3 rounded-full text-xs font-sans uppercase tracking-wider font-semibold bg-gradient-to-r from-[#C84B0F] to-[#7C1D23] hover:from-[#E05A1B] hover:to-[#9E3304] text-[#FDFBF7] transition-all shadow-md inline-flex items-center gap-2 border border-[#C5A059]/40"
                 >
                   <span>Explore Heated Suites</span>
-                  <span className="text-sm leading-none">↗</span>
+                  <span className="text-sm leading-none text-[#DFCA9B]">↗</span>
                 </a>
 
                 <a
                   href="#routes"
-                  className="px-6 py-3 rounded-full text-xs font-sans uppercase tracking-wider font-semibold border border-[#C5A059] bg-[#FDFBF7] text-[#2C2523] hover:text-[#7C1D23] transition-all inline-flex items-center gap-2"
+                  className="px-6 py-3 rounded-full text-xs font-sans uppercase tracking-wider font-semibold border border-[#C84B0F]/40 bg-[#FDFBF7] text-[#2C2523] hover:text-[#C84B0F] hover:border-[#C84B0F] transition-all inline-flex items-center gap-2"
                 >
                   <span>View Route Distances</span>
-                  <span className="text-sm leading-none">↓</span>
+                  <span className="text-sm leading-none text-[#C84B0F]">↓</span>
                 </a>
               </div>
             </div>

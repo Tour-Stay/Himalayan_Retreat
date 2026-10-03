@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { BedIcon, SnowIcon, ArrowUpRightIcon } from '@shared';
+import { BedIcon, SnowIcon, ArrowUpRightIcon, snowViewSuiteImg } from '@shared';
 
 const RoomCard = ({ room, onBookNow }) => {
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
-  const images = room.imageURLs && room.imageURLs.length > 0 ? room.imageURLs : ['https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=800&q=80'];
+  const images = room.imageURLs && room.imageURLs.length > 0 ? room.imageURLs : [snowViewSuiteImg];
 
   return (
     <div className="bg-ivory rounded-3xl overflow-hidden border border-gold/25 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between h-full group card-luxury">
@@ -17,7 +17,7 @@ const RoomCard = ({ room, onBookNow }) => {
             className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
             onError={(e) => {
               e.target.onerror = null;
-              e.target.src = 'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=800&q=80';
+              e.target.src = snowViewSuiteImg;
             }}
           />
           {/* Subtle Gradient Shade */}

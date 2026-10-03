@@ -4,79 +4,80 @@ const amenities = [
   {
     icon: FlameIcon,
     title: 'Room Heating & Bed Warmers',
-    description: 'Every suite is equipped with powerful multi-stage room heaters and dual electric bed warmers for toasty comfort during winter snowfall.'
+    description: 'Every room is equipped with room heaters and electric bed warmers so you stay cozy and warm during chilly mountain nights.',
   },
   {
     icon: DropletIcon,
-    title: '24/7 Hot Running Geyser',
-    description: 'Dedicated high-capacity water geysers ensure steaming hot showers whenever you step in from the crisp mountain air.'
+    title: '24-Hour Hot Water',
+    description: 'Dedicated water geysers in every bathroom guarantee steaming hot water whenever you need a shower.',
   },
   {
     icon: ZapIcon,
-    title: '100% Uninterrupted Power Backup',
-    description: 'Heavy-duty silent generators and dedicated inverters safeguard your warmth, lighting, and Wi-Fi against mountain snowstorms.'
+    title: '100% Power Backup',
+    description: 'Generators and battery backup keep your room lights, Wi-Fi, and heaters running without power interruption.',
   },
   {
     icon: MountainIcon,
-    title: 'Private Snow-View Balconies',
-    description: 'Step out to uninterrupted 180° views of Nanda Devi and Trishul peaks right from your bedroom door.'
+    title: 'Private Snow-View Balcony',
+    description: 'Enjoy clear 180° views of snow peaks like Mount Trishul and Nanda Devi right outside your bedroom door.',
   },
   {
     icon: WifiIcon,
-    title: 'High-Speed Fiber Wi-Fi',
-    description: 'Ultra-stable 100 Mbps broadband across all suites and common areas for seamless streaming or mountain workations.'
+    title: 'Free High-Speed Wi-Fi',
+    description: 'Fast and reliable internet across all rooms and common areas, perfect for staying connected with family.',
   },
   {
     icon: DropletIcon,
-    title: 'Pure Himalayan Spring Water',
-    description: 'Directly sourced from pure alpine springs, multi-filtered to preserve natural mountain minerals and purity.'
+    title: 'Clean Mountain Water',
+    description: 'Pure, multi-filtered mountain drinking water provided fresh in glass bottles in every room.',
   },
   {
     icon: CoffeeIcon,
-    title: 'Artisanal In-Room Tea Stations',
-    description: 'Electric kettle paired with local Kumaoni organic herbal teas, artisan coffee, and complimentary mountain snacks.'
+    title: 'Electric Kettle & Tea Kit',
+    description: 'In-room kettle with green tea, masala tea bags, fresh coffee, and mountain honey for a warm hot cup anytime.',
   },
   {
     icon: ShieldCheckIcon,
-    title: 'Secure Drive-in Parking & Concierge',
-    description: 'Easy road access with secure private on-site parking, snow chain assistance, and dedicated luggage service to your suite.'
-  }
+    title: 'Direct Car Parking',
+    description: 'Drive right up to our hotel entrance with free, secure private parking and helpful staff to carry your luggage.',
+  },
 ];
 
 const AmenitiesGrid = () => {
   return (
-    <section id="amenities" className="py-24 px-4 bg-ivory-warm/50 relative border-b border-gold/15">
+    <section id="amenities" className="py-10 sm:py-14 px-4 bg-[#FAF6EF]/60 relative border-b border-[#C5A059]/20">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <span className="inline-block px-3.5 py-1 rounded-full bg-ivory text-gold text-xs font-semibold tracking-[0.25em] uppercase mb-4 border border-gold/30 font-mono">
-            Thoughtful Hospitality
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-[#FAF6EF] text-[#7C1D23] text-xs font-semibold tracking-[0.2em] uppercase mb-4 border border-[#C5A059]/30 font-cinzel">
+            Hotel Facilities &amp; Comforts
           </span>
-          <h2 className="font-serif text-3xl sm:text-5xl text-charcoal font-medium mb-4 tracking-tight">
-            Details That Make the Difference
+          <h2 className="font-serif text-3xl sm:text-5xl text-[#2C2523] font-medium mb-4 tracking-tight leading-tight">
+            Everything You Need for a Comfortable Stay
           </h2>
-          <p className="text-charcoal-muted text-base sm:text-lg font-light leading-relaxed">
-            Engineered for mountain serenity and winter comfort — ensuring every detail of your stay feels effortless.
+          <div className="w-16 h-0.5 bg-[#C5A059]/60 mx-auto my-4"></div>
+          <p className="text-[#5C5350] text-base sm:text-lg font-normal leading-relaxed">
+            We make sure your stay is warm, cozy, and hassle-free even in the cold mountain winter.
           </p>
         </div>
 
         {/* Luxury Amenities Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-7">
           {amenities.map((item, index) => {
             const IconComponent = item.icon;
             return (
               <div
                 key={index}
-                className="bg-ivory p-7 rounded-3xl border border-gold/25 shadow-sm hover:shadow-xl hover:border-gold/50 hover:-translate-y-1 transition-all duration-300 h-full flex flex-col justify-between group card-luxury"
+                className="bg-[#FDFBF7] p-7 rounded-3xl border border-[#C5A059]/25 shadow-xs hover:shadow-lg hover:border-[#7C1D23]/35 hover:-translate-y-1 transition-all duration-300 h-full flex flex-col justify-between group"
               >
                 <div>
-                  <div className="w-12 h-12 rounded-2xl bg-gold/15 text-maroon flex items-center justify-center mb-5 group-hover:bg-maroon group-hover:text-ivory transition-all duration-300 border border-gold/30">
-                    <IconComponent className="w-6 h-6 transition-transform group-hover:scale-110" />
+                  <div className="w-12 h-12 rounded-2xl bg-[#FAF6EF] text-[#7C1D23] flex items-center justify-center mb-5 group-hover:bg-[#7C1D23] group-hover:text-[#FDFBF7] transition-all duration-300 border border-[#C5A059]/30 shadow-xs">
+                    <IconComponent className="w-6 h-6 transition-transform group-hover:scale-105" />
                   </div>
-                  <h3 className="font-serif text-lg font-medium text-charcoal mb-2.5 group-hover:text-maroon transition-colors">
+                  <h3 className="font-serif text-lg font-medium text-[#2C2523] mb-2 group-hover:text-[#7C1D23] transition-colors">
                     {item.title}
                   </h3>
-                  <p className="text-charcoal-muted text-sm leading-relaxed font-light">
+                  <p className="text-[#5C5350] text-sm leading-relaxed font-normal">
                     {item.description}
                   </p>
                 </div>

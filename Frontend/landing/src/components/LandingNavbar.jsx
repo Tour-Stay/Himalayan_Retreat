@@ -22,6 +22,7 @@ const navItems = [
     id: 'devbhoomi',
     label: 'Holy Sites',
     subtitle: 'Temples & Holy Sites',
+    badge: 'पावन तीर्थ',
     dropdown: [
       {
         title: 'Kainchi Dham Ashram',
@@ -233,22 +234,28 @@ const LandingNavbar = () => {
     <header ref={navRef} className="sticky top-0 z-50 w-full font-sans transition-all duration-300">
       {/* 1. TOP UTILITY BAR (Editorial Luxury Strip — gently collapses on scroll) */}
       <div
-        className={`bg-[#FAF6EF] border-b border-[#C5A059]/25 px-4 text-xs text-[#6B615E] transition-all duration-300 overflow-hidden ${
+        className={`bg-gradient-to-r from-[#FFF5EC] via-[#FAF6EF] to-[#FFF5EC] border-b border-[#C84B0F]/20 px-4 text-xs text-[#6B615E] transition-all duration-300 overflow-hidden ${
           isScrolled ? 'max-h-0 py-0 opacity-0 pointer-events-none border-b-0' : 'max-h-12 py-1.5 opacity-100'
         }`}
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3 sm:gap-4 text-[11px] font-sans">
-            <span className="text-[#C5A059] font-cinzel font-semibold tracking-[0.16em] flex items-center gap-1.5">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#C5A059]"></span>
-              6,942 FT ELEVATION • ALMORA HUB
+          <div className="flex items-center gap-2 sm:gap-4 text-[11px] font-sans">
+            <span className="text-[#C84B0F] font-serif font-bold tracking-wider flex items-center gap-1.5">
+              <span className="text-amber-500 animate-pulse text-xs">🪔</span>
+              <span className="hidden sm:inline">॥ ॐ नमः शिवाय • 🔱 जय श्री नीब करौरी महाराज ॥</span>
+              <span className="sm:hidden">॥ ॐ जय बाबा नीम करौरी ॥</span>
             </span>
-            <span className="hidden sm:inline text-[#C5A059]/40">|</span>
+            <span className="hidden md:inline text-[#C5A059]/40">|</span>
+            <span className="text-[#C5A059] font-cinzel font-semibold tracking-[0.16em] hidden md:flex items-center gap-1.5">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#C84B0F]"></span>
+              6,942 FT • ALMORA HUB
+            </span>
+            <span className="hidden lg:inline text-[#C5A059]/40">|</span>
             <a
               href={`tel:${SITE_CONFIG.conciergePhone}`}
-              className="hidden sm:inline hover:text-[#7C1D23] transition-colors"
+              className="hidden lg:inline hover:text-[#C84B0F] transition-colors"
             >
-              Concierge: <strong className="text-[#2C2523] font-numeral font-bold tracking-wide">{SITE_CONFIG.conciergePhone}</strong>
+              Yatra Helpline: <strong className="text-[#2C2523] font-numeral font-bold tracking-wide">{SITE_CONFIG.conciergePhone}</strong>
             </a>
           </div>
 
@@ -257,7 +264,7 @@ const LandingNavbar = () => {
               href="#hotel-gateway"
               className="text-[#7C1D23] hover:underline font-semibold tracking-wider uppercase flex items-center gap-1"
             >
-              <span>Explore Sanctuaries</span>
+              <span>View Heated Rooms</span>
               <span>&rarr;</span>
             </a>
             <span className="text-[#C5A059]/40">|</span>
@@ -316,7 +323,7 @@ const LandingNavbar = () => {
                           : 'text-[#2C2523] hover:text-[#7C1D23] hover:bg-[#FAF6EF]'
                         }`}
                     >
-                      <span>{item.label}</span>
+                      <span>{item.id === 'devbhoomi' ? '🪔 ' + item.label : item.label}</span>
                       <svg
                         className={`w-3 h-3 text-[#C5A059] transition-transform duration-200 flex-shrink-0 ${isOpen ? 'rotate-180 text-[#7C1D23]' : ''
                           }`}
@@ -408,22 +415,22 @@ const LandingNavbar = () => {
               href={APP_URLS.hotel}
               target="_blank"
               rel="noreferrer"
-              className="px-4 py-1.5 rounded-full text-xs font-sans uppercase tracking-wider font-semibold bg-[#7C1D23] hover:bg-[#5C151A] text-[#FDFBF7] transition-all shadow-md border border-[#C5A059]/40 cursor-pointer flex items-center gap-1.5 whitespace-nowrap hover:scale-102"
+              className="px-4 py-1.5 rounded-full text-xs font-sans uppercase tracking-wider font-semibold bg-gradient-to-r from-[#C84B0F] to-[#7C1D23] hover:from-[#E05A1B] hover:to-[#9E3304] text-[#FDFBF7] transition-all shadow-md border border-[#C5A059]/40 cursor-pointer flex items-center gap-1.5 whitespace-nowrap hover:scale-102"
               title="Book Room at The Kasar Himalayan Heights"
             >
               <span>Book Room</span>
-              <span className="text-[#C5A059] text-xs leading-none">↗</span>
+              <span className="text-[#DFCA9B] text-xs leading-none">↗</span>
             </a>
 
             <a
               href={APP_URLS.travel}
               target="_blank"
               rel="noreferrer"
-              className="px-4 py-1.5 rounded-full text-xs font-sans uppercase tracking-wider font-semibold border border-[#C5A059] bg-[#FAF6EF] hover:bg-[#C5A059]/20 text-[#2C2523] hover:text-[#7C1D23] transition-all shadow-xs cursor-pointer flex items-center gap-1.5 whitespace-nowrap hover:scale-102"
+              className="px-4 py-1.5 rounded-full text-xs font-sans uppercase tracking-wider font-semibold border border-[#C84B0F]/40 bg-[#FAF6EF] hover:bg-[#C84B0F]/10 text-[#2C2523] hover:text-[#C84B0F] transition-all shadow-xs cursor-pointer flex items-center gap-1.5 whitespace-nowrap hover:scale-102"
               title="Book Cab / Mountain Tour"
             >
               <span>Book Cab</span>
-              <span className="text-[#7C1D23] text-xs leading-none">↗</span>
+              <span className="text-[#C84B0F] text-xs leading-none">↗</span>
             </a>
           </div>
 
@@ -459,7 +466,7 @@ const LandingNavbar = () => {
               href={APP_URLS.hotel}
               target="_blank"
               rel="noreferrer"
-              className="w-full py-3 rounded-full text-center text-xs uppercase tracking-wider font-bold bg-[#7C1D23] text-[#FDFBF7] shadow-md border border-[#C5A059]/40 block"
+              className="w-full py-3 rounded-full text-center text-xs uppercase tracking-wider font-bold bg-gradient-to-r from-[#C84B0F] to-[#7C1D23] text-[#FDFBF7] shadow-md border border-[#C5A059]/40 block"
             >
               Stay at Kasar Resort ↗
             </a>
@@ -467,7 +474,7 @@ const LandingNavbar = () => {
               href={APP_URLS.travel}
               target="_blank"
               rel="noreferrer"
-              className="w-full py-3 rounded-full text-center text-xs uppercase tracking-wider font-bold border border-[#C5A059] bg-[#FAF6EF] text-[#2C2523] block"
+              className="w-full py-3 rounded-full text-center text-xs uppercase tracking-wider font-bold border border-[#C84B0F]/40 bg-[#FAF6EF] text-[#2C2523] hover:text-[#C84B0F] block"
             >
               Mountain Expeditions ↗
             </a>

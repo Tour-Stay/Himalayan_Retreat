@@ -292,3 +292,63 @@ body {
   transform: translateY(-3px);
   box-shadow: 0 12px 28px rgba(124, 29, 35, 0.35);
 }
+
+/* ================================================================
+   DEVOTIONAL SAFFRON & TEMPLE GLOW AESTHETICS
+   ================================================================ */
+
+/* Diya Aarti Flicker Animation */
+@keyframes diyaAarti {
+  0%, 100% {
+    opacity: 0.85;
+    transform: scale(1);
+    filter: drop-shadow(0 0 12px rgba(224, 90, 27, 0.45));
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+    filter: drop-shadow(0 0 20px rgba(230, 81, 0, 0.65));
+  }
+}
+
+.animate-diya {
+  animation: diyaAarti 3.5s ease-in-out infinite;
+}
+
+/* Sacred Saffron Halo Glow */
+.saffron-halo {
+  background: radial-gradient(circle, rgba(224, 90, 27, 0.28) 0%, rgba(212, 175, 55, 0.16) 45%, transparent 75%);
+}
+
+/* Saffron Gradient Text */
+.text-gradient-saffron {
+  background: linear-gradient(135deg, #C84B0F 0%, #E05A1B 50%, #B83E0A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Sacred Saffron Button */
+.btn-saffron {
+  background: linear-gradient(135deg, #C84B0F 0%, #E05A1B 50%, #B83E0A 100%);
+  color: #FFFDF9;
+  box-shadow: 0 4px 16px rgba(200, 75, 15, 0.3);
+  transition: all 0.3s ease;
+}
+
+.btn-saffron:hover {
+  background: linear-gradient(135deg, #A83707 0%, #C84B0F 50%, #9E3304 100%);
+  box-shadow: 0 6px 22px rgba(200, 75, 15, 0.45);
+  transform: translateY(-1px);
+}
+
+/* Sacred Temple Card Kesariya Border Trim */
+.temple-card-saffron {
+  border: 1px solid rgba(200, 75, 15, 0.22);
+  transition: all 0.35s ease;
+}
+
+.temple-card-saffron:hover {
+  border-color: rgba(200, 75, 15, 0.55);
+  box-shadow: 0 12px 36px rgba(200, 75, 15, 0.12);
+}

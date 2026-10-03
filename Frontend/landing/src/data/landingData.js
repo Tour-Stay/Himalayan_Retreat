@@ -151,17 +151,17 @@ export const suitesData = [
   {
     id: 'attic-sanctuary',
     name: "Crank's Ridge Attic Glass Suite",
-    tag: 'Contemplative Retreat',
+    tag: 'Peaceful Mountain Retreat',
     tariff: '₹7,200',
     unit: 'per night + taxes',
     size: '360 sq ft',
     image: atticSuiteImg,
     features: [
-      'Angled pine-sloped roof with sky window for stargazing',
+      'Angled pine wood roof with glass ceiling for stargazing',
       'Private meditation corner overlooking deodar valley',
-      'Dual electric bed warming mats & quiet oil radiator',
-      'Quietude sanctuary with zero road traffic sound',
-      'Dedicated writer desk with fast high-speed optical Wi-Fi',
+      'Electric bed warming blankets & warm room heater',
+      'Completely quiet with zero road traffic noise',
+      'Dedicated work desk with fast high-speed Wi-Fi',
     ],
   },
 ];

@@ -26,7 +26,7 @@ const ConciergeEnquirySection = () => {
   const getHeaderContent = () => {
     if (formData.serviceType === 'hotel') {
       return {
-        badge: 'Heated Chalet Booking',
+        badge: '🪔 Heated Chalet Booking',
         title: 'Book Your Heated Chalet Suite',
         subtitle:
           'Tell us your travel dates and room preference. Our Almora team will message you on WhatsApp with real room photos and current availability.',
@@ -37,7 +37,7 @@ const ConciergeEnquirySection = () => {
     }
     if (formData.serviceType === 'travel') {
       return {
-        badge: 'Private Mountain Cab Booking',
+        badge: '🪔 Devotional Cab & Yatra Booking',
         title: 'Book Your Private Mountain Cab',
         subtitle:
           'Tell us your pickup location and route. Our team in Almora will message you directly on WhatsApp with fair, fixed rates and cab options.',
@@ -47,7 +47,7 @@ const ConciergeEnquirySection = () => {
       };
     }
     return {
-      badge: 'Easy WhatsApp Booking',
+      badge: '🪔 पावन यात्रा • Easy WhatsApp Booking',
       title: 'Plan Your Stay & Mountain Travel',
       subtitle:
         'Tell us your travel dates and requirements. Our team in Almora will message you directly on WhatsApp with available rooms and fair cab prices.',
@@ -66,6 +66,7 @@ const ConciergeEnquirySection = () => {
 
     if (formData.serviceType === 'hotel') {
       message = encodeURIComponent(
+        `*॥ ॐ नमः शिवाय • जय श्री नीब करौरी महाराज ॥*\n` +
         `*Room Inquiry — The Kasar Himalayan Heights*\n` +
         `----------------------------------------\n` +
         `*Name:* ${formData.name}\n` +
@@ -81,6 +82,7 @@ const ConciergeEnquirySection = () => {
       );
     } else if (formData.serviceType === 'travel') {
       message = encodeURIComponent(
+        `*॥ ॐ नमः शिवाय • जय श्री नीब करौरी महाराज ॥*\n` +
         `*Cab Inquiry — Mountain Expeditions*\n` +
         `----------------------------------------\n` +
         `*Name:* ${formData.name}\n` +
@@ -96,6 +98,7 @@ const ConciergeEnquirySection = () => {
       );
     } else {
       message = encodeURIComponent(
+        `*॥ ॐ नमः शिवाय • जय श्री नीब करौरी महाराज ॥*\n` +
         `*Package Inquiry — Stay & Mountain Cab*\n` +
         `----------------------------------------\n` +
         `*Name:* ${formData.name}\n` +
@@ -115,9 +118,17 @@ const ConciergeEnquirySection = () => {
   };
 
   return (
-    <section id="enquiry" className="py-16 sm:py-24 px-4 bg-[#FDFBF7] border-b border-[#C5A059]/20">
+    <section id="enquiry" className="py-16 sm:py-24 px-4 bg-gradient-to-b from-[#FDFBF7] via-[#FFF6EC]/50 to-[#FDFBF7] border-b border-[#C5A059]/20 relative overflow-hidden">
+      {/* Subtle sacred symbol watermark */}
+      <div className="absolute -bottom-6 -right-6 text-[#C84B0F]/[0.035] text-[180px] font-devanagari select-none pointer-events-none leading-none z-0">
+        ॐ
+      </div>
+
       <Container size="md">
-        <div className="bg-[#FAF6EF] p-6 sm:p-10 rounded-3xl border border-[#C5A059]/40 shadow-xl text-center">
+        <div className="bg-gradient-to-b from-[#FFF8F0] via-[#FAF6EF] to-[#FFF5EB] p-6 sm:p-10 rounded-3xl border border-[#C84B0F]/30 shadow-xl text-center relative z-10">
+          <span className="text-[#C84B0F] text-xs font-devanagari font-bold tracking-widest uppercase block mb-1">
+            ॥ ॐ नमः शिवाय • जय श्री नीब करौरी महाराज ॥
+          </span>
           <span className="text-[#C5A059] text-xs font-sans font-semibold tracking-wider uppercase mb-2 block">
             {header.badge}
           </span>
@@ -458,7 +469,7 @@ const ConciergeEnquirySection = () => {
 
             <button
               type="submit"
-              className="w-full py-3.5 rounded-full text-xs font-sans uppercase tracking-wider font-bold bg-[#7C1D23] hover:bg-[#5C151A] text-[#FDFBF7] transition-all shadow-md cursor-pointer mt-2 text-center"
+              className="w-full py-3.5 rounded-full text-xs font-sans uppercase tracking-wider font-bold bg-gradient-to-r from-[#C84B0F] via-[#E05A1B] to-[#7C1D23] hover:from-[#9E3304] hover:to-[#5C151A] text-[#FDFBF7] transition-all shadow-lg shadow-[#C84B0F]/20 cursor-pointer mt-2 text-center border border-[#C5A059]/40 hover:scale-[1.01]"
             >
               {header.buttonText}
             </button>

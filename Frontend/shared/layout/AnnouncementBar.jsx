@@ -5,13 +5,14 @@ const AnnouncementBar = ({
   linkText = 'Plan Your Visit',
   linkHref = '#enquiry',
   onClose,
+  className = '',
 }) => {
   const [visible, setVisible] = useState(true);
 
   if (!visible) return null;
 
   return (
-    <div className="bg-[#5C151A] text-[#FDFBF7] text-xs py-2 px-4 border-b border-[#C5A059]/40 relative z-50">
+    <div className={`text-[#FDFBF7] text-xs py-2 px-4 border-b border-[#C5A059]/40 relative z-50 ${className || 'bg-[#5C151A]'}`}>
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
         <div className="flex-1 text-center font-sans tracking-wide">
           <span className="font-light">{message}</span>{' '}

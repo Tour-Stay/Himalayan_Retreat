@@ -6,8 +6,8 @@ export const LANDING_CONTENT = {
   // Top Notice Bar (Dismissible)
   announcement: {
     enabled: true,
-    message: 'Visiting Kainchi Dham or Kasar Devi? Cozy heated rooms and private cabs are open for booking.',
-    linkText: 'Book on WhatsApp',
+    message: '॥ ॐ नमः शिवाय • जय श्री नीब करौरी महाराज ॥ Visiting Kainchi Dham or Kasar Devi? Consecrated yatra assistance, heated chalet suites & temple cabs are open for booking.',
+    linkText: 'Yatra Booking ↗',
     linkHref: '#enquiry',
   },
 

@@ -25,7 +25,7 @@ const AllRooms = () => {
     fetchRooms();
   }, []);
 
-  const filterOptions = ['All', 'Snow Peak View', 'Chalet', 'Family Villa', 'Attic Suite'];
+  const filterOptions = ['All', 'Snow Peak View', 'Family Chalet', 'Attic Suite'];
 
   const filteredRooms = rooms.filter((room) => {
     if (selectedFilter === 'All') return true;
@@ -34,9 +34,8 @@ const AllRooms = () => {
         (room.view || '').toLowerCase().includes('peak') ||
         (room.view || '').toLowerCase().includes('snow')
       );
-    if (selectedFilter === 'Chalet') return (room.name || '').toLowerCase().includes('chalet');
-    if (selectedFilter === 'Family Villa')
-      return (room.name || '').toLowerCase().includes('family') || room.capacity?.adults > 2;
+    if (selectedFilter === 'Family Chalet')
+      return (room.name || '').toLowerCase().includes('chalet') || (room.name || '').toLowerCase().includes('family') || room.capacity?.adults > 2;
     if (selectedFilter === 'Attic Suite') return (room.name || '').toLowerCase().includes('attic');
     return true;
   });
@@ -45,15 +44,16 @@ const AllRooms = () => {
     <div className="pt-28 pb-24 px-4 min-h-screen bg-ivory font-sans">
       <Container size="lg">
         {/* Page Header */}
-        <div className="text-center mb-12">
-          <span className="text-gold text-xs font-semibold tracking-[0.25em] uppercase mb-3 block font-mono">
-            Kasar Devi Accommodations • 6,942 FT
+        <div className="text-center mb-14">
+          <span className="text-[#C5A059] text-xs font-cinzel font-semibold tracking-[0.2em] uppercase mb-3 block">
+            Rooms &amp; Rates • Kasar Devi • 6,942 FT
           </span>
-          <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl text-charcoal font-medium mb-4">
-            Heated Mountain Suites
+          <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl text-[#2C2523] font-medium mb-4">
+            Warm Rooms &amp; Heated Suites
           </h1>
-          <p className="text-charcoal-muted text-base sm:text-lg max-w-xl mx-auto font-light leading-relaxed">
-            Every suite is thoughtfully crafted with natural pine, heated interiors, and panoramic balconies overlooking 180° of the sacred Himalayas.
+          <div className="w-16 h-0.5 bg-[#C5A059]/60 mx-auto my-4"></div>
+          <p className="text-[#5C5350] text-base sm:text-lg max-w-xl mx-auto font-light leading-relaxed font-sans">
+            Every room is built with natural pine wood and stone, equipped with room heaters, electric bed warmers, and private balconies overlooking 180° of the Himalayas.
           </p>
 
           {/* Filter Pills */}
@@ -62,10 +62,11 @@ const AllRooms = () => {
               <button
                 key={filter}
                 onClick={() => setSelectedFilter(filter)}
-                className={`px-5 py-2.5 rounded-full text-xs uppercase tracking-wider transition-all duration-300 cursor-pointer ${selectedFilter === filter
-                    ? 'bg-maroon text-ivory font-bold shadow-md border border-gold/40'
-                    : 'bg-ivory-warm border border-gold/25 text-charcoal/80 hover:border-gold/50 font-semibold'
-                  }`}
+                className={`px-5 py-2 rounded-full text-xs font-cinzel uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                  selectedFilter === filter
+                    ? 'bg-[#7C1D23] text-[#FDFBF7] font-bold shadow-md border border-[#C5A059]/40'
+                    : 'bg-[#FAF6EF] border border-[#C5A059]/30 text-[#2C2523] hover:border-[#C5A059] font-semibold'
+                }`}
               >
                 {filter}
               </button>
