@@ -15,7 +15,7 @@
 4. [Project Directory Structure](#-project-directory-structure)
 5. [Core Features & Modules](#-core-features--modules)
 6. [Mountain Travel & Fare Calculation Engine](#-mountain-travel--fare-calculation-engine)
-7. [Centralized Asset Inventory (19 Verified Files)](#-centralized-asset-inventory-19-verified-files)
+7. [Centralized Asset Inventory (41 Image Files)](#-centralized-asset-inventory-41-image-files)
 8. [Client Photography Wishlist](#-client-photography-wishlist)
 9. [REST API Documentation](#-rest-api-documentation)
 10. [Environment Variables Setup](#-environment-variables-setup)
@@ -59,7 +59,7 @@ The platform is designed as an isolated **multi-frontend monorepo** with a centr
 
 | Micro-Application | Port | Responsibility |
 | :--- | :---: | :--- |
-| **Landing Portal** | `5173` | Grand brand entry, Neem Karoli Baba devotional hero, Dev Bhoomi 4 pillars, route planner, dynamic WhatsApp booking form, and luxury sandstone footer. |
+| **Landing Portal** | `5173` | Grand brand entry, Neem Karoli Baba devotional hero, Dev Bhoomi 4 pillars, route planner, dynamic booking form, and luxury sandstone footer. |
 | **Hotel Portal** | `5174` | Dedicated boutique resort web app, heated alpine chalets, live winter snowfall canvas engine, room filters, and stay booking modal. |
 | **Travel Portal** | `5175` | Dedicated mountain expedition web app, Almora base hub circuits, dynamic vehicle fare calculator, community guest reviews. |
 | **Admin Portal** | `5176` | Executive staff command desk, live KPI counters, dual view suite tables, suite CRUD modal with drag-and-drop dropzone, 1-click WhatsApp dispatch. |
@@ -77,7 +77,7 @@ The platform is designed as an isolated **multi-frontend monorepo** with a centr
   - *Body Text:* Raleway, Inter
   - *Devotional Sanskrit:* Rozha One, Tiro Devanagari Hindi
   - *Numerals & Tariffs:* Lining numerals with clean sans-serif ampersands (`CleanAmp` fallback)
-- **Visual FX & Interactions:** Canvas-based realistic snowfall particle engine, 3D tilt perspective cards, animated SVG chevrons (zero emojis/stickers).
+- **Visual FX & Interactions:** Canvas-based realistic snowfall particle engine, animated SVG chevrons (zero emojis/stickers).
 - **HTTP Client:** Axios with standardized interceptors in `@shared/services/apiClient.js`.
 
 ### Backend Ecosystem
@@ -138,7 +138,7 @@ Himalayan_Retreat/
 │   │   │   │   ├── TravelGatewaySection.jsx# Fleet showcase & fixed route tariffs
 │   │   │   │   ├── PilgrimageItinerary.jsx # 3-day sample pilgrimage schedule
 │   │   │   │   ├── VisitorFaqSection.jsx   # Practical Q&A with SVG accordion
-│   │   │   │   └── ConciergeEnquirySection.jsx # 100% dynamic WhatsApp booking form
+│   │   │   │   └── ConciergeEnquirySection.jsx # Dynamic booking form
 │   │   │   ├── content/
 │   │   │   │   └── landing.content.js      # Centralized editable content
 │   │   │   ├── data/
@@ -152,17 +152,21 @@ Himalayan_Retreat/
 │   ├── hotel/                              # Micro-App 2: Boutique Resort (Port 5174)
 │   │   ├── src/
 │   │   │   ├── components/                 # RoomCard, RoomModal, BookingForm, SnowEffect
-│   │   │   ├── pages/                      # Home, AllRooms, RoomDetails, Confirmation
+│   │   │   ├── data/                       # mockRooms.js — suite catalog seed data
+│   │   │   ├── pages/                      # HotelHome, AllRooms, RoomDetails, BookingConfirmation
 │   │   │   ├── App.jsx
+│   │   │   ├── index.css
 │   │   │   └── main.jsx
 │   │   ├── index.html
 │   │   └── vite.config.js
 │   │
 │   ├── travel/                             # Micro-App 3: Mountain Travel (Port 5175)
 │   │   ├── src/
-│   │   │   ├── components/                 # TravelNavbar, TravelFooter, FareCalculator
-│   │   │   ├── pages/                      # TourAndTravel, CommunityReviews
+│   │   │   ├── components/                 # TravelNavbar, TravelFooter, FareCalculator, VehicleFleet
+│   │   │   ├── data/                       # travelData.js — fleet, destinations & fare matrix
+│   │   │   ├── pages/                      # TravelHome, AllCabs, TravelBookingConfirmation
 │   │   │   ├── App.jsx
+│   │   │   ├── index.css
 │   │   │   └── main.jsx
 │   │   ├── index.html
 │   │   └── vite.config.js
@@ -179,23 +183,28 @@ Himalayan_Retreat/
 │   │
 │   ├── shared/                             # Centralized Shared Package (@shared)
 │   │   ├── assets/
-│   │   │   └── images/                     # 19 centralized, deduplicated image assets
+│   │   │   └── images/                     # 41 centralized, deduplicated image assets
 │   │   ├── components/
 │   │   │   ├── ArchImage.jsx               # Reverent arch-framed portrait wrapper
 │   │   │   ├── BackToTop.jsx               # Smooth scroll-to-top luxury button
 │   │   │   ├── Button.jsx                  # Standardized brand button
 │   │   │   ├── Container.jsx               # Responsive editorial grid container
+│   │   │   ├── Divider.jsx                 # Ornamental section divider
 │   │   │   ├── Icons.jsx                   # Handcrafted SVG vector icons (Zero emojis)
+│   │   │   ├── Loader.jsx                  # Animated loading spinner
 │   │   │   ├── Logo.jsx                    # Scalable mountain crest vector emblem
 │   │   │   ├── Modal.jsx                   # Accessible modal dialog
-│   │   │   └── TiltCard.jsx                # Interactive 3D perspective wrapper
+│   │   │   └── SectionHeading.jsx          # Reusable section title with divider
 │   │   ├── constants/
 │   │   │   ├── assets.js                   # Single source of truth for all images
 │   │   │   └── siteConfig.js               # Cross-app URL mappings & coordinates
+│   │   ├── context/
+│   │   │   └── AuthContext.jsx             # Admin authentication state provider
+│   │   ├── hooks/
+│   │   │   └── useScrollReveal.js          # Intersection Observer scroll animations
 │   │   ├── layout/
 │   │   │   ├── AnnouncementBar.jsx         # Dismissible top notice ribbon
-│   │   │   ├── SiteFooter.jsx              # Warm Sandstone & Pearl Ivory luxury footer
-│   │   │   └── SiteHeader.jsx              # Standalone universal header
+│   │   │   └── SiteFooter.jsx              # Warm Sandstone & Pearl Ivory luxury footer
 │   │   ├── services/
 │   │   │   └── apiClient.js                # Pre-configured Axios API client
 │   │   ├── styles/
@@ -203,6 +212,7 @@ Himalayan_Retreat/
 │   │   │   └── tokens.css                  # Color palette tokens & font-face rules
 │   │   └── index.js                        # Barrel exports for `@shared` import alias
 │   │
+│   ├── .env                                # Frontend environment config (gitignored)
 │   ├── .env.example                        # Frontend cross-port environment template
 │   └── package.json                        # Root workspace scripts & dependencies
 │
@@ -270,9 +280,9 @@ $$\text{Total Fare} = \left(\text{Route Distance (km)} \times \text{Vehicle Rate
 
 ---
 
-## 📸 Centralized Asset Inventory (19 Verified Files)
+## 📸 Centralized Asset Inventory (41 Image Files)
 
-All images are consolidated in [`Frontend/shared/assets/images`](file:///d:/Himalayan_Retreat/Frontend/shared/assets/images) and exported via [`Frontend/shared/constants/assets.js`](file:///d:/Himalayan_Retreat/Frontend/shared/constants/assets.js):
+All images are consolidated in [`Frontend/shared/assets/images/`](file:///d:/Himalayan_Retreat/Frontend/shared/assets/images) and exported via [`Frontend/shared/constants/assets.js`](file:///d:/Himalayan_Retreat/Frontend/shared/constants/assets.js):
 
 | Category | File Name | Export Identifier | Usage Location |
 | :--- | :--- | :--- | :--- |
@@ -283,18 +293,40 @@ All images are consolidated in [`Frontend/shared/assets/images`](file:///d:/Hima
 | | `kasar-devi-temple.jpg` | `kasarTempleImg` | Kasar Devi & Crank's Ridge cosmic belt |
 | | `Trishul-&-Nanda-Devi.jpg` | `trishulPeaksImg` | Trishul (7,120m) & Nanda Devi vista |
 | **Resort Exterior** | `hotel-best-pic.jpg` | `hotelBestPic` | Daytime chalet resort architecture (6,942 FT) |
+| | `hotel-exterior-day.jpg` | `hotelExteriorDay` | Full resort daytime facade |
 | | `hotel-in-snow.jpg` | `hotelInSnow` | Winter snowfall over the resort pine ridge |
 | | `hotel-at-night.jpg` | `hotelAtNight` | Warm amber night illumination of the chalet |
+| | `hotel-night-sky.jpg` | `hotelNightSky` | Starry night atmosphere over resort |
 | **Room Interiors** | `snow-view-suite.jpg` | `snowViewSuiteImg` | Nanda Devi Signature Heated Suite bedroom |
+| | `suite-nanda-devi-bed.jpg` | `suiteNandaDeviBed` | Nanda Devi suite bed close-up |
+| | `suite-nanda-devi-balcony.jpg` | `suiteNandaDeviBalcony` | Nanda Devi private balcony view |
+| | `suite-nanda-devi-balcony2.jpg` | `suiteNandaDeviBalcony2` | Alternate balcony perspective |
+| | `suite-trishul-terrace.jpg` | `suiteTrishulTerrace` | Trishul Terrace suite |
+| | `suite-luxury-bathroom.jpg` | `suiteLuxuryBathroom` | En-suite bathroom finishes |
+| | `suite-attic-workspace.jpg` | `suiteAtticWorkspace` | Attic suite workspace area |
 | | `chalet-suite.jpg` | `chaletSuiteImg` | Cedar Alpine Family Chalet bedroom |
+| | `chalet-family-living.jpg` | `chaletFamilyLiving` | Chalet family living room |
+| | `chalet-family-bedroom.jpg` | `chaletFamilyBedroom` | Chalet family bedroom |
 | | `attic-suite.jpg` | `atticSuiteImg` | Crank's Ridge Attic Glass Suite pine interior |
-| **Resort Amenities**| `caption.jpg` | `captionImg` | Satvik Dining & Cafe featuring resort signboard |
+| **Resort Amenities** | `caption.jpg` | `captionImg` | Satvik Dining & Cafe featuring resort signboard |
 | | `corridor-at-day.jpg` | `corridorDay` | Wood-paneled alpine interior corridor |
 | | `corridor-at-night.jpg` | `corridorNight` | Cozy night-lit interior guest hallway |
 | | `gamezone.jpg` | `gamezoneImg` | Indoor family entertainment & recreational hall |
+| | `sunrise-meditation-deck.jpg` | `sunriseMeditationDeck` | Morning meditation deck |
+| **Dining** | `dining-satvik-thali.jpg` | `diningSatvikThali` | Authentic Satvik thali spread |
+| | `dining-hearth-cafe.jpg` | `diningHearthCafe` | Hearth cafe interior |
+| **Spiritual Trails** | `vivekananda-cave.jpg` | `vivekanandaCave` | Swami Vivekananda meditation cave |
+| | `kasar-temple-trail.jpg` | `kasarTempleTrail` | Kasar Devi temple trail path |
 | **Mountain Fleet** | `innova-crysta.jpg` | `innovaImg` | Toyota Innova Crysta (6-seater luxury SUV) |
+| | `innova-interior.jpg` | `innovaInteriorImg` | Innova Crysta interior cabin |
 | | `mountain-sedan.jpg` | `sedanImg` | Maruti Suzuki Dzire (4-seater mountain sedan) |
 | | `luxury-minibus.jpg` | `minibusImg` | Force Urbania (12-seater executive carrier) |
+| | `urbania-minibus-interior.jpg` | `urbaniaInteriorImg` | Urbania interior cabin |
+| **Travel Destinations** | `kathgodam-railway-station-pickup.jpg` | `kathgodamStationImg` | Kathgodam station pickup point |
+| | `kathgodam-taxi-station-pickup.jpg` | `kathgodamTaxiImg` | Kathgodam taxi stand |
+| | `kausani-tea-peaks.jpg` | `kausaniImg` | Kausani tea gardens & peak views |
+| | `kedarnath-chardham.jpg` | `kedarnathImg` | Kedarnath Char Dham temple |
+| | `nainital-lake.jpg` | `nainitalLakeImg` | Nainital lake panorama |
 
 ---
 

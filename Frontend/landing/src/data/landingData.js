@@ -31,7 +31,7 @@ export const routeData = {
       route: 'Direct walking ridge trail from resort',
       roadCondition: 'Pine Needle Footpath & Stone Steps',
       recommendedVehicle: 'Walking / Resort Shuttle',
-      highlight: 'Positioned on the geomagnetic belt shared only with Stonehenge and Machu Picchu. Famous for intense meditation quietude.',
+      highlight: 'Positioned on the geomagnetic belt shared only with Stonehenge and Machu Picchu. Famous for its natural peace and meditation calm.',
     },
     {
       name: 'Baijnath Temple Complex',
@@ -52,8 +52,8 @@ export const routeData = {
       time: '3 hrs',
       route: 'Via Kathgodam - Bhimtal - Bhowali - Khairna - Almora',
       roadCondition: 'Well-maintained National Highway 109',
-      recommendedVehicle: 'Dzire Sedan (₹3,800) / Innova Crysta (₹5,500)',
-      highlight: 'Platform meet-and-greet by our chauffeured fleet with direct luggage handling and direct hotel drop.',
+      recommendedVehicle: 'Dzire Sedan (₹2,499) / Innova Crysta (₹4,499)',
+      highlight: 'Platform meet-and-greet by our friendly local drivers with luggage assistance and direct hotel drop.',
     },
     {
       name: 'Pantnagar Airport (PGH)',
@@ -174,16 +174,16 @@ export const fleetData = [
     id: 'innova',
     name: 'Toyota Innova Crysta (Heated Cabin)',
     type: '6+1 Luxury High-Clearance MPV',
-    tag: 'Most Recommended for Ghat Roads',
-    rateKathgodam: '₹5,500',
-    rateDelhi: '₹14,500',
+    tag: 'Most Recommended for Hill Roads',
+    rateKathgodam: '₹4,499',
+    rateDelhi: '₹10,999',
     image: innovaImg,
     specs: [
       'Accommodates 6 passengers + 4 large check-in bags comfortably',
       'Individual rear reclining captain seats with AC & heating',
-      'High ground clearance ideal for high-altitude Kumaon ghat roads',
+      'High ground clearance ideal for high-altitude Kumaon hill roads',
       'Driven by licensed native Pahadi chauffeurs with 10+ years experience',
-      'Zero hidden ghat charges — fuel, driver allowances & toll included',
+      'Zero hidden charges — fuel, driver allowances & toll included',
     ],
   },
   {
@@ -191,8 +191,8 @@ export const fleetData = [
     name: 'Maruti Suzuki Dzire (Private Mountain Sedan)',
     type: '4+1 Compact Executive Sedan',
     tag: 'Best for Couples & Small Families',
-    rateKathgodam: '₹3,800',
-    rateDelhi: '₹10,500',
+    rateKathgodam: '₹2,499',
+    rateDelhi: '₹7,499',
     image: sedanImg,
     specs: [
       'Comfortable seating for 3-4 passengers + 2 medium bags',
@@ -207,8 +207,8 @@ export const fleetData = [
     name: 'Force Urbania Luxury Minibus',
     type: '12+1 Executive Pilgrimage Carrier',
     tag: 'Large Family & Group Darshan',
-    rateKathgodam: '₹9,800',
-    rateDelhi: '₹22,000',
+    rateKathgodam: '₹7,999',
+    rateDelhi: '₹18,500',
     image: minibusImg,
     specs: [
       '12 plush individual pushback reclining leather seats',
@@ -238,7 +238,7 @@ export const faqsData = [
   },
   {
     q: 'What is the geomagnetic significance of Kasar Devi and Crank’s Ridge?',
-    a: 'Kasar Devi is scientifically verified to rest on an enormous geomagnetic field formed by the Van Allen Radiation Belt. Globally, this unique high-vibration quietude is shared only with Stonehenge (England) and Machu Picchu (Peru). This distinct natural stillness has historically attracted meditators including Swami Vivekananda (1890), Rabindranath Tagore, Lama Anagarika Govinda, and Buddhist scholars.',
+    a: 'Kasar Devi is scientifically verified to rest on an enormous geomagnetic field formed by the Van Allen Radiation Belt. Globally, this unique peaceful stillness is shared only with Stonehenge (England) and Machu Picchu (Peru). This distinct natural calm has historically attracted meditators including Swami Vivekananda (1890), Rabindranath Tagore, Lama Anagarika Govinda, and Buddhist scholars.',
   },
   {
     q: 'What kind of food is served? Is pure Satvik and vegetarian food available?',

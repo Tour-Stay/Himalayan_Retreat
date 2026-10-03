@@ -1,113 +1,97 @@
-import { UsersIcon, LuggageIcon, CheckCircleIcon, ArrowUpRightIcon } from '@shared';
+import React, { useState } from 'react';
+import { Container, ArrowUpRightIcon } from '@shared';
 import { fleetData } from '../data/travelData';
+import VehicleCard from './VehicleCard';
 
-const VehicleFleet = ({ onBookFleet }) => {
+const VehicleFleet = ({ onBookFleet, onQuickView }) => {
+  const [filter, setFilter] = useState('all');
+
+  const filteredFleet = filter === 'all'
+    ? fleetData
+    : fleetData.filter((v) => {
+        if (filter === 'small') return v.seats <= 4;
+        if (filter === 'suv') return v.seats === 6;
+        if (filter === 'group') return v.seats > 6;
+        return true;
+      });
+
   return (
-    <section id="fleet" className="py-24 px-4 bg-ivory border-b border-gold/15 font-sans">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <span className="text-gold text-xs font-semibold tracking-[0.25em] uppercase mb-3 block font-mono">
-            Himalayan Fleet Collection
-          </span>
-          <h2 className="font-serif text-3xl sm:text-5xl text-charcoal font-medium mb-4">
-            Tailored Mountain Transports
-          </h2>
-          <p className="text-charcoal-muted text-base sm:text-lg font-light leading-relaxed">
-            High ground-clearance vehicles inspected for mountain ghats, piloted by native Pahadi chauffeurs who know every hill curve.
-          </p>
+    <section id="cabs" className="py-20 sm:py-28 px-4 bg-[#FDFBF7] border-b border-[#C5A059]/20 relative overflow-hidden">
+      {/* Subtle background sacred watermark */}
+      <div className="absolute top-10 right-8 text-[#C84B0F]/[0.025] text-[180px] font-devanagari select-none pointer-events-none leading-none z-0">
+        🔱
+      </div>
+
+      <Container size="lg">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6 relative z-10">
+          <div className="max-w-xl">
+            <span className="text-xs font-sans text-[#C84B0F] uppercase tracking-wider font-semibold block mb-2 flex items-center gap-1.5">
+              <span className="text-sm">🪔</span> Verified Mountain Fleet • Almora Base
+            </span>
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-[#2C2523] font-medium leading-tight">
+              Our Clean Mountain Cabs
+            </h2>
+            <p className="text-[#5C5350] text-base leading-relaxed mt-2 font-normal">
+              High-clearance vehicles inspected for hill roads, driven by friendly local Pahadi drivers who know every mountain turn. Transparent fixed rates with no hidden costs.
+            </p>
+          </div>
+
+          {/* Filter Pills */}
+          <div className="flex flex-wrap items-center gap-2">
+            {[
+              { id: 'all', label: 'All Cabs' },
+              { id: 'small', label: '4-Seater Sedan' },
+              { id: 'suv', label: '6-Seater SUV' },
+              { id: 'group', label: '12-Seater Minibus' },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setFilter(tab.id)}
+                className={`px-4 py-2 rounded-full text-xs uppercase tracking-wider font-semibold transition-all cursor-pointer ${
+                  filter === tab.id
+                    ? 'bg-gradient-to-r from-[#C84B0F] to-[#7C1D23] text-[#FDFBF7] shadow-sm'
+                    : 'bg-[#FAF6EF] text-[#5C5350] border border-[#C5A059]/30 hover:border-[#C84B0F]'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {fleetData.map((vehicle) => (
-            <div
+        {/* Fleet Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10">
+          {filteredFleet.map((vehicle) => (
+            <VehicleCard
               key={vehicle.id}
-              className="bg-ivory rounded-3xl overflow-hidden border border-gold/30 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between card-luxury"
-            >
-              <div>
-                {/* Vehicle Image */}
-                <div className="relative h-60 overflow-hidden bg-slate">
-                  <img
-                    src={vehicle.image}
-                    alt={vehicle.title}
-                    onError={(e) => { e.currentTarget.src = '/mountain-fleet.jpg'; }}
-                    className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent"></div>
-                  
-                  <span className="absolute top-4 left-4 bg-maroon text-ivory text-[11px] font-semibold px-3 py-1 rounded-full border border-gold/30 shadow-md">
-                    {vehicle.tag}
-                  </span>
-
-                  <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-ivory text-xs">
-                    <span className="bg-slate/85 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/20 flex items-center gap-1.5 font-mono">
-                      <UsersIcon className="w-3.5 h-3.5 text-gold" />
-                      <span>{vehicle.seats} Passengers</span>
-                    </span>
-                    <span className="bg-slate/85 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/20 flex items-center gap-1.5 font-mono">
-                      <LuggageIcon className="w-3.5 h-3.5 text-gold" />
-                      <span>{vehicle.luggage.split(' ')[0]} Bags</span>
-                    </span>
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="p-6 sm:p-8">
-                  <h3 className="font-serif text-2xl font-medium text-charcoal mb-1">
-                    {vehicle.title}
-                  </h3>
-                  <p className="text-xs uppercase tracking-wider text-gold font-mono font-semibold mb-4">
-                    {vehicle.model}
-                  </p>
-                  <p className="text-sm text-charcoal-muted font-light leading-relaxed mb-6">
-                    {vehicle.idealFor}
-                  </p>
-
-                  <div className="space-y-2.5 mb-6 pt-4 border-t border-gold/20">
-                    {vehicle.features.map((feat, idx) => (
-                      <div key={idx} className="flex items-center gap-2.5 text-xs text-charcoal">
-                        <CheckCircleIcon className="w-3.5 h-3.5 text-gold flex-shrink-0" />
-                        <span>{feat}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Pricing & CTA */}
-              <div className="p-6 sm:p-8 pt-0 border-t border-gold/15 mt-auto">
-                <div className="flex items-baseline justify-between mb-4">
-                  <div>
-                    <span className="text-[10px] text-charcoal-muted uppercase tracking-wider block font-mono">
-                      Starting At
-                    </span>
-                    <span className="font-serif text-3xl font-semibold text-maroon">
-                      ₹{vehicle.dailyRate?.toLocaleString()}
-                    </span>
-                    <span className="text-xs text-charcoal-muted ml-1">/ day</span>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-xs font-mono font-semibold text-charcoal bg-gold/15 px-3 py-1 rounded-full border border-gold/30">
-                      ₹{vehicle.perKmRate}/km
-                    </span>
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => {
-                    if (onBookFleet) onBookFleet(vehicle.id);
-                    const calcEl = document.getElementById('calculator');
-                    if (calcEl) calcEl.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                  className="w-full py-3.5 rounded-xl text-xs uppercase tracking-wider font-semibold bg-maroon hover:bg-maroon-dark text-ivory flex items-center justify-center gap-1.5 transition-colors shadow-md cursor-pointer"
-                >
-                  <span>Select & Calculate Fare</span>
-                  <ArrowUpRightIcon className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </div>
+              vehicle={vehicle}
+              onQuickView={onQuickView}
+              onBook={onBookFleet}
+            />
           ))}
         </div>
-      </div>
+
+        {/* Bottom Banner */}
+        <div className="mt-14 p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#FFF5EC] via-[#FAF6EF] to-[#FFF5EC] border border-[#C84B0F]/30 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left relative z-10 shadow-xs">
+          <div>
+            <h4 className="font-serif text-xl sm:text-2xl font-medium text-[#2C2523] flex items-center justify-center sm:justify-start gap-2">
+              <span>Looking for a Custom Multi-Day Tour?</span>
+              <span className="text-xs font-devanagari text-[#C84B0F]">॥ शुभ यात्रा ॥</span>
+            </h4>
+            <p className="text-xs sm:text-sm text-[#5C5350] mt-1 leading-relaxed">
+              We arrange customized temple itineraries, airport pickups from Delhi/Pantnagar, and Chardham Yatra escorts with dedicated hill drivers.
+            </p>
+          </div>
+
+          <a
+            href="#calculator"
+            className="px-6 py-3 rounded-full text-xs uppercase tracking-wider font-bold bg-[#7C1D23] hover:bg-[#5C151A] text-[#FDFBF7] transition-all shadow-md flex-shrink-0 flex items-center gap-1.5 border border-[#C5A059]/30"
+          >
+            <span>Plan Custom Trip ↗</span>
+          </a>
+        </div>
+      </Container>
     </section>
   );
 };

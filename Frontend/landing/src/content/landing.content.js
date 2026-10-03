@@ -44,7 +44,7 @@ export const LANDING_CONTENT = {
       {
         name: 'Kasar Devi & Crank’s Ridge',
         subtitle: 'Kashyap Hill • 6,942 ft Elevation',
-        description: 'Perched on a high ridge dating back to the 2nd century CE, Kasar Devi is celebrated for its geomagnetic quietude and extraordinary stillness. Here Swami Vivekananda meditated in 1890, followed by Lama Govinda and decades of spiritual seekers.',
+        description: 'Perched on a high ridge dating back to the 2nd century CE, Kasar Devi is celebrated for its peaceful energy and extraordinary stillness. Here Swami Vivekananda meditated in 1890, followed by Lama Govinda and decades of spiritual seekers.',
         highlight: 'Vivekananda Caves & Cosmic Ridge',
         image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Kasar_Devi_Temple.JPG/960px-Kasar_Devi_Temple.JPG',
       },

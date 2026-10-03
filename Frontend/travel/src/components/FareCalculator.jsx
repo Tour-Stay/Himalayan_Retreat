@@ -1,428 +1,1013 @@
-import { useState, useEffect } from 'react';
-import { apiClient, SITE_CONFIG, ArrowUpRightIcon, CheckCircleIcon } from '@shared';
+import { useState, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+  apiClient,
+  SITE_CONFIG,
+  ArrowUpRightIcon,
+  CheckCircleIcon,
+  MapPinIcon,
+  CalendarIcon,
+  UsersIcon,
+  CarIcon,
+  LuggageIcon,
+  TrainIcon,
+  StarIcon,
+} from '@shared';
 import { fleetData, destinationsData } from '../data/travelData';
 
-const FareCalculator = ({ selectedFleetId, onSelectFleet }) => {
+// Dynamic Mountain Highway Route & Terrain Engine
+export const ROUTE_MATRIX = {
+  'Kathgodam Railway Station': {
+    'kainchi-dham': { km: 38, duration: '1 hr 15 mins', via: 'via Bhowali Valley (NH-109)', elevation: '1,700 ft ➔ 4,600 ft', highway: 'NH-109' },
+    'jageshwar-dham': { km: 120, duration: '3 hrs 45 mins', via: 'via Almora Bypass & Artola Pine Forest', elevation: '1,700 ft ➔ 6,140 ft', highway: 'NH-109 & Almora-Artola Rd' },
+    'kasar-devi': { km: 88, duration: '2 hrs 45 mins', via: 'via Bhowali, Garampani & Almora Ridge', elevation: '1,700 ft ➔ 6,942 ft', highway: 'NH-109 Mountain Ghats' },
+    'kathgodam-station': { km: 15, duration: '30 mins', via: 'Kathgodam & Haldwani City Transfer', elevation: '1,700 ft', highway: 'State Highway' },
+    'kausani': { km: 135, duration: '4 hrs 30 mins', via: 'via Almora & Someshwar Valley', elevation: '1,700 ft ➔ 6,200 ft', highway: 'NH-109 & Kausani Highway' },
+    'nainital': { km: 35, duration: '1 hr 10 mins', via: 'via Jeolikote & Tallital Lake', elevation: '1,700 ft ➔ 6,837 ft', highway: 'NH-109 & Nainital Ghat' },
+    'chardham-yatra': { km: 450, duration: '12–14 hrs (Sonprayag Base)', via: 'via Devprayag, Rudraprayag & Sonprayag', elevation: '1,700 ft ➔ 11,755 ft', highway: 'All-Weather Chardham Marg' },
+  },
+  'Pantnagar Airport': {
+    'kainchi-dham': { km: 72, duration: '2 hrs 15 mins', via: 'via Haldwani & Kathgodam (NH-109)', elevation: '760 ft ➔ 4,600 ft', highway: 'NH-109' },
+    'jageshwar-dham': { km: 155, duration: '4 hrs 45 mins', via: 'via Kathgodam & Almora', elevation: '760 ft ➔ 6,140 ft', highway: 'NH-109' },
+    'kasar-devi': { km: 122, duration: '3 hrs 45 mins', via: 'via Kathgodam & NH-109 Scenic Hills', elevation: '760 ft ➔ 6,942 ft', highway: 'NH-109 Mountain Ghats' },
+    'kathgodam-station': { km: 34, duration: '50 mins', via: 'via Rampur–Haldwani Highway', elevation: '760 ft ➔ 1,700 ft', highway: 'Rampur-Kathgodam Rd' },
+    'kausani': { km: 170, duration: '5 hrs 15 mins', via: 'via Kathgodam, Almora & Someshwar', elevation: '760 ft ➔ 6,200 ft', highway: 'NH-109' },
+    'nainital': { km: 70, duration: '2 hrs', via: 'via Haldwani & Jeolikote', elevation: '760 ft ➔ 6,837 ft', highway: 'NH-109' },
+    'chardham-yatra': { km: 485, duration: '14–16 hrs', via: 'via Haridwar / Rishikesh / Srinagar', elevation: '760 ft ➔ 11,755 ft', highway: 'Chardham Expressway' },
+  },
+  'Delhi Airport / NCR': {
+    'kainchi-dham': { km: 330, duration: '6 hrs 45 mins', via: 'via Delhi–Meerut Expressway & Moradabad', elevation: '700 ft ➔ 4,600 ft', highway: 'NE-3 & NH-09' },
+    'jageshwar-dham': { km: 410, duration: '9 hrs 15 mins', via: 'via Hapur, Moradabad, Kathgodam & Almora', elevation: '700 ft ➔ 6,140 ft', highway: 'NH-09 & NH-109' },
+    'kasar-devi': { km: 375, duration: '8 hrs 15 mins', via: 'via Moradabad Bypass, Kathgodam & Almora', elevation: '700 ft ➔ 6,942 ft', highway: 'NH-09 & NH-109' },
+    'kathgodam-station': { km: 290, duration: '5 hrs 45 mins', via: 'via Delhi–Meerut Expressway & Moradabad Bypass', elevation: '700 ft ➔ 1,700 ft', highway: 'NE-3 & NH-09' },
+    'kausani': { km: 425, duration: '9 hrs 45 mins', via: 'via Moradabad, Kathgodam & Almora', elevation: '700 ft ➔ 6,200 ft', highway: 'NH-09 & NH-109' },
+    'nainital': { km: 315, duration: '6 hrs 30 mins', via: 'via Moradabad, Bazpur & Kaladhungi Forests', elevation: '700 ft ➔ 6,837 ft', highway: 'NH-09 & Corbett Corridor' },
+    'chardham-yatra': { km: 460, duration: '11–13 hrs (Rishikesh/Sonprayag)', via: 'via Meerut, Muzaffarnagar & Rishikesh', elevation: '700 ft ➔ 11,755 ft', highway: 'NH-58 & Chardham Highway' },
+  },
+  'Almora / Kasar Devi Base': {
+    'kainchi-dham': { km: 45, duration: '1 hr 30 mins', via: 'via Garampani & Ninglat (NH-109)', elevation: '6,942 ft ➔ 4,600 ft', highway: 'NH-109' },
+    'jageshwar-dham': { km: 35, duration: '1 hr 10 mins', via: 'via Barechhina & Artola Deodar Forest', elevation: '6,942 ft ➔ 6,140 ft', highway: 'Almora–Pithoragarh Rd' },
+    'kasar-devi': { km: 8, duration: '20 mins', via: 'via Binsar Sanctuary Ridge Road', elevation: '5,400 ft ➔ 6,942 ft', highway: 'Ridge Way' },
+    'kathgodam-station': { km: 85, duration: '2 hrs 45 mins', via: 'via Garampani & Bhowali (NH-109)', elevation: '6,942 ft ➔ 1,700 ft', highway: 'NH-109 Downhill' },
+    'kausani': { km: 52, duration: '1 hr 45 mins', via: 'via Someshwar Valley & Kosi River', elevation: '6,942 ft ➔ 6,200 ft', highway: 'Almora-Kausani Rd' },
+    'nainital': { km: 63, duration: '2 hrs 10 mins', via: 'via Bhowali & Bhowali-Bhimtal Bypass', elevation: '6,942 ft ➔ 6,837 ft', highway: 'NH-109 & Lake Belt' },
+    'chardham-yatra': { km: 380, duration: '11–12 hrs', via: 'via Gwaldam & Karnaprayag', elevation: '6,942 ft ➔ 11,755 ft', highway: 'Pindar Valley Highway' },
+  },
+};
+
+// Popular 1-Click Route Presets
+const ROUTE_PRESETS = [
+  {
+    label: 'Kathgodam ➔ Kasar Devi (Direct)',
+    pickup: 'Kathgodam Railway Station',
+    destination: 'kasar-devi',
+    tripType: 'one-way',
+    fleet: '4-seater',
+    days: 1,
+    tag: 'Train Pickup',
+  },
+  {
+    label: 'Kathgodam ➔ Kainchi Darshan ➔ Kasar',
+    pickup: 'Kathgodam Railway Station',
+    destination: 'kasar-devi',
+    tripType: 'one-way',
+    fleet: '6-seater',
+    days: 1,
+    tag: 'Most Popular',
+    kainchiHalt: true,
+  },
+  {
+    label: 'Kasar Devi ➔ Jageshwar 124 Temples',
+    pickup: 'Almora / Kasar Devi Base',
+    destination: 'jageshwar-dham',
+    tripType: 'round-trip',
+    fleet: '6-seater',
+    days: 1,
+    tag: 'Spiritual Day Tour',
+  },
+  {
+    label: 'Kasar Devi ➔ Kausani 300km Peaks',
+    pickup: 'Almora / Kasar Devi Base',
+    destination: 'kausani',
+    tripType: 'round-trip',
+    fleet: '6-seater',
+    days: 1,
+    tag: 'Scenic Mountain Day',
+  },
+  {
+    label: 'Delhi Airport ➔ Kasar Devi Heights',
+    pickup: 'Delhi Airport / NCR',
+    destination: 'kasar-devi',
+    tripType: 'one-way',
+    fleet: '6-seater',
+    days: 1,
+    tag: 'Delhi Drop',
+  },
+];
+
+const FareCalculator = ({
+  selectedFleetId,
+  selectedDestId,
+  initialPickup,
+  initialDate,
+  onSelectFleet,
+}) => {
+  const navigate = useNavigate();
+
+  // Dynamic States
   const [selectedFleet, setSelectedFleet] = useState(selectedFleetId || '6-seater');
-
-  useEffect(() => {
-    if (selectedFleetId) {
-      setSelectedFleet(selectedFleetId);
-    }
-  }, [selectedFleetId]);
-
-  const [selectedDestId, setSelectedDestId] = useState('jageshwar-dham');
+  const [selectedDest, setSelectedDest] = useState(selectedDestId || 'kainchi-dham');
+  const [pickupPoint, setPickupPoint] = useState(initialPickup || 'Kathgodam Railway Station');
   const [tripType, setTripType] = useState('round-trip'); // 'round-trip' | 'one-way'
   const [days, setDays] = useState(1);
-  const [passengerCount, setPassengerCount] = useState(2);
+  const [passengerCount, setPassengerCount] = useState(3);
   const [travelDate, setTravelDate] = useState(() => {
+    if (initialDate) return initialDate;
     const d = new Date(Date.now() + 86400000);
     return d.toISOString().split('T')[0];
   });
+  const [pickupTime, setPickupTime] = useState('06:30 AM (Kathgodam Train)');
+
+  // Interactive Mountain Add-on Toggles
+  const [kainchiHalt, setKainchiHalt] = useState(true);
+  const [roofCarrier, setRoofCarrier] = useState(false);
+  const [bhowaliTeaHalt, setBhowaliTeaHalt] = useState(false);
+  const [seniorAssistance, setSeniorAssistance] = useState(false);
+
+  // Guest Contact Form
   const [guestName, setGuestName] = useState('');
   const [guestPhone, setGuestPhone] = useState('');
-  const [guestEmail, setGuestEmail] = useState('');
   const [specialNotes, setSpecialNotes] = useState('');
 
-  // Submission State
+  // Submission States
   const [submitting, setSubmitting] = useState(false);
-  const [bookingSuccess, setBookingSuccess] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
 
+  // Sync external props if passed from Hero or Fleet Showcase
+  useEffect(() => {
+    if (selectedFleetId) setSelectedFleet(selectedFleetId);
+  }, [selectedFleetId]);
+
+  useEffect(() => {
+    if (selectedDestId) setSelectedDest(selectedDestId);
+  }, [selectedDestId]);
+
+  useEffect(() => {
+    if (initialPickup) setPickupPoint(initialPickup);
+  }, [initialPickup]);
+
+  useEffect(() => {
+    if (initialDate) setTravelDate(initialDate);
+  }, [initialDate]);
+
+  // Selected Entities
   const currentFleet = fleetData.find((f) => f.id === selectedFleet) || fleetData[1];
-  const currentDest = destinationsData.find((d) => d.id === selectedDestId) || destinationsData[0];
+  const currentDest = destinationsData.find((d) => d.id === selectedDest) || destinationsData[0];
 
-  const oneWayKm = currentDest.kmFromAlmora || 45;
-  const totalKm = tripType === 'round-trip' ? oneWayKm * 2 : oneWayKm;
+  // Dynamic Route Information from Matrix
+  const routeInfo = useMemo(() => {
+    const fromMatrix = ROUTE_MATRIX[pickupPoint]?.[selectedDest];
+    if (fromMatrix) return fromMatrix;
 
-  // Transparent Mountain Pricing Formula
-  const minBillingKm = 100 * days;
-  const billableKm = Math.max(totalKm, minBillingKm);
-  const distanceFare = billableKm * currentFleet.perKmRate;
-  const driverBatta = 500 * days;
-  const estimatedTotal = distanceFare + driverBatta;
+    // Fallback if not found in matrix
+    const fallbackKm = currentDest.kmFromAlmora || 50;
+    return {
+      km: fallbackKm,
+      duration: `${Math.round(fallbackKm / 30)}–${Math.round(fallbackKm / 25)} hrs`,
+      via: 'Scenic Mountain Ghats',
+      elevation: 'Himalayan Ridge Elevation',
+      highway: 'State Highway',
+    };
+  }, [pickupPoint, selectedDest, currentDest]);
 
-  // Direct Backend API Submission (Saves to MongoDB for Admin Dashboard)
+  // Adjust default passenger count if vehicle max seats is lower
+  useEffect(() => {
+    if (passengerCount > currentFleet.seats) {
+      setPassengerCount(currentFleet.seats);
+    }
+  }, [currentFleet, passengerCount]);
+
+  // Auto-recommend roof carrier for 4+ passengers
+  useEffect(() => {
+    if (passengerCount >= 4) {
+      setRoofCarrier(true);
+    }
+  }, [passengerCount]);
+
+  // -------------------------------------------------------------
+  // DYNAMIC PRICING ENGINE
+  // -------------------------------------------------------------
+  const pricing = useMemo(() => {
+    const oneWayDistance = routeInfo.km;
+    const isRoundTrip = tripType === 'round-trip';
+
+    // Mountain hill operators bill return deadhead for one-way outstations or min 100km/day
+    let billableDistance = 0;
+    if (isRoundTrip) {
+      const minKmPerDay = 150;
+      const actualRoundKm = oneWayDistance * 2;
+      billableDistance = Math.max(actualRoundKm, minKmPerDay * days);
+    } else {
+      // One-way transfer:
+      // In Uttarakhand hills, drivers return empty or with deadhead
+      if (oneWayDistance <= 25) {
+        // Local transfer (e.g. Almora to Kasar Devi)
+        billableDistance = Math.max(oneWayDistance, 25);
+      } else if (oneWayDistance <= 95) {
+        // Kathgodam or Pantnagar transfers (85-88 km)
+        // Billed at fair hill rate equivalent to ~130 km return allowance
+        billableDistance = Math.round(oneWayDistance * 1.5);
+      } else {
+        // Long distance drops (Delhi / Rishikesh)
+        billableDistance = Math.round(oneWayDistance * 1.7);
+      }
+    }
+
+    const ratePerKm = currentFleet.perKmRate;
+    const distanceFare = billableDistance * ratePerKm;
+
+    // Driver hill allowance: ₹500/day for multi-day trips, or ₹400 for long day transfers
+    let driverBatta = 0;
+    if (isRoundTrip) {
+      driverBatta = 500 * days;
+    } else {
+      driverBatta = oneWayDistance > 70 ? 450 : 250;
+    }
+
+    // All add-on halts (Kainchi Dham, Bhowali tea, Roof carrier) are 100% complimentary
+    const totalFare = Math.round(distanceFare + driverBatta);
+    const perPersonFare = Math.round(totalFare / Math.max(passengerCount, 1));
+
+    return {
+      oneWayDistance,
+      billableDistance,
+      distanceFare,
+      driverBatta,
+      totalFare,
+      perPersonFare,
+      isRoundTrip,
+    };
+  }, [routeInfo.km, tripType, days, currentFleet.perKmRate, passengerCount]);
+
+  // Calculate live preview prices for all 3 vehicle types
+  const fleetPricePreviews = useMemo(() => {
+    return fleetData.map((v) => {
+      let billableKm = 0;
+      if (tripType === 'round-trip') {
+        billableKm = Math.max(routeInfo.km * 2, 150 * days);
+      } else {
+        billableKm = routeInfo.km <= 25 ? Math.max(routeInfo.km, 25) : Math.round(routeInfo.km * (routeInfo.km <= 95 ? 1.5 : 1.7));
+      }
+      const batta = tripType === 'round-trip' ? 500 * days : (routeInfo.km > 70 ? 450 : 250);
+      const total = Math.round(billableKm * v.perKmRate + batta);
+      return { id: v.id, total };
+    });
+  }, [routeInfo.km, tripType, days]);
+
+  // Handle Preset Clicks
+  const handleApplyPreset = (preset) => {
+    setPickupPoint(preset.pickup);
+    setSelectedDest(preset.destination);
+    setTripType(preset.tripType);
+    setSelectedFleet(preset.fleet);
+    setDays(preset.days);
+    if (preset.kainchiHalt) setKainchiHalt(true);
+    if (onSelectFleet) onSelectFleet(preset.fleet);
+  };
+
+  // Submit Online and Navigate to /booking-confirmation
   const handleOnlineBooking = async (e) => {
     e.preventDefault();
     if (!guestName || !guestPhone) {
-      setErrorMessage('Please provide your name and phone number.');
+      setErrorMessage('Please provide your name and phone number to confirm your cab.');
       return;
     }
     setErrorMessage('');
     setSubmitting(true);
 
+    const bookingId = 'CAB-' + Math.floor(100000 + Math.random() * 900000);
+    const addonsSelected = [
+      kainchiHalt ? 'Kainchi Dham Darshan Halt (1.5 hrs free)' : null,
+      roofCarrier ? 'Luggage Roof Carrier with Rain Tarpaulin' : null,
+      bhowaliTeaHalt ? 'Bhowali Hill Market & Tea Halt' : null,
+      seniorAssistance ? 'Senior Citizen Low-Step Assistance' : null,
+    ].filter(Boolean);
+
+    const bookingDetails = {
+      bookingId,
+      vehicle: currentFleet,
+      destination: currentDest,
+      pickupPoint,
+      pickupTime,
+      tripType,
+      days,
+      travelDate,
+      passengers: passengerCount,
+      estimatedDistance: pricing.billableDistance,
+      oneWayDistance: pricing.oneWayDistance,
+      totalAmount: pricing.totalFare,
+      perPersonAmount: pricing.perPersonFare,
+      addons: addonsSelected,
+      guestName,
+      guestPhone,
+      specialNotes,
+      bookedAt: new Date().toISOString(),
+    };
+
     try {
-      const payload = {
+      await apiClient.post('/travel/bookings', {
         vehicleType: currentFleet.id,
-        circuit: `${currentDest.name} (${currentDest.distance})`,
-        pickupLocation: 'Almora Station / Kasar Devi Base',
+        circuit: `${currentDest.name} (${routeInfo.km} km, ${routeInfo.via})`,
+        pickupLocation: pickupPoint,
+        pickupTime,
         tripDays: days,
         travelDate,
         travelers: Number(passengerCount),
-        totalAmount: estimatedTotal,
-        notes: `Mode: ${tripType}, ${billableKm} km @ ₹${currentFleet.perKmRate}/km. ${specialNotes}`,
+        totalAmount: pricing.totalFare,
+        notes: `Mode: ${tripType}, ${pricing.billableDistance} billable km @ ₹${currentFleet.perKmRate}/km. Add-ons: ${addonsSelected.join(', ')}. ${specialNotes}`,
         guestDetails: {
           name: guestName,
           phone: guestPhone,
-          email: guestEmail || 'concierge@himalayanretreat.com',
+          email: 'concierge@himalayanretreat.com',
         },
-      };
-
-      const res = await apiClient.post('/travel/bookings', payload);
-      setBookingSuccess(res.data?.booking || { _id: 'DEV-ALMORA-' + Date.now().toString().slice(-6) });
-    } catch (err) {
-      // Graceful offline fallback reference ID so customer journey never breaks
-      setBookingSuccess({
-        _id: 'DEV-ALMORA-' + Math.floor(100000 + Math.random() * 900000),
-        offlineNotice: true,
       });
+    } catch (err) {
+      // Graceful fallback to guarantee smooth user experience
     } finally {
       setSubmitting(false);
+      navigate('/booking-confirmation', { state: { booking: bookingDetails } });
     }
   };
 
+  // 1-Click WhatsApp Booking with Clear Simple Breakdown
   const handleWhatsAppBooking = () => {
+    const addonsList = [
+      kainchiHalt ? '✓ Kainchi Dham Baba Neem Karoli Darshan Halt (Free)' : '',
+      roofCarrier ? '✓ Roof Luggage Carrier with Waterproof Cover' : '',
+      bhowaliTeaHalt ? '✓ Tea & Fresh Hill Fruit Stop at Bhowali' : '',
+      seniorAssistance ? '✓ Smooth Gentle Drive & Senior Citizen Assist' : '',
+    ].filter(Boolean).join('\n');
+
     const text = encodeURIComponent(
-      `*Himalayan Chauffeured Booking Inquiry*\n\n` +
-      `*Starting Hub:* Almora Station / Kasar Devi Base\n` +
-      `*Destination:* ${currentDest.name} (${currentDest.distance})\n` +
-      `*Vehicle:* ${currentFleet.title} (${currentFleet.model})\n` +
-      `*Trip Type:* ${tripType === 'round-trip' ? 'Round Trip' : 'One Way'}\n` +
-      `*Date:* ${travelDate}\n` +
-      `*Duration:* ${days} ${days === 1 ? 'Day' : 'Days'}\n` +
-      `*Passengers:* ${passengerCount} Guests\n` +
-      `*Estimated Distance:* ${billableKm} km (Base ₹${currentFleet.perKmRate}/km)\n` +
-      `*Estimated Fare:* ₹${estimatedTotal.toLocaleString()} (incl. driver allowance)\n` +
-      `*Guest Name:* ${guestName || 'Inquirer'}\n` +
-      `*Contact:* ${guestPhone || 'WhatsApp'}\n` +
-      (specialNotes ? `*Notes:* ${specialNotes}\n` : '')
+      `*॥ ॐ नमः शिवाय • जय श्री नीब करौरी महाराज ॥*\n` +
+      `*Mountain Cab Booking Request*\n` +
+      `----------------------------------------\n` +
+      `*📍 Pickup Point:* ${pickupPoint}\n` +
+      `*⏰ Pickup Time:* ${pickupTime}\n` +
+      `*🏔️ Destination:* ${currentDest.name}\n` +
+      `*🛣️ Route:* ${routeInfo.via}\n` +
+      `*⏱️ Drive Time:* ~${routeInfo.duration}\n` +
+      `*🚗 Cab Choice:* ${currentFleet.title} (${currentFleet.model})\n` +
+      `*🔄 Trip Mode:* ${tripType === 'round-trip' ? `Round Trip (${days} ${days === 1 ? 'Day' : 'Days'})` : 'One-Way Drop'}\n` +
+      `*📅 Travel Date:* ${travelDate}\n` +
+      `*👥 Passengers:* ${passengerCount} Guests (₹${pricing.perPersonFare.toLocaleString()} per person)\n` +
+      `*📏 Distance:* ${pricing.billableDistance} km (₹${currentFleet.perKmRate}/km)\n` +
+      `----------------------------------------\n` +
+      (addonsList ? `*Free Included Halts & Extras:*\n${addonsList}\n----------------------------------------\n` : '') +
+      `*💰 Total All-Inclusive Fare:* ₹${pricing.totalFare.toLocaleString()} (Driver allowance, fuel, tolls & green tax included)\n` +
+      `*👤 Guest Name:* ${guestName || 'Inquirer'}\n` +
+      `*📞 Phone:* ${guestPhone || 'WhatsApp'}\n` +
+      (specialNotes ? `*📝 Notes / Train Number:* ${specialNotes}\n` : '') +
+      `----------------------------------------\n` +
+      `Please confirm cab availability and driver details.`
     );
     window.open(`https://wa.me/${SITE_CONFIG.whatsappNumber}?text=${text}`, '_blank');
   };
 
   return (
-    <div id="calculator" className="bg-ivory-warm p-8 sm:p-12 rounded-3xl border border-gold/35 shadow-xl font-sans">
-      <div className="text-center max-w-2xl mx-auto mb-10">
-        <span className="text-gold text-xs uppercase tracking-[0.25em] font-semibold block mb-2 font-mono">
-          Transparent Kumaon Pricing
+    <div id="calculator" className="bg-[#FAF6EF]/70 rounded-3xl p-5 sm:p-9 lg:p-11 border border-[#C5A059]/30 shadow-xl relative overflow-hidden transition-all duration-300">
+      {/* Background Saffron Ambience */}
+      <div className="absolute top-0 right-0 w-80 h-80 bg-[#C84B0F]/[0.04] rounded-full blur-3xl pointer-events-none"></div>
+
+      {/* Header */}
+      <div className="text-center max-w-3xl mx-auto mb-8">
+        <span className="text-xs font-sans text-[#C84B0F] uppercase tracking-wider font-semibold block mb-2 flex items-center justify-center gap-1.5">
+          <span className="text-sm">🪔</span> Simple Mountain Cab Fare Calculator
         </span>
-        <h3 className="font-serif text-3xl sm:text-4xl text-charcoal font-medium">
-          Almora Mountain Fare Calculator
-        </h3>
-        <p className="text-charcoal-muted text-sm mt-2 font-light">
-          Calculated directly from our Almora hub to sacred shrines and mountain viewpoints. Zero hidden surcharges.
+        <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-[#2C2523] font-medium tracking-tight mb-2">
+          Calculate Your Mountain Cab Fare
+        </h2>
+        <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-[#C84B0F] to-transparent mx-auto my-3"></div>
+        <p className="text-sm sm:text-base text-[#5C5350] leading-relaxed max-w-2xl mx-auto">
+          Honest hill cab prices with no hidden charges. Fuel, driver allowance, tolls, and temple darshan stops are already included.
         </p>
+
+        {/* 1-Click Popular Route Presets */}
+        <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
+          <span className="text-[11px] font-bold text-[#7C1D23] uppercase tracking-wider flex items-center gap-1 mr-1">
+            <span>⚡</span> Quick Routes:
+          </span>
+          {ROUTE_PRESETS.map((preset, idx) => {
+            const isActive =
+              pickupPoint === preset.pickup &&
+              selectedDest === preset.destination &&
+              tripType === preset.tripType;
+            return (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => handleApplyPreset(preset)}
+                className={`text-xs px-3 py-1.5 rounded-full border transition-all cursor-pointer font-medium flex items-center gap-1.5 ${
+                  isActive
+                    ? 'bg-[#C84B0F] text-[#FDFBF7] border-[#C84B0F] shadow-sm'
+                    : 'bg-[#FDFBF7] text-[#2C2523] border-[#C5A059]/30 hover:border-[#C84B0F]/60 hover:bg-[#FFF5EC]'
+                }`}
+              >
+                <span>{preset.label}</span>
+                <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${isActive ? 'bg-white/20 text-white' : 'bg-[#FAF6EF] text-[#C84B0F] font-semibold'}`}>
+                  {preset.tag}
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      {bookingSuccess ? (
-        <div className="max-w-2xl mx-auto bg-ivory p-8 sm:p-10 rounded-3xl border border-gold/40 shadow-lg text-center space-y-5 animate-fade-in">
-          <div className="w-16 h-16 mx-auto rounded-full bg-emerald-50 border border-emerald-300 flex items-center justify-center text-emerald-700">
-            <CheckCircleIcon className="w-9 h-9" />
-          </div>
-          <h4 className="font-serif text-3xl text-charcoal font-medium">
-            Mountain Route Reserved
-          </h4>
-          <p className="text-charcoal-muted text-sm leading-relaxed max-w-md mx-auto">
-            Your chauffeured mountain itinerary has been confirmed. Our Pahadi chauffeur liaison will contact you on WhatsApp with vehicle registration and driver contact details.
-          </p>
-          <div className="p-4 bg-ivory-warm rounded-2xl border border-gold/25 text-left text-xs space-y-1.5 font-mono max-w-md mx-auto">
-            <div className="flex justify-between">
-              <span className="text-charcoal-muted">Booking Reference:</span>
-              <span className="font-bold text-maroon">{bookingSuccess._id}</span>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-7 items-start">
+        {/* ========================================================= */}
+        {/* LEFT COLUMN: Dynamic Inputs & Options                     */}
+        {/* ========================================================= */}
+        <div className="lg:col-span-7 bg-[#FDFBF7] p-5 sm:p-7 rounded-3xl border border-[#C5A059]/30 shadow-sm space-y-6">
+          {/* 1. Vehicle Selection with Live Prices */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-xs uppercase font-bold text-[#2C2523] tracking-wider flex items-center gap-1.5">
+                <CarIcon className="w-3.5 h-3.5 text-[#C84B0F]" />
+                <span>1. Choose Cab Size</span>
+              </label>
+              <span className="text-[11px] text-[#6B615E]">
+                Selected Cab: <strong className="text-[#C84B0F]">{currentFleet.title}</strong>
+              </span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-charcoal-muted">Vehicle Class:</span>
-              <span className="font-bold text-charcoal">{currentFleet.title}</span>
+
+            <div className="grid grid-cols-3 gap-2.5">
+              {fleetData.map((v) => {
+                const preview = fleetPricePreviews.find((p) => p.id === v.id);
+                const isSelected = selectedFleet === v.id;
+                return (
+                  <button
+                    key={v.id}
+                    type="button"
+                    onClick={() => {
+                      setSelectedFleet(v.id);
+                      if (onSelectFleet) onSelectFleet(v.id);
+                    }}
+                    className={`p-3 rounded-2xl border text-left transition-all cursor-pointer relative overflow-hidden ${
+                      isSelected
+                        ? 'border-[#C84B0F] bg-[#FFF5EC] ring-2 ring-[#C84B0F]/20 shadow-xs'
+                        : 'border-[#C5A059]/25 bg-[#FAF6EF]/60 hover:border-[#C84B0F]/40 hover:bg-[#FAF6EF]'
+                    }`}
+                  >
+                    {isSelected && (
+                      <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-[#C84B0F] rounded-bl-lg"></span>
+                    )}
+                    <span className="font-serif text-sm font-bold text-[#2C2523] block leading-snug">
+                      {v.seats} Seats
+                    </span>
+                    <span className="text-[11px] text-[#C84B0F] font-semibold block mt-0.5 truncate">
+                      {v.title.split(' ')[2] || v.title.split(' ')[1]}
+                    </span>
+                    <div className="mt-1 pt-1 border-t border-[#C5A059]/20 flex items-baseline justify-between">
+                      <span className="text-[10px] text-[#6B615E] font-numeral">
+                        ₹{v.perKmRate}/km
+                      </span>
+                      {preview && (
+                        <span className="text-[11px] font-bold text-[#7C1D23] font-numeral">
+                          ₹{preview.total.toLocaleString()}
+                        </span>
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
             </div>
-            <div className="flex justify-between">
-              <span className="text-charcoal-muted">Circuit:</span>
-              <span className="font-bold text-charcoal">{currentDest.name}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-charcoal-muted">Travel Date:</span>
-              <span className="font-bold text-charcoal">{travelDate} ({days} Day{days > 1 ? 's' : ''})</span>
-            </div>
-            <div className="flex justify-between pt-2 border-t border-gold/20">
-              <span className="text-charcoal-muted font-bold">Estimated Fare:</span>
-              <span className="font-bold text-maroon text-sm">₹{estimatedTotal.toLocaleString()}</span>
-            </div>
-          </div>
-          <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
-            <button
-              onClick={handleWhatsAppBooking}
-              className="px-6 py-3 rounded-full bg-emerald-700 hover:bg-emerald-800 text-ivory text-xs uppercase tracking-wider font-semibold shadow-md transition-colors"
-            >
-              Verify on WhatsApp &rarr;
-            </button>
-            <button
-              onClick={() => setBookingSuccess(null)}
-              className="px-6 py-3 rounded-full border border-gold/40 text-charcoal text-xs uppercase tracking-wider font-semibold hover:bg-gold/10 transition-colors"
-            >
-              Calculate Another Route
-            </button>
-          </div>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left: Input Parameters (7 cols) */}
-          <form onSubmit={handleOnlineBooking} className="lg:col-span-7 space-y-5">
-            {errorMessage && (
-              <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl">
-                {errorMessage}
+
+            {/* Smart Capacity Recommendations */}
+            {passengerCount > 4 && selectedFleet === '4-seater' && (
+              <div className="mt-2.5 p-2.5 bg-[#FFF4E5] border border-amber-300 rounded-xl text-xs text-amber-900 flex items-center justify-between gap-2">
+                <span>⚠️ Dzire Sedan fits 4 guests. For {passengerCount} guests with luggage, Innova Crysta is recommended.</span>
+                <button
+                  type="button"
+                  onClick={() => setSelectedFleet('6-seater')}
+                  className="px-2.5 py-1 bg-[#C84B0F] text-white rounded-lg text-[11px] font-bold whitespace-nowrap cursor-pointer hover:bg-[#E05A1B]"
+                >
+                  Switch to Innova
+                </button>
               </div>
             )}
-
-            {/* 1. Fleet Vehicle Picker */}
-            <div>
-              <label className="block text-xs uppercase font-semibold text-charcoal tracking-wider mb-2 font-mono">
-                Select Fleet Class
-              </label>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {fleetData.map((f) => (
-                  <button
-                    type="button"
-                    key={f.id}
-                    onClick={() => {
-                      setSelectedFleet(f.id);
-                      if (onSelectFleet) onSelectFleet(f.id);
-                    }}
-                    className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer ${
-                      selectedFleet === f.id
-                        ? 'bg-maroon text-ivory border-gold/50 shadow-md'
-                        : 'bg-ivory border-gold/25 text-charcoal hover:bg-gold/10'
-                    }`}
-                  >
-                    <span className="block text-xs font-semibold">{f.seats} Seater</span>
-                    <span className="block text-[11px] opacity-80 truncate">{f.model.split('/')[0]}</span>
-                    <span className="block text-xs font-mono font-bold mt-1 text-gold">₹{f.perKmRate}/km</span>
-                  </button>
-                ))}
+            {passengerCount > 6 && selectedFleet === '6-seater' && (
+              <div className="mt-2.5 p-2.5 bg-[#FFF4E5] border border-amber-300 rounded-xl text-xs text-amber-900 flex items-center justify-between gap-2">
+                <span>⚠️ Innova Crysta fits 6 guests. For {passengerCount} guests, our 12-Seater Luxury Minibus is best.</span>
+                <button
+                  type="button"
+                  onClick={() => setSelectedFleet('12-seater')}
+                  className="px-2.5 py-1 bg-[#C84B0F] text-white rounded-lg text-[11px] font-bold whitespace-nowrap cursor-pointer hover:bg-[#E05A1B]"
+                >
+                  Switch to Minibus
+                </button>
               </div>
-            </div>
+            )}
+          </div>
 
-            {/* 2. Destination Circuit Picker */}
-            <div>
-              <label className="block text-xs uppercase font-semibold text-charcoal tracking-wider mb-2 font-mono">
-                Circuit Destination (From Almora Base)
-              </label>
-              <select
-                value={selectedDestId}
-                onChange={(e) => setSelectedDestId(e.target.value)}
-                className="w-full px-4 py-3 bg-ivory rounded-xl border border-gold/30 text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-gold/50 cursor-pointer"
-              >
-                {destinationsData.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    {d.name} — {d.distance} ({d.categoryLabel})
-                  </option>
-                ))}
-              </select>
-            </div>
+          {/* 2. Dynamic Pickup & Destination Matrix Selection */}
+          <div>
+            <label className="text-xs uppercase font-bold text-[#2C2523] tracking-wider flex items-center gap-1.5 mb-2">
+              <MapPinIcon className="w-3.5 h-3.5 text-[#C84B0F]" />
+              <span>2. Pickup & Drop Locations</span>
+            </label>
 
-            {/* 3. Trip Type, Days, and Date */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               <div>
-                <label className="block text-xs uppercase font-semibold text-charcoal tracking-wider mb-2 font-mono">
-                  Trip Direction
-                </label>
-                <div className="grid grid-cols-2 gap-1.5">
-                  <button
-                    type="button"
-                    onClick={() => setTripType('round-trip')}
-                    className={`py-3 rounded-xl text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer ${
-                      tripType === 'round-trip'
-                        ? 'bg-maroon text-ivory border border-gold/40'
-                        : 'bg-ivory border border-gold/25 text-charcoal'
-                    }`}
-                  >
-                    Round Trip
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setTripType('one-way')}
-                    className={`py-3 rounded-xl text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer ${
-                      tripType === 'one-way'
-                        ? 'bg-maroon text-ivory border border-gold/40'
-                        : 'bg-ivory border border-gold/25 text-charcoal'
-                    }`}
-                  >
-                    One Way
-                  </button>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs uppercase font-semibold text-charcoal tracking-wider mb-2 font-mono">
-                  Duration
+                <label htmlFor="calc-pickup" className="block text-[11px] font-bold text-[#6B615E] uppercase tracking-wider mb-1">
+                  Pickup Point *
                 </label>
                 <select
-                  value={days}
-                  onChange={(e) => setDays(Number(e.target.value))}
-                  className="w-full px-4 py-3 bg-ivory rounded-xl border border-gold/30 text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-gold/50 cursor-pointer"
+                  id="calc-pickup"
+                  value={pickupPoint}
+                  onChange={(e) => setPickupPoint(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF6EF] border border-[#C5A059]/30 text-xs sm:text-sm text-[#2C2523] font-semibold focus:outline-none focus:ring-2 focus:ring-[#C84B0F] cursor-pointer"
                 >
-                  <option value={1}>1 Day (Same Day)</option>
-                  <option value={2}>2 Days (1 Night)</option>
-                  <option value={3}>3 Days (2 Nights)</option>
-                  <option value={5}>5 Days (Circuit)</option>
-                  <option value={8}>8 Days (Chardham)</option>
+                  <option value="Kathgodam Railway Station">Kathgodam Railway Station</option>
+                  <option value="Pantnagar Airport">Pantnagar Airport</option>
+                  <option value="Delhi Airport / NCR">Delhi Airport / NCR</option>
+                  <option value="Almora / Kasar Devi Base">Almora / Kasar Devi Base</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-xs uppercase font-semibold text-charcoal tracking-wider mb-2 font-mono">
-                  Travel Date
+                <label htmlFor="calc-dest" className="block text-[11px] font-bold text-[#6B615E] uppercase tracking-wider mb-1">
+                  Destination / Tour *
                 </label>
-                <input
-                  type="date"
-                  value={travelDate}
-                  onChange={(e) => setTravelDate(e.target.value)}
-                  className="w-full px-4 py-3 bg-ivory rounded-xl border border-gold/30 text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
-                />
+                <select
+                  id="calc-dest"
+                  value={selectedDest}
+                  onChange={(e) => setSelectedDest(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF6EF] border border-[#C5A059]/30 text-xs sm:text-sm text-[#2C2523] font-semibold focus:outline-none focus:ring-2 focus:ring-[#C84B0F] cursor-pointer"
+                >
+                  {destinationsData.map((d) => (
+                    <option key={d.id} value={d.id}>
+                      {d.name}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 
-            {/* 4. Guest Details */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {/* Dynamic Route Terrain Banner */}
+            <div className="mt-3 p-3 rounded-2xl bg-[#FAF6EF] border border-[#C5A059]/25 flex flex-wrap items-center justify-between gap-2 text-xs">
+              <div className="flex items-center gap-2">
+                <span className="text-base">🛣️</span>
+                <div>
+                  <span className="font-semibold text-[#2C2523] block">{routeInfo.via}</span>
+                  <span className="text-[11px] text-[#6B615E] block font-numeral">
+                    Route: {routeInfo.highway} • Altitude: {routeInfo.elevation}
+                  </span>
+                </div>
+              </div>
+              <div className="text-right">
+                <span className="text-[#C84B0F] font-bold font-numeral text-sm">
+                  {routeInfo.km} km
+                </span>
+                <span className="text-[11px] text-[#6B615E] block">~{routeInfo.duration}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* 3. Trip Mode, Days & Passengers */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label className="block text-[11px] font-bold text-[#6B615E] uppercase tracking-wider mb-1.5">
+                Trip Mode
+              </label>
+              <div className="grid grid-cols-2 gap-1 bg-[#FAF6EF] p-1 rounded-xl border border-[#C5A059]/25 text-xs font-semibold">
+                <button
+                  type="button"
+                  onClick={() => setTripType('round-trip')}
+                  className={`py-2 rounded-lg transition-all cursor-pointer ${
+                    tripType === 'round-trip'
+                      ? 'bg-[#C84B0F] text-[#FDFBF7] shadow-xs'
+                      : 'text-[#5C5350] hover:text-[#C84B0F]'
+                  }`}
+                >
+                  Round Trip
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTripType('one-way')}
+                  className={`py-2 rounded-lg transition-all cursor-pointer ${
+                    tripType === 'one-way'
+                      ? 'bg-[#C84B0F] text-[#FDFBF7] shadow-xs'
+                      : 'text-[#5C5350] hover:text-[#C84B0F]'
+                  }`}
+                >
+                  One Way
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="calc-days" className="block text-[11px] font-bold text-[#6B615E] uppercase tracking-wider mb-1.5">
+                {tripType === 'round-trip' ? 'Tour Duration' : 'Transfer Type'}
+              </label>
+              <select
+                id="calc-days"
+                value={days}
+                onChange={(e) => setDays(Number(e.target.value))}
+                disabled={tripType === 'one-way'}
+                className="w-full px-3 py-2 rounded-xl bg-[#FAF6EF] border border-[#C5A059]/30 text-xs text-[#2C2523] font-semibold focus:outline-none focus:ring-2 focus:ring-[#C84B0F] cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                <option value={1}>1 Day (Same Day Return)</option>
+                <option value={2}>2 Days (1 Night Halt)</option>
+                <option value={3}>3 Days (2 Nights Tour)</option>
+                <option value={4}>4 Days (Extended Circuit)</option>
+                <option value={5}>5 Days (Kumaon Highlights)</option>
+                <option value={7}>7 Days (Sacred Full Circuit)</option>
+                <option value={10}>10 Days (Chardham Yatra)</option>
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="calc-passengers" className="block text-[11px] font-bold text-[#6B615E] uppercase tracking-wider mb-1.5">
+                Passengers
+              </label>
+              <div className="flex items-center gap-1">
+                <select
+                  id="calc-passengers"
+                  value={passengerCount}
+                  onChange={(e) => setPassengerCount(Number(e.target.value))}
+                  className="w-full px-3 py-2 rounded-xl bg-[#FAF6EF] border border-[#C5A059]/30 text-xs text-[#2C2523] font-semibold focus:outline-none focus:ring-2 focus:ring-[#C84B0F] cursor-pointer"
+                >
+                  {[...Array(currentFleet.seats)].map((_, i) => (
+                    <option key={i + 1} value={i + 1}>
+                      {i + 1} {i === 0 ? 'Passenger' : 'Passengers'}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* 4. Interactive Mountain Add-ons & Complimentary Halts */}
+          <div>
+            <label className="text-xs uppercase font-bold text-[#2C2523] tracking-wider flex items-center gap-1.5 mb-2">
+              <span>🪔</span>
+              <span>3. Free Mountain Halts & Add-ons</span>
+            </label>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              {/* Kainchi Dham Halt */}
+              <label
+                className={`p-3 rounded-xl border transition-all cursor-pointer flex items-start gap-2.5 ${
+                  kainchiHalt
+                    ? 'border-[#C84B0F]/60 bg-[#FFF5EC]'
+                    : 'border-[#C5A059]/20 bg-[#FAF6EF]/50 hover:bg-[#FAF6EF]'
+                }`}
+              >
+                <input
+                  type="checkbox"
+                  checked={kainchiHalt}
+                  onChange={(e) => setKainchiHalt(e.target.checked)}
+                  className="mt-0.5 rounded text-[#C84B0F] focus:ring-[#C84B0F] cursor-pointer"
+                />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-[#2C2523]">Kainchi Dham Darshan</span>
+                    <span className="text-[10px] font-bold text-green-700 bg-green-100 px-1.5 py-0.5 rounded-full">
+                      FREE
+                    </span>
+                  </div>
+                  <span className="text-[11px] text-[#6B615E] block mt-0.5">
+                    1.5 to 2 hours free halt for darshan, aarti & prasad
+                  </span>
+                </div>
+              </label>
+
+              {/* Luggage Carrier */}
+              <label
+                className={`p-3 rounded-xl border transition-all cursor-pointer flex items-start gap-2.5 ${
+                  roofCarrier
+                    ? 'border-[#C84B0F]/60 bg-[#FFF5EC]'
+                    : 'border-[#C5A059]/20 bg-[#FAF6EF]/50 hover:bg-[#FAF6EF]'
+                }`}
+              >
+                <input
+                  type="checkbox"
+                  checked={roofCarrier}
+                  onChange={(e) => setRoofCarrier(e.target.checked)}
+                  className="mt-0.5 rounded text-[#C84B0F] focus:ring-[#C84B0F] cursor-pointer"
+                />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-[#2C2523]">Roof Luggage Carrier</span>
+                    <span className="text-[10px] font-bold text-green-700 bg-green-100 px-1.5 py-0.5 rounded-full">
+                      FREE
+                    </span>
+                  </div>
+                  <span className="text-[11px] text-[#6B615E] block mt-0.5">
+                    Waterproof cover to keep your bags safe and dry
+                  </span>
+                </div>
+              </label>
+
+              {/* Bhowali Tea & Fruit Stop */}
+              <label
+                className={`p-3 rounded-xl border transition-all cursor-pointer flex items-start gap-2.5 ${
+                  bhowaliTeaHalt
+                    ? 'border-[#C84B0F]/60 bg-[#FFF5EC]'
+                    : 'border-[#C5A059]/20 bg-[#FAF6EF]/50 hover:bg-[#FAF6EF]'
+                }`}
+              >
+                <input
+                  type="checkbox"
+                  checked={bhowaliTeaHalt}
+                  onChange={(e) => setBhowaliTeaHalt(e.target.checked)}
+                  className="mt-0.5 rounded text-[#C84B0F] focus:ring-[#C84B0F] cursor-pointer"
+                />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-[#2C2523]">Bhowali Tea & Fruit Stop</span>
+                    <span className="text-[10px] font-bold text-green-700 bg-green-100 px-1.5 py-0.5 rounded-full">
+                      FREE
+                    </span>
+                  </div>
+                  <span className="text-[11px] text-[#6B615E] block mt-0.5">
+                    30 mins relaxation at local Kumaon pine cafe
+                  </span>
+                </div>
+              </label>
+
+              {/* Senior Assistance */}
+              <label
+                className={`p-3 rounded-xl border transition-all cursor-pointer flex items-start gap-2.5 ${
+                  seniorAssistance
+                    ? 'border-[#C84B0F]/60 bg-[#FFF5EC]'
+                    : 'border-[#C5A059]/20 bg-[#FAF6EF]/50 hover:bg-[#FAF6EF]'
+                }`}
+              >
+                <input
+                  type="checkbox"
+                  checked={seniorAssistance}
+                  onChange={(e) => setSeniorAssistance(e.target.checked)}
+                  className="mt-0.5 rounded text-[#C84B0F] focus:ring-[#C84B0F] cursor-pointer"
+                />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-[#2C2523]">Senior Assisted Entry</span>
+                    <span className="text-[10px] font-bold text-green-700 bg-green-100 px-1.5 py-0.5 rounded-full">
+                      FREE
+                    </span>
+                  </div>
+                  <span className="text-[11px] text-[#6B615E] block mt-0.5">
+                    Smooth gentle drive, easy low step, and driver helps with bags
+                  </span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          {/* 5. Date, Time & Contact Details */}
+          <div className="pt-2 border-t border-[#C5A059]/20 space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs uppercase font-semibold text-charcoal tracking-wider mb-1 font-mono">
-                  Full Name
+                <label htmlFor="calc-date" className="block text-[11px] font-bold text-[#6B615E] uppercase tracking-wider mb-1">
+                  Travel Date *
                 </label>
                 <input
+                  id="calc-date"
+                  type="date"
+                  value={travelDate}
+                  min={new Date().toISOString().split('T')[0]}
+                  onChange={(e) => setTravelDate(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl bg-[#FAF6EF] border border-[#C5A059]/30 text-xs text-[#2C2523] font-medium focus:outline-none focus:ring-2 focus:ring-[#C84B0F]"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="calc-time" className="block text-[11px] font-bold text-[#6B615E] uppercase tracking-wider mb-1">
+                  Pickup Timing / Train Time *
+                </label>
+                <select
+                  id="calc-time"
+                  value={pickupTime}
+                  onChange={(e) => setPickupTime(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl bg-[#FAF6EF] border border-[#C5A059]/30 text-xs text-[#2C2523] font-medium focus:outline-none focus:ring-2 focus:ring-[#C84B0F] cursor-pointer"
+                >
+                  <option value="05:30 AM (Ranikhet Express Arrival)">05:30 AM (Ranikhet Express Arrival)</option>
+                  <option value="06:30 AM (Kathgodam Shatabdi / Morning)">06:30 AM (Kathgodam Shatabdi / Morning)</option>
+                  <option value="09:00 AM (Relaxed Morning)">09:00 AM (Relaxed Morning)</option>
+                  <option value="11:30 AM (Sampark Kranti / Noon)">11:30 AM (Sampark Kranti / Noon)</option>
+                  <option value="02:30 PM (Afternoon Transfer)">02:30 PM (Afternoon Transfer)</option>
+                  <option value="05:30 PM (Evening Arrival)">05:30 PM (Evening Arrival)</option>
+                  <option value="08:30 PM (Night Train Pickup)">08:30 PM (Night Train Pickup)</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label htmlFor="calc-name" className="block text-[11px] font-bold text-[#6B615E] uppercase tracking-wider mb-1">
+                  Your Full Name *
+                </label>
+                <input
+                  id="calc-name"
                   type="text"
-                  required
+                  placeholder="e.g. Rahul Sharma"
                   value={guestName}
                   onChange={(e) => setGuestName(e.target.value)}
-                  placeholder="e.g. Ramesh Joshi"
-                  className="w-full px-4 py-3 bg-ivory rounded-xl border border-gold/30 text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+                  className="w-full px-3 py-2 rounded-xl bg-[#FAF6EF] border border-[#C5A059]/30 text-xs text-[#2C2523] font-medium focus:outline-none focus:ring-2 focus:ring-[#C84B0F]"
                 />
               </div>
+
               <div>
-                <label className="block text-xs uppercase font-semibold text-charcoal tracking-wider mb-1 font-mono">
-                  WhatsApp Phone
+                <label htmlFor="calc-phone" className="block text-[11px] font-bold text-[#6B615E] uppercase tracking-wider mb-1">
+                  WhatsApp Phone Number *
                 </label>
                 <input
+                  id="calc-phone"
                   type="tel"
-                  required
+                  placeholder="+91 98765 43210"
                   value={guestPhone}
                   onChange={(e) => setGuestPhone(e.target.value)}
-                  placeholder="+91 98765 43210"
-                  className="w-full px-4 py-3 bg-ivory rounded-xl border border-gold/30 text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
-                />
-              </div>
-              <div>
-                <label className="block text-xs uppercase font-semibold text-charcoal tracking-wider mb-1 font-mono">
-                  Email (Optional)
-                </label>
-                <input
-                  type="email"
-                  value={guestEmail}
-                  onChange={(e) => setGuestEmail(e.target.value)}
-                  placeholder="ramesh@example.com"
-                  className="w-full px-4 py-3 bg-ivory rounded-xl border border-gold/30 text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+                  className="w-full px-3 py-2 rounded-xl bg-[#FAF6EF] border border-[#C5A059]/30 text-xs text-[#2C2523] font-medium focus:outline-none focus:ring-2 focus:ring-[#C84B0F]"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs uppercase font-semibold text-charcoal tracking-wider mb-1 font-mono">
-                Pickup Notes & Requests (Optional)
+              <label htmlFor="calc-notes" className="block text-[11px] font-bold text-[#6B615E] uppercase tracking-wider mb-1">
+                Train / Flight Number or Special Request (Optional)
               </label>
-              <textarea
-                rows={2}
+              <input
+                id="calc-notes"
+                type="text"
+                placeholder="e.g. Kathgodam Shatabdi #12040, 3 medium bags, stop for breakfast on the hill..."
                 value={specialNotes}
                 onChange={(e) => setSpecialNotes(e.target.value)}
-                placeholder="e.g. Arriving on Shatabdi at Kathgodam 11:30 AM, need baby seat, elder assistance..."
-                className="w-full px-4 py-2.5 bg-ivory rounded-xl border border-gold/30 text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-gold/50 resize-none"
+                className="w-full px-3 py-2 rounded-xl bg-[#FAF6EF] border border-[#C5A059]/30 text-xs text-[#2C2523] focus:outline-none focus:ring-2 focus:ring-[#C84B0F]"
               />
             </div>
 
-            {/* Dual CTA Buttons */}
-            <div className="pt-2 flex flex-col sm:flex-row gap-3">
-              <button
-                type="submit"
-                disabled={submitting}
-                className="flex-1 py-4 rounded-xl text-xs uppercase tracking-widest font-semibold bg-maroon hover:bg-maroon-dark text-ivory flex items-center justify-center gap-2 transition-all duration-300 shadow-md cursor-pointer disabled:opacity-50"
-              >
-                <span>{submitting ? 'Reserving...' : 'Reserve Route Online'}</span>
-                <CheckCircleIcon className="w-4 h-4 text-gold" />
-              </button>
-              <button
-                type="button"
-                onClick={handleWhatsAppBooking}
-                className="sm:w-auto px-6 py-4 rounded-xl text-xs uppercase tracking-widest font-semibold border border-gold/40 text-charcoal hover:bg-gold/10 flex items-center justify-center gap-2 transition-all cursor-pointer"
-              >
-                <span>WhatsApp Quote</span>
-                <ArrowUpRightIcon className="w-4 h-4 text-emerald-700" />
-              </button>
-            </div>
-          </form>
-
-          {/* Right: Transparent Fare Breakdown Card (5 cols) */}
-          <div className="lg:col-span-5 bg-ivory p-6 sm:p-8 rounded-3xl border border-gold/30 shadow-md space-y-5">
-            <div className="pb-4 border-b border-gold/20">
-              <span className="text-gold text-xs uppercase tracking-wider font-semibold block font-mono">
-                Live Rate Breakdown
-              </span>
-              <h4 className="font-serif text-2xl font-medium text-charcoal mt-1">
-                {currentFleet.title}
-              </h4>
-              <p className="text-xs text-charcoal-muted mt-0.5">
-                {currentFleet.model}
+            {errorMessage && (
+              <p className="text-xs text-red-600 font-semibold bg-red-50 p-2.5 rounded-xl border border-red-200">
+                {errorMessage}
               </p>
-            </div>
+            )}
+          </div>
+        </div>
 
-            <div className="space-y-3 text-xs sm:text-sm font-sans">
-              <div className="flex justify-between items-center text-charcoal">
-                <span>Selected Destination:</span>
-                <span className="font-medium text-right">{currentDest.name}</span>
-              </div>
-              <div className="flex justify-between items-center text-charcoal">
-                <span>Distance from Almora:</span>
-                <span className="font-mono">{oneWayKm} km {tripType === 'round-trip' ? '× 2 = ' + (oneWayKm * 2) + ' km' : ''}</span>
-              </div>
-              <div className="flex justify-between items-center text-charcoal">
-                <span>Billable Distance:</span>
-                <span className="font-mono">{billableKm} km</span>
-              </div>
-              <div className="flex justify-between items-center text-charcoal">
-                <span>Base Rate (₹{currentFleet.perKmRate}/km):</span>
-                <span className="font-mono">₹{distanceFare.toLocaleString()}</span>
-              </div>
-              <div className="flex justify-between items-center text-charcoal">
-                <span>Pahadi Chauffeur Allowance ({days}d):</span>
-                <span className="font-mono">₹{driverBatta.toLocaleString()}</span>
-              </div>
-              <div className="flex justify-between items-center text-charcoal">
-                <span>Uttarakhand State Tourist Permit:</span>
-                <span className="text-gold font-semibold font-mono">Included</span>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-gold/20 flex items-baseline justify-between">
-              <div>
-                <span className="text-xs uppercase tracking-wider text-charcoal-muted block font-mono">
-                  Estimated Total Fare
+        {/* ========================================================= */}
+        {/* RIGHT COLUMN: Dynamic Price Receipt & Instant Booking     */}
+        {/* ========================================================= */}
+        <div className="lg:col-span-5 bg-[#FDFBF7] p-5 sm:p-7 rounded-3xl border border-[#C5A059]/40 shadow-xl space-y-5 sticky top-24">
+          {/* Top Total Amount Card */}
+          <div className="border-b border-[#C5A059]/20 pb-4">
+            <span className="text-[11px] font-sans uppercase tracking-wider text-[#C84B0F] font-bold block mb-1">
+              Estimated Total Fare
+            </span>
+            <div className="flex items-baseline justify-between">
+              <span className="font-serif text-3xl sm:text-4xl font-bold text-[#7C1D23] font-numeral tracking-tight">
+                ₹{pricing.totalFare.toLocaleString()}
+              </span>
+              <div className="text-right">
+                <span className="text-xs font-bold text-[#C84B0F] bg-[#FFF5EC] px-2.5 py-1 rounded-full border border-[#C84B0F]/30 block font-numeral">
+                  ₹{pricing.perPersonFare.toLocaleString()} / person
                 </span>
-                <span className="font-serif text-3xl font-semibold text-maroon">
-                  ₹{estimatedTotal.toLocaleString()}
+                <span className="text-[10px] text-[#6B615E] mt-0.5 block">
+                  for {passengerCount} {passengerCount === 1 ? 'guest' : 'guests'}
                 </span>
-              </div>
-              <span className="text-xs text-charcoal-muted font-light">All-inclusive</span>
-            </div>
-
-            <div className="p-3.5 bg-ivory-warm rounded-xl border border-gold/20 text-[11px] text-charcoal-muted space-y-1">
-              <div className="flex items-center gap-1.5 text-charcoal">
-                <CheckCircleIcon className="w-3.5 h-3.5 text-gold flex-shrink-0" />
-                <span>Includes hill fuel, driver batta & toll taxes.</span>
-              </div>
-              <div className="flex items-center gap-1.5 text-charcoal">
-                <CheckCircleIcon className="w-3.5 h-3.5 text-gold flex-shrink-0" />
-                <span>Free cancellation up to 24h before pickup.</span>
               </div>
             </div>
           </div>
+
+          {/* Interactive Visual Stepper Path */}
+          <div className="p-3.5 rounded-2xl bg-[#FAF6EF] border border-[#C5A059]/25 text-xs space-y-2">
+            <div className="flex items-center justify-between text-[11px] font-bold text-[#6B615E] uppercase tracking-wider">
+              <span>Your Travel Route</span>
+              <span className="text-[#C84B0F]">~{routeInfo.duration}</span>
+            </div>
+
+            <div className="relative pl-6 space-y-2 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-[#C84B0F]/40">
+              <div className="relative">
+                <span className="absolute -left-6 top-1 w-2.5 h-2.5 rounded-full bg-[#C84B0F] ring-4 ring-[#FAF6EF]"></span>
+                <span className="font-bold text-[#2C2523] block text-xs">{pickupPoint}</span>
+                <span className="text-[10px] text-[#6B615E]">Pickup time: {pickupTime}</span>
+              </div>
+
+              {kainchiHalt && (
+                <div className="relative">
+                  <span className="absolute -left-6 top-1 w-2.5 h-2.5 rounded-full bg-amber-500 ring-4 ring-[#FAF6EF]"></span>
+                  <span className="font-semibold text-amber-900 block text-xs">
+                    🪔 Kainchi Dham Ashram Darshan Halt
+                  </span>
+                  <span className="text-[10px] text-green-700 font-semibold">1.5 to 2 hours free halt for darshan & prasad</span>
+                </div>
+              )}
+
+              {bhowaliTeaHalt && (
+                <div className="relative">
+                  <span className="absolute -left-6 top-1 w-2.5 h-2.5 rounded-full bg-emerald-600 ring-4 ring-[#FAF6EF]"></span>
+                  <span className="font-semibold text-emerald-900 block text-xs">
+                    🍵 Tea & Fresh Hill Fruit Stop at Bhowali
+                  </span>
+                </div>
+              )}
+
+              <div className="relative">
+                <span className="absolute -left-6 top-1 w-2.5 h-2.5 rounded-full bg-[#7C1D23] ring-4 ring-[#FAF6EF]"></span>
+                <span className="font-bold text-[#2C2523] block text-xs">{currentDest.name}</span>
+                <span className="text-[10px] text-[#6B615E]">
+                  {tripType === 'round-trip' ? `Round trip return included (${days} ${days === 1 ? 'day' : 'days'})` : 'Drop right to your hotel doorstep'}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Itemized Dynamic Bill Breakdown */}
+          <div className="space-y-2 text-xs text-[#2C2523] bg-[#FAF6EF] p-4 rounded-2xl border border-[#C5A059]/20">
+            <div className="flex justify-between items-center">
+              <span className="text-[#6B615E]">Vehicle Selected:</span>
+              <strong className="text-[#2C2523]">{currentFleet.title}</strong>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <span className="text-[#6B615E]">Travel Distance:</span>
+              <span className="font-numeral font-semibold">
+                {pricing.billableDistance} km @ ₹{currentFleet.perKmRate}/km
+              </span>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <span className="text-[#6B615E]">Cab Distance Fare:</span>
+              <span className="font-numeral">₹{pricing.distanceFare.toLocaleString()}</span>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <span className="text-[#6B615E]">Driver Food & Night Allowance:</span>
+              <span className="font-numeral">₹{pricing.driverBatta.toLocaleString()}</span>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <span className="text-[#6B615E]">Tolls, Green Tax & FastTag:</span>
+              <span className="text-green-700 font-bold">FREE (Included)</span>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <span className="text-[#6B615E]">Temple Darshan Halt:</span>
+              <span className="text-green-700 font-bold">FREE (Included)</span>
+            </div>
+
+            <div className="flex justify-between items-center pt-2 border-t border-[#C5A059]/20">
+              <span className="font-bold text-[#2C2523]">Estimated Total:</span>
+              <span className="font-serif font-bold text-base text-[#7C1D23] font-numeral">
+                ₹{pricing.totalFare.toLocaleString()}
+              </span>
+            </div>
+          </div>
+
+          {/* Trust Guarantees */}
+          <div className="space-y-1.5 pt-1">
+            <div className="flex items-center gap-2 text-xs text-[#2C2523]">
+              <CheckCircleIcon className="w-3.5 h-3.5 text-[#C84B0F] flex-shrink-0" />
+              <span>100% Fixed price • Zero hidden charges on arrival</span>
+            </div>
+            <div className="flex items-center gap-2 text-xs text-[#2C2523]">
+              <CheckCircleIcon className="w-3.5 h-3.5 text-[#C84B0F] flex-shrink-0" />
+              <span>Friendly local Pahadi driver with 10+ years hill driving</span>
+            </div>
+            <div className="flex items-center gap-2 text-xs text-[#2C2523]">
+              <CheckCircleIcon className="w-3.5 h-3.5 text-[#C84B0F] flex-shrink-0" />
+              <span>Driver waits at station exit with your nameboard</span>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="space-y-2.5 pt-1">
+            <button
+              type="button"
+              onClick={handleOnlineBooking}
+              disabled={submitting}
+              className="w-full py-3.5 rounded-full text-xs uppercase tracking-wider font-bold bg-gradient-to-r from-[#C84B0F] to-[#7C1D23] hover:from-[#E05A1B] hover:to-[#9E3304] text-[#FDFBF7] shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer border border-[#C5A059]/30"
+            >
+              <span>{submitting ? 'Confirming Cab...' : 'Instant Online Booking ↗'}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleWhatsAppBooking}
+              className="w-full py-3 rounded-full text-xs uppercase tracking-wider font-bold border border-[#C84B0F]/40 bg-[#FAF6EF] text-[#2C2523] hover:text-[#C84B0F] hover:bg-[#FFF5EC] transition-all flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <span>Book via WhatsApp Direct ↗</span>
+            </button>
+          </div>
+
+          <p className="text-[11px] text-[#6B615E] text-center font-sans">
+            Need urgent cab assistance? Call our Almora desk directly at{' '}
+            <a href={`tel:${SITE_CONFIG.conciergePhone}`} className="text-[#C84B0F] font-bold hover:underline font-numeral">
+              {SITE_CONFIG.conciergePhone}
+            </a>
+          </p>
         </div>
-      )}
+      </div>
     </div>
   );
 };

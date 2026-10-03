@@ -15,10 +15,10 @@ import babaPortraitImg from '../assets/images/neem-karoli-baba.jpg';
 import hotelBestPic from '../assets/images/hotel-best-pic.jpg';
 import hotelExteriorDay from '../assets/images/hotel-exterior-day.jpg';
 import hotelInSnow from '../assets/images/hotel-in-snow.jpg';
-import hotelSnowPanorama from '../assets/images/hotel-snow-panorama.jpg';
+
 import hotelAtNight from '../assets/images/hotel-at-night.jpg';
 import hotelNightSky from '../assets/images/hotel-night-sky.jpg';
-import hotelBalconyView from '../assets/images/hotel-balcony-view.jpg';
+
 import corridorDay from '../assets/images/corridor-at-day.jpg';
 import corridorNight from '../assets/images/corridor-at-night.jpg';
 import gamezoneImg from '../assets/images/gamezone.jpg';
@@ -43,12 +43,19 @@ import diningHearthCafe from '../assets/images/dining-hearth-cafe.jpg';
 import vivekanandaCave from '../assets/images/vivekananda-cave.jpg';
 import kasarTempleTrail from '../assets/images/kasar-temple-trail.jpg';
 import sunriseMeditationDeck from '../assets/images/sunrise-meditation-deck.jpg';
-import kasarHimalayaHoliday from '../assets/images/kasar-himalaya-holiday.jpg';
+
 
 // Mountain Fleet & Cabs
 import innovaImg from '../assets/images/innova-crysta.jpg';
 import sedanImg from '../assets/images/mountain-sedan.jpg';
 import minibusImg from '../assets/images/luxury-minibus.jpg';
+import innovaInteriorImg from '../assets/images/innova-interior.jpg';
+import urbaniaInteriorImg from '../assets/images/urbania-minibus-interior.jpg';
+import kathgodamStationImg from '../assets/images/kathgodam-railway-station-pickup.jpg';
+import kathgodamTaxiImg from '../assets/images/kathgodam-taxi-station-pickup.jpg';
+import kausaniImg from '../assets/images/kausani-tea-peaks.jpg';
+import kedarnathImg from '../assets/images/kedarnath-chardham.jpg';
+import nainitalLakeImg from '../assets/images/nainital-lake.jpg';
 
 export const SHARED_IMAGES = {
   // Shrines
@@ -64,10 +71,10 @@ export const SHARED_IMAGES = {
   hotelBestPic: hotelBestPic,
   hotelExteriorDay: hotelExteriorDay,
   hotelSnow: hotelInSnow,
-  hotelSnowPanorama: hotelSnowPanorama,
+
   hotelNight: hotelAtNight,
   hotelNightSky: hotelNightSky,
-  hotelBalconyView: hotelBalconyView,
+
   corridorDay: corridorDay,
   corridorNight: corridorNight,
   gamezone: gamezoneImg,
@@ -92,12 +99,19 @@ export const SHARED_IMAGES = {
   vivekanandaCave: vivekanandaCave,
   kasarTempleTrail: kasarTempleTrail,
   sunriseMeditationDeck: sunriseMeditationDeck,
-  kasarHoliday: kasarHimalayaHoliday,
 
-  // Mountain Fleet
+
+  // Mountain Fleet & Destinations
   innova: innovaImg,
   sedan: sedanImg,
   minibus: minibusImg,
+  innovaInterior: innovaInteriorImg,
+  urbaniaInterior: urbaniaInteriorImg,
+  kathgodamStation: kathgodamStationImg,
+  kathgodamTaxi: kathgodamTaxiImg,
+  kausani: kausaniImg,
+  kedarnath: kedarnathImg,
+  nainitalLake: nainitalLakeImg,
 };
 
 export {
@@ -110,10 +124,10 @@ export {
   hotelBestPic,
   hotelExteriorDay,
   hotelInSnow,
-  hotelSnowPanorama,
+
   hotelAtNight,
   hotelNightSky,
-  hotelBalconyView,
+
   corridorDay,
   corridorNight,
   gamezoneImg,
@@ -134,8 +148,15 @@ export {
   vivekanandaCave,
   kasarTempleTrail,
   sunriseMeditationDeck,
-  kasarHimalayaHoliday,
+
   innovaImg,
   sedanImg,
   minibusImg,
+  innovaInteriorImg,
+  urbaniaInteriorImg,
+  kathgodamStationImg,
+  kathgodamTaxiImg,
+  kausaniImg,
+  kedarnathImg,
+  nainitalLakeImg,
 };

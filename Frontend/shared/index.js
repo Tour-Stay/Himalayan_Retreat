@@ -9,16 +9,12 @@ export { default as Container } from './components/Container';
 export { default as SectionHeading } from './components/SectionHeading';
 export { default as Divider } from './components/Divider';
 export { default as Modal } from './components/Modal';
-export { default as Accordion } from './components/Accordion';
 export { default as Loader } from './components/Loader';
 export { default as Logo } from './components/Logo';
-export { default as WhatsAppButton } from './components/WhatsAppButton';
-export { default as TiltCard } from './components/TiltCard';
 export { default as BackToTop } from './components/BackToTop';
 export * from './components/Icons';
 
 // Layout
-export { default as SiteHeader } from './layout/SiteHeader';
 export { default as SiteFooter } from './layout/SiteFooter';
 export { default as AnnouncementBar } from './layout/AnnouncementBar';
 

@@ -1,175 +1,175 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Container,
-  SectionHeading,
-  Button,
-  ArchImage,
   CarIcon,
-  ShieldCheckIcon,
-  CompassIcon,
   MountainIcon,
   initAutoScrollReveal,
+  kausaniImg,
+  APP_URLS,
+  ArrowUpRightIcon,
 } from '@shared';
+import HeroCabBar from '../components/HeroCabBar';
 import VehicleFleet from '../components/VehicleFleet';
-import DestinationSlider from '../components/DestinationSlider';
+import VehicleModal from '../components/VehicleModal';
+import PilgrimageCircuits from '../components/PilgrimageCircuits';
+import SafetyStandardsGrid from '../components/SafetyStandardsGrid';
 import FareCalculator from '../components/FareCalculator';
 import TravelReviews from '../components/TravelReviews';
-import { safetyStandards } from '../data/travelData';
+import TravelFaqSection from '../components/TravelFaqSection';
 
 const TravelHome = () => {
   const [selectedFleetId, setSelectedFleetId] = useState('6-seater');
+  const [selectedDestId, setSelectedDestId] = useState('kainchi-dham');
+  const [selectedPickup, setSelectedPickup] = useState('Kathgodam Railway Station');
+  const [selectedDate, setSelectedDate] = useState('');
+  const [modalVehicle, setModalVehicle] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const cleanup = initAutoScrollReveal();
     return cleanup;
   }, []);
 
+  const handleHeroSearch = (searchData) => {
+    if (searchData.vehicle) setSelectedFleetId(searchData.vehicle);
+    if (searchData.destination) setSelectedDestId(searchData.destination);
+    if (searchData.pickup) setSelectedPickup(searchData.pickup);
+    if (searchData.date) setSelectedDate(searchData.date);
+  };
+
+  const handleQuickView = (vehicle) => {
+    setModalVehicle(vehicle);
+    setIsModalOpen(true);
+  };
+
+  const handleBookFleet = (vehicleId) => {
+    setSelectedFleetId(vehicleId);
+    const calcEl = document.getElementById('calculator');
+    if (calcEl) {
+      calcEl.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleSelectCircuit = (destId) => {
+    setSelectedDestId(destId);
+    const calcEl = document.getElementById('calculator');
+    if (calcEl) {
+      calcEl.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <div className="bg-ivory text-charcoal font-sans selection:bg-gold/20 selection:text-maroon">
-      {/* 1. Hero: Misty Mountain Expeditions & Chauffeur Services */}
-      <section className="relative min-h-[80vh] flex items-center justify-center bg-slate text-ivory overflow-hidden pt-20 pb-24">
+    <div className="bg-[#FAF7F2] text-[#2C2523] font-sans selection:bg-[#C5A059]/20 selection:text-[#7C1D23]">
+      {/* 1. Hero: Bright Scenic Mountain Highway & Local Drivers */}
+      <section className="relative min-h-[82vh] flex items-center justify-center bg-[#151D28] text-[#FDFBF7] overflow-hidden pt-16 pb-24">
         <div className="absolute inset-0 z-0">
           <img
-            src="/mountain-fleet.jpg"
-            alt="Chauffeured Mountain Expeditions"
-            className="w-full h-full object-cover opacity-45"
+            src={kausaniImg}
+            alt="Scenic Himalayan Valleys and Snow Peaks"
+            className="w-full h-full object-cover opacity-85 scale-102"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate via-slate/75 to-slate/40"></div>
+          {/* Subtle balanced gradient for clear contrast without darkening the mountains */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#151D28]/85 via-[#151D28]/35 to-black/20"></div>
         </div>
+
+        {/* Ambient Warm Glow */}
+        <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-[#E05A1B]/[0.08] rounded-full blur-[160px] pointer-events-none"></div>
 
         <div className="relative z-20 max-w-5xl mx-auto px-4 text-center flex flex-col items-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate/85 border border-gold/40 text-gold text-xs font-mono uppercase tracking-[0.25em] mb-6 shadow-md">
-            <CarIcon className="w-3.5 h-3.5 text-gold" />
-            <span>Chauffeured Mountain Fleet • Hub: Almora</span>
+          {/* Sacred Kesariya Tag */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1C1817]/85 border border-[#C5A059]/40 text-[#DFCA9B] text-xs font-semibold uppercase tracking-wider mb-6 shadow-xl backdrop-blur-md">
+            <span className="text-amber-500 animate-pulse text-xs">🪔</span>
+            <span className="font-devanagari">॥ ॐ नमः शिवाय • 🔱 जय श्री नीब करौरी महाराज ॥</span>
           </div>
 
-          <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl font-medium tracking-tight leading-tight text-ivory max-w-4xl">
-            Himalayan Expeditions & Chauffeured Travel
+          <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl font-medium tracking-tight leading-[1.12] text-[#FDFBF7] max-w-5xl drop-shadow-md">
+            Himalayan Cabs <span className="font-sans font-light">&</span>{' '}
+            <br className="hidden sm:inline" />
+            <span className="italic text-[#DFCA9B] font-light">Scenic Mountain Tours</span>
           </h1>
 
-          <p className="mt-4 font-serif text-lg sm:text-2xl text-gold/90 italic max-w-2xl font-light">
-            Serene mountain transit across sacred Kumaon pilgrimage circuits & high passes
+          <p className="mt-4 font-serif text-lg sm:text-2xl text-[#DFCA9B]/90 italic max-w-2xl font-light">
+            Comfortable hill travel to Kainchi Dham, Jageshwar, and Himalayan valleys
           </p>
 
-          <p className="mt-4 text-sm sm:text-base text-ivory/75 max-w-2xl font-light leading-relaxed">
-            Native Pahadi chauffeurs, high-clearance heated vehicles, and all-inclusive transparent fares measured directly from our Almora hub to Kainchi Dham, Jageshwar, Kathgodam, and Chardham.
+          <p className="mt-4 text-sm sm:text-base text-[#FAF6EF]/85 max-w-2xl font-normal leading-relaxed">
+            Friendly local Pahadi drivers, clean heated vehicles, and honest fixed fares with zero surprises. Pickups from Kathgodam Railway Station, Pantnagar Airport, and Almora.
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+          {/* Trust Pills */}
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3">
+            <span className="px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs text-[#FAF6EF] font-medium">
+              ✓ Local Pahadi Drivers
+            </span>
+            <span className="px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs text-[#FAF6EF] font-medium">
+              ✓ 100% Fixed Upfront Fares
+            </span>
+            <span className="px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs text-[#FAF6EF] font-medium">
+              ✓ On-Time Station Pickup
+            </span>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
             <a
               href="#calculator"
-              className="bg-maroon hover:bg-maroon-dark text-ivory font-semibold text-xs uppercase tracking-widest px-8 py-4 rounded-full shadow-lg transition-colors border border-gold/30"
+              className="bg-gradient-to-r from-[#C84B0F] to-[#7C1D23] hover:from-[#E05A1B] hover:to-[#9E3304] text-[#FDFBF7] font-semibold text-xs uppercase tracking-wider px-8 py-3.5 rounded-full shadow-lg transition-all border border-[#C5A059]/40 cursor-pointer flex items-center gap-1.5 hover:scale-102"
             >
-              Calculate Almora Fare
+              <span>Calculate Trip Fare</span>
+              <ArrowUpRightIcon className="w-3.5 h-3.5" />
             </a>
+
             <a
-              href="#fleet"
-              className="border border-gold/50 hover:bg-gold/15 text-ivory font-semibold text-xs uppercase tracking-widest px-8 py-4 rounded-full transition-colors"
+              href="#cabs"
+              className="border border-[#C5A059]/60 hover:bg-[#C5A059]/20 text-[#FDFBF7] font-semibold text-xs uppercase tracking-wider px-8 py-3.5 rounded-full transition-all cursor-pointer"
             >
-              Explore Mountain Fleet
+              Explore Our Cabs
             </a>
           </div>
         </div>
       </section>
 
-      {/* 2. 3 Traveler Personas (Inspired by Kumaon Collective) */}
-      <section className="py-20 px-4 bg-ivory border-b border-gold/15">
-        <Container size="lg">
-          <SectionHeading
-            subtitle="Tailored Mountain Journeys"
-            title="Designed for Every Type of Traveler"
-            description="Whether seeking silent meditation at ancient shrines, family vacations across alpine valleys, or high-altitude passes."
-          />
+      {/* 2. Hero Floating Quick Cab Bar */}
+      <HeroCabBar onSearch={handleHeroSearch} />
 
-          <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                title: 'Sacred Pilgrims & Devotees',
-                desc: 'Unhurried transfers to Sri Kainchi Dham, Jageshwar 124-shrine complex, and Kasar Devi caves with respectful, quiet Pahadi chauffeurs.',
-                badge: 'Pilgrimage Circuit',
-              },
-              {
-                title: 'Family Vacations & Reunions',
-                desc: 'Spacious 6-seater Innova Crysta and 12-seater Maharaja Urbania with luggage bays, room heating, and kid-friendly rest stops.',
-                badge: 'Family & Group Comfort',
-              },
-              {
-                title: 'Railway & Station Transfers',
-                desc: 'Punctual meet & greet at Kathgodam Railway Station or Pantnagar Airport with personalized guest nameboards and direct hotel drop.',
-                badge: 'Station Transfer Hub',
-              },
-            ].map((persona, idx) => (
-              <div
-                key={idx}
-                className="bg-ivory-warm p-8 rounded-3xl border border-gold/30 shadow-sm flex flex-col justify-between reveal-stagger"
-              >
-                <div>
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-gold bg-gold/15 px-3 py-1 rounded-full border border-gold/30 inline-block mb-4">
-                    {persona.badge}
-                  </span>
-                  <h3 className="font-serif text-2xl font-medium text-charcoal mb-3">
-                    {persona.title}
-                  </h3>
-                  <p className="text-charcoal-muted text-sm leading-relaxed font-light">
-                    {persona.desc}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Container>
-      </section>
+      {/* 3. Fleet Showcase (Sedan, Innova Crysta, Minibus) */}
+      <VehicleFleet
+        onBookFleet={handleBookFleet}
+        onQuickView={handleQuickView}
+      />
 
-      {/* 3. Safety Standards */}
-      <section className="py-20 px-4 bg-ivory-warm/60 border-b border-gold/15">
-        <Container size="lg">
-          <SectionHeading
-            subtitle="Mountain Reliability"
-            title="Safety & Mountain Standards"
-            description="Navigating Uttarakhand hill roads requires experience, patience, and well-maintained machinery."
-          />
+      {/* 4. Popular Pilgrimage Circuits (Kainchi Dham, Jageshwar, Kasar, Kausani, Nainital) */}
+      <PilgrimageCircuits onSelectDestination={handleSelectCircuit} />
 
-          <div className="mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {safetyStandards.map((std, idx) => (
-              <div
-                key={idx}
-                className="bg-ivory p-6 rounded-2xl border border-gold/25 shadow-xs flex items-start gap-4 reveal-stagger"
-              >
-                <div className="w-10 h-10 rounded-xl bg-gold/15 border border-gold/30 flex items-center justify-center text-maroon flex-shrink-0 font-serif font-bold">
-                  {idx + 1}
-                </div>
-                <div>
-                  <h4 className="font-serif text-lg font-medium text-charcoal mb-1">
-                    {std.title}
-                  </h4>
-                  <p className="text-xs text-charcoal-muted leading-relaxed font-light">
-                    {std.desc}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Container>
-      </section>
-
-      {/* 4. Vehicle Fleet (4, 6, 12 Seater) */}
-      <VehicleFleet onBookFleet={(id) => setSelectedFleetId(id)} />
-
-      {/* 5. Destination Circuits & Almora Distance Matrix */}
-      <DestinationSlider />
-
-      {/* 6. Almora Fare Calculator Engine */}
-      <section className="py-24 px-4 bg-ivory border-b border-gold/15">
+      {/* 5. Live Transparent Fare Calculator */}
+      <section className="py-20 sm:py-28 px-4 bg-[#FDFBF7] border-b border-[#C5A059]/20">
         <Container size="lg">
           <FareCalculator
             selectedFleetId={selectedFleetId}
+            selectedDestId={selectedDestId}
+            initialPickup={selectedPickup}
+            initialDate={selectedDate}
             onSelectFleet={(id) => setSelectedFleetId(id)}
           />
         </Container>
       </section>
 
-      {/* 7. Client Reviews & Feedback */}
+      {/* 6. Safety & Mountain Standards (6 Trust Pillars) */}
+      <SafetyStandardsGrid />
+
+      {/* 7. Real Guest Reviews */}
       <TravelReviews />
+
+      {/* 8. Mountain Travel FAQs */}
+      <TravelFaqSection />
+
+      {/* 9. Quick View Vehicle Modal */}
+      <VehicleModal
+        vehicle={modalVehicle}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSelectForBooking={handleBookFleet}
+      />
     </div>
   );
 };
