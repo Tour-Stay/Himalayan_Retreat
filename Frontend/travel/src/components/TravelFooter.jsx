@@ -60,10 +60,10 @@ const TravelFooter = () => {
               <Logo size={42} />
               <div className="flex flex-col">
                 <span className="font-cinzel text-base sm:text-lg font-bold text-[#2C2523] tracking-tight group-hover:text-[#7C1D23] transition-colors">
-                  The Kasar Mountain Cabs
+                  The Kasar Himalayan Heights
                 </span>
-                <span className="text-[10px] tracking-widest uppercase text-[#C84B0F] font-semibold font-cinzel">
-                  Chauffeured Mountain Fleet • Almora Base
+                <span className="text-[10px] tracking-widest uppercase text-[#C5A059] font-semibold font-cinzel">
+                  Chauffeured Mountain Travel • Kasar Devi (6,942 FT)
                 </span>
               </div>
             </a>
@@ -206,7 +206,7 @@ const TravelFooter = () => {
         {/* Bottom Strip */}
         <div className="mt-12 pt-6 border-t border-[#C5A059]/30 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#6B615E]">
           <p>
-            &copy; {currentYear} The Kasar Mountain Cabs & Expeditions. All rights reserved.
+            &copy; {currentYear} The Kasar Himalayan Heights & Expeditions. All rights reserved.
           </p>
 
           <p className="font-serif italic text-[#7C1D23] text-center text-xs font-semibold">

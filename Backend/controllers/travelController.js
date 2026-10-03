@@ -118,6 +118,8 @@ const updateTour = async (req, res) => {
     }
 
     const updateData = { ...req.body };
+
+    // Parse string fields from FormData
     if (updateData.duration && typeof updateData.duration === 'string') {
       try {
         updateData.duration = JSON.parse(updateData.duration);
@@ -145,6 +147,25 @@ const updateTour = async (req, res) => {
       }
     }
 
+    // Handle new image uploads if provided
+    if (req.files && req.files.length > 0) {
+      let newImageURLs = [];
+      try {
+        const uploadPromises = req.files.map((file) =>
+          uploadToCloudinary(file.buffer, 'tour-packages')
+        );
+        const results = await Promise.all(uploadPromises);
+        newImageURLs = results.map((result) => result.secure_url);
+      } catch (cloudErr) {
+        console.warn('\u26a0\ufe0f Cloudinary upload warning (using base64 fallback):', cloudErr.message || cloudErr);
+        newImageURLs = req.files.map((file) => {
+          const mime = file.mimetype || 'image/jpeg';
+          return `data:${mime};base64,${file.buffer.toString('base64')}`;
+        });
+      }
+      updateData.imageURLs = newImageURLs;
+    }
+
     const updatedTour = await TourPackage.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
       runValidators: true,
@@ -152,6 +173,7 @@ const updateTour = async (req, res) => {
 
     res.status(200).json({ message: 'Tour package updated successfully.', tour: updatedTour });
   } catch (error) {
+    console.error('Update Tour Error:', error);
     res.status(500).json({ message: 'Server error.', error: error.message });
   }
 };
@@ -240,7 +262,9 @@ const createTravelBooking = async (req, res) => {
 // @access  Protected (Admin only)
 const getAllTravelBookings = async (req, res) => {
   try {
-    const bookings = await TravelBooking.find().populate('packageId', 'title destination pricePerPerson');
+    const bookings = await TravelBooking.find()
+      .populate('packageId', 'title destination pricePerPerson')
+      .sort({ createdAt: -1 });
     res.status(200).json(bookings);
   } catch (error) {
     res.status(500).json({ message: 'Server error.', error: error.message });
@@ -282,6 +306,26 @@ const deleteTravelBooking = async (req, res) => {
   }
 };
 
+// @desc    Update travel booking payment status
+// @route   PUT /api/travel/bookings/:id/payment
+// @access  Protected (Admin only)
+const updateTravelPaymentStatus = async (req, res) => {
+  try {
+    const { paymentStatus } = req.body;
+    const booking = await TravelBooking.findByIdAndUpdate(
+      req.params.id,
+      { paymentStatus },
+      { new: true }
+    );
+    if (!booking) {
+      return res.status(404).json({ message: 'Travel booking not found.' });
+    }
+    res.status(200).json({ message: 'Payment status updated.', booking });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error.', error: error.message });
+  }
+};
+
 module.exports = {
   getAllTours,
   getTourById,
@@ -291,5 +335,6 @@ module.exports = {
   createTravelBooking,
   getAllTravelBookings,
   updateTravelBookingStatus,
+  updateTravelPaymentStatus,
   deleteTravelBooking,
 };

@@ -4,7 +4,7 @@ import {
   atticSuiteImg,
   hotelBestPic,
   hotelExteriorDay,
-  hotelSnowPanorama,
+  hotelInSnow,
   hotelAtNight,
   corridorDay,
   corridorNight,
@@ -133,7 +133,7 @@ export const mockRooms = [
       suiteTrishulTerrace,
       suiteLuxuryBathroom,
       hotelExteriorDay,
-      hotelSnowPanorama,
+      hotelInSnow,
     ],
   },
 ];

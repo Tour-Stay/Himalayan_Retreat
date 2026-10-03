@@ -11,6 +11,7 @@ const {
   createTravelBooking,
   getAllTravelBookings,
   updateTravelBookingStatus,
+  updateTravelPaymentStatus,
   deleteTravelBooking,
 } = require('../controllers/travelController');
 const {
@@ -40,10 +41,11 @@ router.put('/reviews/:id', upload.array('photos', 5), updateReview);          //
 // PROTECTED ROUTES (Admin only)
 // ============================
 router.post('/tours', authMiddleware, upload.array('images', 10), addTour);  // Add tour with up to 10 images
-router.put('/tours/:id', authMiddleware, updateTour);    // Edit a tour package
+router.put('/tours/:id', authMiddleware, upload.array('images', 10), updateTour);  // Edit tour (with optional new images)
 router.delete('/tours/:id', authMiddleware, deleteTour); // Delete a tour package
 router.get('/bookings', authMiddleware, getAllTravelBookings); // View all travel bookings
 router.put('/bookings/:id/status', authMiddleware, updateTravelBookingStatus); // Update status
+router.put('/bookings/:id/payment', authMiddleware, updateTravelPaymentStatus); // Update payment status
 router.delete('/bookings/:id', authMiddleware, deleteTravelBooking); // Delete booking
 router.get('/reviews/admin', authMiddleware, getAdminReviews); // Fetch ALL reviews (approved & pending)
 router.put('/reviews/:id/approve', authMiddleware, toggleReviewApproval); // Toggle approval status

@@ -18,6 +18,10 @@ const roomSchema = new mongoose.Schema({
     children: { type: Number, default: 0 }
   },
   amenities: [String],
+  view: {
+    type: String,
+    default: '',
+  },
   imageURLs: [String], // Array of image URLs
   isAvailable: {
     type: Boolean,

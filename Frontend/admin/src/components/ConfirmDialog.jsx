@@ -1,0 +1,72 @@
+export const ConfirmDialog = ({
+  isOpen,
+  title = 'Confirm Action',
+  message = 'Are you sure you want to proceed?',
+  confirmText = 'Confirm',
+  cancelText = 'Cancel',
+  isDestructive = true,
+  isLoading = false,
+  onConfirm,
+  onCancel,
+}) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-2xs animate-fade-in">
+      <div className="w-full max-w-md bg-[#FDFBF7] border border-[#C5A059]/40 rounded-3xl shadow-2xl p-6 text-[#2C2523] animate-scale-up">
+        <div className="flex items-center gap-3 mb-3">
+          <div
+            className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${
+              isDestructive
+                ? 'bg-rose-50 text-rose-700 border-rose-300'
+                : 'bg-amber-50 text-amber-700 border-amber-300'
+            }`}
+          >
+            {isDestructive ? (
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            ) : (
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            )}
+          </div>
+          <h3 className="font-cinzel text-lg font-bold text-[#2C2523]">{title}</h3>
+        </div>
+
+        <p className="text-[#5C5350] text-sm mb-6 leading-relaxed">
+          {message}
+        </p>
+
+        <div className="flex items-center justify-end gap-3">
+          <button
+            type="button"
+            onClick={onCancel}
+            disabled={isLoading}
+            className="px-4 py-2 rounded-full text-xs font-cinzel font-semibold text-[#5C5350] hover:text-[#2C2523] hover:bg-[#FAF6EF] border border-[#C5A059]/40 transition cursor-pointer"
+          >
+            {cancelText}
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            disabled={isLoading}
+            className={`px-4 py-2 rounded-full text-xs font-cinzel font-semibold text-[#FDFBF7] transition cursor-pointer flex items-center gap-2 shadow-xs ${
+              isDestructive
+                ? 'bg-[#7C1D23] hover:bg-[#5C151A] border border-[#C5A059]/40'
+                : 'bg-[#C5A059] hover:bg-[#B89047] border border-[#C5A059]'
+            } disabled:opacity-50`}
+          >
+            {isLoading && (
+              <span className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+            )}
+            <span>{confirmText}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ConfirmDialog;

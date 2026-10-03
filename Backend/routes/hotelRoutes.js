@@ -4,10 +4,12 @@ const authMiddleware = require('../middleware/authMiddleware');
 const upload = require('../middleware/uploadMiddleware');
 const {
   getAllRooms,
+  getAllRoomsAdmin,
   getRoomById,
   addRoom,
   updateRoom,
   deleteRoom,
+  toggleRoomAvailability,
   createBooking,
   getAllBookings,
   updateBookingStatus,
@@ -24,8 +26,10 @@ router.post('/bookings', createBooking);   // Create a new reservation
 // ============================
 // PROTECTED ROUTES (Admin only)
 // ============================
+router.get('/rooms-admin', authMiddleware, getAllRoomsAdmin);  // Fetch ALL rooms (including unavailable)
 router.post('/rooms', authMiddleware, upload.array('images', 10), addRoom);  // Add room with up to 10 images
-router.put('/rooms/:id', authMiddleware, updateRoom);    // Update room details/price
+router.put('/rooms/:id', authMiddleware, upload.array('images', 10), updateRoom);  // Update room (with optional new images)
+router.put('/rooms/:id/toggle', authMiddleware, toggleRoomAvailability);  // Toggle room availability
 router.delete('/rooms/:id', authMiddleware, deleteRoom); // Delete a room
 router.get('/bookings', authMiddleware, getAllBookings);  // View all reservations
 router.put('/bookings/:id/status', authMiddleware, updateBookingStatus); // Update booking status

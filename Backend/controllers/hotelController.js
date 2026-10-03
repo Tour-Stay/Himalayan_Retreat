@@ -19,6 +19,18 @@ const getAllRooms = async (req, res) => {
   }
 };
 
+// @desc    Get ALL rooms (including unavailable — for admin dashboard)
+// @route   GET /api/hotel/rooms-admin
+// @access  Protected (Admin only)
+const getAllRoomsAdmin = async (req, res) => {
+  try {
+    const rooms = await Room.find().sort({ createdAt: -1 });
+    res.status(200).json(rooms);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error.', error: error.message });
+  }
+};
+
 // @desc    Get a single room by ID
 // @route   GET /api/hotel/rooms/:id
 // @access  Public
@@ -86,7 +98,7 @@ const addRoom = async (req, res) => {
   }
 };
 
-// @desc    Update a room
+// @desc    Update a room (with optional new image uploads)
 // @route   PUT /api/hotel/rooms/:id
 // @access  Protected (Admin only)
 const updateRoom = async (req, res) => {
@@ -96,13 +108,44 @@ const updateRoom = async (req, res) => {
       return res.status(404).json({ message: 'Room not found.' });
     }
 
-    const updatedRoom = await Room.findByIdAndUpdate(req.params.id, req.body, {
-      new: true, // Return the updated document
+    const updateData = { ...req.body };
+
+    // Parse FormData string fields
+    if (typeof updateData.capacity === 'string') {
+      try { updateData.capacity = JSON.parse(updateData.capacity); } catch (e) {}
+    }
+    if (typeof updateData.amenities === 'string') {
+      try { updateData.amenities = JSON.parse(updateData.amenities); } catch (e) {}
+    }
+
+    // Handle new image uploads if provided
+    if (req.files && req.files.length > 0) {
+      let newImageURLs = [];
+      try {
+        const uploadPromises = req.files.map((file) =>
+          uploadToCloudinary(file.buffer, 'hotel-rooms')
+        );
+        const results = await Promise.all(uploadPromises);
+        newImageURLs = results.map((result) => result.secure_url);
+      } catch (cloudErr) {
+        console.warn('⚠️ Cloudinary upload warning (using base64 fallback):', cloudErr.message || cloudErr);
+        newImageURLs = req.files.map((file) => {
+          const mime = file.mimetype || 'image/jpeg';
+          return `data:${mime};base64,${file.buffer.toString('base64')}`;
+        });
+      }
+      // Replace existing images with new uploads
+      updateData.imageURLs = newImageURLs;
+    }
+
+    const updatedRoom = await Room.findByIdAndUpdate(req.params.id, updateData, {
+      new: true,
       runValidators: true,
     });
 
     res.status(200).json({ message: 'Room updated successfully.', room: updatedRoom });
   } catch (error) {
+    console.error('Update Room Error:', error);
     res.status(500).json({ message: 'Server error.', error: error.message });
   }
 };
@@ -119,6 +162,28 @@ const deleteRoom = async (req, res) => {
 
     await Room.findByIdAndDelete(req.params.id);
     res.status(200).json({ message: 'Room deleted successfully.' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error.', error: error.message });
+  }
+};
+
+// @desc    Toggle room availability (enable/disable without deleting)
+// @route   PUT /api/hotel/rooms/:id/toggle
+// @access  Protected (Admin only)
+const toggleRoomAvailability = async (req, res) => {
+  try {
+    const room = await Room.findById(req.params.id);
+    if (!room) {
+      return res.status(404).json({ message: 'Room not found.' });
+    }
+
+    room.isAvailable = !room.isAvailable;
+    await room.save();
+
+    res.status(200).json({
+      message: `Room ${room.isAvailable ? 'enabled' : 'disabled'} successfully.`,
+      room,
+    });
   } catch (error) {
     res.status(500).json({ message: 'Server error.', error: error.message });
   }
@@ -195,7 +260,9 @@ const createBooking = async (req, res) => {
 // @access  Protected (Admin only)
 const getAllBookings = async (req, res) => {
   try {
-    const bookings = await Booking.find().populate('room', 'name pricePerNight');
+    const bookings = await Booking.find()
+      .populate('room', 'name pricePerNight view')
+      .sort({ createdAt: -1 });
     res.status(200).json(bookings);
   } catch (error) {
     res.status(500).json({ message: 'Server error.', error: error.message });
@@ -239,10 +306,12 @@ const deleteBooking = async (req, res) => {
 
 module.exports = {
   getAllRooms,
+  getAllRoomsAdmin,
   getRoomById,
   addRoom,
   updateRoom,
   deleteRoom,
+  toggleRoomAvailability,
   createBooking,
   getAllBookings,
   updateBookingStatus,

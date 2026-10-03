@@ -51,8 +51,16 @@ app.use(
 // Body Parser
 app.use(express.json());
 
-// NoSQL Injection Sanitization: Strips out $ and . from req.body/query/params
-// Temporarily removed express-mongo-sanitize to fix server crash. Mongoose strict routing protects us.
+// NoSQL Injection Sanitization: Strips prohibited MongoDB operators ($ and .) from request inputs
+app.use((req, res, next) => {
+  if (req.body && typeof req.body === 'object') {
+    mongoSanitize.sanitize(req.body);
+  }
+  if (req.params && typeof req.params === 'object') {
+    mongoSanitize.sanitize(req.params);
+  }
+  next();
+});
 
 // Basic Route
 app.get('/', (req, res) => {

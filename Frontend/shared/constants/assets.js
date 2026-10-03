@@ -124,6 +124,7 @@ export {
   hotelBestPic,
   hotelExteriorDay,
   hotelInSnow,
+  hotelInSnow as hotelSnowPanorama,
 
   hotelAtNight,
   hotelNightSky,

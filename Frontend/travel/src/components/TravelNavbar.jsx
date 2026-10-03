@@ -34,7 +34,7 @@ const TravelNavbar = () => {
         <div className="max-w-7xl mx-auto flex items-center justify-between text-[11px] whitespace-nowrap">
           <div className="flex items-center gap-2 flex-shrink-0">
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#C5A059]"></span>
-            <span className="font-semibold text-[#2C2523]">Almora Station Base</span>
+            <span className="font-semibold text-[#2C2523]">Kasar Devi, Almora</span>
             <span className="text-[#C5A059]">•</span>
             <span>6,942 Ft Height</span>
           </div>
@@ -67,15 +67,15 @@ const TravelNavbar = () => {
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-4">
-          {/* Brand Logo & Name */}
+          {/* Brand Logo & Name (Original name restored) */}
           <Link to="/" className="flex items-center gap-2.5 group flex-shrink-0 whitespace-nowrap">
             <Logo size={36} />
             <div className="flex flex-col">
               <span className="font-cinzel text-sm sm:text-base font-bold text-[#2C2523] group-hover:text-[#7C1D23] transition-colors leading-tight whitespace-nowrap">
-                The Kasar Mountain Cabs
+                The Kasar Himalayan Heights
               </span>
-              <span className="text-[10px] tracking-widest uppercase text-[#C84B0F] font-medium font-cinzel whitespace-nowrap">
-                Almora Base &bull; Kainchi Dham
+              <span className="text-[10px] tracking-widest uppercase text-[#C5A059] font-medium font-cinzel whitespace-nowrap">
+                Kasar Devi • 6,942 FT
               </span>
             </div>
           </Link>
@@ -107,10 +107,10 @@ const TravelNavbar = () => {
 
             <a
               href="/#calculator"
-              className="px-4 py-1.5 rounded-full text-xs font-cinzel font-semibold uppercase tracking-wider bg-gradient-to-r from-[#C84B0F] to-[#7C1D23] hover:from-[#E05A1B] hover:to-[#9E3304] text-[#FDFBF7] transition-all shadow-md border border-[#C5A059]/40 flex items-center gap-1 hover:scale-102 whitespace-nowrap flex-shrink-0 cursor-pointer"
+              className="px-4 py-1.5 rounded-full text-xs font-cinzel font-semibold uppercase tracking-wider bg-[#7C1D23] hover:bg-[#5C151A] text-[#FDFBF7] transition-all shadow-md border border-[#C5A059]/40 flex items-center gap-1.5 hover:scale-102 whitespace-nowrap flex-shrink-0 cursor-pointer"
             >
+              <CarIcon className="w-3.5 h-3.5 flex-shrink-0" />
               <span className="whitespace-nowrap">Book Cab</span>
-              <ArrowUpRightIcon className="w-3.5 h-3.5 flex-shrink-0" />
             </a>
           </div>
 

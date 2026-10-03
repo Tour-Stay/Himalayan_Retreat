@@ -1,0 +1,57 @@
+/* Custom Office Admin Styling & Print Support */
+@media print {
+  /* Hide everything except the printable slip */
+  body * {
+    visibility: hidden !important;
+  }
+
+  .printable-slip,
+  .printable-slip * {
+    visibility: visible !important;
+  }
+
+  .printable-slip {
+    position: fixed !important;
+    left: 50% !important;
+    top: 20px !important;
+    transform: translateX(-50%) !important;
+    width: 90% !important;
+    max-width: 650px !important;
+    margin: 0 !important;
+    padding: 30px !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+    border: 2px solid #374151 !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+    z-index: 999999 !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* Custom scrollbar for middle page and wide data tables */
+.admin-table-container::-webkit-scrollbar,
+aside::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+.admin-table-container::-webkit-scrollbar-track,
+aside::-webkit-scrollbar-track {
+  background: #FAF6EF;
+  border-radius: 3px;
+}
+
+.admin-table-container::-webkit-scrollbar-thumb,
+aside::-webkit-scrollbar-thumb {
+  background: rgba(197, 160, 89, 0.45);
+  border-radius: 3px;
+}
+
+.admin-table-container::-webkit-scrollbar-thumb:hover,
+aside::-webkit-scrollbar-thumb:hover {
+  background: #7c1d23;
+}

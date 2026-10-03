@@ -173,10 +173,25 @@ Himalayan_Retreat/
 │   │
 │   ├── admin/                              # Micro-App 4: Operations Desk (Port 5176)
 │   │   ├── src/
+│   │   │   ├── components/                 # Modular management components
+│   │   │   │   ├── AdminHeader.jsx         # Staff top navigation, live site ports & sync
+│   │   │   │   ├── AdminSidebar.jsx        # Tab navigation with live count & alert badges
+│   │   │   │   ├── KpiCards.jsx            # Interactive top metrics summary cards
+│   │   │   │   ├── RoomManager.jsx         # Full suite CRUD, image upload & availability toggle
+│   │   │   │   ├── HotelBookingManager.jsx # Reservations, status selector & 1-click WhatsApp
+│   │   │   │   ├── TravelBookingManager.jsx# Cab/tour requests, trip & payment status, WhatsApp
+│   │   │   │   ├── TourManager.jsx         # Tour package CRUD, itinerary & inclusions
+│   │   │   │   ├── ReviewManager.jsx       # Review moderation, photo lightbox & approval
+│   │   │   │   ├── StatusBadge.jsx         # Standard status pills (booking, payment, review)
+│   │   │   │   ├── ConfirmDialog.jsx       # Staff modal for safe destructive operations
+│   │   │   │   └── Toast.jsx               # Floating staff notifications with auto-dismiss
+│   │   │   ├── hooks/
+│   │   │   │   └── useAdminData.js         # Central data hook for all 5 collections & stats
 │   │   │   ├── pages/
 │   │   │   │   ├── AdminLogin.jsx          # Protected staff login with rate limiting
-│   │   │   │   └── AdminDashboard.jsx      # KPI metrics, suite CRUD modal, dual view
-│   │   │   ├── App.jsx
+│   │   │   │   └── AdminDashboard.jsx      # Modular operations orchestrator
+│   │   │   ├── admin.css                   # Office printable voucher media styling & table scrollbars
+│   │   │   ├── App.jsx                     # ToastProvider & AuthProvider wrapped routes
 │   │   │   └── main.jsx
 │   │   ├── index.html
 │   │   └── vite.config.js
@@ -365,13 +380,15 @@ To bring all sub-pages and gallery modals to 100% full production fidelity, the 
 ### 🏨 Hotel Suites & Bookings (`/api/hotel`)
 | Method | Endpoint | Description | Access |
 | :--- | :--- | :--- | :--- |
-| `GET` | `/api/hotel/rooms` | Retrieve all suites in catalog | Public |
+| `GET` | `/api/hotel/rooms` | Retrieve all available suites in catalog | Public |
+| `GET` | `/api/hotel/rooms-admin` | Retrieve ALL suites (available + disabled) | Protected (Admin) |
 | `GET` | `/api/hotel/rooms/:id` | Retrieve single suite details by ID | Public |
 | `POST` | `/api/hotel/rooms` | Create a new suite (file upload + Data URI fallback) | Protected (Admin) |
-| `PUT` | `/api/hotel/rooms/:id` | Update an existing suite | Protected (Admin) |
+| `PUT` | `/api/hotel/rooms/:id` | Update an existing suite (with image upload) | Protected (Admin) |
+| `PUT` | `/api/hotel/rooms/:id/toggle` | Toggle room availability on/off | Protected (Admin) |
 | `DELETE` | `/api/hotel/rooms/:id` | Delete a suite from catalog | Protected (Admin) |
 | `POST` | `/api/hotel/bookings` | Submit room booking reservation | Public |
-| `GET` | `/api/hotel/bookings` | Retrieve all guest reservations | Protected (Admin) |
+| `GET` | `/api/hotel/bookings` | Retrieve all guest reservations (newest first) | Protected (Admin) |
 | `PUT` | `/api/hotel/bookings/:id/status` | Update booking status (`confirmed`, `cancelled`, etc.) | Protected (Admin) |
 | `DELETE` | `/api/hotel/bookings/:id` | Remove a booking record | Protected (Admin) |
 
@@ -380,12 +397,17 @@ To bring all sub-pages and gallery modals to 100% full production fidelity, the 
 | :--- | :--- | :--- | :--- |
 | `GET` | `/api/travel/tours` | List all curated tour packages | Public |
 | `GET` | `/api/travel/tours/:id` | Retrieve single tour package | Public |
+| `POST` | `/api/travel/tours` | Create tour package (with image upload) | Protected (Admin) |
+| `PUT` | `/api/travel/tours/:id` | Edit tour package (with image upload) | Protected (Admin) |
+| `DELETE` | `/api/travel/tours/:id` | Delete tour package from catalog | Protected (Admin) |
 | `POST` | `/api/travel/bookings` | Submit a chauffeured vehicle reservation | Public |
-| `GET` | `/api/travel/bookings` | Retrieve all travel fleet bookings | Protected (Admin) |
+| `GET` | `/api/travel/bookings` | Retrieve all travel fleet bookings (newest first) | Protected (Admin) |
 | `PUT` | `/api/travel/bookings/:id/status` | Update travel booking status | Protected (Admin) |
+| `PUT` | `/api/travel/bookings/:id/payment` | Update payment settlement status (`pending`, `paid`, `refunded`) | Protected (Admin) |
 | `DELETE` | `/api/travel/bookings/:id` | Remove a travel booking | Protected (Admin) |
 | `GET` | `/api/travel/reviews` | Fetch approved community travel reviews | Public |
 | `POST` | `/api/travel/reviews` | Submit guest review with up to 5 photos | Public |
+| `GET` | `/api/travel/reviews/admin` | Fetch ALL reviews for moderation (approved & pending) | Protected (Admin) |
 | `PUT` | `/api/travel/reviews/:id/approve` | Toggle review approval status | Protected (Admin) |
 | `DELETE` | `/api/travel/reviews/:id` | Delete a travel review | Protected (Admin) |
 
