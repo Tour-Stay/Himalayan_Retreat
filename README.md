@@ -154,7 +154,7 @@ Himalayan_Retreat/
 ├── Frontend/                               # React 19 Multi-Frontend Monorepo
 │   ├── landing/                            # Micro-App 1: Main Brand Portal (Port 5173)
 │   │   ├── src/
-│   │   │   ├── components/                 # LandingNavbar, HeroMaharajji, RouteDistancePlanner
+│   │   │   ├── components/                 # LandingNavbar, HeroMaharajji, RouteDistancePlanner, ClientCompanySection
 │   │   │   ├── App.jsx                     # Landing page layout & auto-reveal
 │   │   │   └── main.jsx
 │   │   └── vite.config.js
@@ -162,7 +162,7 @@ Himalayan_Retreat/
 │   ├── hotel/                              # Micro-App 2: Boutique Resort (Port 5174)
 │   │   ├── src/
 │   │   │   ├── components/                 # SuiteShowcase, HeroBookingBar, SanctuaryReviews, RoomCard
-│   │   │   ├── pages/                      # HotelHome, AllRooms, RoomDetails, BookingConfirmation
+│   │   │   ├── pages/                      # HotelHome, AllRooms, RoomDetails, BookRoom, BookingConfirmation
 │   │   │   ├── App.jsx
 │   │   │   └── main.jsx
 │   │   └── vite.config.js
@@ -171,7 +171,7 @@ Himalayan_Retreat/
 │   │   ├── src/
 │   │   │   ├── components/                 # FareCalculator, VehicleFleet, TravelReviews, PilgrimageCircuits
 │   │   │   ├── data/travelData.js          # Resilient asset & settings resolvers
-│   │   │   ├── pages/                      # TravelHome, AllCabs, TravelBookingConfirmation
+│   │   │   ├── pages/                      # TravelHome, AllCabs, FareCalculatorPage, TravelBookingConfirmation
 │   │   │   ├── App.jsx
 │   │   │   └── main.jsx
 │   │   └── vite.config.js
@@ -196,28 +196,29 @@ Himalayan_Retreat/
 │   │   │   │   ├── FleetManager.jsx        # Cab fleet models, tariffs & rates CMS
 │   │   │   │   ├── RouteManager.jsx        # Fixed temple & sightseeing route tariffs CMS
 │   │   │   │   ├── AnnouncementManager.jsx # Top announcement ribbon banner CMS
+│   │   │   │   ├── LandingCmsManager.jsx   # Landing hero, Baba quote, 3-day plan & FAQ CMS
 │   │   │   │   ├── PolicyManager.jsx       # Check-in/out, cancellation & driver allowances CMS
 │   │   │   │   └── YieldManager.jsx        # Dynamic weekend surcharges & seasonal yield CMS
 │   │   │   ├── constants/
 │   │   │   │   └── adminRoutes.js          # Canonical URL map, tabs & document titles
 │   │   │   ├── hooks/useAdminData.js       # Central data hook for all collections & stats
 │   │   │   ├── pages/
-│   │   │   │   ├── AdminLogin.jsx          # Protected staff login with rate limiting
+│   │   │   │   ├── AdminLogin.jsx          # Protected staff login with rate limiting & alpine theme
 │   │   │   │   └── AdminDashboard.jsx      # Deep-link routing orchestrator
 │   │   │   ├── App.jsx
 │   │   │   └── main.jsx
 │   │   └── vite.config.js
 │   │
 │   ├── shared/                             # Centralized Shared Package (@shared)
-│   │   ├── assets/images/                  # 41 centralized, deduplicated image assets
-│   │   ├── components/                     # ArchImage, BackToTop, Button, Container, Icons, Modal
+│   │   ├── assets/images/                  # 42 centralized, deduplicated image assets
+│   │   ├── components/                     # ArchImage, BackToTop, Button, Container, Icons, Modal, Logo
 │   │   ├── constants/assets.js             # Single source of truth for all images
 │   │   ├── context/
 │   │   │   ├── AuthContext.jsx             # Admin authentication state provider
 │   │   │   └── SiteSettingsContext.jsx     # Global site settings & sync listener context
 │   │   ├── utils/
 │   │   │   └── syncBroadcaster.js          # BroadcastChannel cross-app sync engine
-│   │   ├── services/apiClient.js           # Axios API client
+│   │   ├── services/apiClient.js           # Hardened Axios API client with URL normalization
 │   │   └── index.js                        # Barrel exports for `@shared` import alias
 │   └── package.json
 └── README.md
@@ -228,12 +229,15 @@ Himalayan_Retreat/
 ## 🎯 Core Features & Operations Desks
 
 ### 1. Admin Command Portal ([AdminDashboard.jsx](file:///d:/Himalayan_Retreat/Frontend/admin/src/pages/AdminDashboard.jsx))
+- **Alpine Heritage Login Experience ([AdminLogin.jsx](file:///d:/Himalayan_Retreat/Frontend/admin/src/pages/AdminLogin.jsx)):** High-altitude split-screen layout with Himalayan forest green (`#073125`) and heritage gold (`#EAA722`) theme, animated mountain silhouette backdrop, floating ambient particles, 256-bit SSL encrypted feel, and rate-limited credential validation.
 - **Canonical Semantic URLs:** Every operations desk has its own direct URL (e.g. `/rooms`, `/hotel-bookings`, `/travel-bookings`, `/tours`, `/reviews`, `/yield`, `/settings/company`, `/settings/fleet`).
 - **Deep-Link State:** Navigation changes URL history via React Router `<Link>` components, allowing browser back/forward, bookmarks, and opening desks in new tabs.
 - **Staff Access Protection ([ProtectedRoute.jsx](file:///d:/Himalayan_Retreat/Frontend/admin/src/components/ProtectedRoute.jsx)):** Unauthorized visits are remembered in `location.state.from` and redirected back automatically post-login.
-- **Folio Checkout & Invoicing ([FolioInvoiceModal.jsx](file:///d:/Himalayan_Retreat/Frontend/admin/src/components/FolioInvoiceModal.jsx)):** Itemized on-property charges (hearth dining, room heaters, laundry) with printable invoice vouchers.
-- **Digital Guest ID & Police Verification ([GuestIdProofModal.jsx](file:///d:/Himalayan_Retreat/Frontend/admin/src/components/GuestIdProofModal.jsx)):** Upload guest Aadhaar/Passport proof and export compliance Form C Police Register CSV.
-- **Travel Dispatch Hub ([TravelDispatchModal.jsx](file:///d:/Himalayan_Retreat/Frontend/admin/src/components/TravelDispatchModal.jsx)):** Assign hill chauffeurs, license plates (e.g. `UK01-TA-4492`), track train arrival numbers, and log driver fuel allowances.
+- **Guest Folio & Tax Invoice Engine ([FolioInvoiceModal.jsx](file:///d:/Himalayan_Retreat/Frontend/admin/src/components/FolioInvoiceModal.jsx)):** Real-time ledger tracking room tariff, 1-click on-property incidentals (private bonfire, winter oil radiator, Pahadi dinner thali, pooja thali), partial payments, balance calculation, and official printable Form C tax invoice vouchers with direct UPI QR code generator.
+- **Digital Guest ID & Police Verification ([GuestIdProofModal.jsx](file:///d:/Himalayan_Retreat/Frontend/admin/src/components/GuestIdProofModal.jsx)):** Fast digital upload of guest Aadhaar/Passport proof and 1-click export of the compliance Form C Police Register CSV for Uttarakhand Tourism authorities.
+- **Chauffeur Dispatch & Transit Command ([TravelDispatchModal.jsx](file:///d:/Himalayan_Retreat/Frontend/admin/src/components/TravelDispatchModal.jsx)):** Assign dedicated Pahadi drivers, commercial registration plates (e.g. `UK 04 TA 8892`), monitor Kathgodam train arrival numbers & ETAs, log petrol/diesel estimates, calculate net operator margins in real-time, and trigger 1-click formatted WhatsApp dispatch slips to driver and passenger.
+- **Main Website CMS Desk ([LandingCmsManager.jsx](file:///d:/Himalayan_Retreat/Frontend/admin/src/components/LandingCmsManager.jsx)):** Direct live editor for devotional Maharajji greeting, Sri Neem Karoli Baba quote, 3-day pilgrimage itinerary stages, and customer FAQs.
+- **Clean Icon Font Architecture:** Clean, high-resolution vector SVG icon fonts replacing all casual emojis/stickers across table actions, badges, buttons, and control panels.
 
 ### 2. Dynamic Boutique Hotel Showcase ([SuiteShowcase.jsx](file:///d:/Himalayan_Retreat/Frontend/hotel/src/components/SuiteShowcase.jsx))
 - Real-time catalog populated directly from MongoDB Atlas.
@@ -331,13 +335,14 @@ $$\text{Total Fare} = \left(\text{Route Distance (km)} \times \text{Vehicle Rate
 
 ---
 
-## 📸 Centralized Asset Inventory (41 Image Files)
+## 📸 Centralized Asset Inventory (42 Image Files)
 
 All media assets are strictly centralized in [`Frontend/shared/assets/images/`](file:///d:/Himalayan_Retreat/Frontend/shared/assets/images) and exported through [`Frontend/shared/constants/assets.js`](file:///d:/Himalayan_Retreat/Frontend/shared/constants/assets.js). No files are duplicated across individual frontend projects:
 
 | Category | File Name | Export Identifier | Usage Location |
 | :--- | :--- | :--- | :--- |
 | **Holy Sites** | `neem-karoli-baba.jpg` | `babaPortraitImg` | Hero Section reverent arch portrait |
+| | `neem-karoli-baba1.jpg` | `babaNewImg` | Landing devotional hero high-res portrait |
 | | `Kainchi-Dham.webp` | `kainchiWebp` | Dev Bhoomi pillar & Kainchi Darshan card |
 | | `kainchi-dham.jpg` | `kainchiJpg` | High-res alternate ashram perspective |
 | | `Jageshwar-Mahamrityunjaya-Dham.jpg` | `jageshwarImg` | Jageshwar 124 Jyotirlinga temples card |
