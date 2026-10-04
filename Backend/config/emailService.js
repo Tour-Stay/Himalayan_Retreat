@@ -160,7 +160,7 @@ const sendReviewThankYouEmail = async (review) => {
           </div>
 
           <p style="color: #aaa; font-size: 11px; text-align: center; margin-top: 25px; padding-top: 20px; border-top: 1px solid #eee;">
-            The Kasar Himalayan Heights — Kasar Devi, 7,500 FT • Uttarakhand, India<br/>
+            The Kasar Himalayan Heights — Kasar Devi, 6,942 FT • Uttarakhand, India<br/>
             This is an automated message. Please do not reply to this email.
           </p>
         </div>

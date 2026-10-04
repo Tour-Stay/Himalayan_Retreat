@@ -1,0 +1,275 @@
+@import "tailwindcss";
+@source "./**/*.{js,jsx,ts,tsx}";
+@source "../index.html";
+@source "../../shared/**/*.{js,jsx,ts,tsx}";
+
+/* ================================================================
+   THE KASAR HIMALAYAN HEIGHTS (HOTEL) — KUMAON GREEN THEME
+   Tranquil, high-altitude editorial aesthetic inspired by kumaoncollective.com
+   ================================================================ */
+
+:root {
+  --color-pine-dark: #073125;
+  --color-pine-deep: #0B2B21;
+  --color-pine-mid: #12433B;
+  --color-pine-light: #2D604E;
+  --color-sage-accent: #C9F24D;
+  --color-sage-bg: #F4F7F3;
+  --color-sage-card: #FAFBF9;
+  --color-bg-base: #F8FAF7;
+  --color-gold-warm: #C5A059;
+}
+
+/* Base HTML & Body — Increased font sizes for enhanced readability across the whole page */
+html {
+  font-size: 17px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 17.5px;
+  }
+}
+
+body {
+  font-family: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-variant-numeric: lining-nums proportional-nums;
+  -webkit-font-feature-settings: "lnum" 1, "pnum" 1;
+  font-feature-settings: "lnum" 1, "pnum" 1;
+  color: #073125;
+  background-color: #F8FAF7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+}
+
+/* Clean simple ampersand font fallback — targets only the '&' character (U+0026) */
+@font-face {
+  font-family: 'CleanAmp';
+  src: local('Raleway'), local('Inter'), local('Segoe UI'), local('Roboto'), local('Arial'), local('Helvetica Neue');
+  unicode-range: U+0026;
+  font-style: normal;
+}
+
+/* Editorial Serif Headings (Cormorant Garamond / Playfair standard) */
+.font-serif {
+  font-family: 'CleanAmp', 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+  font-variant-numeric: lining-nums proportional-nums;
+  -webkit-font-feature-settings: "lnum" 1, "pnum" 1;
+  font-feature-settings: "lnum" 1, "pnum" 1;
+}
+
+/* Clean ampersand override */
+.clean-amp,
+.font-serif .font-sans,
+.font-cinzel .font-sans {
+  font-family: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+}
+
+/* Classical Roman Inscriptions — Badges, Eyebrows, CTA Buttons */
+.font-cinzel {
+  font-family: 'CleanAmp', 'Cinzel', Georgia, serif;
+  letter-spacing: 0.08em;
+}
+
+/* Devotional Sanskrit & Hindi Chants */
+.font-devanagari {
+  font-family: 'Rozha One', 'Tiro Devanagari Hindi', 'Playfair Display', Georgia, serif;
+}
+
+/* Body Sans — Raleway with lining numerals */
+.font-sans {
+  font-family: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-variant-numeric: lining-nums proportional-nums;
+  -webkit-font-feature-settings: "lnum" 1, "pnum" 1;
+  font-feature-settings: "lnum" 1, "pnum" 1;
+}
+
+/* Clean Lining Numerals */
+.font-numeral,
+.numeral {
+  font-family: 'Raleway', sans-serif !important;
+  font-variant-numeric: lining-nums proportional-nums !important;
+  -webkit-font-feature-settings: "lnum" 1, "pnum" 1 !important;
+  font-feature-settings: "lnum" 1, "pnum" 1 !important;
+}
+
+/* Legacy font-mono redirect */
+.font-mono {
+  font-family: 'Raleway', sans-serif !important;
+  font-variant-numeric: lining-nums proportional-nums !important;
+}
+
+/* Global lining numerals */
+*,
+*::before,
+*::after {
+  font-variant-numeric: lining-nums proportional-nums;
+  -webkit-font-feature-settings: "lnum" 1, "pnum" 1;
+  font-feature-settings: "lnum" 1, "pnum" 1;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: clip;
+  min-height: 100vh;
+}
+
+/* Scrollbar utilities */
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #EBF2EA;
+}
+::-webkit-scrollbar-thumb {
+  background: #073125;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #12433B;
+}
+
+/* ================================================================
+   NAVIGATION LAYOUT CONTROLS
+   ================================================================ */
+@media (min-width: 1024px) {
+  .nav-desktop-menu {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+  }
+
+  .nav-desktop-menu a {
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+  }
+
+  .nav-mobile-btn {
+    display: none !important;
+  }
+
+  .nav-mobile-panel {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1023px) {
+  .nav-desktop-menu {
+    display: none !important;
+  }
+
+  .nav-mobile-btn {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 640px) {
+  .nav-actions-desktop {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+  }
+
+  .nav-actions-desktop a {
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+  }
+}
+
+@media (max-width: 639px) {
+  .nav-actions-desktop {
+    display: none !important;
+  }
+}
+
+/* ================================================================
+   ANIMATIONS & MICRO-INTERACTIONS
+   ================================================================ */
+
+/* Dropdown fade in */
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-dropdown {
+  animation: dropdownFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ================================================================
+   SCROLL REVEAL SAFETY & VISIBILITY (ELIMINATES BLANK SPACES)
+   ================================================================ */
+.reveal,
+.reveal-stagger,
+.reveal-left,
+.reveal-right,
+.reveal-scale {
+  opacity: 1 !important;
+  transform: none !important;
+  visibility: visible !important;
+}
+
+/* Gentle fade-up animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0.2;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeInUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Subtle float */
+@keyframes gentleFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.animate-float {
+  animation: gentleFloat 6s ease-in-out infinite;
+}
+
+/* Card hover lift */
+.card-luxury {
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.card-luxury:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(44, 37, 35, 0.08), 0 4px 16px rgba(197, 160, 89, 0.12);
+}

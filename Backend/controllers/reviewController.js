@@ -11,7 +11,12 @@ const { sendReviewThankYouEmail } = require('../config/emailService');
 // @access  Public
 const getAllReviews = async (req, res) => {
   try {
-    const reviews = await TravelReview.find({ isApproved: true })
+    const filter = { isApproved: true };
+    const category = req.query?.category || req.category;
+    if (category) {
+      filter.category = category;
+    }
+    const reviews = await TravelReview.find(filter)
       .sort({ createdAt: -1 });
     res.status(200).json(reviews);
   } catch (error) {
@@ -24,7 +29,11 @@ const getAllReviews = async (req, res) => {
 // @access  Protected (Admin)
 const getAdminReviews = async (req, res) => {
   try {
-    const reviews = await TravelReview.find().sort({ createdAt: -1 });
+    const filter = {};
+    if (req.query.category) {
+      filter.category = req.query.category;
+    }
+    const reviews = await TravelReview.find(filter).sort({ createdAt: -1 });
     res.status(200).json(reviews);
   } catch (error) {
     res.status(500).json({ message: 'Server error.', error: error.message });
@@ -36,7 +45,7 @@ const getAdminReviews = async (req, res) => {
 // @access  Public
 const createReview = async (req, res) => {
   try {
-    const { name, email, location, tripType, rating, review } = req.body;
+    const { name, email, location, tripType, stayedIn, category, rating, review } = req.body;
 
     if (!name || !email || !review) {
       return res.status(400).json({ message: 'Name, email, and review text are required.' });
@@ -66,6 +75,8 @@ const createReview = async (req, res) => {
       email,
       location: location || '',
       tripType: tripType || '',
+      stayedIn: stayedIn || '',
+      category: category || 'travel',
       rating: Number(rating) || 5,
       review,
       photos,

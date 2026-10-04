@@ -1,0 +1,251 @@
+// =========================================================================
+// REAL DATA: Transit Distances, Travel Times & Routes
+// =========================================================================
+export const routeData = {
+  dhams: [
+    {
+      name: 'Kainchi Dham Ashram',
+      dedication: 'Sri Neem Karoli Baba Maharaj Sanctuary',
+      distance: '45 km',
+      time: '1.5 hrs',
+      route: 'Via Almora - Khairna - Bhowali Road (NH 109)',
+      roadCondition: 'Smooth Paved Hill Highway',
+      recommendedVehicle: 'Sedan / Innova Crysta',
+      highlight: 'Established in 1962 on the banks of the Kshipra river. Daily evening aarti and Hanuman Chalisa recitation.',
+    },
+    {
+      name: 'Jageshwar Mahamrityunjaya Dham',
+      dedication: '124 Ancient 8th-Century Jyotirlinga Stone Shrines',
+      distance: '35 km',
+      time: '1.2 hrs',
+      route: 'Via Barechhina - Artola - Jageshwar Deodar Valley',
+      roadCondition: 'Scenic Deodar Forest Road',
+      recommendedVehicle: 'Innova Crysta / Sedan',
+      highlight: 'Cluster of 124 Nagara-style stone temples surrounded by towering deodar trees. Dedicated priest puja liaison available.',
+    },
+    {
+      name: "Kasar Devi Temple & Crank's Ridge",
+      dedication: '2nd Century Devi Shrine & Van Allen Geomagnetic Belt',
+      distance: '800 meters',
+      time: '5 min walk',
+      route: 'Direct walking ridge trail from resort',
+      roadCondition: 'Pine Needle Footpath & Stone Steps',
+      recommendedVehicle: 'Walking / Resort Shuttle',
+      highlight: 'Positioned on the geomagnetic belt shared only with Stonehenge and Machu Picchu. Famous for its natural peace and meditation calm.',
+    },
+    {
+      name: 'Baijnath Temple Complex',
+      dedication: '12th Century Katyuri Dynasty Shiva-Parvati Temple',
+      distance: '72 km',
+      time: '2.5 hrs',
+      route: 'Via Kausani - Garur Highway along Gomti river',
+      roadCondition: 'Scenic Valley Road',
+      recommendedVehicle: 'Innova Crysta / Urbania',
+      highlight: 'Ancient stone temple complex on the banks of Gomti river with sacred fish pools and panoramic Himalayan foothills.',
+    },
+  ],
+  transit: [
+    {
+      name: 'Kathgodam Railway Station (KGM)',
+      dedication: 'Primary Railhead for Shatabdi, Ranikhet & Kathgodam Express',
+      distance: '85 km',
+      time: '3 hrs',
+      route: 'Via Kathgodam - Bhimtal - Bhowali - Khairna - Almora',
+      roadCondition: 'Well-maintained National Highway 109',
+      recommendedVehicle: 'Dzire Sedan / Innova Crysta SUV',
+      highlight: 'Platform meet-and-greet by our friendly local drivers with luggage assistance and direct hotel drop.',
+    },
+    {
+      name: 'Pantnagar Airport (PGH)',
+      dedication: 'Nearest Domestic Airport (Daily Flights from Delhi & Dehradun)',
+      distance: '120 km',
+      time: '4.0 hrs',
+      route: 'Via Rudrapur - Haldwani - Kathgodam - Almora',
+      roadCondition: 'Highway transition to Ghat roads',
+      recommendedVehicle: 'Innova Crysta / High-Clearance Fleet',
+      highlight: 'Punctual flight reception with complimentary bottled water and hill refreshment halt at Bhowali.',
+    },
+    {
+      name: 'New Delhi / NCR (Indira Gandhi Airport)',
+      dedication: 'Capital Road Corridor via Moradabad & Rampur',
+      distance: '375 km',
+      time: '8.5 - 9 hrs',
+      route: 'Via Delhi - Hapur Bypass - Moradabad - Rampur - Kathgodam - Almora',
+      roadCondition: 'Expressway transition to Kumaon hills',
+      recommendedVehicle: 'Toyota Innova Crysta / Luxury Urbania',
+      highlight: 'Comfortable long-haul private chauffeur with scheduled highway sanitised rest stops and direct mountain ascent.',
+    },
+  ],
+  excursions: [
+    {
+      name: 'Binsar Wildlife Sanctuary (Zero Point)',
+      dedication: 'Dense Oak-Rhododendron Forest & 300 km Snow Crests',
+      distance: '22 km',
+      time: '45 mins',
+      route: 'Via Binsar Forest Gate & Upper Ridge',
+      roadCondition: 'Sanctuary Forest Road (Forest Entry Fee Applicable)',
+      recommendedVehicle: 'High-Clearance SUV / Innova',
+      highlight: 'Uninterrupted panoramic views of Kedarnath, Chaukhamba, Trishul, Nanda Devi and Panchachuli peaks.',
+    },
+    {
+      name: 'Mukteshwar Dham & Chauli ki Jali',
+      dedication: '350-Year-Old Shiva Temple & Overhanging Cliffs',
+      distance: '48 km',
+      time: '1.8 hrs',
+      route: 'Via Bhowali - Ramgarh Apple Belt - Mukteshwar',
+      roadCondition: 'Winding Ridge Roads through Fruit Orchards',
+      recommendedVehicle: 'Innova Crysta / Sedan',
+      highlight: 'Dramatic cliff views over the Ramgarh valley and ancient stone shrine at 6,942 ft elevation.',
+    },
+    {
+      name: 'Ranikhet Army Cantonment & Chaubatia Orchards',
+      dedication: 'Kumaon Regimental Centre & British Heritage Greens',
+      distance: '46 km',
+      time: '1.5 hrs',
+      route: 'Via Almora - Kosi - Ranikhet Road',
+      roadCondition: 'Gentle Hill Road',
+      recommendedVehicle: 'Sedan / Innova Crysta',
+      highlight: 'Historic pine forests, high-altitude golf course, apple research orchards, and serene cantonment architecture.',
+    },
+  ],
+};
+
+import { snowViewSuiteImg, chaletSuiteImg, atticSuiteImg, innovaImg, sedanImg, minibusImg } from '@shared';
+
+// =========================================================================
+// REAL DATA: Suite Showcase (The Boutique Hotel)
+// =========================================================================
+export const suitesData = [
+  {
+    id: 'nanda-devi',
+    name: 'Nanda Devi Panoramic Heated Suite',
+    tag: 'Signature Sunrise Suite',
+    tariff: 'Available on Request',
+    unit: 'includes Satvik breakfast',
+    size: '420 sq ft',
+    image: snowViewSuiteImg,
+    features: [
+      'Dual-zone electric under-bed blankets for winter comfort',
+      'Private cedar wood balcony facing Trishul & Nanda Devi peaks',
+      'Handcrafted Kumaoni stone fireplace with pine firewood',
+      '24/7 continuous high-pressure heated water & heater',
+      'King bed with premium down duvets & organic cotton linens',
+    ],
+  },
+  {
+    id: 'cedar-chalet',
+    name: 'Cedar Alpine Family Chalet',
+    tag: 'Two-Bedroom Residence',
+    tariff: 'Available on Request',
+    unit: 'includes Satvik breakfast',
+    size: '680 sq ft',
+    image: chaletSuiteImg,
+    features: [
+      'Two interconnected private bedrooms with en-suite baths',
+      'Spacious living lounge with wood burning fireplace & books',
+      'Private panoramic garden deck with morning tea seating',
+      'Satvik in-room tea & coffee bar with hill herbal infusions',
+      'Accommodates up to 4 adults comfortably + 2 children',
+    ],
+  },
+  {
+    id: 'attic-sanctuary',
+    name: "Crank's Ridge Attic Glass Suite",
+    tag: 'Peaceful Mountain Retreat',
+    tariff: 'Available on Request',
+    unit: 'includes Satvik breakfast',
+    size: '360 sq ft',
+    image: atticSuiteImg,
+    features: [
+      'Angled pine wood roof with glass ceiling for stargazing',
+      'Private meditation corner overlooking deodar valley',
+      'Electric bed warming blankets & warm room heater',
+      'Completely quiet with zero road traffic noise',
+      'Dedicated work desk with fast high-speed Wi-Fi',
+    ],
+  },
+];
+
+// =========================================================================
+// REAL DATA: Fleet Showcase (Chauffeured Mountain Fleet)
+// =========================================================================
+export const fleetData = [
+  {
+    id: 'innova',
+    name: 'Toyota Innova Crysta (Heated Cabin)',
+    type: '6+1 Luxury High-Clearance MPV',
+    tag: 'Most Recommended for Hill Roads',
+    rateKathgodam: 'Station Transfer',
+    rateDelhi: 'Delhi NCR Pickup',
+    image: innovaImg,
+    specs: [
+      'Accommodates 6 passengers + 4 large check-in bags comfortably',
+      'Individual rear reclining captain seats with AC & heating',
+      'High ground clearance ideal for high-altitude Kumaon hill roads',
+      'Driven by licensed native Pahadi chauffeurs with 10+ years experience',
+      'Dedicated temple halts at Kainchi Dham and Jageshwar',
+    ],
+  },
+  {
+    id: 'sedan',
+    name: 'Maruti Suzuki Dzire (Private Mountain Sedan)',
+    type: '4+1 Compact Executive Sedan',
+    tag: 'Best for Couples & Small Families',
+    rateKathgodam: 'Station Transfer',
+    rateDelhi: 'Delhi NCR Pickup',
+    image: sedanImg,
+    specs: [
+      'Comfortable seating for 3-4 passengers + 2 medium bags',
+      'Clean sanitised interior with phone chargers & water bottles',
+      'Smooth hill cornering and economical transfers',
+      'Punctual Kathgodam station pickup and luggage assistance',
+      'Dedicated hill-expert chauffeur for temple circuits',
+    ],
+  },
+  {
+    id: 'urbania',
+    name: 'Force Urbania Luxury Minibus',
+    type: '12+1 Executive Pilgrimage Carrier',
+    tag: 'Large Family & Group Darshan',
+    rateKathgodam: 'Station Transfer',
+    rateDelhi: 'Delhi NCR Pickup',
+    image: minibusImg,
+    specs: [
+      '12 plush individual pushback reclining leather seats',
+      'Extra-large panoramic glass windows for mountain sight-seeing',
+      'Dedicated rear luggage hold for 12+ large suitcases',
+      'Ideal for joint family pilgrimages to Kainchi Dham & Jageshwar',
+      'Hill-certified driver and co-driver support on long circuits',
+    ],
+  },
+];
+
+// =========================================================================
+// REAL DATA: Authentic Visitor FAQs
+// =========================================================================
+export const faqsData = [
+  {
+    q: 'How do I arrange a darshan at Kainchi Dham Ashram from The Kasar Himalayan Heights?',
+    a: 'Kainchi Dham Ashram is located 45 km (~1.5 hrs scenic drive). Our private cabs depart early morning for tranquil aarti and darshan.',
+  },
+  {
+    q: 'Are the suites properly heated during the winter months (November to February)?',
+    a: 'Yes. All rooms include dual-zone electric heating, radiators, 24/7 hot water, and select suites feature cozy wood-burning fireplaces.',
+  },
+  {
+    q: 'Can your chauffeured cabs pick us up directly from Kathgodam Railway Station?',
+    a: 'Yes. Our hill chauffeurs provide direct platform pickup with luggage assistance for Kathgodam trains (85 km, ~3 hrs drive) and Pantnagar Airport.',
+  },
+  {
+    q: 'What makes Kasar Devi and Crank’s Ridge so special for peace and meditation?',
+    a: 'Kasar Devi is world-famous for its natural spiritual calm and deep silence, where Swami Vivekananda and seekers from across the world came to meditate facing the Himalayas.',
+  },
+  {
+    q: 'What kind of food is served? Is pure Satvik and vegetarian food available?',
+    a: 'We serve freshly prepared North Indian and local Kumaoni dishes. Pure Satvik food (no onion, no garlic) and fasting meals are available upon request.',
+  },
+  {
+    q: 'What is the best season to view the 180° snow peaks of Trishul and Nanda Devi?',
+    a: 'October to March offers crystal-clear panoramic views of Mount Trishul and Nanda Devi right across your private balcony.',
+  },
+];

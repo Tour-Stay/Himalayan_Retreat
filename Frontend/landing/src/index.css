@@ -1,0 +1,380 @@
+@import "tailwindcss";
+@source "./**/*.{js,jsx,ts,tsx}";
+@source "../index.html";
+@source "../../shared/**/*.{js,jsx,ts,tsx}";
+
+/* ================================================================
+   THE KASAR HIMALAYAN HEIGHTS & EXPEDITIONS — DEVOTIONAL ASHRAM AESTHETIC
+   Faithful to nkbashram.org (EB Garamond / Cormorant Garamond, Marcellus, Cinzel)
+   Traditional Devotional Temple Vibe • Reduced Content • Generous Font Sizes
+   ================================================================ */
+
+body,
+html {
+  font-family: 'EB Garamond', 'Cormorant Garamond', Georgia, serif;
+  font-size: 19px;
+  line-height: 1.7;
+  color: #FFFFFF;
+  background-color: #12433B;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Exact Reference Colors from nkbashram.org */
+:root {
+  --nkb-green: #12433B;
+  --nkb-green-dark: #0D332D;
+  --nkb-maroon: #541508;
+  --nkb-maroon-dark: #421006;
+  --nkb-gold: #EAA722;
+  --nkb-gold-hover: #D98E16;
+  --nkb-sand: #E7D2B6;
+  --nkb-cream: #FAF5EC;
+}
+
+/* Devotional Pill Button (from nkbashram.org) */
+.btn-nkb-gold {
+  background-color: #EAA722;
+  color: #12433B;
+  font-family: 'Cinzel', 'EB Garamond', serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-radius: 9999px;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 14px rgba(234, 167, 34, 0.35);
+}
+
+.btn-nkb-gold:hover {
+  background-color: #D98E16;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(234, 167, 34, 0.5);
+}
+
+/* Clean simple ampersand font fallback — targets only the '&' character (U+0026) */
+@font-face {
+  font-family: 'CleanAmp';
+  src: local('EB Garamond'), local('Raleway'), local('Inter'), local('Segoe UI'), local('Roboto'), local('Arial'), local('Helvetica Neue');
+  unicode-range: U+0026;
+  font-style: normal;
+}
+
+/* Traditional Devotional Serif Headings */
+.font-serif {
+  font-family: 'CleanAmp', 'Cormorant Garamond', 'EB Garamond', Georgia, serif;
+  letter-spacing: 0.01em;
+}
+
+/* Classical Inscriptions & Temple Monograms */
+.font-cinzel {
+  font-family: 'CleanAmp', 'Cinzel', 'Marcellus', Georgia, serif;
+  letter-spacing: 0.08em;
+}
+
+/* Clean ampersand override */
+.clean-amp,
+.font-serif .font-sans,
+.font-cinzel .font-sans {
+  font-family: 'EB Garamond', Georgia, serif !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+}
+
+/* Sacred Sanskrit / Hindi Scripture Text */
+.font-devanagari {
+  font-family: 'Tiro Devanagari Hindi', 'EB Garamond', Georgia, serif;
+}
+
+/* Secondary Clean Reading Text */
+.font-sans {
+  font-family: 'EB Garamond', Georgia, serif;
+}
+
+/* Clean Lining Numerals */
+.font-numeral,
+.numeral {
+  font-family: 'Raleway', sans-serif !important;
+  font-variant-numeric: lining-nums proportional-nums !important;
+  -webkit-font-feature-settings: "lnum" 1, "pnum" 1 !important;
+  font-feature-settings: "lnum" 1, "pnum" 1 !important;
+}
+
+/* Legacy font-mono redirect */
+.font-mono {
+  font-family: 'Raleway', sans-serif !important;
+  font-variant-numeric: lining-nums proportional-nums !important;
+}
+
+/* Global lining numerals */
+*,
+*::before,
+*::after {
+  font-variant-numeric: lining-nums proportional-nums;
+  -webkit-font-feature-settings: "lnum" 1, "pnum" 1;
+  font-feature-settings: "lnum" 1, "pnum" 1;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: clip;
+  min-height: 100vh;
+}
+
+/* ================================================================
+   NAVIGATION LAYOUT CONTROLS
+   ================================================================ */
+@media (min-width: 1024px) {
+  .nav-desktop-menu {
+    display: flex !important;
+  }
+
+  .nav-mobile-btn {
+    display: none !important;
+  }
+
+  .nav-mobile-panel {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1023px) {
+  .nav-desktop-menu {
+    display: none !important;
+  }
+
+  .nav-mobile-btn {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 640px) {
+  .nav-actions-desktop {
+    display: flex !important;
+  }
+}
+
+@media (max-width: 639px) {
+  .nav-actions-desktop {
+    display: none !important;
+  }
+}
+
+/* ================================================================
+   ANIMATIONS & MICRO-INTERACTIONS
+   ================================================================ */
+
+/* Dropdown fade in */
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-dropdown {
+  animation: dropdownFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Gentle fade-up for scroll reveals */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeInUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Subtle float for hero image */
+@keyframes gentleFloat {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.animate-float {
+  animation: gentleFloat 6s ease-in-out infinite;
+}
+
+/* Subtle shimmer for gold accents */
+@keyframes shimmer {
+  0% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.6;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+/* Image zoom on hover */
+.img-zoom {
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.img-zoom:hover {
+  transform: scale(1.03);
+}
+
+/* Premium card hover lift */
+.card-hover {
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(44, 37, 35, 0.08), 0 4px 12px rgba(197, 160, 89, 0.12);
+}
+
+/* Gold underline animation */
+.gold-underline {
+  position: relative;
+}
+
+.gold-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: #C5A059;
+  transition: width 0.3s ease;
+}
+
+.gold-underline:hover::after {
+  width: 100%;
+}
+
+/* Gradient text for premium headlines */
+.text-gradient-gold {
+  background: linear-gradient(135deg, #C5A059 0%, #E8C87A 50%, #C5A059 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Smooth Luxury Back-to-Top Button */
+.back-to-top {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 40;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #7C1D23;
+  color: #FDFBF7;
+  border: 1.5px solid rgba(197, 160, 89, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(44, 37, 35, 0.25);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0;
+  transform: translateY(16px);
+  pointer-events: none;
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.back-to-top:hover {
+  background: #5C151A;
+  border-color: #C5A059;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(124, 29, 35, 0.35);
+}
+
+/* ================================================================
+   DEVOTIONAL SAFFRON & TEMPLE GLOW AESTHETICS
+   ================================================================ */
+
+/* Diya Aarti Flicker Animation */
+@keyframes diyaAarti {
+  0%, 100% {
+    opacity: 0.85;
+    transform: scale(1);
+    filter: drop-shadow(0 0 12px rgba(224, 90, 27, 0.45));
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+    filter: drop-shadow(0 0 20px rgba(230, 81, 0, 0.65));
+  }
+}
+
+.animate-diya {
+  animation: diyaAarti 3.5s ease-in-out infinite;
+}
+
+/* Sacred Saffron Halo Glow */
+.saffron-halo {
+  background: radial-gradient(circle, rgba(224, 90, 27, 0.28) 0%, rgba(212, 175, 55, 0.16) 45%, transparent 75%);
+}
+
+/* Saffron Gradient Text */
+.text-gradient-saffron {
+  background: linear-gradient(135deg, #C84B0F 0%, #E05A1B 50%, #B83E0A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Sacred Saffron Button */
+.btn-saffron {
+  background: linear-gradient(135deg, #C84B0F 0%, #E05A1B 50%, #B83E0A 100%);
+  color: #FFFDF9;
+  box-shadow: 0 4px 16px rgba(200, 75, 15, 0.3);
+  transition: all 0.3s ease;
+}
+
+.btn-saffron:hover {
+  background: linear-gradient(135deg, #A83707 0%, #C84B0F 50%, #9E3304 100%);
+  box-shadow: 0 6px 22px rgba(200, 75, 15, 0.45);
+  transform: translateY(-1px);
+}
+
+/* Sacred Temple Card Kesariya Border Trim */
+.temple-card-saffron {
+  border: 1px solid rgba(200, 75, 15, 0.22);
+  transition: all 0.35s ease;
+}
+
+.temple-card-saffron:hover {
+  border-color: rgba(200, 75, 15, 0.55);
+  box-shadow: 0 12px 36px rgba(200, 75, 15, 0.12);
+}

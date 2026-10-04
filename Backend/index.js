@@ -26,14 +26,41 @@ const loginLimiter = rateLimit({
 });
 app.use('/api/auth/login', loginLimiter);
 
-// CORS
-app.use(cors());
+// CORS: Explicitly whitelist all 4 frontend monorepo ports (5173, 5174, 5175, 5176)
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',').map((o) => o.trim())
+  : [
+      'http://localhost:5173',
+      'http://localhost:5174',
+      'http://localhost:5175',
+      'http://localhost:5176',
+    ];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(null, true);
+    },
+    credentials: true,
+  })
+);
 
 // Body Parser
 app.use(express.json());
 
-// NoSQL Injection Sanitization: Strips out $ and . from req.body/query/params
-// Temporarily removed express-mongo-sanitize to fix server crash. Mongoose strict routing protects us.
+// NoSQL Injection Sanitization: Strips prohibited MongoDB operators ($ and .) from request inputs
+app.use((req, res, next) => {
+  if (req.body && typeof req.body === 'object') {
+    mongoSanitize.sanitize(req.body);
+  }
+  if (req.params && typeof req.params === 'object') {
+    mongoSanitize.sanitize(req.params);
+  }
+  next();
+});
 
 // Basic Route
 app.get('/', (req, res) => {
@@ -44,6 +71,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/hotel', require('./routes/hotelRoutes'));
 app.use('/api/travel', require('./routes/travelRoutes'));
+app.use('/api/settings', require('./routes/settingsRoutes'));
 
 // Start server
 const PORT = process.env.PORT || 5000;

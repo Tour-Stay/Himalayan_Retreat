@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#111827"/>
+      <stop offset="1" stop-color="#1d2740"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f3dfbd"/>
+      <stop offset="1" stop-color="#bfa88e"/>
+    </linearGradient>
+    <radialGradient id="glow">
+      <stop offset="0" stop-color="#fff8e9" stop-opacity=".9"/>
+      <stop offset=".55" stop-color="#f1dfbd" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#f1dfbd" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="512" height="512" rx="92" fill="url(#bg)"/>
+
+  <!-- sun glow -->
+  <circle cx="256" cy="178" r="116" fill="url(#glow)"/>
+
+  <!-- radial rays -->
+  <g fill="#d9dbe0" opacity=".28">
+    <path d="M247 177L210 18L238 12L257 174Z"/>
+    <path d="M263 177L274 12L302 17L273 179Z"/>
+    <path d="M252 177L133 43L155 28L264 173Z"/>
+    <path d="M260 180L353 31L378 45L270 187Z"/>
+    <path d="M246 182L53 91L68 66L253 174Z"/>
+    <path d="M268 184L448 76L461 101L270 193Z"/>
+    <path d="M245 190L14 177L16 149L249 179Z"/>
+    <path d="M269 191L496 151L500 180L271 199Z"/>
+  </g>
+
+  <!-- temple roof and body -->
+  <path d="M119 410V299L150 263L183 235L215 213L256 181L297 213L329 235L362 263L393 299V410Z"
+        fill="url(#gold)"/>
+  <path d="M159 410V291L193 263L225 244L256 218L287 244L319 263L353 291V410Z"
+        fill="#18213a"/>
+
+  <!-- central sanctum -->
+  <path d="M198 410V304L218 284L256 258L294 284L314 304V410Z" fill="url(#gold)"/>
+  <path d="M226 410V315L256 291L286 315V410Z" fill="#18213a"/>
+  <path d="M239 410V325L256 311L273 325V410Z" fill="url(#gold)"/>
+
+  <!-- side arches -->
+  <path d="M145 410V319Q145 287 171 276L184 293V410Z" fill="#18213a"/>
+  <path d="M367 410V319Q367 287 341 276L328 293V410Z" fill="#18213a"/>
+
+  <!-- राम medallion -->
+  <circle cx="256" cy="178" r="31" fill="#6d7079" opacity=".9"/>
+  <text x="256" y="188" text-anchor="middle"
+        font-family="Noto Serif Devanagari, Devanagari Sangam MN, serif"
+        font-size="28" fill="#f7ead5">राम</text>
+
+  <!-- base -->
+  <path d="M105 410H407L424 438H88Z" fill="#cdb99f"/>
+</svg>

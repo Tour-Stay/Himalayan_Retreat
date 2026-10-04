@@ -23,6 +23,16 @@ const travelReviewSchema = new mongoose.Schema({
     trim: true,
     default: '',
   },
+  stayedIn: {
+    type: String,
+    trim: true,
+    default: '',
+  },
+  category: {
+    type: String,
+    enum: ['hotel', 'travel', 'general'],
+    default: 'travel',
+  },
 
   // Review content
   rating: {
@@ -37,6 +47,10 @@ const travelReviewSchema = new mongoose.Schema({
     required: true,
     trim: true,
     maxlength: 1000,
+  },
+  comment: {
+    type: String,
+    trim: true,
   },
 
   // Photo URLs (uploaded to Cloudinary)
