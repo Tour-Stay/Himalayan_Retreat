@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
-import { Container, ArrowUpRightIcon, SITE_CONFIG } from '@shared';
-import { destinationsData } from '../data/travelData';
+import { Container, ArrowUpRightIcon, SITE_CONFIG, useSiteSettings, kainchiWebp } from '@shared';
+import { destinationsData, mergeDestinationsWithSettings } from '../data/travelData';
 
 const PilgrimageCircuits = ({ onSelectDestination }) => {
   const [activeTab, setActiveTab] = useState('all');
+  const { settings } = useSiteSettings();
+
+  const destinationsList = React.useMemo(() => {
+    return mergeDestinationsWithSettings(settings?.destinations);
+  }, [settings?.destinations]);
 
   const filtered = activeTab === 'all'
-    ? destinationsData
-    : destinationsData.filter((d) => d.category === activeTab);
+    ? destinationsList
+    : destinationsList.filter((d) => d.category === activeTab);
 
   const handleBookCircuit = (dest) => {
     if (onSelectDestination) {
@@ -80,6 +85,11 @@ const PilgrimageCircuits = ({ onSelectDestination }) => {
                   <img
                     src={dest.image}
                     alt={dest.name}
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      const fallback = destinationsData.find((item) => item.id === dest.id)?.image || kainchiWebp;
+                      e.currentTarget.src = fallback;
+                    }}
                     className="w-full h-full object-cover group-hover:scale-104 transition-transform duration-700"
                     loading="lazy"
                   />

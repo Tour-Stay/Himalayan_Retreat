@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
-import { Container, ArrowUpRightIcon } from '@shared';
-import { fleetData } from '../data/travelData';
+import { Container, ArrowUpRightIcon, useSiteSettings } from '@shared';
+import { fleetData, mergeFleetWithSettings } from '../data/travelData';
 import VehicleCard from './VehicleCard';
 
 const VehicleFleet = ({ onBookFleet, onQuickView }) => {
   const [filter, setFilter] = useState('all');
+  const { settings } = useSiteSettings();
+
+  const fleetList = React.useMemo(() => {
+    return mergeFleetWithSettings(settings?.cabFleet);
+  }, [settings?.cabFleet]);
 
   const filteredFleet = filter === 'all'
-    ? fleetData
-    : fleetData.filter((v) => {
+    ? fleetList
+    : fleetList.filter((v) => {
         if (filter === 'small') return v.seats <= 4;
         if (filter === 'suv') return v.seats === 6;
         if (filter === 'group') return v.seats > 6;

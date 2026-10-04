@@ -1,8 +1,8 @@
 import { useContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext, Logo, APP_URLS, SITE_CONFIG } from '@shared';
 
-export const AdminHeader = ({ onRefresh, isRefreshing }) => {
+export const AdminHeader = ({ onRefresh, isRefreshing, onNewBooking }) => {
   const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
   const [currentDate, setCurrentDate] = useState('');
@@ -27,11 +27,11 @@ export const AdminHeader = ({ onRefresh, isRefreshing }) => {
     <header className="w-full shrink-0 z-30 bg-[#FDFBF7] border-b border-[#C5A059]/30 text-[#2C2523] shadow-xs">
       <div className="w-full px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
         {/* Brand Crest & Office Title */}
-        <div className="flex items-center gap-3">
+        <Link to="/rooms" className="flex items-center gap-3 hover:opacity-90 transition group">
           <Logo size={38} />
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-cinzel font-bold text-base sm:text-lg tracking-tight text-[#2C2523]">
+              <span className="font-cinzel font-bold text-base sm:text-lg tracking-tight text-[#2C2523] group-hover:text-[#7C1D23] transition-colors">
                 The Kasar Himalayan Heights
               </span>
               <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-cinzel font-semibold uppercase bg-[#FAF6EF] text-[#7C1D23] border border-[#C5A059]/40">
@@ -44,7 +44,7 @@ export const AdminHeader = ({ onRefresh, isRefreshing }) => {
               <span className="font-medium text-[#2C2523]">📅 {currentDate || 'Today'}</span>
             </div>
           </div>
-        </div>
+        </Link>
 
         {/* Action Controls & Live Portals */}
         <div className="flex items-center gap-2 sm:gap-3">
@@ -81,6 +81,16 @@ export const AdminHeader = ({ onRefresh, isRefreshing }) => {
               Cabs & Tours ↗
             </a>
           </div>
+
+          {/* Front Desk + New Booking Quick Button */}
+          <button
+            onClick={onNewBooking}
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-cinzel font-bold bg-gradient-to-r from-[#7C1D23] to-[#9E3304] hover:from-[#5C151A] hover:to-[#7C1D23] text-[#FDFBF7] border border-[#DFCA9B]/50 transition cursor-pointer shadow-md hover:scale-102"
+            title="Book walk-in or phone reservation immediately"
+          >
+            <span className="text-sm leading-none">+</span>
+            <span>New Booking</span>
+          </button>
 
           {/* Refresh Data Button */}
           <button

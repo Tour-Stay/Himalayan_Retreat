@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { APP_URLS, SITE_CONFIG, PhoneIcon, ArrowUpRightIcon, CarIcon } from '@shared';
+import { APP_URLS, SITE_CONFIG, PhoneIcon, ArrowUpRightIcon, CarIcon, useSiteSettings } from '@shared';
 import Logo from '@shared/components/Logo';
 
 const navLinks = [
@@ -11,6 +11,11 @@ const navLinks = [
 ];
 
 const HotelNavbar = () => {
+  const { settings } = useSiteSettings();
+  const company = settings?.company;
+  const conciergePhone = company?.conciergePhone || SITE_CONFIG.conciergePhone;
+  const elevation = company?.elevation || '6,942 Ft';
+
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -35,16 +40,16 @@ const HotelNavbar = () => {
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#C5A059]"></span>
             <span className="font-semibold text-[#2C2523]">Kasar Devi, Almora</span>
             <span className="text-[#C5A059]">•</span>
-            <span>6,942 Ft Height</span>
+            <span>{elevation} Height</span>
           </div>
 
           <div className="flex items-center gap-3 flex-shrink-0">
             <a
-              href={`tel:${SITE_CONFIG.conciergePhone}`}
+              href={`tel:${conciergePhone}`}
               className="hover:text-[#7C1D23] font-semibold flex items-center gap-1 transition-colors whitespace-nowrap"
             >
               <PhoneIcon className="w-3 h-3 text-[#7C1D23]" />
-              <span>Call: <strong className="text-[#2C2523] font-numeral">{SITE_CONFIG.conciergePhone}</strong></span>
+              <span>Call: <strong className="text-[#2C2523] font-numeral">{conciergePhone}</strong></span>
             </a>
             <span className="text-[#C5A059]/40">|</span>
             <a

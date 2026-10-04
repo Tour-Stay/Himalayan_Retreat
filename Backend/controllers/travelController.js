@@ -326,6 +326,55 @@ const updateTravelPaymentStatus = async (req, res) => {
   }
 };
 
+// @desc    Dispatch travel booking / assign driver
+// @route   PUT /api/travel/bookings/:id/dispatch
+// @access  Protected (Admin only)
+const dispatchTravelBooking = async (req, res) => {
+  try {
+    const {
+      driverName,
+      driverPhone,
+      vehiclePlate,
+      trainNumber,
+      trainEta,
+      luggageCount,
+      fuelEstimate,
+      driverAllowance,
+      fareToCollect,
+      dispatchNotes,
+    } = req.body;
+
+    const booking = await TravelBooking.findById(req.params.id);
+    if (!booking) {
+      return res.status(404).json({ message: 'Travel booking not found.' });
+    }
+
+    booking.dispatchDetails = {
+      driverName: driverName !== undefined ? driverName : (booking.dispatchDetails?.driverName || ''),
+      driverPhone: driverPhone !== undefined ? driverPhone : (booking.dispatchDetails?.driverPhone || ''),
+      vehiclePlate: vehiclePlate !== undefined ? vehiclePlate : (booking.dispatchDetails?.vehiclePlate || ''),
+      trainNumber: trainNumber !== undefined ? trainNumber : (booking.dispatchDetails?.trainNumber || ''),
+      trainEta: trainEta !== undefined ? trainEta : (booking.dispatchDetails?.trainEta || ''),
+      luggageCount: luggageCount !== undefined ? Number(luggageCount) : (booking.dispatchDetails?.luggageCount || 0),
+      fuelEstimate: fuelEstimate !== undefined ? Number(fuelEstimate) : (booking.dispatchDetails?.fuelEstimate || 0),
+      driverAllowance: driverAllowance !== undefined ? Number(driverAllowance) : (booking.dispatchDetails?.driverAllowance || 0),
+      fareToCollect: fareToCollect !== undefined ? Number(fareToCollect) : (booking.dispatchDetails?.fareToCollect || booking.totalAmount || 0),
+      dispatchNotes: dispatchNotes !== undefined ? dispatchNotes : (booking.dispatchDetails?.dispatchNotes || ''),
+      dispatchedAt: new Date(),
+    };
+
+    // Auto-confirm booking if it was still pending
+    if (booking.status === 'pending') {
+      booking.status = 'confirmed';
+    }
+
+    await booking.save();
+    res.status(200).json({ message: 'Driver dispatched and booking updated successfully.', booking });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error.', error: error.message });
+  }
+};
+
 module.exports = {
   getAllTours,
   getTourById,
@@ -337,4 +386,5 @@ module.exports = {
   updateTravelBookingStatus,
   updateTravelPaymentStatus,
   deleteTravelBooking,
+  dispatchTravelBooking,
 };

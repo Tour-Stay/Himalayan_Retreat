@@ -1,7 +1,10 @@
 import React from 'react';
-import { Container, Divider, ArchImage, APP_URLS, babaPortraitImg } from '@shared';
+import { Container, Divider, ArchImage, APP_URLS, babaPortraitImg, useSiteSettings } from '@shared';
 
 const HeroMaharajji = () => {
+  const { settings } = useSiteSettings();
+  const hero = settings?.landingHero || {};
+
   return (
     <section
       id="maharajji"
@@ -27,7 +30,9 @@ const HeroMaharajji = () => {
             {/* Sacred Kesariya Devotional Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C84B0F]/10 border border-[#C84B0F]/30 text-[#C84B0F] text-xs font-semibold uppercase tracking-wider mb-4 shadow-xs">
               <span className="text-sm animate-diya inline-block">🪔</span>
-              <span className="font-devanagari text-sm">॥ पावन कैंची धाम • देवभूमि उत्तराखण्ड ॥</span>
+              <span className="font-devanagari text-sm">
+                {hero.devotionalGreeting ? `॥ ${hero.devotionalGreeting} ॥` : '॥ पावन कैंची धाम • देवभूमि उत्तराखण्ड ॥'}
+              </span>
             </div>
 
             {/* Sanskrit Blessing Header */}
@@ -37,7 +42,7 @@ const HeroMaharajji = () => {
               </span>
               <p className="text-xs sm:text-sm font-sans tracking-wide text-[#C84B0F] font-semibold mt-2 flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#E05A1B] inline-block"></span>
-                <span>Kainchi Dham Darshan &bull; Kasar Devi, Almora (6,942 FT)</span>
+                <span>Kainchi Dham Darshan &bull; Kasar Devi, Almora ({settings?.company?.elevation || '6,942 FT'})</span>
               </p>
             </div>
 
@@ -52,10 +57,10 @@ const HeroMaharajji = () => {
             {/* Sacred Quote with Kesariya Saffron Accent */}
             <div className="relative pl-5 border-l-3 border-[#E05A1B] my-3 py-3 pr-4 max-w-lg bg-gradient-to-r from-[#FFF3EB] to-[#FAF6EF]/50 rounded-r-2xl shadow-xs">
               <blockquote className="font-serif text-lg sm:text-xl text-[#2C2523] italic leading-relaxed">
-                &ldquo;Love everyone, feed everyone, remember God, and tell the truth.&rdquo;
+                &ldquo;{hero.teachingQuote || 'Love everyone, feed everyone, remember God, and tell the truth.'}&rdquo;
               </blockquote>
               <p className="mt-2 text-xs font-sans text-[#C84B0F] font-bold tracking-wide flex items-center gap-1.5">
-                <span>— Sri Neem Karoli Baba Maharaj</span>
+                <span>— {hero.quoteAttribution || 'Sri Neem Karoli Baba Maharaj'}</span>
                 <span className="text-sm">🔱</span>
               </p>
             </div>
@@ -64,7 +69,8 @@ const HeroMaharajji = () => {
 
             {/* Welcome Statement — Simple & friendly */}
             <p className="text-base text-[#5C5350] leading-relaxed max-w-lg font-normal">
-              Welcome to The Kasar Himalayan Heights in Kasar Devi, Almora. Whether you are visiting Kainchi Dham, exploring ancient Kumaon temples, or traveling with family, enjoy cozy heated rooms, clear Himalayan sunrise views, and trusted local cab services.
+              {hero.welcomeStatement ||
+                'Welcome to The Kasar Himalayan Heights in Kasar Devi, Almora. Whether you are visiting Kainchi Dham, exploring ancient Kumaon temples, or traveling with family, enjoy cozy heated rooms, clear Himalayan sunrise views, and trusted local cab services.'}
             </p>
 
             {/* Clear CTA Action Buttons with Saffron Glow */}

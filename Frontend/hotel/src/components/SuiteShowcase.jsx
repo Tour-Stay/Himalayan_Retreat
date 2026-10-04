@@ -11,12 +11,13 @@ const getShortName = (name) => {
   return name;
 };
 
-const SuiteShowcase = ({ onSelectSuite, onOpenQuickView }) => {
+const SuiteShowcase = ({ onSelectSuite, onOpenQuickView, rooms }) => {
+  const suiteList = (rooms && rooms.length > 0) ? rooms : mockRooms;
   const [activeSuiteIndex, setActiveSuiteIndex] = useState(0);
   const [activeImgIndex, setActiveImgIndex] = useState(0);
 
-  const activeSuite = mockRooms[activeSuiteIndex] || mockRooms[0];
-  const images = activeSuite.imageURLs && activeSuite.imageURLs.length > 0
+  const activeSuite = suiteList[activeSuiteIndex] || suiteList[0];
+  const images = activeSuite?.imageURLs && activeSuite.imageURLs.length > 0
     ? activeSuite.imageURLs
     : [snowViewSuiteImg];
 
@@ -46,7 +47,7 @@ const SuiteShowcase = ({ onSelectSuite, onOpenQuickView }) => {
 
         {/* Suite Selection Tabs — 4-Column Responsive Grid (No horizontal overflow or scrollbar) */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 mb-6">
-          {mockRooms.map((suite, idx) => (
+          {suiteList.slice(0, 4).map((suite, idx) => (
             <button
               key={suite._id}
               onClick={() => handleTabChange(idx)}

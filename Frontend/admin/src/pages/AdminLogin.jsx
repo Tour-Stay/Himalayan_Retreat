@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext, apiClient, Logo, APP_URLS, SITE_CONFIG } from '@shared';
 
 const AdminLogin = () => {
@@ -11,6 +11,7 @@ const AdminLogin = () => {
 
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -24,7 +25,8 @@ const AdminLogin = () => {
       });
 
       login(res.data.token);
-      navigate('/dashboard');
+      const destination = location.state?.from?.pathname || '/rooms';
+      navigate(destination, { replace: true });
     } catch (err) {
       setError(
         err.response?.data?.message || 'Invalid email or password. Please verify your staff credentials.'

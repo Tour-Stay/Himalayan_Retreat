@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { apiClient, Loader, Container, SectionHeading } from '@shared';
+import { apiClient, Loader, Container, SectionHeading, subscribeToUpdates } from '@shared';
 import RoomCard from '../components/RoomCard';
 import { mockRooms } from '../data/mockRooms';
 
@@ -23,6 +23,15 @@ const AllRooms = () => {
       }
     };
     fetchRooms();
+
+    // Instant real-time sync when rooms change in Admin
+    const unsubscribe = subscribeToUpdates('rooms', () => {
+      fetchRooms();
+    });
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   const filterOptions = ['All', 'Snow Peak View', 'Family Chalet', 'Attic Suite'];

@@ -1,8 +1,14 @@
 import React from 'react';
-import { Container, ShieldCheckIcon, CarIcon, CheckCircleIcon, kathgodamStationImg } from '@shared';
+import { Container, ShieldCheckIcon, CarIcon, CheckCircleIcon, kathgodamStationImg, useSiteSettings } from '@shared';
 import { safetyStandards } from '../data/travelData';
 
 const SafetyStandardsGrid = () => {
+  const { settings } = useSiteSettings();
+
+  const standardsList = (settings?.travelPolicies?.safetyStandards && Array.isArray(settings.travelPolicies.safetyStandards) && settings.travelPolicies.safetyStandards.length > 0)
+    ? settings.travelPolicies.safetyStandards
+    : safetyStandards;
+
   return (
     <section id="safety" className="py-20 sm:py-28 px-4 bg-[#FDFBF7] border-b border-[#C5A059]/20">
       <Container size="lg">
@@ -20,7 +26,7 @@ const SafetyStandardsGrid = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {safetyStandards.map((std, idx) => (
+          {standardsList.map((std, idx) => (
             <div
               key={idx}
               className="card-luxury p-7 rounded-3xl bg-[#FAF6EF]/60 border border-[#C5A059]/25 hover:border-[#C84B0F]/35 transition-all shadow-xs flex flex-col justify-between"

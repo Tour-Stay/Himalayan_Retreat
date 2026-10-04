@@ -1,5 +1,5 @@
 import React from 'react';
-import { UsersIcon, LuggageIcon, CheckCircleIcon, ArrowUpRightIcon } from '@shared';
+import { UsersIcon, LuggageIcon, CheckCircleIcon, ArrowUpRightIcon, sedanImg, innovaImg, minibusImg } from '@shared';
 
 const VehicleCard = ({ vehicle, onQuickView, onBook }) => {
   return (
@@ -10,6 +10,12 @@ const VehicleCard = ({ vehicle, onQuickView, onBook }) => {
           <img
             src={vehicle.image}
             alt={vehicle.title}
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              if (vehicle.id === '4-seater') e.currentTarget.src = sedanImg;
+              else if (vehicle.id === '12-seater') e.currentTarget.src = minibusImg;
+              else e.currentTarget.src = innovaImg;
+            }}
             className="w-full h-full object-cover transition-transform duration-700 hover:scale-104"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#1C1817]/75 via-transparent to-transparent"></div>

@@ -13,6 +13,7 @@ const {
   updateTravelBookingStatus,
   updateTravelPaymentStatus,
   deleteTravelBooking,
+  dispatchTravelBooking,
 } = require('../controllers/travelController');
 const {
   getAllReviews,
@@ -46,6 +47,7 @@ router.delete('/tours/:id', authMiddleware, deleteTour); // Delete a tour packag
 router.get('/bookings', authMiddleware, getAllTravelBookings); // View all travel bookings
 router.put('/bookings/:id/status', authMiddleware, updateTravelBookingStatus); // Update status
 router.put('/bookings/:id/payment', authMiddleware, updateTravelPaymentStatus); // Update payment status
+router.put('/bookings/:id/dispatch', authMiddleware, dispatchTravelBooking); // Assign driver & dispatch details
 router.delete('/bookings/:id', authMiddleware, deleteTravelBooking); // Delete booking
 router.get('/reviews/admin', authMiddleware, getAdminReviews); // Fetch ALL reviews (approved & pending)
 router.put('/reviews/:id/approve', authMiddleware, toggleReviewApproval); // Toggle approval status

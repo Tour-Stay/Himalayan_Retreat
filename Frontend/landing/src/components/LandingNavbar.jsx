@@ -14,6 +14,7 @@ import {
   TrainIcon,
   MapIcon,
   HelpCircleIcon,
+  useSiteSettings,
 } from '@shared';
 import Logo from '@shared/components/Logo';
 
@@ -165,6 +166,9 @@ const navItems = [
 ];
 
 const LandingNavbar = () => {
+  const { settings } = useSiteSettings();
+  const company = settings?.company || SITE_CONFIG;
+
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -252,10 +256,10 @@ const LandingNavbar = () => {
             </span>
             <span className="hidden lg:inline text-[#C5A059]/40">|</span>
             <a
-              href={`tel:${SITE_CONFIG.conciergePhone}`}
+              href={`tel:${company.conciergePhone}`}
               className="hidden lg:inline hover:text-[#C84B0F] transition-colors"
             >
-              Yatra Helpline: <strong className="text-[#2C2523] font-numeral font-bold tracking-wide">{SITE_CONFIG.conciergePhone}</strong>
+              Yatra Helpline: <strong className="text-[#2C2523] font-numeral font-bold tracking-wide">{company.conciergePhone}</strong>
             </a>
           </div>
 
@@ -546,7 +550,7 @@ const LandingNavbar = () => {
           </div>
 
           <div className="pt-2 text-center text-xs text-[#6B615E] font-sans">
-            Direct Helpline: <strong className="text-[#2C2523] font-numeral font-bold tracking-wide">{SITE_CONFIG.conciergePhone}</strong>
+            Direct Helpline: <strong className="text-[#2C2523] font-numeral font-bold tracking-wide">{company.conciergePhone}</strong>
           </div>
         </div>
       )}

@@ -1,10 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { apiClient, ArrowUpRightIcon, WhatsAppIcon, SITE_CONFIG } from '@shared';
+import { apiClient, ArrowUpRightIcon, WhatsAppIcon, SITE_CONFIG, useSiteSettings, calculateStayTariff } from '@shared';
 import { mockRooms } from '../data/mockRooms';
 
 const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
   const navigate = useNavigate();
+  const { settings } = useSiteSettings();
+  const policies = settings?.hotelPolicies;
+  const company = settings?.company;
+
+  const checkInTime = policies?.checkInTime || '12:00 PM';
+  const checkOutTime = policies?.checkOutTime || '10:00 AM';
+  const cancellationPolicy = policies?.cancellationPolicy || 'Free cancellation up to 48 hours prior to check-in';
+  const whatsappNumber = company?.whatsappNumber || SITE_CONFIG.whatsappNumber;
+
   const [rooms, setRooms] = useState(mockRooms);
   const [formData, setFormData] = useState({
     room: preSelectedRoom || mockRooms[0]._id,
@@ -17,6 +26,43 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
     specialRequest: '',
   });
   const [loading, setLoading] = useState(false);
+  const [occupiedRoomIds, setOccupiedRoomIds] = useState([]);
+  const [isRoomUnavailable, setIsRoomUnavailable] = useState(false);
+
+  // Real-time server availability check to prevent double bookings
+  useEffect(() => {
+    let isMounted = true;
+    const verifyAvailability = async () => {
+      if (formData.checkInDate && formData.checkOutDate && new Date(formData.checkInDate) < new Date(formData.checkOutDate)) {
+        try {
+          const res = await apiClient.get('/hotel/rooms/check-availability', {
+            params: {
+              checkIn: formData.checkInDate,
+              checkOut: formData.checkOutDate,
+            },
+          });
+          if (isMounted && res.data && Array.isArray(res.data.occupiedRoomIds)) {
+            setOccupiedRoomIds(res.data.occupiedRoomIds);
+            const occupied = res.data.occupiedRoomIds.includes(formData.room);
+            setIsRoomUnavailable(occupied);
+          }
+        } catch (err) {
+          // Graceful fallback: do not block if network check fails
+          if (isMounted) {
+            setOccupiedRoomIds([]);
+            setIsRoomUnavailable(false);
+          }
+        }
+      } else {
+        if (isMounted) {
+          setOccupiedRoomIds([]);
+          setIsRoomUnavailable(false);
+        }
+      }
+    };
+    verifyAvailability();
+    return () => { isMounted = false; };
+  }, [formData.checkInDate, formData.checkOutDate, formData.room]);
 
   // Load rooms from backend, fallback to mockRooms if empty or offline
   useEffect(() => {
@@ -53,18 +99,21 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
   // Find selected room for pricing calculation
   const selectedRoomObj = rooms.find((r) => r._id === formData.room) || rooms[0];
 
-  // Calculate nights and total
-  let nights = 0;
-  let totalPrice = 0;
-  if (formData.checkInDate && formData.checkOutDate) {
-    const d1 = new Date(formData.checkInDate);
-    const d2 = new Date(formData.checkOutDate);
-    const diffTime = d2.getTime() - d1.getTime();
-    nights = Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
-    if (selectedRoomObj) {
-      totalPrice = nights * (selectedRoomObj.pricePerNight || 0);
+  // Dynamic yield & seasonal pricing calculation
+  const pricingResult = useMemo(() => {
+    if (!selectedRoomObj || !formData.checkInDate || !formData.checkOutDate) {
+      return { totalAmount: 0, avgPricePerNight: selectedRoomObj?.pricePerNight || 0, nights: 0, hasSurcharge: false, activeSurchargeReason: '' };
     }
-  }
+    return calculateStayTariff(
+      selectedRoomObj.pricePerNight,
+      formData.checkInDate,
+      formData.checkOutDate,
+      settings?.pricingRules
+    );
+  }, [selectedRoomObj, formData.checkInDate, formData.checkOutDate, settings?.pricingRules]);
+
+  const nights = pricingResult.nights;
+  const totalPrice = pricingResult.totalAmount;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -116,19 +165,32 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
           required
           className="w-full px-4 py-3 rounded-xl border border-gold/30 bg-ivory text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-gold/50 transition cursor-pointer"
         >
-          {rooms.map((room) => (
-            <option key={room._id} value={room._id}>
-              {room.name} — ₹{room.pricePerNight?.toLocaleString()}/night
-            </option>
-          ))}
+          {rooms.map((room) => {
+            const isOccupied = occupiedRoomIds.includes(room._id);
+            return (
+              <option key={room._id} value={room._id}>
+                {room.name} — ₹{room.pricePerNight?.toLocaleString()}/night
+                {isOccupied ? ' [Reserved for Selected Dates]' : ''}
+              </option>
+            );
+          })}
         </select>
       </div>
+
+      {/* Date Conflict Warning Banner */}
+      {isRoomUnavailable && (
+        <div className="p-3.5 bg-red-50 border border-red-200 rounded-xl flex items-center gap-2.5 text-xs text-red-700 font-semibold shadow-xs">
+          <span className="text-base">⚠️</span>
+          <span>This room is already reserved for the selected dates. Please choose another suite or alternative dates.</span>
+        </div>
+      )}
 
       {/* Date Pickers */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5 font-mono">
-            Check-In
+          <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5 font-mono flex items-center justify-between">
+            <span>Check-In</span>
+            <span className="text-[10px] text-charcoal-muted lowercase font-normal font-sans">({checkInTime})</span>
           </label>
           <input
             type="date"
@@ -142,8 +204,9 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
           />
         </div>
         <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5 font-mono">
-            Check-Out
+          <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5 font-mono flex items-center justify-between">
+            <span>Check-Out</span>
+            <span className="text-[10px] text-charcoal-muted lowercase font-normal font-sans">({checkOutTime})</span>
           </label>
           <input
             type="date"
@@ -231,8 +294,13 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
               {selectedRoomObj.name}
             </span>
             <span className="text-xs text-charcoal-muted">
-              ₹{selectedRoomObj.pricePerNight?.toLocaleString()} × {nights} {nights === 1 ? 'night' : 'nights'}
+              ₹{pricingResult.avgPricePerNight?.toLocaleString()} × {nights} {nights === 1 ? 'night' : 'nights'}
             </span>
+            {pricingResult.hasSurcharge && (
+              <span className="inline-block mt-1 px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 text-[10px] font-medium">
+                ✨ {pricingResult.activeSurchargeReason}
+              </span>
+            )}
           </div>
           <div className="text-right">
             <span className="text-xs text-charcoal-muted block font-mono">Estimated Total</span>
@@ -247,11 +315,17 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
       <div className="space-y-2.5 pt-2">
         <button
           type="submit"
-          disabled={loading}
+          disabled={loading || isRoomUnavailable}
           className="w-full py-4 rounded-xl text-xs uppercase tracking-widest font-semibold bg-maroon hover:bg-maroon-dark text-ivory disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group transition-all duration-300 shadow-md cursor-pointer"
         >
-          <span>{loading ? 'Confirming Booking...' : 'Book Your Room Now'}</span>
-          {!loading && (
+          <span>
+            {loading
+              ? 'Confirming Booking...'
+              : isRoomUnavailable
+              ? 'Dates Unavailable — Select Alternative Room'
+              : 'Book Your Room Now'}
+          </span>
+          {!loading && !isRoomUnavailable && (
             <ArrowUpRightIcon className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5" />
           )}
         </button>
@@ -262,7 +336,7 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
             const text = encodeURIComponent(
               `Hello Kasar Himalayan Heights! I would like to book ${selectedRoomObj?.name || 'a room'} from ${formData.checkInDate || 'upcoming dates'} for ${formData.guests} guest(s).`
             );
-            window.open(`https://wa.me/${SITE_CONFIG.whatsappNumber}?text=${text}`, '_blank');
+            window.open(`https://wa.me/${whatsappNumber}?text=${text}`, '_blank');
           }}
           className="w-full py-3.5 rounded-xl text-xs uppercase tracking-widest font-semibold border border-gold/40 hover:bg-gold/10 text-charcoal flex items-center justify-center gap-2 transition-all duration-300 cursor-pointer"
         >
@@ -272,7 +346,7 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
       </div>
 
       <p className="text-center text-[11px] text-charcoal-muted pt-1">
-        Best rate guarantee • Free cancellation up to 48 hours prior • Free hot breakfast included
+        Best rate guarantee • {cancellationPolicy} • Free hot breakfast included
       </p>
     </form>
   );

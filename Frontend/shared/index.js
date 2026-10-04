@@ -20,6 +20,11 @@ export { default as AnnouncementBar } from './layout/AnnouncementBar';
 
 // Context
 export { AuthContext, AuthProvider } from './context/AuthContext';
+export {
+  SiteSettingsContext,
+  SiteSettingsProvider,
+  useSiteSettings,
+} from './context/SiteSettingsContext';
 
 // Services
 export { default as apiClient } from './services/apiClient';
@@ -30,3 +35,10 @@ export * from './constants/assets';
 
 // Hooks
 export { useScrollReveal, useStaggerReveal, initAutoScrollReveal } from './hooks/useScrollReveal';
+
+// Dynamic Pricing & Yield Engine
+export { calculateStayTariff } from './utils/pricingEngine';
+
+// Real-Time Cross-App Sync Engine
+export { broadcastUpdate, subscribeToUpdates } from './utils/syncBroadcaster';
+

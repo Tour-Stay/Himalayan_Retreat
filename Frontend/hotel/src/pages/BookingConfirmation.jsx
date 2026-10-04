@@ -1,9 +1,12 @@
 import { useLocation, Link } from 'react-router-dom';
-import { SITE_CONFIG, Container, CheckCircleIcon } from '@shared';
+import { SITE_CONFIG, Container, CheckCircleIcon, useSiteSettings } from '@shared';
 
 const BookingConfirmation = () => {
   const location = useLocation();
   const booking = location.state?.booking;
+  const { settings } = useSiteSettings();
+  const company = settings?.company;
+  const whatsappNumber = company?.whatsappNumber || SITE_CONFIG.whatsappNumber;
 
   return (
     <div className="pt-28 pb-24 px-4 min-h-screen flex items-center justify-center bg-[#FDFBF7] font-sans">
@@ -68,7 +71,7 @@ const BookingConfirmation = () => {
               Back to Home
             </Link>
             <a
-              href={`https://wa.me/${SITE_CONFIG.whatsappNumber}?text=${encodeURIComponent(
+              href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
                 `Hello Kasar Himalayan Heights, I have a booking with ID: ${booking?.bookingId || ''}`
               )}`}
               target="_blank"

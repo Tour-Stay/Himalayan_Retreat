@@ -1,4 +1,5 @@
 import { APP_URLS, SITE_CONFIG } from '../constants/siteConfig';
+import { useSiteSettings } from '../context/SiteSettingsContext';
 import Logo from '../components/Logo';
 import {
   PhoneIcon,
@@ -13,12 +14,22 @@ import {
 
 const SiteFooter = () => {
   const currentYear = new Date().getFullYear();
+  let company = SITE_CONFIG;
+
+  try {
+    const { settings } = useSiteSettings();
+    if (settings?.company) {
+      company = { ...SITE_CONFIG, ...settings.company };
+    }
+  } catch (e) {
+    // If not wrapped in SiteSettingsProvider, gracefully use SITE_CONFIG
+  }
 
   const handleWhatsAppClick = () => {
     const message = encodeURIComponent(
       `Hello Concierge! I am planning a visit to Kasar Devi / Kainchi Dham and would like to inquire about suite availability and mountain cab bookings.`
     );
-    window.open(`https://wa.me/${SITE_CONFIG.whatsappNumber}?text=${message}`, '_blank');
+    window.open(`https://wa.me/${company.whatsappNumber}?text=${message}`, '_blank');
   };
 
   return (
@@ -50,12 +61,12 @@ const SiteFooter = () => {
             </button>
 
             <a
-              href={`tel:${SITE_CONFIG.conciergePhone}`}
+              href={`tel:${company.conciergePhone}`}
               className="px-6 py-3.5 rounded-full text-xs uppercase tracking-widest font-semibold border border-[#C5A059]/50 bg-[#FAF6EF] hover:bg-[#C5A059]/15 text-[#2C2523] transition-all flex items-center gap-2.5 cursor-pointer shadow-xs"
               title="Call Almora Desk"
             >
               <PhoneIcon className="w-4 h-4 text-[#7C1D23]" />
-              <span className="font-mono font-bold tracking-wider">{SITE_CONFIG.conciergePhone}</span>
+              <span className="font-mono font-bold tracking-wider">{company.conciergePhone}</span>
             </a>
           </div>
         </div>
@@ -265,7 +276,7 @@ const SiteFooter = () => {
                 <MapPinIcon className="w-4 h-4 text-[#7C1D23] flex-shrink-0 mt-1" />
                 <div>
                   <span className="text-xs uppercase font-cinzel text-[#2C2523] block font-semibold">Resort Address</span>
-                  <span>Crank&apos;s Ridge, Kasar Devi, Almora, Uttarakhand 263601</span>
+                  <span>{company.hotelAddress || "Crank's Ridge, Kasar Devi, Almora, Uttarakhand 263601"}</span>
                 </div>
               </div>
 
@@ -273,7 +284,7 @@ const SiteFooter = () => {
                 <CarIcon className="w-4 h-4 text-[#7C1D23] flex-shrink-0 mt-1" />
                 <div>
                   <span className="text-xs uppercase font-cinzel text-[#2C2523] block font-semibold">Travel Fleet Hub</span>
-                  <span>Almora Station Base Hub, Uttarakhand</span>
+                  <span>{company.travelHubAddress || "Almora Station Base Hub, Uttarakhand"}</span>
                 </div>
               </div>
 
@@ -281,32 +292,32 @@ const SiteFooter = () => {
                 <div className="flex items-center gap-2.5">
                   <PhoneIcon className="w-4 h-4 text-[#7C1D23] flex-shrink-0" />
                   <a
-                    href={`tel:${SITE_CONFIG.conciergePhone}`}
+                    href={`tel:${company.conciergePhone}`}
                     className="text-[#2C2523] hover:text-[#7C1D23] font-mono font-bold tracking-wide transition-colors"
                   >
-                    {SITE_CONFIG.conciergePhone}
+                    {company.conciergePhone}
                   </a>
                 </div>
 
                 <div className="flex items-center gap-2.5">
                   <WhatsAppIcon className="w-4 h-4 text-[#7C1D23] flex-shrink-0" />
                   <a
-                    href={`https://wa.me/${SITE_CONFIG.whatsappNumber}`}
+                    href={`https://wa.me/${company.whatsappNumber}`}
                     target="_blank"
                     rel="noreferrer"
                     className="text-[#2C2523] hover:text-[#7C1D23] transition-colors"
                   >
-                    WhatsApp: <span className="font-mono font-bold text-[#2C2523]">{SITE_CONFIG.whatsappDisplay}</span>
+                    WhatsApp: <span className="font-mono font-bold text-[#2C2523]">{company.whatsappDisplay || company.conciergePhone}</span>
                   </a>
                 </div>
 
                 <div className="flex items-center gap-2.5">
                   <MailIcon className="w-4 h-4 text-[#7C1D23] flex-shrink-0" />
                   <a
-                    href={`mailto:${SITE_CONFIG.email}`}
+                    href={`mailto:${company.email}`}
                     className="text-[#5C5350] hover:text-[#7C1D23] text-xs transition-colors break-all"
                   >
-                    {SITE_CONFIG.email}
+                    {company.email}
                   </a>
                 </div>
               </div>

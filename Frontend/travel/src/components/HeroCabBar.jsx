@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { MapPinIcon, CalendarIcon, UsersIcon, CarIcon, ArrowUpRightIcon } from '@shared';
+import { MapPinIcon, CalendarIcon, UsersIcon, CarIcon, ArrowUpRightIcon, useSiteSettings } from '@shared';
+import { mergeDestinationsWithSettings, mergeFleetWithSettings } from '../data/travelData';
 
 const HeroCabBar = ({ onSearch }) => {
+  const { settings } = useSiteSettings();
+
   const [pickup, setPickup] = useState('Kathgodam Railway Station');
   const [destination, setDestination] = useState('kainchi-dham');
   const [date, setDate] = useState(() => {
@@ -9,6 +12,14 @@ const HeroCabBar = ({ onSearch }) => {
     return d.toISOString().split('T')[0];
   });
   const [vehicle, setVehicle] = useState('6-seater');
+
+  const destinationsList = React.useMemo(() => {
+    return mergeDestinationsWithSettings(settings?.destinations);
+  }, [settings?.destinations]);
+
+  const fleetList = React.useMemo(() => {
+    return mergeFleetWithSettings(settings?.cabFleet);
+  }, [settings?.cabFleet]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -61,13 +72,23 @@ const HeroCabBar = ({ onSearch }) => {
               onChange={(e) => setDestination(e.target.value)}
               className="w-full bg-transparent text-xs font-semibold text-[#2C2523] focus:outline-none cursor-pointer truncate"
             >
-              <option value="kainchi-dham">Kainchi Dham Ashram (45 km)</option>
-              <option value="jageshwar-dham">Jageshwar Dham 124 Temples (35 km)</option>
-              <option value="kasar-devi">Kasar Devi Ridge (8 km)</option>
-              <option value="nainital">Nainital Lake & Temples (63 km)</option>
-              <option value="kausani">Kausani 300km Peak View (52 km)</option>
-              <option value="kathgodam-station">Kathgodam Station Drop (85 km)</option>
-              <option value="chardham-yatra">Sacred Chardham Yatra Circuit</option>
+              {destinationsList ? (
+                destinationsList.map((d) => (
+                  <option key={d.id} value={d.id}>
+                    {d.name} {d.kmFromAlmora ? `(${d.kmFromAlmora} km)` : ''}
+                  </option>
+                ))
+              ) : (
+                <>
+                  <option value="kainchi-dham">Kainchi Dham Ashram (45 km)</option>
+                  <option value="jageshwar-dham">Jageshwar Dham 124 Temples (35 km)</option>
+                  <option value="kasar-devi">Kasar Devi Ridge (8 km)</option>
+                  <option value="nainital">Nainital Lake & Temples (63 km)</option>
+                  <option value="kausani">Kausani 300km Peak View (52 km)</option>
+                  <option value="kathgodam-station">Kathgodam Station Drop (85 km)</option>
+                  <option value="chardham-yatra">Sacred Chardham Yatra Circuit</option>
+                </>
+              )}
             </select>
           </div>
         </div>
@@ -103,9 +124,19 @@ const HeroCabBar = ({ onSearch }) => {
               onChange={(e) => setVehicle(e.target.value)}
               className="w-full bg-transparent text-xs font-semibold text-[#2C2523] focus:outline-none cursor-pointer truncate"
             >
-              <option value="4-seater">4-Seater Sedan (Dzire)</option>
-              <option value="6-seater">6-Seater SUV (Innova)</option>
-              <option value="12-seater">12-Seater Minibus</option>
+              {fleetList ? (
+                fleetList.map((f) => (
+                  <option key={f.id} value={f.id}>
+                    {f.seats}-Seater ({f.model || f.title})
+                  </option>
+                ))
+              ) : (
+                <>
+                  <option value="4-seater">4-Seater Sedan (Dzire)</option>
+                  <option value="6-seater">6-Seater SUV (Innova)</option>
+                  <option value="12-seater">12-Seater Minibus</option>
+                </>
+              )}
             </select>
           </div>
         </div>

@@ -11,17 +11,20 @@
 ## 📖 Table of Contents
 1. [About the Project](#-about-the-project)
 2. [Platform Architecture & Ports](#-platform-architecture--ports)
-3. [Technology Stack](#-technology-stack)
-4. [Project Directory Structure](#-project-directory-structure)
-5. [Core Features & Modules](#-core-features--modules)
-6. [Mountain Travel & Fare Calculation Engine](#-mountain-travel--fare-calculation-engine)
-7. [Centralized Asset Inventory (41 Image Files)](#-centralized-asset-inventory-41-image-files)
-8. [Client Photography Wishlist](#-client-photography-wishlist)
-9. [REST API Documentation](#-rest-api-documentation)
-10. [Environment Variables Setup](#-environment-variables-setup)
-11. [Installation & Local Setup](#-installation--local-setup)
-12. [Security & Production Hardening](#-security--production-hardening)
-13. [Contact & Concierge](#-contact--concierge)
+3. [Real-Time Cross-Portal Synchronization](#-real-time-cross-portal-synchronization)
+4. [Technology Stack](#-technology-stack)
+5. [Project Directory Structure](#-project-directory-structure)
+6. [Core Features & Operations Desks](#-core-features--operations-desks)
+7. [Database State & Seeding CLI](#-database-state--seeding-cli)
+8. [Authentic Reviews & Photo Lightbox System](#-authentic-reviews--photo-lightbox-system)
+9. [Mountain Travel & Fare Calculation Engine](#-mountain-travel--fare-calculation-engine)
+10. [Centralized Asset Inventory (41 Image Files)](#-centralized-asset-inventory-41-image-files)
+11. [Client Photography Wishlist](#-client-photography-wishlist)
+12. [REST API Documentation](#-rest-api-documentation)
+13. [Environment Variables Setup](#-environment-variables-setup)
+14. [Installation & Local Setup](#-installation--local-setup)
+15. [Security & Production Hardening](#-security--production-hardening)
+16. [Contact & Concierge](#-contact--concierge)
 
 ---
 
@@ -39,7 +42,7 @@
 
 ## 🏛️ Platform Architecture & Ports
 
-The platform is designed as an isolated **multi-frontend monorepo** with a centralized shared library and a hardened REST API backend:
+The platform is designed as an isolated **multi-frontend monorepo** with a centralized shared package (`@shared`) and a hardened REST API backend:
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
@@ -49,7 +52,9 @@ The platform is designed as an isolated **multi-frontend monorepo** with a centr
 │ Devotional Heritage, Routes,  │ Heated Alpine Suites, Room      │ Mountain Fleet, Live Fare      │
 │ 3-Day Plan & Dynamic Booking  │ Tariffs, Dining & Reservations  │ Calculator & Temple Circuits   │
 ├───────────────────────────────┴─────────────────────────────────┴────────────────────────────────┤
-│ 🛡️ ADMIN COMMAND PORTAL (Port 5176): Staff Operations, Room CRUD, Reservations & Travel Dispatch  │
+│ 🛡️ ADMIN COMMAND PORTAL (Port 5176): Canonical URLs, Hotel & Travel Desks, Dispatch & Yield CMS │
+├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 📡 REAL-TIME BROADCAST ENGINE (BroadcastChannel + LocalStorage): Sub-millisecond Cross-Tab Sync │
 ├──────────────────────────────────────────────────────────────────────────────────────────────────┤
 │ 📦 @shared PACKAGE: Shared UI Components, Icons, Layouts, Centralized Asset Registry, Utilities  │
 ├──────────────────────────────────────────────────────────────────────────────────────────────────┤
@@ -60,10 +65,25 @@ The platform is designed as an isolated **multi-frontend monorepo** with a centr
 | Micro-Application | Port | Responsibility |
 | :--- | :---: | :--- |
 | **Landing Portal** | `5173` | Grand brand entry, Neem Karoli Baba devotional hero, Dev Bhoomi 4 pillars, route planner, dynamic booking form, and luxury sandstone footer. |
-| **Hotel Portal** | `5174` | Dedicated boutique resort web app, heated alpine chalets, live winter snowfall canvas engine, room filters, and stay booking modal. |
+| **Hotel Portal** | `5174` | Dedicated boutique resort web app, heated alpine chalets, live winter snowfall canvas engine, dynamic suite showcase, room filters, and stay booking modal. |
 | **Travel Portal** | `5175` | Dedicated mountain expedition web app, Almora base hub circuits, dynamic vehicle fare calculator, community guest reviews. |
-| **Admin Portal** | `5176` | Executive staff command desk, live KPI counters, dual view suite tables, suite CRUD modal with drag-and-drop dropzone, 1-click WhatsApp dispatch. |
+| **Admin Portal** | `5176` | Executive staff command desk, canonical React Router deep links, live KPI counters, room CRUD, 1-click WhatsApp dispatch, police register exports, and site CMS. |
 | **Backend REST API** | `5000` | Node.js + Express 5 backend with MongoDB Atlas, JWT authentication, rate limiting, and asset pipeline. |
+
+---
+
+## 📡 Real-Time Cross-Portal Synchronization
+
+The ecosystem is equipped with a **zero-polling, sub-millisecond synchronization engine** built on HTML5 `BroadcastChannel` with fallback to `window.storage` events ([`Frontend/shared/utils/syncBroadcaster.js`](file:///d:/Himalayan_Retreat/Frontend/shared/utils/syncBroadcaster.js)):
+
+1. **Instant Updates Across Open Portals:**
+   - **`rooms`:** Toggling availability, updating tariffs, or editing suite specs in the Admin Room Manager immediately updates the Hotel suite showcase, room cards, and hero booking bar without page refresh.
+   - **`settings`:** Updating company contact numbers, cab fleet tariffs, fixed routes, announcements, or policies instantly reflects on the Landing, Hotel, and Travel portals.
+   - **`tours`:** Adding, updating, or deleting tour packages updates the Admin and client tour listings in real time.
+   - **`reviews`:** Approving, moderating, or deleting customer reviews in Admin immediately updates the Hotel and Travel review feeds.
+2. **Auto-Revalidation on Focus & Heartbeat:**
+   - Client contexts automatically revalidate on `window.focus` and `document.visibilitychange`.
+   - Includes a 45-second background health heartbeat to ensure zero stale state.
 
 ---
 
@@ -71,6 +91,7 @@ The platform is designed as an isolated **multi-frontend monorepo** with a centr
 
 ### Frontend Ecosystem
 - **Core:** React 19, Vite 8, React Router DOM 7
+- **Routing & Navigation:** Canonical semantic URLs (`/rooms`, `/hotel-bookings`, `/travel-bookings`, `/tours`, `/reviews`, `/yield`, `/settings/*`), `ProtectedRoute` with redirect preservation, and wildcard 404 fallbacks.
 - **Styling & Design System:** Tailwind CSS v4 (`@tailwindcss/vite`), Vanilla CSS design tokens (`tokens.css`, `base.css`)
 - **Typography:**
   - *Headings & Titles:* Playfair Display, Cormorant Garamond, Cinzel Roman
@@ -101,7 +122,8 @@ Himalayan_Retreat/
 │   ├── controllers/
 │   │   ├── authController.js               # Staff sign-in & JWT generation
 │   │   ├── hotelController.js              # Suite CRUD & room reservation processing
-│   │   ├── reviewController.js             # Guest travel reviews & approval moderation
+│   │   ├── reviewController.js             # Guest reviews (Hotel & Travel) & moderation
+│   │   ├── settingsController.js           # Live site settings, fleet, routes & policies
 │   │   └── travelController.js             # Chauffeured travel booking & circuit handlers
 │   ├── middleware/
 │   │   ├── authMiddleware.js               # JWT bearer token verification
@@ -110,157 +132,171 @@ Himalayan_Retreat/
 │   │   ├── Admin.js                        # Staff credential schema with salt+pepper
 │   │   ├── Booking.js                      # Hotel room booking reservation schema
 │   │   ├── Room.js                         # Heated suite catalog schema
+│   │   ├── SiteSettings.js                 # Dynamic CMS brand, fleet, routes & policies
 │   │   ├── TourPackage.js                  # Pre-packaged travel circuit schema
 │   │   ├── TravelBooking.js                # Chauffeured travel booking schema
-│   │   └── TravelReview.js                 # Community review & photo schema
+│   │   └── TravelReview.js                 # Community review & photo schema (Hotel/Travel)
 │   ├── routes/
 │   │   ├── authRoutes.js                   # /api/auth endpoints
-│   │   ├── hotelRoutes.js                  # /api/hotel endpoints
-│   │   └── travelRoutes.js                 # /api/travel endpoints
+│   │   ├── hotelRoutes.js                  # /api/hotel endpoints (rooms, bookings, reviews)
+│   │   ├── settingsRoutes.js               # /api/settings CMS endpoints
+│   │   └── travelRoutes.js                 # /api/travel endpoints (tours, bookings, reviews)
 │   ├── scripts/
 │   │   ├── checkAdmin.js                   # Admin verification CLI script
 │   │   ├── dropAdmin.js                    # Database cleanup script
-│   │   └── seedAdmin.js                    # Initial admin provisioning script
+│   │   ├── seedAdmin.js                    # Initial admin provisioning script
+│   │   ├── seedDatabase.js                 # Complete luxury suites & tour packages seed
+│   │   └── seedAuthenticReviews.js         # Authentic reviews & candid guest photo seed
 │   ├── .env.example                        # Backend environment template
 │   ├── index.js                            # Express server entry point
 │   └── package.json
 │
 ├── Frontend/                               # React 19 Multi-Frontend Monorepo
 │   ├── landing/                            # Micro-App 1: Main Brand Portal (Port 5173)
-│   │   ├── public/                         # Static icons & vectors
 │   │   ├── src/
-│   │   │   ├── components/
-│   │   │   │   ├── LandingNavbar.jsx       # Sticky header with hover/click dropdowns
-│   │   │   │   ├── HeroMaharajji.jsx       # Sacred Baba Neem Karoli arch hero
-│   │   │   │   ├── DevBhoomiSection.jsx    # 4 spiritual pillars & resort architecture
-│   │   │   │   ├── RouteDistancePlanner.jsx# Almora hub distance tabs with cab CTA
-│   │   │   │   ├── HotelGatewaySection.jsx # Heated suites showcase & Satvik cafe
-│   │   │   │   ├── TravelGatewaySection.jsx# Fleet showcase & fixed route tariffs
-│   │   │   │   ├── PilgrimageItinerary.jsx # 3-day sample pilgrimage schedule
-│   │   │   │   ├── VisitorFaqSection.jsx   # Practical Q&A with SVG accordion
-│   │   │   │   └── ConciergeEnquirySection.jsx # Dynamic booking form
-│   │   │   ├── content/
-│   │   │   │   └── landing.content.js      # Centralized editable content
-│   │   │   ├── data/
-│   │   │   │   └── landingData.js          # Verified route, suite, and fleet datasets
+│   │   │   ├── components/                 # LandingNavbar, HeroMaharajji, RouteDistancePlanner
 │   │   │   ├── App.jsx                     # Landing page layout & auto-reveal
-│   │   │   ├── index.css                   # Tailwind v4 imports & custom typography
 │   │   │   └── main.jsx
-│   │   ├── index.html
 │   │   └── vite.config.js
 │   │
 │   ├── hotel/                              # Micro-App 2: Boutique Resort (Port 5174)
 │   │   ├── src/
-│   │   │   ├── components/                 # RoomCard, RoomModal, BookingForm, SnowEffect
-│   │   │   ├── data/                       # mockRooms.js — suite catalog seed data
+│   │   │   ├── components/                 # SuiteShowcase, HeroBookingBar, SanctuaryReviews, RoomCard
 │   │   │   ├── pages/                      # HotelHome, AllRooms, RoomDetails, BookingConfirmation
 │   │   │   ├── App.jsx
-│   │   │   ├── index.css
 │   │   │   └── main.jsx
-│   │   ├── index.html
 │   │   └── vite.config.js
 │   │
 │   ├── travel/                             # Micro-App 3: Mountain Travel (Port 5175)
 │   │   ├── src/
-│   │   │   ├── components/                 # TravelNavbar, TravelFooter, FareCalculator, VehicleFleet
-│   │   │   ├── data/                       # travelData.js — fleet, destinations & fare matrix
+│   │   │   ├── components/                 # FareCalculator, VehicleFleet, TravelReviews, PilgrimageCircuits
+│   │   │   ├── data/travelData.js          # Resilient asset & settings resolvers
 │   │   │   ├── pages/                      # TravelHome, AllCabs, TravelBookingConfirmation
 │   │   │   ├── App.jsx
-│   │   │   ├── index.css
 │   │   │   └── main.jsx
-│   │   ├── index.html
 │   │   └── vite.config.js
 │   │
 │   ├── admin/                              # Micro-App 4: Operations Desk (Port 5176)
 │   │   ├── src/
-│   │   │   ├── components/                 # Modular management components
+│   │   │   ├── components/
 │   │   │   │   ├── AdminHeader.jsx         # Staff top navigation, live site ports & sync
-│   │   │   │   ├── AdminSidebar.jsx        # Tab navigation with live count & alert badges
+│   │   │   │   ├── AdminSidebar.jsx        # Semantic <Link> navigation with active indicator
+│   │   │   │   ├── ProtectedRoute.jsx      # Auth guard with redirect preservation
 │   │   │   │   ├── KpiCards.jsx            # Interactive top metrics summary cards
 │   │   │   │   ├── RoomManager.jsx         # Full suite CRUD, image upload & availability toggle
 │   │   │   │   ├── HotelBookingManager.jsx # Reservations, status selector & 1-click WhatsApp
 │   │   │   │   ├── TravelBookingManager.jsx# Cab/tour requests, trip & payment status, WhatsApp
+│   │   │   │   ├── TravelDispatchModal.jsx # Chauffeur & vehicle assignment with train tracking
+│   │   │   │   ├── GuestIdProofModal.jsx   # Guest ID proof verification modal
+│   │   │   │   ├── FolioInvoiceModal.jsx   # Itemized on-property folio checkout & invoice
+│   │   │   │   ├── QuickBookingModal.jsx   # Walk-in reservation creator
 │   │   │   │   ├── TourManager.jsx         # Tour package CRUD, itinerary & inclusions
-│   │   │   │   ├── ReviewManager.jsx       # Review moderation, photo lightbox & approval
-│   │   │   │   ├── StatusBadge.jsx         # Standard status pills (booking, payment, review)
-│   │   │   │   ├── ConfirmDialog.jsx       # Staff modal for safe destructive operations
-│   │   │   │   └── Toast.jsx               # Floating staff notifications with auto-dismiss
-│   │   │   ├── hooks/
-│   │   │   │   └── useAdminData.js         # Central data hook for all 5 collections & stats
+│   │   │   │   ├── ReviewManager.jsx       # Review moderation with candid photo lightbox
+│   │   │   │   ├── CompanyManager.jsx      # Brand info, phones, address, UPI ID CMS
+│   │   │   │   ├── FleetManager.jsx        # Cab fleet models, tariffs & rates CMS
+│   │   │   │   ├── RouteManager.jsx        # Fixed temple & sightseeing route tariffs CMS
+│   │   │   │   ├── AnnouncementManager.jsx # Top announcement ribbon banner CMS
+│   │   │   │   ├── PolicyManager.jsx       # Check-in/out, cancellation & driver allowances CMS
+│   │   │   │   └── YieldManager.jsx        # Dynamic weekend surcharges & seasonal yield CMS
+│   │   │   ├── constants/
+│   │   │   │   └── adminRoutes.js          # Canonical URL map, tabs & document titles
+│   │   │   ├── hooks/useAdminData.js       # Central data hook for all collections & stats
 │   │   │   ├── pages/
 │   │   │   │   ├── AdminLogin.jsx          # Protected staff login with rate limiting
-│   │   │   │   └── AdminDashboard.jsx      # Modular operations orchestrator
-│   │   │   ├── admin.css                   # Office printable voucher media styling & table scrollbars
-│   │   │   ├── App.jsx                     # ToastProvider & AuthProvider wrapped routes
+│   │   │   │   └── AdminDashboard.jsx      # Deep-link routing orchestrator
+│   │   │   ├── App.jsx
 │   │   │   └── main.jsx
-│   │   ├── index.html
 │   │   └── vite.config.js
 │   │
 │   ├── shared/                             # Centralized Shared Package (@shared)
-│   │   ├── assets/
-│   │   │   └── images/                     # 41 centralized, deduplicated image assets
-│   │   ├── components/
-│   │   │   ├── ArchImage.jsx               # Reverent arch-framed portrait wrapper
-│   │   │   ├── BackToTop.jsx               # Smooth scroll-to-top luxury button
-│   │   │   ├── Button.jsx                  # Standardized brand button
-│   │   │   ├── Container.jsx               # Responsive editorial grid container
-│   │   │   ├── Divider.jsx                 # Ornamental section divider
-│   │   │   ├── Icons.jsx                   # Handcrafted SVG vector icons (Zero emojis)
-│   │   │   ├── Loader.jsx                  # Animated loading spinner
-│   │   │   ├── Logo.jsx                    # Scalable mountain crest vector emblem
-│   │   │   ├── Modal.jsx                   # Accessible modal dialog
-│   │   │   └── SectionHeading.jsx          # Reusable section title with divider
-│   │   ├── constants/
-│   │   │   ├── assets.js                   # Single source of truth for all images
-│   │   │   └── siteConfig.js               # Cross-app URL mappings & coordinates
+│   │   ├── assets/images/                  # 41 centralized, deduplicated image assets
+│   │   ├── components/                     # ArchImage, BackToTop, Button, Container, Icons, Modal
+│   │   ├── constants/assets.js             # Single source of truth for all images
 │   │   ├── context/
-│   │   │   └── AuthContext.jsx             # Admin authentication state provider
-│   │   ├── hooks/
-│   │   │   └── useScrollReveal.js          # Intersection Observer scroll animations
-│   │   ├── layout/
-│   │   │   ├── AnnouncementBar.jsx         # Dismissible top notice ribbon
-│   │   │   └── SiteFooter.jsx              # Warm Sandstone & Pearl Ivory luxury footer
-│   │   ├── services/
-│   │   │   └── apiClient.js                # Pre-configured Axios API client
-│   │   ├── styles/
-│   │   │   ├── base.css                    # Global typography & animation utilities
-│   │   │   └── tokens.css                  # Color palette tokens & font-face rules
+│   │   │   ├── AuthContext.jsx             # Admin authentication state provider
+│   │   │   └── SiteSettingsContext.jsx     # Global site settings & sync listener context
+│   │   ├── utils/
+│   │   │   └── syncBroadcaster.js          # BroadcastChannel cross-app sync engine
+│   │   ├── services/apiClient.js           # Axios API client
 │   │   └── index.js                        # Barrel exports for `@shared` import alias
-│   │
-│   ├── .env                                # Frontend environment config (gitignored)
-│   ├── .env.example                        # Frontend cross-port environment template
-│   └── package.json                        # Root workspace scripts & dependencies
-│
-├── .gitignore
+│   └── package.json
 └── README.md
 ```
 
 ---
 
-## 🎯 Core Features & Modules
+## 🎯 Core Features & Operations Desks
 
-### 1. Dynamic Concierge Booking Form ([ConciergeEnquirySection.jsx](file:///d:/Himalayan_Retreat/Frontend/landing/src/components/ConciergeEnquirySection.jsx))
+### 1. Admin Command Portal ([AdminDashboard.jsx](file:///d:/Himalayan_Retreat/Frontend/admin/src/pages/AdminDashboard.jsx))
+- **Canonical Semantic URLs:** Every operations desk has its own direct URL (e.g. `/rooms`, `/hotel-bookings`, `/travel-bookings`, `/tours`, `/reviews`, `/yield`, `/settings/company`, `/settings/fleet`).
+- **Deep-Link State:** Navigation changes URL history via React Router `<Link>` components, allowing browser back/forward, bookmarks, and opening desks in new tabs.
+- **Staff Access Protection ([ProtectedRoute.jsx](file:///d:/Himalayan_Retreat/Frontend/admin/src/components/ProtectedRoute.jsx)):** Unauthorized visits are remembered in `location.state.from` and redirected back automatically post-login.
+- **Folio Checkout & Invoicing ([FolioInvoiceModal.jsx](file:///d:/Himalayan_Retreat/Frontend/admin/src/components/FolioInvoiceModal.jsx)):** Itemized on-property charges (hearth dining, room heaters, laundry) with printable invoice vouchers.
+- **Digital Guest ID & Police Verification ([GuestIdProofModal.jsx](file:///d:/Himalayan_Retreat/Frontend/admin/src/components/GuestIdProofModal.jsx)):** Upload guest Aadhaar/Passport proof and export compliance Form C Police Register CSV.
+- **Travel Dispatch Hub ([TravelDispatchModal.jsx](file:///d:/Himalayan_Retreat/Frontend/admin/src/components/TravelDispatchModal.jsx)):** Assign hill chauffeurs, license plates (e.g. `UK01-TA-4492`), track train arrival numbers, and log driver fuel allowances.
+
+### 2. Dynamic Boutique Hotel Showcase ([SuiteShowcase.jsx](file:///d:/Himalayan_Retreat/Frontend/hotel/src/components/SuiteShowcase.jsx))
+- Real-time catalog populated directly from MongoDB Atlas.
+- High-altitude amenities list (room heaters, electric bed warmers, 24-hr hot water, private balconies).
+- Interactive suite tabs with zero horizontal overflow, responsive on all devices.
+- Direct booking modal integration with instant date difference and night calculation.
+
+### 3. Dynamic Concierge Booking Form ([ConciergeEnquirySection.jsx](file:///d:/Himalayan_Retreat/Frontend/landing/src/components/ConciergeEnquirySection.jsx))
 - **Smart Reactive Fields:**
   - Selecting **"Room Stay Only"** hides cab options and displays check-in/out date pickers, room categories, room counts, and guest numbers.
   - Selecting **"Cab / Travel Only"** hides room fields and displays travel date, pickup hub, destination route, vehicle model, and passenger count.
   - Selecting **"Both Room Stay & Mountain Cab"** reveals the complete joint pilgrimage package form.
 - **Custom WhatsApp Message Generator:** Generates a pre-formatted, bulleted WhatsApp message routed to the concierge number (`+91 96906 21247`).
 
-### 2. Dev Bhoomi & Shrines Section ([DevBhoomiSection.jsx](file:///d:/Himalayan_Retreat/Frontend/landing/src/components/DevBhoomiSection.jsx))
-- 4 rich spiritual cards highlighting Kasar Devi (800m walk), Kainchi Dham (45 km), Jageshwar Dham (35 km), and Trishul/Nanda Devi peaks.
-- Includes a dedicated "At Our Retreat" contextual bridge for every holy site.
-- Architecture showcase featuring authentic daylight and winter snow photography.
+---
 
-### 3. Boutique Hotel Showcase ([HotelGatewaySection.jsx](file:///d:/Himalayan_Retreat/Frontend/landing/src/components/HotelGatewaySection.jsx))
-- Real suite bedroom photos: Nanda Devi Panoramic Suite, Cedar Alpine Chalet, and Crank's Ridge Attic Suite.
-- Live tariff switcher, dimensions, and amenities list.
-- Satvik Dining & Cafe card featuring the real signboard photo (`caption.jpg`).
+## 🗄️ Database State & Seeding CLI
 
-### 4. Harmonized Luxury Site Footer ([SiteFooter.jsx](file:///d:/Himalayan_Retreat/Frontend/shared/layout/SiteFooter.jsx))
-- Styled in the website's signature **Warm Sandstone & Pearl Ivory** palette (`bg-gradient-to-b from-[#FAF6EF] via-[#F5EFE6] to-[#EFE7DA]`).
-- Pre-footer concierge callout strip with direct WhatsApp and phone dialers.
-- 4-column editorial layout: Brand & Philosophy, Resort & Stay, Cabs & Tours, and Concierge & Locations.
-- Sacred Himalayan peaks strip and reverent Sanskrit chant: `॥ ॐ श्री नीब करौरी महाराजाय नमः ॥`.
+The database state in **MongoDB Atlas** is fully populated with production-ready collections:
+
+| Collection | Model | Count | Contents |
+| :--- | :--- | :---: | :--- |
+| `rooms` | `Room.js` | **5** | 4 luxury heated suites (*Nanda Devi*, *Cedar Family Chalet*, *Crank's Ridge Attic Glass Suite*, *Trishul Crest*) + reference room. |
+| `tourpackages` | `TourPackage.js` | **3** | *Kainchi Dham Pilgrimage* (3D/2N), *Jageshwar Circuit* (2D/1N), *Grand Kumaon Heights* (4D/3N). |
+| `sitesettings` | `SiteSettings.js` | **1** | Company branding, 3 cab fleet models, 6 temple/sightseeing circuits, policies, announcements, dynamic pricing rules. |
+| `travelreviews` | `TravelReview.js` | **6** | 3 Hotel + 3 Travel authentic reviews with candid guest snapshots, realistic 4★/5★ ratings, and full comments. |
+| `admins` | `Admin.js` | **1** | Provisioned staff credential (`abc_lalit@gmail.com`). |
+| `bookings` | `Booking.js` | **1** | Active reservation history record. |
+| `travelbookings`| `TravelBooking.js` | **0** | Clean, ready for live customer trip reservations. |
+
+### Seeding Scripts
+
+Run any of the automated seeders directly from `Backend/`:
+
+```bash
+cd Backend
+
+# 1. Seed or reset Admin account
+node scripts/seedAdmin.js
+
+# 2. Seed all 4 luxury suites, tour packages, and site settings
+node scripts/seedDatabase.js
+
+# 3. Seed authentic customer reviews with candid photos & varied ratings
+node scripts/seedAuthenticReviews.js
+```
+
+---
+
+## 🌟 Authentic Reviews & Photo Lightbox System
+
+Both the Hotel and Travel portals feature a **100% database-driven review engine** with zero hardcoded review cards:
+
+1. **Unique Candid Traveler Photos (Zero Promotional Asset Reuse):**
+   - Reviews do not recycle official marketing brochure or vehicle photos.
+   - Genuine traveler perspectives: steaming morning chai held on wooden balcony overlooking peaks, Chitai temple sacred bells, winding mountain road from a car window, outdoor stone bonfire under starry night, traditional Kumaoni Satvik thali in brass katoris, and alpine ridge hiking trail.
+2. **Realistic Rating Distribution:**
+   - Varied 5★ and 4★ reviews providing an authentic **4.8★ - 4.9★ natural rating average**.
+   - Includes real constructive traveler feedback (steep mountain approach road, gentle motion-sickness driving on hairpin curves).
+3. **Interactive Full-Screen Photo Lightbox:**
+   - Both [`SanctuaryReviews.jsx`](file:///d:/Himalayan_Retreat/Frontend/hotel/src/components/SanctuaryReviews.jsx) and [`TravelReviews.jsx`](file:///d:/Himalayan_Retreat/Frontend/travel/src/components/TravelReviews.jsx) include clickable photo thumbnails opening an animated, high-resolution modal.
+4. **Instant Admin Moderation Sync:**
+   - Approving, toggling, or deleting a review in the Admin Review Desk immediately broadcasts across all active tabs in milliseconds.
 
 ---
 
@@ -283,11 +319,11 @@ All travel circuits and tariffs are calibrated from the central Kumaon hub of **
 | **New Delhi / NCR** | Capital Highway Corridor | **375 km** | ~ 8.5 hrs | Expressway to Foothills Ascent |
 
 #### Vehicle Fleet Tariff Matrix:
-| Fleet Class | Vehicle Models | Seating | Luggage | Per-Km Rate | Kathgodam Drop |
+| Fleet Class | Vehicle Models | Seating | Luggage | Per-Km Rate | Base Day Tariff |
 | :--- | :--- | :---: | :---: | :---: | :---: |
-| **Mountain Sedan** | Maruti Dzire / Toyota Etios | 4 Guests | 2 Large + 2 Cabin | **₹14 / km** | **₹3,800** |
-| **Luxury SUV** | Toyota Innova Crysta | 6 Guests | 4 Large + Roof Carrier | **₹18 / km** | **₹5,500** |
-| **Luxury Minibus** | Force Urbania | 12 Guests | 10+ Large Suitcases | **₹26 / km** | **₹9,800** |
+| **Mountain Sedan** | Swift Dzire / Toyota Etios | 4 Guests | 2 Large + 2 Cabin | **₹14 / km** | **₹2,499** |
+| **Luxury SUV** | Toyota Innova Crysta | 6 Guests | 4 Large + Roof Carrier | **₹18 / km** | **₹4,499** |
+| **Luxury Minibus** | Force Urbania / Traveller | 12 Guests | 10+ Large Suitcases | **₹26 / km** | **₹7,999** |
 
 $$\text{Total Fare} = \left(\text{Route Distance (km)} \times \text{Vehicle Rate/km}\right) + \left(₹500 \times \text{Trip Days}\right) + \text{State Tolls \& Permits}$$
 
@@ -297,7 +333,7 @@ $$\text{Total Fare} = \left(\text{Route Distance (km)} \times \text{Vehicle Rate
 
 ## 📸 Centralized Asset Inventory (41 Image Files)
 
-All images are consolidated in [`Frontend/shared/assets/images/`](file:///d:/Himalayan_Retreat/Frontend/shared/assets/images) and exported via [`Frontend/shared/constants/assets.js`](file:///d:/Himalayan_Retreat/Frontend/shared/constants/assets.js):
+All media assets are strictly centralized in [`Frontend/shared/assets/images/`](file:///d:/Himalayan_Retreat/Frontend/shared/assets/images) and exported through [`Frontend/shared/constants/assets.js`](file:///d:/Himalayan_Retreat/Frontend/shared/constants/assets.js). No files are duplicated across individual frontend projects:
 
 | Category | File Name | Export Identifier | Usage Location |
 | :--- | :--- | :--- | :--- |
@@ -377,7 +413,7 @@ To bring all sub-pages and gallery modals to 100% full production fidelity, the 
 | :--- | :--- | :--- | :--- |
 | `POST` | `/api/auth/login` | Staff admin authentication (returns JWT token) | Public (Rate Limited) |
 
-### 🏨 Hotel Suites & Bookings (`/api/hotel`)
+### 🏨 Hotel Suites, Bookings & Reviews (`/api/hotel`)
 | Method | Endpoint | Description | Access |
 | :--- | :--- | :--- | :--- |
 | `GET` | `/api/hotel/rooms` | Retrieve all available suites in catalog | Public |
@@ -390,7 +426,14 @@ To bring all sub-pages and gallery modals to 100% full production fidelity, the 
 | `POST` | `/api/hotel/bookings` | Submit room booking reservation | Public |
 | `GET` | `/api/hotel/bookings` | Retrieve all guest reservations (newest first) | Protected (Admin) |
 | `PUT` | `/api/hotel/bookings/:id/status` | Update booking status (`confirmed`, `cancelled`, etc.) | Protected (Admin) |
+| `POST` | `/api/hotel/bookings/:id/folio` | Add itemized on-property folio charge | Protected (Admin) |
+| `DELETE` | `/api/hotel/bookings/:id/folio/:cId`| Remove itemized folio charge | Protected (Admin) |
+| `PUT` | `/api/hotel/bookings/:id/settle` | Settle folio balance & complete checkout | Protected (Admin) |
+| `POST` | `/api/hotel/bookings/:id/id-proof` | Upload guest ID document (Aadhaar/Passport) | Protected (Admin) |
+| `GET` | `/api/hotel/bookings/police-register`| Export Form C Police Verification Register CSV | Protected (Admin) |
 | `DELETE` | `/api/hotel/bookings/:id` | Remove a booking record | Protected (Admin) |
+| `GET` | `/api/hotel/reviews` | Fetch approved hotel guest reviews with photos | Public |
+| `POST` | `/api/hotel/reviews` | Submit new hotel review | Public |
 
 ### 🚕 Tour & Travel Expeditions (`/api/travel`)
 | Method | Endpoint | Description | Access |
@@ -403,13 +446,20 @@ To bring all sub-pages and gallery modals to 100% full production fidelity, the 
 | `POST` | `/api/travel/bookings` | Submit a chauffeured vehicle reservation | Public |
 | `GET` | `/api/travel/bookings` | Retrieve all travel fleet bookings (newest first) | Protected (Admin) |
 | `PUT` | `/api/travel/bookings/:id/status` | Update travel booking status | Protected (Admin) |
-| `PUT` | `/api/travel/bookings/:id/payment` | Update payment settlement status (`pending`, `paid`, `refunded`) | Protected (Admin) |
+| `PUT` | `/api/travel/bookings/:id/payment` | Update payment settlement status (`pending`, `paid`) | Protected (Admin) |
+| `PUT` | `/api/travel/bookings/:id/dispatch` | Assign chauffeur, plate number, train ETA | Protected (Admin) |
 | `DELETE` | `/api/travel/bookings/:id` | Remove a travel booking | Protected (Admin) |
-| `GET` | `/api/travel/reviews` | Fetch approved community travel reviews | Public |
+| `GET` | `/api/travel/reviews` | Fetch approved travel reviews (supports `?category=`) | Public |
 | `POST` | `/api/travel/reviews` | Submit guest review with up to 5 photos | Public |
 | `GET` | `/api/travel/reviews/admin` | Fetch ALL reviews for moderation (approved & pending) | Protected (Admin) |
 | `PUT` | `/api/travel/reviews/:id/approve` | Toggle review approval status | Protected (Admin) |
 | `DELETE` | `/api/travel/reviews/:id` | Delete a travel review | Protected (Admin) |
+
+### ⚙️ Site Settings CMS (`/api/settings`)
+| Method | Endpoint | Description | Access |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/settings` | Fetch all dynamic brand, fleet, route, policy settings | Public |
+| `PUT` | `/api/settings` | Update site settings CMS (broadcasts across sites) | Protected (Admin) |
 
 ---
 
@@ -448,15 +498,21 @@ git clone https://github.com/<your-username>/Himalayan_Retreat.git
 cd Himalayan_Retreat
 ```
 
-### 3. Backend Setup & Admin Seed
+### 3. Backend Setup & Seed
 ```bash
 cd Backend
 npm install
 
-# Provision initial admin credentials
-npm run seed:admin
+# Seed Admin account
+node scripts/seedAdmin.js
 
-# Start development server (Port 5000)
+# Seed Luxury Suites, Tours & Site CMS
+node scripts/seedDatabase.js
+
+# Seed Authentic Reviews with Candid Traveler Photos
+node scripts/seedAuthenticReviews.js
+
+# Start Backend Server (Port 5000)
 npm run dev
 ```
 
@@ -496,6 +552,7 @@ npm run dev:admin     # Runs admin on 5176
 3. **HTTP Header Hardening:** `helmet` middleware enforces modern Content Security Policies and X-Frame-Options.
 4. **Data Sanitization:** Strict Mongoose schemas and `express-mongo-sanitize` prevent NoSQL injection.
 5. **Resilient Upload Engine:** Automatic base64 fallback ensures uninterrupted room/tour creation during Cloudinary rate limits or network issues.
+6. **Route Protection & History:** In-memory + storage session persistence with automatic redirect preservation upon session expiry.
 
 ---
 

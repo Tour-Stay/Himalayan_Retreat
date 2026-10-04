@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
-import { Container } from '@shared';
+import { Container, useSiteSettings } from '@shared';
 import { travelFaqs } from '../data/travelData';
 
 const TravelFaqSection = () => {
   const [openIdx, setOpenIdx] = useState(0);
+  const { settings } = useSiteSettings();
+
+  const faqsList = (settings?.travelPolicies?.faqs && Array.isArray(settings.travelPolicies.faqs) && settings.travelPolicies.faqs.length > 0)
+    ? settings.travelPolicies.faqs
+    : travelFaqs;
 
   return (
     <section id="faq" className="py-20 sm:py-28 px-4 bg-[#FDFBF7] border-b border-[#C5A059]/20 relative overflow-hidden">
@@ -27,7 +32,7 @@ const TravelFaqSection = () => {
         </div>
 
         <div className="space-y-3.5 max-w-2xl mx-auto relative z-10">
-          {travelFaqs.map((faq, idx) => {
+          {faqsList.map((faq, idx) => {
             const isOpen = openIdx === idx;
             return (
               <div

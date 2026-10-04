@@ -3,6 +3,8 @@ import { apiClient } from '@shared';
 import StatusBadge from './StatusBadge';
 import ConfirmDialog from './ConfirmDialog';
 import { useToast } from './Toast';
+import FolioInvoiceModal from './FolioInvoiceModal';
+import GuestIdProofModal from './GuestIdProofModal';
 
 export const HotelBookingManager = ({ bookings, setBookings, onRefresh }) => {
   const { addToast } = useToast();
@@ -13,6 +15,12 @@ export const HotelBookingManager = ({ bookings, setBookings, onRefresh }) => {
 
   // Selected booking for Slip / Receipt Modal
   const [viewSlipBooking, setViewSlipBooking] = useState(null);
+
+  // Selected booking for Folio & Invoicing Modal
+  const [folioModalBooking, setFolioModalBooking] = useState(null);
+
+  // Selected booking for Digital Guest ID Proof Modal
+  const [idModalBooking, setIdModalBooking] = useState(null);
 
   // Deletion state
   const [deleteTarget, setDeleteTarget] = useState(null);
@@ -117,6 +125,28 @@ export const HotelBookingManager = ({ bookings, setBookings, onRefresh }) => {
     link.click();
     document.body.removeChild(link);
     addToast('Downloaded reservations CSV spreadsheet.', 'success');
+  };
+
+  // Export Daily Police Verification Register (CSV) for Uttarakhand Tourism
+  const handleExportPoliceRegister = async () => {
+    try {
+      addToast('Preparing Uttarakhand Police Guest Register...', 'info');
+      const response = await apiClient.get('/api/hotel/bookings/police-register?date=all', {
+        responseType: 'blob',
+      });
+      const url = window.URL.createObjectURL(new Blob([response.data], { type: 'text/csv' }));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `Uttarakhand_Police_Guest_Register_${new Date().toISOString().split('T')[0]}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+      addToast('Police verification register downloaded successfully!', 'success');
+    } catch (err) {
+      console.error('Police register export error:', err);
+      addToast('Failed to export police register: ' + (err.response?.data?.message || err.message), 'error');
+    }
   };
 
   // Change booking status
@@ -298,6 +328,14 @@ export const HotelBookingManager = ({ bookings, setBookings, onRefresh }) => {
             </svg>
             <span>Export CSV</span>
           </button>
+
+          <button
+            onClick={handleExportPoliceRegister}
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-cinzel font-semibold bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 transition cursor-pointer shrink-0 shadow-2xs"
+            title="Download Uttarakhand Tourism / Police Form C verification register CSV"
+          >
+            <span>👮 Police Register</span>
+          </button>
         </div>
       </div>
 
@@ -329,8 +367,15 @@ export const HotelBookingManager = ({ bookings, setBookings, onRefresh }) => {
                   <tr key={b._id} className="hover:bg-[#FAF6EF]/60 transition">
                     {/* Guest Contact */}
                     <td className="py-3.5 px-4">
-                      <div className="font-serif font-bold text-[#2C2523] text-sm">
-                        {b.guestDetails?.name || 'Guest'}
+                      <div className="flex items-center gap-2">
+                        <span className="font-serif font-bold text-[#2C2523] text-sm">
+                          {b.guestDetails?.name || 'Guest'}
+                        </span>
+                        {b.source && (
+                          <span className="px-1.5 py-0.5 rounded text-[9px] font-cinzel font-semibold bg-[#FAF6EF] text-[#7C1D23] border border-[#C5A059]/40">
+                            {b.source}
+                          </span>
+                        )}
                       </div>
                       <div className="text-[#5C5350] font-mono text-[11px] flex items-center gap-2 mt-0.5">
                         {b.guestDetails?.phone ? (
@@ -347,6 +392,20 @@ export const HotelBookingManager = ({ bookings, setBookings, onRefresh }) => {
                       </div>
                       <div className="text-[#66605B] text-[11px] truncate max-w-[180px]">
                         ✉️ {b.guestDetails?.email || 'No email provided'}
+                      </div>
+                      <div className="mt-1">
+                        <button
+                          type="button"
+                          onClick={() => setIdModalBooking(b)}
+                          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-mono text-[10px] border font-medium transition cursor-pointer ${
+                            b.idProofUrl || b.idProofNumber
+                              ? 'bg-emerald-50 text-emerald-800 border-emerald-300 hover:bg-emerald-100'
+                              : 'bg-amber-50 text-amber-800 border-amber-300 hover:bg-amber-100'
+                          }`}
+                          title={b.idProofUrl || b.idProofNumber ? 'View digital guest ID proof' : 'Upload guest ID proof for police register'}
+                        >
+                          <span>{b.idProofUrl || b.idProofNumber ? `🆔 ${b.idProofType || 'ID'}` : '⚠️ ID Pending'}</span>
+                        </button>
                       </div>
                     </td>
 
@@ -372,9 +431,21 @@ export const HotelBookingManager = ({ bookings, setBookings, onRefresh }) => {
                       </div>
                     </td>
 
-                    {/* Amount */}
-                    <td className="py-3.5 px-4 font-mono font-bold text-[#7C1D23] text-sm">
-                      ₹{Number(b.totalAmount || 0).toLocaleString('en-IN')}
+                    {/* Amount & Settlement */}
+                    <td className="py-3.5 px-4">
+                      <div className="font-mono font-bold text-[#7C1D23] text-sm">
+                        ₹{Number(b.totalAmount || 0).toLocaleString('en-IN')}
+                      </div>
+                      {b.advancePaid > 0 ? (
+                        <div className="text-[10px] text-emerald-700 font-semibold mt-0.5">
+                          Adv: ₹{Number(b.advancePaid).toLocaleString('en-IN')} ({b.paymentMode || 'Paid'})
+                        </div>
+                      ) : null}
+                      {(b.balanceDue > 0 || (b.advancePaid > 0 && b.totalAmount > b.advancePaid)) ? (
+                        <div className="text-[10px] text-[#C84B0F] font-semibold">
+                          Due: ₹{(b.balanceDue !== undefined ? b.balanceDue : (b.totalAmount - (b.advancePaid || 0))).toLocaleString('en-IN')}
+                        </div>
+                      ) : null}
                     </td>
 
                     {/* Status Dropdown */}
@@ -419,6 +490,33 @@ export const HotelBookingManager = ({ bookings, setBookings, onRefresh }) => {
                             ✓ Confirm
                           </button>
                         )}
+
+                        {/* Guest Folio & Invoicing */}
+                        <button
+                          onClick={() => setFolioModalBooking(b)}
+                          className="px-2.5 py-1 rounded-full text-xs font-cinzel font-semibold bg-[#FAF6EF] hover:bg-[#C5A059]/20 text-[#7C1D23] border border-[#C5A059]/50 transition cursor-pointer shadow-2xs whitespace-nowrap flex items-center gap-1"
+                          title="Open Guest Folio, Add Incidentals & Print Tax Invoice"
+                        >
+                          <span>Folio 🧾</span>
+                          {b.folioExtras?.length > 0 && (
+                            <span className="w-4 h-4 rounded-full bg-[#7C1D23] text-white text-[9px] font-mono flex items-center justify-center font-bold">
+                              {b.folioExtras.length}
+                            </span>
+                          )}
+                        </button>
+
+                        {/* ID Proof Verification */}
+                        <button
+                          onClick={() => setIdModalBooking(b)}
+                          className={`px-2 py-1 rounded-full text-xs font-cinzel font-semibold transition cursor-pointer shadow-2xs whitespace-nowrap flex items-center gap-1 ${
+                            b.idProofUrl || b.idProofNumber
+                              ? 'bg-emerald-50 text-emerald-800 border border-emerald-300 hover:bg-emerald-100'
+                              : 'bg-[#FAF6EF] text-[#2C2523] border border-[#C5A059]/40 hover:bg-white'
+                          }`}
+                          title="Verify or Upload Guest Identity Document"
+                        >
+                          <span>ID 🪪</span>
+                        </button>
 
                         {/* View Slip */}
                         <button
@@ -548,6 +646,33 @@ export const HotelBookingManager = ({ bookings, setBookings, onRefresh }) => {
         isLoading={isDeleting}
         onConfirm={handleConfirmDelete}
         onCancel={() => setDeleteTarget(null)}
+      />
+
+      {/* GUEST FOLIO & CHECKOUT TAX INVOICE MODAL */}
+      <FolioInvoiceModal
+        booking={folioModalBooking}
+        isOpen={Boolean(folioModalBooking)}
+        onClose={() => setFolioModalBooking(null)}
+        onFolioUpdated={(updatedBooking) => {
+          setBookings((prev) =>
+            prev.map((item) => (item._id === updatedBooking._id ? updatedBooking : item))
+          );
+          setFolioModalBooking(updatedBooking);
+          if (onRefresh) onRefresh();
+        }}
+      />
+
+      {/* DIGITAL GUEST ID PROOF MODAL */}
+      <GuestIdProofModal
+        booking={idModalBooking}
+        isOpen={Boolean(idModalBooking)}
+        onClose={() => setIdModalBooking(null)}
+        onIdProofUpdated={(updatedBooking) => {
+          setBookings((prev) =>
+            prev.map((item) => (item._id === updatedBooking._id ? updatedBooking : item))
+          );
+          if (onRefresh) onRefresh();
+        }}
       />
     </div>
   );

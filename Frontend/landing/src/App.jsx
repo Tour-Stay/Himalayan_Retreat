@@ -4,6 +4,8 @@ import {
   SiteFooter,
   BackToTop,
   initAutoScrollReveal,
+  SiteSettingsProvider,
+  useSiteSettings,
 } from '@shared';
 
 import LandingNavbar from './components/LandingNavbar';
@@ -17,7 +19,10 @@ import VisitorFaqSection from './components/VisitorFaqSection';
 import ConciergeEnquirySection from './components/ConciergeEnquirySection';
 import { LANDING_CONTENT } from './content/landing.content';
 
-function App() {
+function LandingPageContent() {
+  const { settings } = useSiteSettings();
+  const announcement = settings?.announcement || LANDING_CONTENT.announcement;
+
   useEffect(() => {
     const cleanup = initAutoScrollReveal();
     return cleanup;
@@ -25,13 +30,15 @@ function App() {
 
   return (
     <div className="min-h-screen bg-ivory text-charcoal font-sans flex flex-col selection:bg-gold/25 selection:text-maroon text-base sm:text-lg">
-      {/* 1. Top Announcement Bar */}
-      <AnnouncementBar
-        message={LANDING_CONTENT.announcement.message}
-        linkText={LANDING_CONTENT.announcement.linkText}
-        linkHref={LANDING_CONTENT.announcement.linkHref}
-        className="bg-gradient-to-r from-[#9E3304] via-[#B83E0A] to-[#7C1D23] border-b border-[#DFCA9B]/35 shadow-sm"
-      />
+      {/* 1. Top Announcement Bar (Dynamic from CMS) */}
+      {announcement.enabled !== false && (
+        <AnnouncementBar
+          message={announcement.message || LANDING_CONTENT.announcement.message}
+          linkText={announcement.linkText || LANDING_CONTENT.announcement.linkText}
+          linkHref={announcement.linkHref || LANDING_CONTENT.announcement.linkHref}
+          className="bg-gradient-to-r from-[#9E3304] via-[#B83E0A] to-[#7C1D23] border-b border-[#DFCA9B]/35 shadow-sm"
+        />
+      )}
 
       {/* 2. Live Horizontal Navbar (Desktop Bar + Hover/Click Dropdowns + 2 Action Buttons) */}
       <LandingNavbar />
@@ -66,6 +73,14 @@ function App() {
       <SiteFooter />
       <BackToTop />
     </div>
+  );
+}
+
+function App() {
+  return (
+    <SiteSettingsProvider>
+      <LandingPageContent />
+    </SiteSettingsProvider>
   );
 }
 

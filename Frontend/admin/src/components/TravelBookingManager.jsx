@@ -3,6 +3,7 @@ import { apiClient } from '@shared';
 import StatusBadge from './StatusBadge';
 import ConfirmDialog from './ConfirmDialog';
 import { useToast } from './Toast';
+import TravelDispatchModal from './TravelDispatchModal';
 
 export const TravelBookingManager = ({ bookings, setBookings, onRefresh }) => {
   const { addToast } = useToast();
@@ -14,6 +15,9 @@ export const TravelBookingManager = ({ bookings, setBookings, onRefresh }) => {
 
   // Selected trip for Dispatch Slip Modal
   const [viewSlipTrip, setViewSlipTrip] = useState(null);
+
+  // Selected trip for Command Center Dispatch Modal
+  const [dispatchModalTrip, setDispatchModalTrip] = useState(null);
 
   // Delete state
   const [deleteTarget, setDeleteTarget] = useState(null);
@@ -408,12 +412,20 @@ export const TravelBookingManager = ({ bookings, setBookings, onRefresh }) => {
                       <div className="font-semibold text-[#7C1D23] font-cinzel">
                         {b.packageId?.title || b.circuit || 'Custom Hill Route'}
                       </div>
-                      <div className="text-[#66605B] text-[11px] mt-0.5 flex items-center gap-1.5">
+                      <div className="text-[#66605B] text-[11px] mt-0.5 flex flex-wrap items-center gap-1.5">
                         <span className="px-2 py-0.5 rounded-full bg-[#FAF6EF] font-mono text-[10px] text-[#2C2523] border border-[#C5A059]/30">
                           🚘 {b.vehicleType || 'Chauffeur Cab'}
                         </span>
                         <span>• {b.travelers || 2} Pax</span>
                       </div>
+                      {b.dispatchDetails?.driverName && (
+                        <div className="mt-1">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 font-mono text-[10px] border border-emerald-300 font-medium">
+                            <span>👤 {b.dispatchDetails.driverName}</span>
+                            {b.dispatchDetails.vehiclePlate && <span>({b.dispatchDetails.vehiclePlate})</span>}
+                          </span>
+                        </div>
+                      )}
                     </td>
 
                     {/* Date & Pickup */}
@@ -501,6 +513,19 @@ export const TravelBookingManager = ({ bookings, setBookings, onRefresh }) => {
                           </button>
                         )}
 
+                        {/* Assign & Dispatch Command Center */}
+                        <button
+                          onClick={() => setDispatchModalTrip(b)}
+                          className={`px-2.5 py-1 rounded-full text-[11px] font-cinzel font-semibold transition cursor-pointer shadow-2xs whitespace-nowrap flex items-center gap-1 ${
+                            b.dispatchDetails?.driverName
+                              ? 'bg-emerald-50 text-emerald-800 border border-emerald-300 hover:bg-emerald-100'
+                              : 'bg-linear-to-r from-[#7C1D23] to-[#9B232A] text-white hover:brightness-110'
+                          }`}
+                          title={b.dispatchDetails?.driverName ? 'Manage Driver & Dispatch' : 'Assign Chauffeur & Dispatch'}
+                        >
+                          <span>{b.dispatchDetails?.driverName ? '🚘 Dispatched' : '🚘 Dispatch'}</span>
+                        </button>
+
                         {/* View Dispatch Slip */}
                         <button
                           onClick={() => setViewSlipTrip(b)}
@@ -580,6 +605,42 @@ export const TravelBookingManager = ({ bookings, setBookings, onRefresh }) => {
                 <span className="text-[#66605B]">Assigned Vehicle Model:</span>
                 <span className="font-mono font-bold text-[#2C2523]">{viewSlipTrip.vehicleType || 'SUV Chauffeur'}</span>
               </div>
+              {viewSlipTrip.dispatchDetails?.driverName && (
+                <>
+                  <div className="flex justify-between py-1 border-b border-[#C5A059]/15 bg-emerald-50/50 px-2 rounded-lg">
+                    <span className="text-emerald-900 font-semibold">Assigned Chauffeur:</span>
+                    <span className="font-bold text-emerald-900">
+                      {viewSlipTrip.dispatchDetails.driverName} {viewSlipTrip.dispatchDetails.driverPhone ? `(📞 ${viewSlipTrip.dispatchDetails.driverPhone})` : ''}
+                    </span>
+                  </div>
+                  {viewSlipTrip.dispatchDetails?.vehiclePlate && (
+                    <div className="flex justify-between py-1 border-b border-[#C5A059]/15">
+                      <span className="text-[#66605B]">Vehicle Reg Plate:</span>
+                      <span className="font-mono font-bold text-[#7C1D23]">{viewSlipTrip.dispatchDetails.vehiclePlate}</span>
+                    </div>
+                  )}
+                  {viewSlipTrip.dispatchDetails?.trainNumber && (
+                    <div className="flex justify-between py-1 border-b border-[#C5A059]/15">
+                      <span className="text-[#66605B]">Train / Arrival:</span>
+                      <span className="font-medium text-[#2C2523]">
+                        {viewSlipTrip.dispatchDetails.trainNumber} {viewSlipTrip.dispatchDetails.trainEta ? `(ETA: ${viewSlipTrip.dispatchDetails.trainEta})` : ''}
+                      </span>
+                    </div>
+                  )}
+                  {viewSlipTrip.dispatchDetails?.luggageCount > 0 && (
+                    <div className="flex justify-between py-1 border-b border-[#C5A059]/15">
+                      <span className="text-[#66605B]">Luggage Pieces:</span>
+                      <span className="font-mono">{viewSlipTrip.dispatchDetails.luggageCount} Bags</span>
+                    </div>
+                  )}
+                  {viewSlipTrip.dispatchDetails?.fareToCollect > 0 && (
+                    <div className="flex justify-between py-1 border-b border-[#C5A059]/15 bg-amber-50/60 px-2 rounded-lg">
+                      <span className="text-amber-900 font-semibold">Fare to Collect:</span>
+                      <span className="font-mono font-bold text-[#7C1D23]">₹{Number(viewSlipTrip.dispatchDetails.fareToCollect).toLocaleString('en-IN')}</span>
+                    </div>
+                  )}
+                </>
+              )}
               <div className="flex justify-between py-1 border-b border-[#C5A059]/15">
                 <span className="text-[#66605B]">Travel Date:</span>
                 <span className="font-mono">{formatDate(viewSlipTrip.travelDate)}</span>
@@ -623,6 +684,19 @@ export const TravelBookingManager = ({ bookings, setBookings, onRefresh }) => {
           </div>
         </div>
       )}
+
+      {/* TRAVEL DISPATCH & DRIVER COMMAND CENTER MODAL */}
+      <TravelDispatchModal
+        booking={dispatchModalTrip}
+        isOpen={Boolean(dispatchModalTrip)}
+        onClose={() => setDispatchModalTrip(null)}
+        onDispatched={(updatedBooking) => {
+          setBookings((prev) =>
+            prev.map((item) => (item._id === updatedBooking._id ? updatedBooking : item))
+          );
+          if (onRefresh) onRefresh();
+        }}
+      />
 
       {/* DELETE CONFIRM DIALOG */}
       <ConfirmDialog

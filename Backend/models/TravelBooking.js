@@ -54,6 +54,19 @@ const travelBookingSchema = new mongoose.Schema({
     enum: ['pending', 'confirmed', 'completed', 'cancelled'],
     default: 'pending',
   },
+  dispatchDetails: {
+    driverName: { type: String, default: '' },
+    driverPhone: { type: String, default: '' },
+    vehiclePlate: { type: String, default: '' },
+    trainNumber: { type: String, default: '' },
+    trainEta: { type: String, default: '' },
+    luggageCount: { type: Number, default: 0 },
+    fuelEstimate: { type: Number, default: 0 },
+    driverAllowance: { type: Number, default: 0 },
+    fareToCollect: { type: Number, default: 0 },
+    dispatchNotes: { type: String, default: '' },
+    dispatchedAt: { type: Date },
+  },
 }, { timestamps: true });
 
 module.exports = mongoose.model('TravelBooking', travelBookingSchema);

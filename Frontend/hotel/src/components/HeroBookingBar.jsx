@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { CalendarIcon, BedIcon, ArrowUpRightIcon, CheckCircleIcon } from '@shared';
 import { mockRooms } from '../data/mockRooms';
 
-const HeroBookingBar = ({ onSearch }) => {
+const HeroBookingBar = ({ onSearch, rooms }) => {
+  const suiteList = (rooms && rooms.length > 0) ? rooms : mockRooms;
   const today = new Date().toISOString().split('T')[0];
   const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
 
@@ -12,7 +13,7 @@ const HeroBookingBar = ({ onSearch }) => {
 
   const [checkIn, setCheckIn] = useState(today);
   const [checkOut, setCheckOut] = useState(tomorrow);
-  const [selectedSuite, setSelectedSuite] = useState(mockRooms[0]._id);
+  const [selectedSuite, setSelectedSuite] = useState(suiteList[0]?._id || '');
 
   // Calculate nights
   let nights = 1;
@@ -23,7 +24,7 @@ const HeroBookingBar = ({ onSearch }) => {
     nights = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
   }
 
-  const currentSuite = mockRooms.find((r) => r._id === selectedSuite) || mockRooms[0];
+  const currentSuite = suiteList.find((r) => r._id === selectedSuite) || suiteList[0] || {};
   const estimatedTotal = nights * (currentSuite.pricePerNight || 6942);
 
   const handleCheckAvailability = (e) => {
@@ -92,7 +93,7 @@ const HeroBookingBar = ({ onSearch }) => {
             onChange={(e) => setSelectedSuite(e.target.value)}
             className="w-full bg-transparent text-xs sm:text-sm font-semibold text-charcoal focus:outline-none cursor-pointer truncate"
           >
-            {mockRooms.map((suite) => (
+            {suiteList.map((suite) => (
               <option key={suite._id} value={suite._id}>
                 {suite.name} (₹{suite.pricePerNight?.toLocaleString()})
               </option>

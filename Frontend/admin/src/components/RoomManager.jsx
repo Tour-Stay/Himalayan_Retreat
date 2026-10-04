@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { apiClient } from '@shared';
+import { apiClient, broadcastUpdate } from '@shared';
 import StatusBadge from './StatusBadge';
 import ConfirmDialog from './ConfirmDialog';
 import { useToast } from './Toast';
@@ -145,6 +145,7 @@ export const RoomManager = ({ rooms, setRooms, onRefresh }) => {
         `Suite "${room.name}" is now ${res.data?.room?.isAvailable ? 'Active' : 'Disabled'}`,
         'success'
       );
+      broadcastUpdate('rooms');
     } catch (err) {
       // Revert optimistic update
       setRooms((prev) =>
@@ -201,6 +202,7 @@ export const RoomManager = ({ rooms, setRooms, onRefresh }) => {
 
       setIsModalOpen(false);
       onRefresh();
+      broadcastUpdate('rooms');
     } catch (err) {
       console.error('Room save error:', err);
       addToast(
@@ -222,6 +224,7 @@ export const RoomManager = ({ rooms, setRooms, onRefresh }) => {
       setRooms((prev) => prev.filter((r) => r._id !== deleteTarget._id));
       addToast(`Suite "${deleteTarget.name}" deleted.`, 'info');
       setDeleteTarget(null);
+      broadcastUpdate('rooms');
     } catch (err) {
       addToast('Failed to delete room: ' + (err.response?.data?.message || err.message), 'error');
     } finally {

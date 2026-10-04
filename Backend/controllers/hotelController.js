@@ -19,6 +19,66 @@ const getAllRooms = async (req, res) => {
   }
 };
 
+// @desc    Check room availability for given dates (prevents double-booking)
+// @route   GET /api/hotel/rooms/check-availability
+// @access  Public
+const checkRoomAvailability = async (req, res) => {
+  try {
+    const { checkIn, checkOut, roomId } = req.query;
+
+    if (!checkIn || !checkOut) {
+      return res.status(400).json({ message: 'Both checkIn and checkOut dates are required.' });
+    }
+
+    const checkInDate = new Date(checkIn);
+    const checkOutDate = new Date(checkOut);
+
+    if (isNaN(checkInDate.getTime()) || isNaN(checkOutDate.getTime())) {
+      return res.status(400).json({ message: 'Invalid check-in or check-out date format.' });
+    }
+
+    if (checkInDate >= checkOutDate) {
+      return res.status(400).json({ message: 'Check-out date must be strictly after check-in date.' });
+    }
+
+    // Find any non-cancelled bookings that overlap with requested range
+    const filter = {
+      status: { $ne: 'cancelled' },
+      checkInDate: { $lt: checkOutDate },
+      checkOutDate: { $gt: checkInDate },
+    };
+
+    if (roomId) {
+      filter.room = roomId;
+    }
+
+    const conflictingBookings = await Booking.find(filter).select('room checkInDate checkOutDate status');
+    const occupiedRoomIds = conflictingBookings.map((b) => b.room.toString());
+
+    // Fetch all currently active rooms
+    const allRooms = await Room.find({ isAvailable: true }).sort({ pricePerNight: 1 });
+    const roomsWithAvailability = allRooms.map((room) => {
+      const isOccupied = occupiedRoomIds.includes(room._id.toString());
+      return {
+        ...room.toObject(),
+        isAvailableForDates: !isOccupied,
+      };
+    });
+
+    res.status(200).json({
+      checkIn,
+      checkOut,
+      totalRoomsCount: allRooms.length,
+      occupiedCount: occupiedRoomIds.length,
+      availableCount: allRooms.length - occupiedRoomIds.length,
+      occupiedRoomIds,
+      rooms: roomsWithAvailability,
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error checking availability.', error: error.message });
+  }
+};
+
 // @desc    Get ALL rooms (including unavailable — for admin dashboard)
 // @route   GET /api/hotel/rooms-admin
 // @access  Protected (Admin only)
@@ -230,7 +290,14 @@ const createBooking = async (req, res) => {
     const nights = Math.ceil(
       (new Date(checkOutDate) - new Date(checkInDate)) / (1000 * 60 * 60 * 24)
     );
-    const totalAmount = nights * roomData.pricePerNight;
+    const calculatedTotal = nights * roomData.pricePerNight;
+    const totalAmount = Number(req.body.totalAmount) || calculatedTotal;
+    const advancePaid = Number(req.body.advancePaid) || 0;
+    const balanceDue = Math.max(0, totalAmount - advancePaid);
+    const status = req.body.status || 'pending';
+    const paymentMode = req.body.paymentMode || (advancePaid > 0 ? 'Cash' : 'Pending');
+    const source = req.body.source || 'Website';
+    const specialNotes = req.body.specialNotes || '';
 
     // Create the booking
     const booking = await Booking.create({
@@ -239,7 +306,12 @@ const createBooking = async (req, res) => {
       checkInDate,
       checkOutDate,
       totalAmount,
-      status: 'pending',
+      advancePaid,
+      balanceDue,
+      paymentMode,
+      source,
+      specialNotes,
+      status,
     });
 
     // Send confirmation email (non-blocking — don't fail booking if email fails)
@@ -304,10 +376,226 @@ const deleteBooking = async (req, res) => {
   }
 };
 
+// @desc    Add on-property folio charge (meals, bonfire, heaters, extras)
+// @route   POST /api/hotel/bookings/:id/folio
+// @access  Protected (Admin only)
+const addFolioCharge = async (req, res) => {
+  try {
+    const { item, amount } = req.body;
+    const chargeAmount = Number(amount);
+
+    if (!item || isNaN(chargeAmount) || chargeAmount <= 0) {
+      return res.status(400).json({ message: 'Valid item description and positive amount are required.' });
+    }
+
+    const booking = await Booking.findById(req.params.id).populate('room', 'name pricePerNight');
+    if (!booking) {
+      return res.status(404).json({ message: 'Booking not found.' });
+    }
+
+    booking.folioExtras.push({
+      item: item.trim(),
+      amount: chargeAmount,
+      addedAt: new Date(),
+    });
+
+    booking.totalAmount = (Number(booking.totalAmount) || 0) + chargeAmount;
+    booking.balanceDue = Math.max(0, booking.totalAmount - (Number(booking.advancePaid) || 0));
+
+    await booking.save();
+    res.status(200).json({ message: 'Folio charge added successfully.', booking });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error adding folio charge.', error: error.message });
+  }
+};
+
+// @desc    Remove folio charge
+// @route   DELETE /api/hotel/bookings/:id/folio/:chargeId
+// @access  Protected (Admin only)
+const removeFolioCharge = async (req, res) => {
+  try {
+    const booking = await Booking.findById(req.params.id).populate('room', 'name pricePerNight');
+    if (!booking) {
+      return res.status(404).json({ message: 'Booking not found.' });
+    }
+
+    const chargeIndex = booking.folioExtras.findIndex(
+      (extra) => extra._id.toString() === req.params.chargeId
+    );
+
+    if (chargeIndex === -1) {
+      return res.status(404).json({ message: 'Folio charge not found.' });
+    }
+
+    const removedAmount = booking.folioExtras[chargeIndex].amount;
+    booking.folioExtras.splice(chargeIndex, 1);
+
+    booking.totalAmount = Math.max(0, (Number(booking.totalAmount) || 0) - removedAmount);
+    booking.balanceDue = Math.max(0, booking.totalAmount - (Number(booking.advancePaid) || 0));
+
+    await booking.save();
+    res.status(200).json({ message: 'Folio charge removed successfully.', booking });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error removing folio charge.', error: error.message });
+  }
+};
+
+// @desc    Settle folio payment & optionally mark checked out
+// @route   PUT /api/hotel/bookings/:id/settle
+// @access  Protected (Admin only)
+const settleBookingFolio = async (req, res) => {
+  try {
+    const { amountPaid, paymentMode, markCheckedOut } = req.body;
+    const additionalPayment = Number(amountPaid) || 0;
+
+    const booking = await Booking.findById(req.params.id).populate('room', 'name pricePerNight');
+    if (!booking) {
+      return res.status(404).json({ message: 'Booking not found.' });
+    }
+
+    booking.advancePaid = (Number(booking.advancePaid) || 0) + additionalPayment;
+    booking.balanceDue = Math.max(0, (Number(booking.totalAmount) || 0) - booking.advancePaid);
+
+    if (paymentMode) {
+      booking.paymentMode = paymentMode;
+    }
+
+    if (markCheckedOut) {
+      booking.status = 'checked_out';
+    }
+
+    await booking.save();
+    res.status(200).json({ message: 'Folio settled successfully.', booking });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error settling folio.', error: error.message });
+  }
+};
+
+// @desc    Upload Guest ID Proof (Aadhaar / Passport / Voter ID)
+// @route   POST /api/hotel/bookings/:id/id-proof
+// @access  Protected (Admin only)
+const uploadGuestIdProof = async (req, res) => {
+  try {
+    const { idProofNumber, idProofType } = req.body;
+    const booking = await Booking.findById(req.params.id);
+
+    if (!booking) {
+      return res.status(404).json({ message: 'Booking not found.' });
+    }
+
+    let idProofUrl = booking.idProofUrl || '';
+
+    if (req.file) {
+      try {
+        const uploadResult = await uploadToCloudinary(req.file.buffer, 'guest-id-proofs');
+        idProofUrl = uploadResult.secure_url;
+      } catch (cloudErr) {
+        console.warn('Cloudinary upload warning for ID proof (using base64 fallback):', cloudErr.message || cloudErr);
+        const mime = req.file.mimetype || 'image/jpeg';
+        idProofUrl = `data:${mime};base64,${req.file.buffer.toString('base64')}`;
+      }
+    }
+
+    if (idProofUrl) booking.idProofUrl = idProofUrl;
+    if (idProofNumber !== undefined) booking.idProofNumber = idProofNumber.trim();
+    if (idProofType !== undefined) booking.idProofType = idProofType.trim();
+
+    await booking.save();
+    res.status(200).json({ message: 'Guest ID Proof updated successfully.', booking });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error uploading ID proof.', error: error.message });
+  }
+};
+
+// @desc    Export daily police verification register (CSV)
+// @route   GET /api/hotel/bookings/police-register
+// @access  Protected (Admin only)
+const exportPoliceRegister = async (req, res) => {
+  try {
+    const targetDateStr = req.query.date || new Date().toISOString().split('T')[0];
+
+    // Find all bookings overlapping with targetDate or all non-cancelled bookings if 'all' requested
+    let filter = { status: { $ne: 'cancelled' } };
+
+    if (req.query.date && req.query.date !== 'all') {
+      const targetDate = new Date(targetDateStr);
+      const nextDay = new Date(targetDate);
+      nextDay.setDate(nextDay.getDate() + 1);
+
+      filter = {
+        status: { $ne: 'cancelled' },
+        checkInDate: { $lt: nextDay },
+        checkOutDate: { $gte: targetDate },
+      };
+    }
+
+    const bookings = await Booking.find(filter)
+      .populate('room', 'name')
+      .sort({ checkInDate: 1 });
+
+    // Build CSV content
+    const headers = [
+      'Sl No',
+      'Booking ID',
+      'Guest Full Name',
+      'Mobile Phone',
+      'Email Address',
+      'Allocated Suite',
+      'Check-in Date',
+      'Check-out Date',
+      'ID Proof Type',
+      'ID Proof Number',
+      'ID Document Attached',
+      'Stay Status',
+      'Police Verification Status',
+    ];
+
+    const escapeCsv = (val) => {
+      if (val === null || val === undefined) return '""';
+      const str = String(val).replace(/"/g, '""');
+      return `"${str}"`;
+    };
+
+    const rows = bookings.map((b, idx) => {
+      const inDate = b.checkInDate ? new Date(b.checkInDate).toISOString().split('T')[0] : 'N/A';
+      const outDate = b.checkOutDate ? new Date(b.checkOutDate).toISOString().split('T')[0] : 'N/A';
+      const hasId = Boolean(b.idProofUrl || b.idProofNumber);
+
+      return [
+        idx + 1,
+        b._id.toString(),
+        b.guestDetails?.name || 'N/A',
+        b.guestDetails?.phone || 'N/A',
+        b.guestDetails?.email || 'N/A',
+        b.room?.name || 'Chalet Suite',
+        inDate,
+        outDate,
+        b.idProofType || 'Aadhaar Card',
+        b.idProofNumber || 'Pending Verification',
+        b.idProofUrl ? 'YES (Digital Copy on File)' : 'NO (Pending)',
+        b.status?.toUpperCase() || 'CONFIRMED',
+        hasId ? 'VERIFIED' : 'PENDING AT CHECK-IN',
+      ].map(escapeCsv).join(',');
+    });
+
+    const csvContent = [headers.map(escapeCsv).join(','), ...rows].join('\r\n');
+
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename="Uttarakhand_Police_Guest_Register_${targetDateStr}.csv"`
+    );
+    return res.status(200).send(csvContent);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error generating police register.', error: error.message });
+  }
+};
+
 module.exports = {
   getAllRooms,
   getAllRoomsAdmin,
   getRoomById,
+  checkRoomAvailability,
   addRoom,
   updateRoom,
   deleteRoom,
@@ -316,4 +604,11 @@ module.exports = {
   getAllBookings,
   updateBookingStatus,
   deleteBooking,
+  addFolioCharge,
+  removeFolioCharge,
+  settleBookingFolio,
+  uploadGuestIdProof,
+  exportPoliceRegister,
 };
+
+

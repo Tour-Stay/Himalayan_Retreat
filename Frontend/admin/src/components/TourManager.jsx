@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { apiClient } from '@shared';
+import { apiClient, broadcastUpdate } from '@shared';
 import ConfirmDialog from './ConfirmDialog';
 import { useToast } from './Toast';
 
@@ -167,6 +167,7 @@ export const TourManager = ({ tours, setTours, onRefresh }) => {
 
       setIsModalOpen(false);
       onRefresh();
+      broadcastUpdate('tours');
     } catch (err) {
       console.error('Tour save error:', err);
       addToast(
@@ -188,6 +189,7 @@ export const TourManager = ({ tours, setTours, onRefresh }) => {
       setTours((prev) => prev.filter((t) => t._id !== deleteTarget._id));
       addToast(`Tour "${deleteTarget.title}" deleted.`, 'info');
       setDeleteTarget(null);
+      broadcastUpdate('tours');
     } catch (err) {
       addToast('Failed to delete tour: ' + (err.response?.data?.message || err.message), 'error');
     } finally {

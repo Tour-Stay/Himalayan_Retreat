@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, SectionHeading, SITE_CONFIG } from '@shared';
+import { Container, SectionHeading, SITE_CONFIG, useSiteSettings } from '@shared';
 import { routeData } from '../data/landingData';
 
 const cleanAmp = (text) => {
@@ -13,6 +13,8 @@ const cleanAmp = (text) => {
 };
 
 const RouteDistancePlanner = () => {
+  const { settings } = useSiteSettings();
+  const company = settings?.company || SITE_CONFIG;
   const [activeRouteTab, setActiveRouteTab] = useState('dhams');
 
   const handleRouteBookClick = (routeName) => {
@@ -21,7 +23,7 @@ const RouteDistancePlanner = () => {
       `Route: ${routeName}\n` +
       `Please share available cabs (Innova / Sedan) and prices.`
     );
-    window.open(`https://wa.me/${SITE_CONFIG.whatsappNumber}?text=${message}`, '_blank');
+    window.open(`https://wa.me/${company.whatsappNumber}?text=${message}`, '_blank');
   };
 
   const tabs = [
@@ -127,8 +129,8 @@ const RouteDistancePlanner = () => {
         <div className="mt-10 text-center">
           <p className="text-sm text-[#6B615E] font-sans">
             Need a custom route or pilgrimage itinerary? Call our Almora team at{' '}
-            <a href={`tel:${SITE_CONFIG.conciergePhone}`} className="text-[#C84B0F] font-numeral font-bold hover:underline tracking-wide">
-              {SITE_CONFIG.conciergePhone}
+            <a href={`tel:${company.conciergePhone}`} className="text-[#C84B0F] font-numeral font-bold hover:underline tracking-wide">
+              {company.conciergePhone}
             </a>
           </p>
         </div>

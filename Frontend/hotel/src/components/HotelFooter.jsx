@@ -1,14 +1,22 @@
-import { APP_URLS, SITE_CONFIG, PhoneIcon, MailIcon, WhatsAppIcon, MapPinIcon, MountainIcon, BedIcon, SparklesIcon, FlameIcon, CoffeeIcon, CompassIcon } from '@shared';
+import { APP_URLS, SITE_CONFIG, PhoneIcon, MailIcon, WhatsAppIcon, MapPinIcon, MountainIcon, BedIcon, SparklesIcon, FlameIcon, CoffeeIcon, CompassIcon, useSiteSettings } from '@shared';
 import Logo from '@shared/components/Logo';
 
 const HotelFooter = () => {
   const currentYear = new Date().getFullYear();
+  const { settings } = useSiteSettings();
+  const company = settings?.company;
+
+  const conciergePhone = company?.conciergePhone || SITE_CONFIG.conciergePhone;
+  const whatsappNumber = company?.whatsappNumber || SITE_CONFIG.whatsappNumber;
+  const email = company?.email || SITE_CONFIG.email;
+  const hotelAddress = company?.hotelAddress || "Crank's Ridge, Kasar Devi, Almora, Uttarakhand 263601";
+  const elevation = company?.elevation || '6,942 FT';
 
   const handleWhatsAppClick = () => {
     const message = encodeURIComponent(
       `Pranam Concierge! I am inquiring about heated suite reservations at The Kasar Himalayan Heights, Kasar Devi.`
     );
-    window.open(`https://wa.me/${SITE_CONFIG.whatsappNumber}?text=${message}`, '_blank');
+    window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
   };
 
   return (
@@ -18,7 +26,7 @@ const HotelFooter = () => {
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-6">
           <div className="text-center lg:text-left max-w-2xl">
             <span className="text-[11px] uppercase tracking-[0.22em] text-[#C5A059] font-cinzel font-semibold block mb-1.5">
-              Warm Heated Rooms • Kasar Devi, Almora • 6,942 FT
+              Warm Heated Rooms • Kasar Devi, Almora • {elevation}
             </span>
             <h3 className="font-serif text-2xl sm:text-3xl text-[#2C2523] font-medium tracking-tight">
               A Peaceful Mountain Stay with Sacred Snow Peak Views
@@ -39,11 +47,11 @@ const HotelFooter = () => {
             </button>
 
             <a
-              href={`tel:${SITE_CONFIG.conciergePhone}`}
+              href={`tel:${conciergePhone}`}
               className="px-5 py-3 rounded-full text-xs uppercase tracking-widest font-semibold border border-[#C5A059]/50 bg-[#FAF6EF] hover:bg-[#C5A059]/15 text-[#2C2523] transition-all flex items-center gap-2 cursor-pointer shadow-xs"
             >
               <PhoneIcon className="w-4 h-4 text-[#7C1D23]" />
-              <span className="font-numeral font-bold tracking-wider">{SITE_CONFIG.conciergePhone}</span>
+              <span className="font-numeral font-bold tracking-wider">{conciergePhone}</span>
             </a>
           </div>
         </div>
@@ -197,8 +205,8 @@ const HotelFooter = () => {
                 <MapPinIcon className="w-4 h-4 text-[#7C1D23] flex-shrink-0 mt-0.5" />
                 <div>
                   <span className="text-xs uppercase font-cinzel text-[#2C2523] block font-semibold">Hotel Location</span>
-                  <span>Crank&apos;s Ridge, Kasar Devi, Almora, Uttarakhand 263601</span>
-                  <span className="text-[10px] text-[#C5A059] block font-numeral mt-0.5">Near Kasar Devi Temple • 6,942 FT</span>
+                  <span>{hotelAddress}</span>
+                  <span className="text-[10px] text-[#C5A059] block font-numeral mt-0.5">Near Kasar Devi Temple • {elevation}</span>
                 </div>
               </div>
 
@@ -206,20 +214,20 @@ const HotelFooter = () => {
                 <div className="flex items-center gap-2">
                   <PhoneIcon className="w-3.5 h-3.5 text-[#7C1D23] flex-shrink-0" />
                   <a
-                    href={`tel:${SITE_CONFIG.conciergePhone}`}
+                    href={`tel:${conciergePhone}`}
                     className="text-[#2C2523] hover:text-[#7C1D23] font-numeral font-bold tracking-wide transition-colors"
                   >
-                    {SITE_CONFIG.conciergePhone}
+                    {conciergePhone}
                   </a>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <MailIcon className="w-3.5 h-3.5 text-[#7C1D23] flex-shrink-0" />
                   <a
-                    href={`mailto:${SITE_CONFIG.email}`}
+                    href={`mailto:${email}`}
                     className="text-[#5C5350] hover:text-[#7C1D23] text-xs transition-colors break-all"
                   >
-                    {SITE_CONFIG.email}
+                    {email}
                   </a>
                 </div>
               </div>

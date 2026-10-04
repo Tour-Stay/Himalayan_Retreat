@@ -1,5 +1,5 @@
 import React from 'react';
-import { UsersIcon, LuggageIcon, CheckCircleIcon, ArrowUpRightIcon, SITE_CONFIG } from '@shared';
+import { UsersIcon, LuggageIcon, CheckCircleIcon, ArrowUpRightIcon, SITE_CONFIG, sedanImg, innovaImg, minibusImg } from '@shared';
 
 const VehicleModal = ({ vehicle, isOpen, onClose, onSelectForBooking }) => {
   const [activeImage, setActiveImage] = React.useState(vehicle?.image);
@@ -47,6 +47,12 @@ const VehicleModal = ({ vehicle, isOpen, onClose, onSelectForBooking }) => {
           <img
             src={activeImage || vehicle.image}
             alt={vehicle.title}
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              if (vehicle.id === '4-seater') e.currentTarget.src = sedanImg;
+              else if (vehicle.id === '12-seater') e.currentTarget.src = minibusImg;
+              else e.currentTarget.src = innovaImg;
+            }}
             className="w-full h-full object-cover transition-all duration-500"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>

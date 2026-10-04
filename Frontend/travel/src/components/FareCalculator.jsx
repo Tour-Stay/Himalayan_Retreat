@@ -12,8 +12,9 @@ import {
   LuggageIcon,
   TrainIcon,
   StarIcon,
+  useSiteSettings,
 } from '@shared';
-import { fleetData, destinationsData } from '../data/travelData';
+import { fleetData, destinationsData, mergeFleetWithSettings, mergeDestinationsWithSettings } from '../data/travelData';
 
 // Dynamic Mountain Highway Route & Terrain Engine
 export const ROUTE_MATRIX = {
@@ -160,9 +161,22 @@ const FareCalculator = ({
     if (initialDate) setTravelDate(initialDate);
   }, [initialDate]);
 
+  // Dynamic Live CMS Settings with offline fallback
+  const { settings } = useSiteSettings();
+  const fleetList = useMemo(() => {
+    return mergeFleetWithSettings(settings?.cabFleet);
+  }, [settings?.cabFleet]);
+
+  const destinationsList = useMemo(() => {
+    return mergeDestinationsWithSettings(settings?.destinations);
+  }, [settings?.destinations]);
+
+  const company = settings?.company;
+  const whatsappNumber = company?.whatsappNumber || SITE_CONFIG.whatsappNumber;
+
   // Selected Entities
-  const currentFleet = fleetData.find((f) => f.id === selectedFleet) || fleetData[1];
-  const currentDest = destinationsData.find((d) => d.id === selectedDest) || destinationsData[0];
+  const currentFleet = fleetList.find((f) => f.id === selectedFleet) || fleetList[1] || fleetList[0];
+  const currentDest = destinationsList.find((d) => d.id === selectedDest) || destinationsList[0];
 
   // Dynamic Route Information from Matrix
   const routeInfo = useMemo(() => {
@@ -249,9 +263,9 @@ const FareCalculator = ({
     };
   }, [routeInfo.km, tripType, days, currentFleet.perKmRate, passengerCount]);
 
-  // Calculate live preview prices for all 3 vehicle types
+  // Calculate live preview prices for all vehicle types
   const fleetPricePreviews = useMemo(() => {
-    return fleetData.map((v) => {
+    return fleetList.map((v) => {
       let billableKm = 0;
       if (tripType === 'round-trip') {
         billableKm = Math.max(routeInfo.km * 2, 150 * days);
@@ -371,7 +385,7 @@ const FareCalculator = ({
       `----------------------------------------\n` +
       `Please confirm cab availability and driver details.`
     );
-    window.open(`https://wa.me/${SITE_CONFIG.whatsappNumber}?text=${text}`, '_blank');
+    window.open(`https://wa.me/${whatsappNumber}?text=${text}`, '_blank');
   };
 
   return (
@@ -441,7 +455,7 @@ const FareCalculator = ({
             </div>
 
             <div className="grid grid-cols-3 gap-2.5">
-              {fleetData.map((v) => {
+              {fleetList.map((v) => {
                 const preview = fleetPricePreviews.find((p) => p.id === v.id);
                 const isSelected = selectedFleet === v.id;
                 return (
@@ -544,7 +558,7 @@ const FareCalculator = ({
                   onChange={(e) => setSelectedDest(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF6EF] border border-[#C5A059]/30 text-xs sm:text-sm text-[#2C2523] font-semibold focus:outline-none focus:ring-2 focus:ring-[#C84B0F] cursor-pointer"
                 >
-                  {destinationsData.map((d) => (
+                  {destinationsList.map((d) => (
                     <option key={d.id} value={d.id}>
                       {d.name}
                     </option>

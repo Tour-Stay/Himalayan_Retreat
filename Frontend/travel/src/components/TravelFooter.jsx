@@ -1,16 +1,23 @@
 import React from 'react';
-import { APP_URLS, SITE_CONFIG, PhoneIcon, MailIcon, WhatsAppIcon, MapPinIcon, CarIcon, MountainIcon, BedIcon } from '@shared';
+import { APP_URLS, SITE_CONFIG, PhoneIcon, MailIcon, WhatsAppIcon, MapPinIcon, CarIcon, MountainIcon, BedIcon, useSiteSettings } from '@shared';
 import Logo from '@shared/components/Logo';
 
 const TravelFooter = () => {
   const currentYear = new Date().getFullYear();
+  const { settings } = useSiteSettings();
+  const company = settings?.company;
+
+  const conciergePhone = company?.conciergePhone || SITE_CONFIG.conciergePhone;
+  const whatsappNumber = company?.whatsappNumber || SITE_CONFIG.whatsappNumber;
+  const whatsappDisplay = company?.whatsappDisplay || SITE_CONFIG.whatsappDisplay;
+  const travelAddress = company?.travelHubAddress || "Station Base Hub, Almora / Kasar Devi, Uttarakhand 263601";
 
   const handleWhatsAppClick = () => {
     const message = encodeURIComponent(
       `*॥ ॐ नमः शिवाय • जय श्री नीब करौरी महाराज ॥*\n` +
       `Hello Almora Cab Desk! I need assistance with a private cab booking / Kathgodam station pickup.`
     );
-    window.open(`https://wa.me/${SITE_CONFIG.whatsappNumber}?text=${message}`, '_blank');
+    window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
   };
 
   return (
@@ -41,11 +48,11 @@ const TravelFooter = () => {
             </button>
 
             <a
-              href={`tel:${SITE_CONFIG.conciergePhone}`}
+              href={`tel:${conciergePhone}`}
               className="px-6 py-3.5 rounded-full text-xs uppercase tracking-wider font-bold border border-[#C5A059]/50 bg-[#FAF6EF] hover:bg-[#FFF5EC] text-[#2C2523] transition-all flex items-center gap-2 cursor-pointer shadow-xs"
             >
               <PhoneIcon className="w-4 h-4 text-[#7C1D23]" />
-              <span className="font-numeral font-bold">{SITE_CONFIG.conciergePhone}</span>
+              <span className="font-numeral font-bold">{conciergePhone}</span>
             </a>
           </div>
         </div>
@@ -174,18 +181,18 @@ const TravelFooter = () => {
             <div className="space-y-2.5 text-sm text-[#5C5350]">
               <div className="flex items-start gap-2">
                 <MapPinIcon className="w-4 h-4 text-[#7C1D23] flex-shrink-0 mt-0.5" />
-                <span>Station Base Hub, Almora / Kasar Devi, Uttarakhand 263601</span>
+                <span>{travelAddress}</span>
               </div>
               <div className="flex items-center gap-2">
                 <PhoneIcon className="w-4 h-4 text-[#7C1D23] flex-shrink-0" />
-                <a href={`tel:${SITE_CONFIG.conciergePhone}`} className="text-[#2C2523] font-bold font-numeral">
-                  {SITE_CONFIG.conciergePhone}
+                <a href={`tel:${conciergePhone}`} className="text-[#2C2523] font-bold font-numeral">
+                  {conciergePhone}
                 </a>
               </div>
               <div className="flex items-center gap-2">
                 <WhatsAppIcon className="w-4 h-4 text-[#7C1D23] flex-shrink-0" />
-                <a href={`https://wa.me/${SITE_CONFIG.whatsappNumber}`} className="text-[#2C2523] hover:underline">
-                  {SITE_CONFIG.whatsappDisplay}
+                <a href={`https://wa.me/${whatsappNumber}`} className="text-[#2C2523] hover:underline">
+                  {whatsappDisplay}
                 </a>
               </div>
               <div className="pt-2 border-t border-[#C5A059]/20">

@@ -7,6 +7,7 @@ import {
   CheckCircleIcon,
   SparklesIcon,
   FlameIcon,
+  useSiteSettings,
 } from '@shared';
 
 const diningFeatures = [
@@ -29,6 +30,8 @@ const diningFeatures = [
 ];
 
 const SatvikDining = () => {
+  const { settings } = useSiteSettings();
+  const diningHours = settings?.hotelPolicies?.diningHours || 'Breakfast: 7:30 - 10:30 AM | Dinner: 7:30 - 10:00 PM';
   return (
     <section id="dining" className="py-10 sm:py-14 px-4 bg-[#FAF6EF]/60 border-b border-[#C5A059]/20 relative">
       <Container size="lg">
@@ -57,7 +60,7 @@ const SatvikDining = () => {
                   &ldquo;Fresh, wholesome home-style food that warms your heart in the cold mountain air.&rdquo;
                 </p>
                 <span className="text-[11px] text-[#C5A059] uppercase tracking-widest font-cinzel block">
-                  Restaurant Timings • Breakfast: 7:30 - 10:30 AM | Dinner: 7:30 - 10:00 PM
+                  Restaurant Timings • {diningHours}
                 </span>
               </div>
             </div>

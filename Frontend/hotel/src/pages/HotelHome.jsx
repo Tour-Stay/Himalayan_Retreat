@@ -21,6 +21,7 @@ import {
   hotelNightSky,
   sunriseMeditationDeck,
   ArrowUpRightIcon,
+  subscribeToUpdates,
 } from '@shared';
 import HeroBookingBar from '../components/HeroBookingBar';
 import SuiteShowcase from '../components/SuiteShowcase';
@@ -54,8 +55,17 @@ const HotelHome = () => {
       }
     };
     fetchRooms();
+
+    // Instant real-time sync when rooms or availability change in Admin
+    const unsubscribe = subscribeToUpdates('rooms', () => {
+      fetchRooms();
+    });
+
     const cleanup = initAutoScrollReveal();
-    return cleanup;
+    return () => {
+      unsubscribe();
+      if (cleanup) cleanup();
+    };
   }, []);
 
   const handleBookNow = (roomId) => {
@@ -126,7 +136,7 @@ const HotelHome = () => {
       </section>
 
       {/* 2. Floating Hero Booking Bar */}
-      <HeroBookingBar onSearch={(data) => setSelectedRoomId(data.suiteId)} />
+      <HeroBookingBar rooms={rooms} onSearch={(data) => setSelectedRoomId(data.suiteId)} />
 
       {/* 2.5 Kumaon At A Glance */}
       <section id="glance" className="pt-14 pb-10 sm:pt-16 sm:pb-12 px-4 bg-[#FDFBF7] border-b border-[#C5A059]/20">
@@ -245,6 +255,7 @@ const HotelHome = () => {
 
       {/* 3. Editorial Suite Showcase */}
       <SuiteShowcase
+        rooms={rooms}
         onSelectSuite={(id) => handleBookNow(id)}
         onOpenQuickView={handleOpenQuickView}
       />

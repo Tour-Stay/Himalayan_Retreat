@@ -296,3 +296,51 @@ export const travelFaqs = [
     a: 'We track your train and flight arrival times online. There are no extra waiting charges if your train or flight is delayed. Your driver will be there when you arrive.',
   },
 ];
+
+// 6. Resilient Asset & Settings Resolvers
+export const mergeFleetWithSettings = (cabFleetSettings) => {
+  if (!cabFleetSettings || !Array.isArray(cabFleetSettings) || cabFleetSettings.length === 0) {
+    return fleetData;
+  }
+  return cabFleetSettings
+    .filter((f) => f.isActive !== false)
+    .map((f) => {
+      const defaultItem = fleetData.find((d) => d.id === f.id) || {};
+      const isRemote =
+        typeof f.image === 'string' &&
+        (f.image.startsWith('http://') || f.image.startsWith('https://') || f.image.startsWith('data:'));
+      const resolvedImage = isRemote ? f.image : (defaultItem.image || f.image || innovaImg);
+      return {
+        ...defaultItem,
+        ...f,
+        image: resolvedImage,
+        interiorImage: f.interiorImage || defaultItem.interiorImage,
+        images:
+          Array.isArray(f.images) && f.images.length > 0
+            ? f.images
+            : defaultItem.images || [resolvedImage],
+      };
+    });
+};
+
+export const mergeDestinationsWithSettings = (destinationsSettings) => {
+  if (!destinationsSettings || !Array.isArray(destinationsSettings) || destinationsSettings.length === 0) {
+    return destinationsData;
+  }
+  return destinationsSettings
+    .filter((d) => d.isActive !== false)
+    .map((d) => {
+      const defaultDest = destinationsData.find((item) => item.id === d.id) || {};
+      const isRemote =
+        typeof d.image === 'string' &&
+        (d.image.startsWith('http://') || d.image.startsWith('https://') || d.image.startsWith('data:'));
+      const resolvedImage = isRemote ? d.image : (defaultDest.image || d.image || kainchiWebp);
+      return {
+        ...defaultDest,
+        ...d,
+        distance: d.distance || d.distanceText || defaultDest.distance || `${d.kmFromAlmora || 50} km from Almora`,
+        image: resolvedImage,
+      };
+    });
+};
+

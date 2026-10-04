@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { apiClient } from '@shared';
+import { apiClient, broadcastUpdate } from '@shared';
 import StatusBadge from './StatusBadge';
 import ConfirmDialog from './ConfirmDialog';
 import { useToast } from './Toast';
@@ -37,8 +37,8 @@ export const ReviewManager = ({ reviews, setReviews, onRefresh }) => {
   const filteredReviews = useMemo(() => {
     return reviews.filter((r) => {
       const name = r.name || r.userName || '';
-      const email = r.userEmail || '';
-      const comment = r.comment || '';
+      const email = r.email || r.userEmail || '';
+      const comment = r.review || r.comment || r.text || '';
 
       const matchesSearch =
         name.toLowerCase().includes(search.toLowerCase()) ||
@@ -67,6 +67,7 @@ export const ReviewManager = ({ reviews, setReviews, onRefresh }) => {
     try {
       const res = await apiClient.put(`/travel/reviews/${review._id}/approve`);
       const newStatus = res.data?.review?.isApproved;
+      broadcastUpdate('reviews');
       addToast(
         `Review by ${review.name || 'Guest'} is now ${newStatus ? 'Approved & Public' : 'Unapproved / Hidden'}`,
         'success'
@@ -90,6 +91,7 @@ export const ReviewManager = ({ reviews, setReviews, onRefresh }) => {
     try {
       await apiClient.delete(`/travel/reviews/${deleteTarget._id}`);
       setReviews((prev) => prev.filter((r) => r._id !== deleteTarget._id));
+      broadcastUpdate('reviews');
       addToast('Review deleted from database.', 'info');
       setDeleteTarget(null);
     } catch (err) {
@@ -190,11 +192,25 @@ export const ReviewManager = ({ reviews, setReviews, onRefresh }) => {
                   {/* Top: Author, Stars, Status */}
                   <div className="flex items-start justify-between gap-3 mb-3">
                     <div>
-                      <h4 className="font-serif font-bold text-[#2C2523] text-sm">{author}</h4>
+                      <div className="flex items-center gap-2">
+                        <h4 className="font-serif font-bold text-[#2C2523] text-sm">{author}</h4>
+                        {review.category && (
+                          <span className="text-[10px] uppercase font-cinzel font-semibold px-2 py-0.5 rounded-full bg-[#FAF6EF] text-[#7C1D23] border border-[#C5A059]/40">
+                            {review.category}
+                          </span>
+                        )}
+                      </div>
                       <div className="text-[11px] text-[#66605B] font-mono mt-0.5">
-                        {review.userEmail && <span>✉️ {review.userEmail} • </span>}
+                        {(review.email || review.userEmail) && (
+                          <span>✉️ {review.email || review.userEmail} • </span>
+                        )}
                         <span>📅 {formatDate(review.createdAt)}</span>
                       </div>
+                      {(review.stayedIn || review.tripType) && (
+                        <div className="text-[11px] text-[#C5A059] font-cinzel font-semibold mt-0.5">
+                          {review.stayedIn ? `Suite: ${review.stayedIn}` : `Trip: ${review.tripType}`}
+                        </div>
+                      )}
                     </div>
 
                     <StatusBadge status={review.isApproved} type="review" />
@@ -213,13 +229,13 @@ export const ReviewManager = ({ reviews, setReviews, onRefresh }) => {
                       </span>
                     ))}
                     <span className="text-xs font-mono font-bold text-[#7C1D23] ml-1">
-                      {rating}.0
+                      {Number(rating).toFixed(1)}
                     </span>
                   </div>
 
                   {/* Comment */}
                   <p className="text-xs text-[#5C5350] leading-relaxed italic bg-[#FAF6EF] p-3 rounded-2xl border border-[#C5A059]/25 mb-3">
-                    "{review.comment}"
+                    &ldquo;{review.review || review.comment || review.text || 'No written comment provided.'}&rdquo;
                   </p>
 
                   {/* Attached Photos thumbnails with click to lightbox */}

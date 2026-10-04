@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
-import { Container, ArrowUpRightIcon } from '@shared';
-import { fleetData } from '../data/travelData';
+import { Container, ArrowUpRightIcon, useSiteSettings } from '@shared';
+import { fleetData, mergeFleetWithSettings } from '../data/travelData';
 import VehicleCard from '../components/VehicleCard';
 import VehicleModal from '../components/VehicleModal';
 
 const AllCabs = () => {
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { settings } = useSiteSettings();
+
+  const fleetList = React.useMemo(() => {
+    return mergeFleetWithSettings(settings?.cabFleet);
+  }, [settings?.cabFleet]);
 
   const handleQuickView = (vehicle) => {
     setSelectedVehicle(vehicle);
@@ -40,7 +45,7 @@ const AllCabs = () => {
 
         {/* Fleet Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {fleetData.map((vehicle) => (
+          {fleetList.map((vehicle) => (
             <VehicleCard
               key={vehicle.id}
               vehicle={vehicle}

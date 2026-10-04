@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { Container, SITE_CONFIG } from '@shared';
+import { Container, SITE_CONFIG, useSiteSettings } from '@shared';
 
 const ConciergeEnquirySection = () => {
+  const { settings } = useSiteSettings();
+  const company = settings?.company || SITE_CONFIG;
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -114,7 +116,7 @@ const ConciergeEnquirySection = () => {
       );
     }
 
-    window.open(`https://wa.me/${SITE_CONFIG.whatsappNumber}?text=${message}`, '_blank');
+    window.open(`https://wa.me/${company.whatsappNumber}?text=${message}`, '_blank');
   };
 
   return (
@@ -475,7 +477,7 @@ const ConciergeEnquirySection = () => {
             </button>
 
             <p className="text-xs text-center text-[#6B615E] pt-1 font-sans">
-              Or call our Almora desk directly: <strong className="text-[#2C2523] font-numeral font-bold tracking-wide">{SITE_CONFIG.conciergePhone}</strong>
+              Or call our Almora desk directly: <strong className="text-[#2C2523] font-numeral font-bold tracking-wide">{company.conciergePhone}</strong>
             </p>
           </form>
         </div>
