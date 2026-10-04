@@ -70,13 +70,13 @@ export const CompanyManager = () => {
 
   return (
     <div className="space-y-6">
-      <div className="bg-[#FDFBF7] p-5 sm:p-6 rounded-2xl border border-[#C5A059]/30 shadow-xs">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 mb-6 border-b border-[#C5A059]/20">
+      <div className="bg-[#FAF5EC] p-5 sm:p-6 rounded-2xl border border-[#EAA722]/30 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 mb-6 border-b border-[#EAA722]/20">
           <div>
-            <span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-cinzel font-semibold block">
+            <span className="text-[10px] uppercase tracking-[0.2em] text-[#073125] font-cinzel font-bold block">
               Universal Platform Identity
             </span>
-            <h3 className="font-serif text-xl sm:text-2xl font-medium text-[#2C2523]">
+            <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#073125]">
               Company & Contact Profile
             </h3>
             <p className="text-xs text-[#5C5350] mt-1">
@@ -88,16 +88,16 @@ export const CompanyManager = () => {
             type="submit"
             form="company-form"
             disabled={isSaving}
-            className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-[#7C1D23] hover:bg-[#5C151A] text-[#FDFBF7] text-xs font-semibold uppercase tracking-wider rounded-xl transition cursor-pointer disabled:opacity-50 shadow-xs"
+            className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-[#073125] hover:bg-[#0C2B22] text-[#EAA722] border border-[#EAA722]/40 text-xs font-cinzel font-bold uppercase tracking-wider rounded-xl transition cursor-pointer disabled:opacity-50 shadow-sm"
           >
             {isSaving ? (
               <>
-                <span className="w-3.5 h-3.5 border-2 border-[#FDFBF7] border-t-transparent rounded-full animate-spin" />
+                <span className="w-3.5 h-3.5 border-2 border-[#EAA722] border-t-transparent rounded-full animate-spin" />
                 <span>Saving Changes...</span>
               </>
             ) : (
               <>
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-4 h-4 text-[#EAA722]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
                 <span>Save Profile</span>
@@ -109,7 +109,7 @@ export const CompanyManager = () => {
         <form id="company-form" onSubmit={handleSave} className="space-y-6">
           {/* Brand Names Group */}
           <div>
-            <h4 className="text-xs font-cinzel uppercase tracking-wider text-[#7C1D23] font-bold mb-3">
+            <h4 className="text-xs font-cinzel uppercase tracking-wider text-[#073125] font-bold mb-3">
               1. Brand Titles & Tagline
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -185,8 +185,8 @@ export const CompanyManager = () => {
           </div>
 
           {/* Contact Numbers Group */}
-          <div className="pt-4 border-t border-[#C5A059]/20">
-            <h4 className="text-xs font-cinzel uppercase tracking-wider text-[#7C1D23] font-bold mb-3">
+          <div className="pt-4 border-t border-[#EAA722]/20">
+            <h4 className="text-xs font-cinzel uppercase tracking-wider text-[#073125] font-bold mb-3">
               2. Front Desk Telephony & WhatsApp
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -201,7 +201,7 @@ export const CompanyManager = () => {
                   onChange={handleChange}
                   required
                   placeholder="+91 96906 21247"
-                  className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-[#C5A059]/40 text-[#2C2523] font-mono focus:outline-hidden focus:border-[#7C1D23]"
+                  className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-[#EAA722]/40 text-[#2C2523] font-mono focus:outline-hidden focus:border-[#073125]"
                 />
               </div>
 
@@ -215,7 +215,7 @@ export const CompanyManager = () => {
                   value={formData.whatsappNumber}
                   onChange={handleChange}
                   required
-                  className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-[#C5A059]/40 text-[#2C2523] font-mono focus:outline-hidden focus:border-[#7C1D23]"
+                  className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-[#EAA722]/40 text-[#2C2523] font-mono focus:outline-hidden focus:border-[#073125]"
                 />
               </div>
 
@@ -229,7 +229,7 @@ export const CompanyManager = () => {
                   value={formData.whatsappDisplay}
                   onChange={handleChange}
                   placeholder="+91 96906 21247"
-                  className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-[#C5A059]/40 text-[#2C2523] font-mono focus:outline-hidden focus:border-[#7C1D23]"
+                  className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-[#EAA722]/40 text-[#2C2523] font-mono focus:outline-hidden focus:border-[#073125]"
                 />
               </div>
 
@@ -243,7 +243,7 @@ export const CompanyManager = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-[#C5A059]/40 text-[#2C2523] focus:outline-hidden focus:border-[#7C1D23]"
+                  className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-[#EAA722]/40 text-[#2C2523] focus:outline-hidden focus:border-[#073125]"
                 />
               </div>
 
@@ -257,15 +257,15 @@ export const CompanyManager = () => {
                   value={formData.upiId}
                   onChange={handleChange}
                   placeholder="e.g. kasarhimalayan@upi"
-                  className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-[#C5A059]/40 text-[#2C2523] font-mono focus:outline-hidden focus:border-[#7C1D23]"
+                  className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-[#EAA722]/40 text-[#2C2523] font-mono focus:outline-hidden focus:border-[#073125]"
                 />
               </div>
             </div>
           </div>
 
           {/* Physical Location Group */}
-          <div className="pt-4 border-t border-[#C5A059]/20">
-            <h4 className="text-xs font-cinzel uppercase tracking-wider text-[#7C1D23] font-bold mb-3">
+          <div className="pt-4 border-t border-[#EAA722]/20">
+            <h4 className="text-xs font-cinzel uppercase tracking-wider text-[#073125] font-bold mb-3">
               3. Addresses & Social Media
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

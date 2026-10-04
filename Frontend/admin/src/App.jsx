@@ -108,6 +108,14 @@ function App() {
                 }
               />
               <Route
+                path="/settings/landing-cms"
+                element={
+                  <ProtectedRoute>
+                    <AdminDashboard tab="landing-cms" />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="/settings/policies"
                 element={
                   <ProtectedRoute>

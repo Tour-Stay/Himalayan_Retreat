@@ -1,16 +1,17 @@
 import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { APP_URLS, SITE_CONFIG, PhoneIcon, ArrowUpRightIcon, CarIcon, useSiteSettings } from '@shared';
 import Logo from '@shared/components/Logo';
 
 const navLinks = [
-  { label: 'Rooms', href: '/#rooms' },
+  { label: 'Rooms & Rates', href: '/rooms' },
   { label: 'Dining', href: '/#dining' },
-  { label: 'Facilities', href: '/#amenities' },
-  { label: 'Temples', href: '/#trails' },
-  { label: 'Our Story', href: '/#philosophy' },
+  { label: 'Sights & Temples', href: '/#trails' },
+  { label: 'Reviews', href: '/#reviews' },
 ];
 
 const HotelNavbar = () => {
+  const location = useLocation();
   const { settings } = useSiteSettings();
   const company = settings?.company;
   const conciergePhone = company?.conciergePhone || SITE_CONFIG.conciergePhone;
@@ -29,32 +30,32 @@ const HotelNavbar = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full font-sans transition-all duration-300">
-      {/* 1. TOP SIMPLE UTILITY STRIP */}
+      {/* 1. TOP UTILITY STRIP (Dark Pine Green) */}
       <div
-        className={`bg-[#FAF6EF] border-b border-[#C5A059]/20 px-4 text-xs text-[#5C5350] transition-all duration-300 overflow-hidden ${
-          isScrolled ? 'max-h-0 py-0 opacity-0 pointer-events-none border-b-0' : 'max-h-10 py-1.5 opacity-100'
+        className={`bg-[#05261D] border-b border-white/10 px-4 text-xs sm:text-sm text-white/90 transition-all duration-300 overflow-hidden ${
+          isScrolled ? 'max-h-0 py-0 opacity-0 pointer-events-none border-b-0' : 'max-h-11 py-2 opacity-100'
         }`}
       >
-        <div className="max-w-7xl mx-auto flex items-center justify-between text-[11px] whitespace-nowrap">
+        <div className="max-w-7xl mx-auto flex items-center justify-between whitespace-nowrap">
           <div className="flex items-center gap-2 flex-shrink-0">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#C5A059]"></span>
-            <span className="font-semibold text-[#2C2523]">Kasar Devi, Almora</span>
-            <span className="text-[#C5A059]">•</span>
+            <span className="inline-block w-2 h-2 rounded-full bg-[#C9F24D]"></span>
+            <span className="font-semibold text-white">Kasar Devi, Almora</span>
+            <span className="text-white/40">•</span>
             <span>{elevation} Height</span>
           </div>
 
-          <div className="flex items-center gap-3 flex-shrink-0">
+          <div className="flex items-center gap-3.5 flex-shrink-0">
             <a
               href={`tel:${conciergePhone}`}
-              className="hover:text-[#7C1D23] font-semibold flex items-center gap-1 transition-colors whitespace-nowrap"
+              className="hover:text-[#C9F24D] font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap text-white/95"
             >
-              <PhoneIcon className="w-3 h-3 text-[#7C1D23]" />
-              <span>Call: <strong className="text-[#2C2523] font-numeral">{conciergePhone}</strong></span>
+              <PhoneIcon className="w-3.5 h-3.5 text-[#C9F24D]" />
+              <span>Call: <strong className="text-white font-mono">{conciergePhone}</strong></span>
             </a>
-            <span className="text-[#C5A059]/40">|</span>
+            <span className="text-white/30">|</span>
             <a
               href={APP_URLS.landing}
-              className="text-[#7C1D23] hover:underline font-semibold whitespace-nowrap"
+              className="text-[#C9F24D] hover:underline font-semibold whitespace-nowrap"
             >
               Dev Bhoomi Guide &rarr;
             </a>
@@ -62,59 +63,64 @@ const HotelNavbar = () => {
         </div>
       </div>
 
-      {/* 2. MAIN CLEAN NAVIGATION BAR */}
+      {/* 2. MAIN SOLID GREEN NAVBAR */}
       <div
-        className={`w-full transition-all duration-300 ${
-          isScrolled
-            ? 'bg-[#FDFBF7]/95 backdrop-blur-md shadow-md border-b border-[#C5A059]/30 py-2.5'
-            : 'bg-[#FDFBF7] border-b border-[#C5A059]/20 py-3 shadow-xs'
+        className={`w-full transition-all duration-300 bg-[#073125] text-white border-b border-white/10 shadow-lg ${
+          isScrolled ? 'py-2.5 backdrop-blur-md' : 'py-3.5'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-4">
           {/* Brand Logo & Name */}
-          <a href="/" className="flex items-center gap-2.5 group flex-shrink-0 whitespace-nowrap">
-            <Logo size={36} />
+          <Link to="/" className="flex items-center gap-3 group flex-shrink-0 whitespace-nowrap">
+            <Logo size={42} />
             <div className="flex flex-col">
-              <span className="font-cinzel text-sm sm:text-base font-bold text-[#2C2523] group-hover:text-[#7C1D23] transition-colors leading-tight whitespace-nowrap">
+              <span className="font-serif text-lg sm:text-xl lg:text-2xl font-bold text-white group-hover:text-[#C9F24D] transition-colors leading-tight whitespace-nowrap">
                 The Kasar Himalayan Heights
               </span>
-              <span className="text-[10px] tracking-widest uppercase text-[#C5A059] font-medium font-cinzel whitespace-nowrap">
+              <span className="text-xs tracking-wider uppercase text-[#C9F24D] font-semibold font-mono whitespace-nowrap">
                 Kasar Devi • 6,942 FT
               </span>
             </div>
-          </a>
+          </Link>
 
-          {/* Simple Clean Desktop Menu Links (1 line always) */}
-          <nav className="nav-desktop-menu items-center gap-1 sm:gap-2 lg:gap-3 flex-nowrap whitespace-nowrap flex-shrink-0">
-            {navLinks.map((link, idx) => (
-              <a
-                key={idx}
-                href={link.href}
-                className="px-2.5 lg:px-3 py-1.5 rounded-full text-xs font-cinzel font-semibold uppercase tracking-wider text-[#2C2523] hover:text-[#7C1D23] hover:bg-[#FAF6EF] transition-all whitespace-nowrap flex-shrink-0"
-              >
-                {link.label}
-              </a>
-            ))}
+          {/* Simple Clean Desktop Menu Links (Prominent Serif Buttons) */}
+          <nav className="nav-desktop-menu items-center gap-1.5 sm:gap-2.5 lg:gap-3.5 flex-nowrap whitespace-nowrap flex-shrink-0">
+            {navLinks.map((link, idx) => {
+              const isActive = link.href === '/rooms' && location.pathname === '/rooms';
+              return (
+                <a
+                  key={idx}
+                  href={link.href}
+                  className={`px-3.5 py-1.5 rounded-full text-[19px] sm:text-[20px] lg:text-[21px] font-serif font-medium transition-all whitespace-nowrap flex-shrink-0 tracking-wide ${
+                    isActive
+                      ? 'bg-white/15 text-[#C9F24D] shadow-xs'
+                      : 'text-white/95 hover:text-[#C9F24D] hover:bg-white/10'
+                  }`}
+                >
+                  {link.label}
+                </a>
+              );
+            })}
           </nav>
 
-          {/* Right Action Buttons (1 line always) */}
+          {/* Right Action Buttons - SWAPPED (Book Room first, Book Cab second) */}
           <div className="nav-actions-desktop items-center gap-2 lg:gap-2.5 flex-nowrap whitespace-nowrap flex-shrink-0">
+            <Link
+              to="/book"
+              className="px-5 py-2.5 rounded-full text-xs sm:text-sm font-mono font-bold uppercase tracking-wider bg-[#C9F24D] hover:bg-[#b8e23f] text-[#073125] transition-all shadow-md flex items-center gap-1.5 hover:scale-102 whitespace-nowrap flex-shrink-0 cursor-pointer"
+            >
+              <span className="whitespace-nowrap">Book Room</span>
+              <ArrowUpRightIcon className="w-4 h-4 flex-shrink-0" />
+            </Link>
+
             <a
               href={APP_URLS.travel}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-3.5 py-1.5 rounded-full text-xs font-cinzel font-semibold uppercase tracking-wider border border-[#C5A059]/60 bg-[#FAF6EF] text-[#2C2523] hover:text-[#7C1D23] hover:border-[#7C1D23] transition-all flex items-center gap-1.5 shadow-xs whitespace-nowrap flex-shrink-0 cursor-pointer"
+              className="px-4 py-2.5 rounded-full text-xs sm:text-sm font-mono font-semibold uppercase tracking-wider border border-white/20 bg-white/10 text-white hover:bg-white/20 transition-all flex items-center gap-1.5 shadow-xs whitespace-nowrap flex-shrink-0 cursor-pointer"
             >
-              <CarIcon className="w-3.5 h-3.5 text-[#7C1D23] flex-shrink-0" />
+              <CarIcon className="w-4 h-4 text-[#C9F24D] flex-shrink-0" />
               <span className="whitespace-nowrap">Book Cab</span>
-            </a>
-
-            <a
-              href="/#book"
-              className="px-4 py-1.5 rounded-full text-xs font-cinzel font-semibold uppercase tracking-wider bg-[#7C1D23] hover:bg-[#5C151A] text-[#FDFBF7] transition-all shadow-md border border-[#C5A059]/40 flex items-center gap-1 hover:scale-102 whitespace-nowrap flex-shrink-0 cursor-pointer"
-            >
-              <span className="whitespace-nowrap">Book Room</span>
-              <ArrowUpRightIcon className="w-3.5 h-3.5 flex-shrink-0" />
             </a>
           </div>
 
@@ -123,7 +129,7 @@ const HotelNavbar = () => {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-xl border border-[#C5A059]/30 bg-[#FAF6EF] text-[#2C2523] hover:text-[#7C1D23] transition-colors cursor-pointer"
+              className="p-2 rounded-xl border border-white/20 bg-white/10 text-white hover:text-[#C9F24D] transition-colors cursor-pointer"
               aria-label="Toggle navigation menu"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -138,16 +144,16 @@ const HotelNavbar = () => {
         </div>
       </div>
 
-      {/* 3. SIMPLE MOBILE MENU DRAWER */}
+      {/* 3. MOBILE MENU DRAWER */}
       {mobileMenuOpen && (
-        <div className="nav-mobile-panel bg-[#FDFBF7] border-b border-[#C5A059]/30 px-6 py-5 space-y-3 shadow-xl">
-          <div className="space-y-1 pb-3 border-b border-[#C5A059]/20">
+        <div className="nav-mobile-panel bg-[#073125] border-b border-white/15 px-6 py-5 space-y-3.5 shadow-xl text-white">
+          <div className="space-y-1.5 pb-3 border-b border-white/10">
             {navLinks.map((link, idx) => (
               <a
                 key={idx}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="block py-2 text-sm font-semibold text-[#2C2523] hover:text-[#7C1D23] transition-colors"
+                className="block py-2 text-[20px] font-serif font-medium text-white/95 hover:text-[#C9F24D] transition-colors"
               >
                 {link.label}
               </a>
@@ -155,32 +161,33 @@ const HotelNavbar = () => {
           </div>
 
           <div className="pt-2 flex flex-col gap-2.5">
+            {/* Swapped order in mobile drawer too */}
             <div className="grid grid-cols-2 gap-2">
+              <Link
+                to="/book"
+                onClick={() => setMobileMenuOpen(false)}
+                className="py-2.5 rounded-full text-center text-xs uppercase tracking-wider font-bold bg-[#C9F24D] text-[#073125] shadow-md flex items-center justify-center gap-1"
+              >
+                <span>Book Room ↗</span>
+              </Link>
+
               <a
                 href={APP_URLS.travel}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setMobileMenuOpen(false)}
-                className="py-2.5 rounded-full text-center text-xs uppercase tracking-wider font-bold border border-[#C5A059]/50 bg-[#FAF6EF] text-[#2C2523] flex items-center justify-center gap-1.5 shadow-xs"
+                className="py-2.5 rounded-full text-center text-xs uppercase tracking-wider font-bold border border-white/25 bg-white/10 text-white flex items-center justify-center gap-1.5 shadow-xs"
               >
-                <CarIcon className="w-3.5 h-3.5 text-[#7C1D23]" />
+                <CarIcon className="w-3.5 h-3.5 text-[#C9F24D]" />
                 <span>Book Cab</span>
-              </a>
-
-              <a
-                href="/#book"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-2.5 rounded-full text-center text-xs uppercase tracking-wider font-bold bg-[#7C1D23] text-[#FDFBF7] shadow-md flex items-center justify-center gap-1"
-              >
-                <span>Book Room ↗</span>
               </a>
             </div>
 
             <a
               href={`tel:${SITE_CONFIG.conciergePhone}`}
-              className="text-center text-xs text-[#5C5350] font-semibold py-1 block"
+              className="text-center text-xs text-white/85 font-medium py-1 block"
             >
-              Call Us: <span className="text-[#2C2523] font-numeral">{SITE_CONFIG.conciergePhone}</span>
+              Call Us: <span className="text-[#C9F24D] font-mono font-bold">{SITE_CONFIG.conciergePhone}</span>
             </a>
           </div>
         </div>

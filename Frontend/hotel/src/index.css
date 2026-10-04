@@ -4,20 +4,43 @@
 @source "../../shared/**/*.{js,jsx,ts,tsx}";
 
 /* ================================================================
-   THE KASAR HIMALAYAN HEIGHTS (HOTEL) — LUXURY EDITORIAL SYSTEM
-   Matching landing page design system & typography standard
+   THE KASAR HIMALAYAN HEIGHTS (HOTEL) — KUMAON GREEN THEME
+   Tranquil, high-altitude editorial aesthetic inspired by kumaoncollective.com
    ================================================================ */
 
-/* Base Body — Clean Luxury Raleway */
-body,
+:root {
+  --color-pine-dark: #073125;
+  --color-pine-deep: #0B2B21;
+  --color-pine-mid: #12433B;
+  --color-pine-light: #2D604E;
+  --color-sage-accent: #C9F24D;
+  --color-sage-bg: #F4F7F3;
+  --color-sage-card: #FAFBF9;
+  --color-bg-base: #F8FAF7;
+  --color-gold-warm: #C5A059;
+}
+
+/* Base HTML & Body — Increased font sizes for enhanced readability across the whole page */
 html {
+  font-size: 17px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 17.5px;
+  }
+}
+
+body {
   font-family: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-variant-numeric: lining-nums proportional-nums;
   -webkit-font-feature-settings: "lnum" 1, "pnum" 1;
   font-feature-settings: "lnum" 1, "pnum" 1;
-  color: #2C2523;
+  color: #073125;
+  background-color: #F8FAF7;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
 }
 
 /* Clean simple ampersand font fallback — targets only the '&' character (U+0026) */
@@ -113,14 +136,14 @@ body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #FAF6EF;
+  background: #EBF2EA;
 }
 ::-webkit-scrollbar-thumb {
-  background: #C5A059;
+  background: #073125;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #7C1D23;
+  background: #12433B;
 }
 
 /* ================================================================

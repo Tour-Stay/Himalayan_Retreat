@@ -7,10 +7,10 @@ const RoomCard = ({ room, onBookNow }) => {
   const images = room.imageURLs && room.imageURLs.length > 0 ? room.imageURLs : [snowViewSuiteImg];
 
   return (
-    <div className="bg-ivory rounded-3xl overflow-hidden border border-gold/25 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between h-full group card-luxury">
+    <div className="bg-white rounded-3xl overflow-hidden border border-[#073125]/10 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between h-full group card-luxury">
       <div>
         {/* Room Image Container with Interactive Image Switcher */}
-        <div className="relative h-64 overflow-hidden bg-slate">
+        <div className="relative h-64 overflow-hidden bg-slate-900">
           <img
             src={images[currentImgIndex]}
             alt={room.name}
@@ -25,12 +25,12 @@ const RoomCard = ({ room, onBookNow }) => {
 
           {/* Badges */}
           <div className="absolute top-3.5 left-3.5 flex flex-wrap gap-2">
-            <span className="bg-slate/80 backdrop-blur-md text-ivory text-[11px] font-medium px-3 py-1 rounded-full border border-gold/30 flex items-center gap-1.5 shadow-sm">
-              <SnowIcon className="w-3.5 h-3.5 text-gold" />
+            <span className="bg-black/65 backdrop-blur-md text-white text-[11px] font-medium px-3 py-1 rounded-full border border-white/20 flex items-center gap-1.5 shadow-sm">
+              <SnowIcon className="w-3.5 h-3.5 text-[#C9F24D]" />
               <span>{room.view || '180° Snow Peak View'}</span>
             </span>
             {room.badge && (
-              <span className="bg-maroon text-ivory text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm border border-gold/30">
+              <span className="bg-[#C9F24D] text-[#073125] text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm">
                 {room.badge}
               </span>
             )}
@@ -47,7 +47,7 @@ const RoomCard = ({ room, onBookNow }) => {
                     setCurrentImgIndex(i);
                   }}
                   className={`h-1.5 rounded-full transition-all cursor-pointer ${
-                    currentImgIndex === i ? 'bg-gold w-3' : 'bg-white/50 w-1.5'
+                    currentImgIndex === i ? 'bg-[#C9F24D] w-3' : 'bg-white/50 w-1.5'
                   }`}
                   aria-label={`View photo ${i + 1}`}
                 />
@@ -56,12 +56,12 @@ const RoomCard = ({ room, onBookNow }) => {
           )}
 
           {/* Room Specs Tag (Area & Bed) */}
-          <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-ivory text-xs">
-            <span className="bg-slate/80 backdrop-blur-md px-2.5 py-1 rounded-lg text-[11px] font-medium border border-white/10">
+          <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-xs">
+            <span className="bg-black/65 backdrop-blur-md px-2.5 py-1 rounded-lg text-[11px] font-medium border border-white/15">
               {room.area || '42 m²'}
             </span>
-            <span className="bg-slate/80 backdrop-blur-md px-2.5 py-1 rounded-lg text-[11px] font-medium border border-white/10 flex items-center gap-1">
-              <BedIcon className="w-3.5 h-3.5 text-gold" />
+            <span className="bg-black/65 backdrop-blur-md px-2.5 py-1 rounded-lg text-[11px] font-medium border border-white/15 flex items-center gap-1">
+              <BedIcon className="w-3.5 h-3.5 text-[#C9F24D]" />
               <span>{room.bedType || 'King Bed'}</span>
             </span>
           </div>
@@ -69,11 +69,11 @@ const RoomCard = ({ room, onBookNow }) => {
 
         {/* Room Info */}
         <div className="p-6">
-          <h3 className="font-serif text-xl sm:text-2xl font-medium text-charcoal group-hover:text-maroon transition-colors mb-2">
+          <h3 className="font-serif text-xl sm:text-2xl font-medium text-[#073125] group-hover:text-[#12433B] transition-colors mb-2">
             {room.name}
           </h3>
 
-          <p className="text-charcoal-muted text-sm leading-relaxed mb-5 line-clamp-2 font-light">
+          <p className="text-[#4B6358] text-sm leading-relaxed mb-5 line-clamp-2 font-light">
             {room.description}
           </p>
 
@@ -82,13 +82,13 @@ const RoomCard = ({ room, onBookNow }) => {
             {(room.amenities || ['Room Heater', 'Geyser', 'Snow Balcony']).slice(0, 3).map((amenity, i) => (
               <span
                 key={i}
-                className="text-[11px] text-charcoal bg-ivory-warm px-2.5 py-1 rounded-lg border border-gold/20 font-medium"
+                className="text-[11px] text-[#073125] bg-[#F1F5F0] px-2.5 py-1 rounded-lg border border-[#073125]/10 font-medium"
               >
                 ✦ {amenity}
               </span>
             ))}
             {room.amenities?.length > 3 && (
-              <span className="text-[11px] text-charcoal-muted px-1.5 py-1 font-medium">
+              <span className="text-[11px] text-[#4B6358] px-1.5 py-1 font-medium">
                 +{room.amenities.length - 3} more
               </span>
             )}
@@ -97,41 +97,36 @@ const RoomCard = ({ room, onBookNow }) => {
       </div>
 
       {/* Card Footer: Price & CTAs */}
-      <div className="px-6 pb-6 pt-4 border-t border-gold/15 flex items-center justify-between">
+      <div className="px-6 pb-6 pt-4 border-t border-[#073125]/10 flex items-center justify-between">
         <div>
-          <span className="text-[10px] text-charcoal-muted block leading-none mb-1 uppercase tracking-wider font-mono">
+          <span className="text-[10px] text-[#4B6358] block leading-none mb-1 uppercase tracking-wider font-mono">
             From
           </span>
-          <span className="text-maroon font-serif text-2xl font-semibold">
+          <span className="text-[#073125] font-serif text-2xl font-semibold">
             ₹{room.pricePerNight?.toLocaleString()}
           </span>
-          <span className="text-xs text-charcoal-muted ml-1">/ night</span>
+          <span className="text-xs text-[#4B6358] ml-1">/ night</span>
         </div>
 
         <div className="flex items-center gap-2">
           <Link
             to={`/rooms/${room._id}`}
-            className="px-3.5 py-2 rounded-full text-xs font-semibold border border-gold/40 text-charcoal hover:bg-gold/10 transition-colors"
+            className="px-3.5 py-2 rounded-full text-xs font-semibold border border-[#073125]/25 text-[#073125] hover:bg-[#EBF2EA] transition-colors"
           >
             Details
           </Link>
-          <a
-            href="#book"
-            onClick={(e) => {
-              if (onBookNow) {
-                e.preventDefault();
-                onBookNow(room._id);
-              }
-            }}
-            className="bg-maroon hover:bg-maroon-dark text-ivory text-xs font-semibold px-4 py-2 rounded-full inline-flex items-center gap-1 group/btn transition-colors shadow-sm"
+          <Link
+            to={`/book?room=${room._id}`}
+            className="bg-[#073125] hover:bg-[#12433B] text-white text-xs font-semibold px-4 py-2 rounded-full inline-flex items-center gap-1 group/btn transition-colors shadow-sm"
           >
             <span>Book</span>
             <ArrowUpRightIcon className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-300" />
-          </a>
+          </Link>
         </div>
       </div>
     </div>
   );
 };
+
 
 export default RoomCard;

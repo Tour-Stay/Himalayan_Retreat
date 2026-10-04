@@ -8,16 +8,42 @@
    Matching Hotel & Landing page design system & typography standard
    ================================================================ */
 
-/* Base Body — Clean Luxury Raleway */
-body,
+:root {
+  --color-pine-dark: #073125;
+  --color-pine-deep: #0B2B21;
+  --color-pine-mid: #12433B;
+  --color-pine-night: #031C15;
+  --color-gold-temple: #EAA722;
+  --color-gold-warm: #C5A059;
+  --color-maroon-devotional: #541508;
+  --color-maroon-dark: #3D0F06;
+  --color-sage-accent: #C9F24D;
+  --color-bg-base: #F8FAF7;
+  --color-bg-cream: #FAF6EF;
+}
+
+/* Base HTML & Body — Calibrated font sizes matching Hotel & Landing */
 html {
+  font-size: 17px;
+  scroll-behavior: smooth;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 17.5px;
+  }
+}
+
+body {
   font-family: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-variant-numeric: lining-nums proportional-nums;
   -webkit-font-feature-settings: "lnum" 1, "pnum" 1;
   font-feature-settings: "lnum" 1, "pnum" 1;
-  color: #2C2523;
+  color: #073125;
+  background-color: #F8FAF7;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
 }
 
 /* Clean simple ampersand font fallback — targets only the '&' character (U+0026) */
@@ -116,11 +142,11 @@ body {
   background: #FAF6EF;
 }
 ::-webkit-scrollbar-thumb {
-  background: #C5A059;
+  background: #EAA722;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #7C1D23;
+  background: #541508;
 }
 
 /* ================================================================
@@ -178,12 +204,12 @@ body {
 
 /* Card hover lift */
 .card-luxury {
-  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .card-luxury:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(44, 37, 35, 0.08), 0 4px 16px rgba(197, 160, 89, 0.12);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(7, 49, 37, 0.08), 0 2px 8px rgba(234, 167, 34, 0.1);
 }
 
 /* Scroll reveal helper */

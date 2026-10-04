@@ -22,6 +22,7 @@ export const ADMIN_ROUTES = {
   fleet: '/settings/fleet',
   routes: '/settings/routes',
   announcements: '/settings/announcements',
+  'landing-cms': '/settings/landing-cms',
   policies: '/settings/policies',
 };
 
@@ -56,6 +57,10 @@ export const PATH_TO_TAB = {
   'announcements': 'announcements',
   'settings/announcements': 'announcements',
   'dashboard/announcements': 'announcements',
+  'landing-cms': 'landing-cms',
+  'landing': 'landing-cms',
+  'settings/landing-cms': 'landing-cms',
+  'dashboard/landing-cms': 'landing-cms',
   'policies': 'policies',
   'settings/policies': 'policies',
   'dashboard/policies': 'policies',
@@ -72,6 +77,7 @@ export const ADMIN_TAB_TITLES = {
   fleet: 'Cab Fleet Tariffs & Per-KM Matrix | Admin CMS',
   routes: 'Temple & Sightseeing Route Fares | Admin CMS',
   announcements: 'Emergency Notice Ribbon & Devotional Hero | Admin CMS',
+  'landing-cms': 'Landing Website CMS & Pilgrimage Itinerary | Admin CMS',
   policies: 'Resort Policies, Dining Hours & FAQs | Admin CMS',
 };
 

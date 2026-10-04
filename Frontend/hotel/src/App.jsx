@@ -12,6 +12,7 @@ import HotelFooter from './components/HotelFooter';
 import HotelHome from './pages/HotelHome';
 import AllRooms from './pages/AllRooms';
 import RoomDetails from './pages/RoomDetails';
+import BookRoom from './pages/BookRoom';
 import BookingConfirmation from './pages/BookingConfirmation';
 
 function HotelAppContent() {
@@ -24,13 +25,13 @@ function HotelAppContent() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-ivory text-charcoal font-sans flex flex-col selection:bg-gold/25 selection:text-maroon text-base sm:text-lg">
+    <div className="min-h-screen bg-[#F8FAF7] text-[#073125] font-sans flex flex-col selection:bg-[#C9F24D]/30 selection:text-[#073125] text-base sm:text-lg">
       {/* 1. Top Announcement Bar */}
       {announcement?.enabled !== false && (
         <AnnouncementBar
           message={announcement?.message || "Warm Heated Rooms at 6,942 Feet: 180° Snow Peak Views & Cozy Pine Chalets."}
-          linkText={announcement?.linkText || "Check Room Rates"}
-          linkHref={announcement?.linkHref || "/#book"}
+          linkText={announcement?.linkText || "View Chalets"}
+          linkHref={announcement?.linkHref || "/rooms"}
         />
       )}
 
@@ -42,6 +43,9 @@ function HotelAppContent() {
           <Route path="/" element={<HotelHome />} />
           <Route path="/rooms" element={<AllRooms />} />
           <Route path="/rooms/:id" element={<RoomDetails />} />
+          <Route path="/room/:id" element={<RoomDetails />} />
+          <Route path="/book" element={<BookRoom />} />
+          <Route path="/book-room" element={<Navigate to="/book" replace />} />
           <Route path="/booking-confirmation" element={<BookingConfirmation />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

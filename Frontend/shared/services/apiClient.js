@@ -10,9 +10,14 @@ const apiClient = axios.create({
   },
 });
 
-// Automatic JWT Bearer Token Injection
+// Automatic JWT Bearer Token Injection & URL Normalization
 apiClient.interceptors.request.use(
   (config) => {
+    // Prevent double /api/api if caller passes '/api/...'
+    if (config.url && config.url.startsWith('/api/')) {
+      config.url = config.url.replace(/^\/api/, '');
+    }
+
     const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;

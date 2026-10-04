@@ -34,6 +34,69 @@ const defaultSeedData = {
     welcomeStatement:
       'Kasar Devi and the Kumaon Himalayas have welcomed spiritual seekers, mystics, and travelers for centuries. Surrounded by ancient deodar forests and the silent majesty of snow peaks, we welcome you with deep reverence and quiet hospitality.',
   },
+  landingContent: {
+    itinerary: [
+      {
+        num: '01',
+        tag: 'Day 1 • Arrival & Kainchi Darshan',
+        title: 'Kathgodam to Kainchi Dham & Kasar Ridge',
+        items: [
+          'Direct train station pickup from Kathgodam by private mountain cab.',
+          'Sacred stop at Kainchi Dham Ashram for evening darshan and aarti.',
+          'Drive up to Kasar Devi for check-in to your heated room and hot satvik dinner.',
+        ],
+        note: '85 km • ~3 hrs scenic mountain drive',
+      },
+      {
+        num: '02',
+        tag: 'Day 2 • Himalayan Sunrise & Jageshwar Valley',
+        title: 'Trishul Peak Dawn & Ancient Shiva Temples',
+        items: [
+          'Enjoy golden morning sunrise over Mount Trishul from your private balcony.',
+          'Peaceful morning walk to historic Kasar Devi Temple and Vivekananda Caves.',
+          'Comfortable cab visit to the ancient 124 stone Shiva temples of Jageshwar Dham.',
+        ],
+        note: '70 km round-trip through cedar forests',
+      },
+      {
+        num: '03',
+        tag: 'Day 3 • Ridge Walk & Departure',
+        title: 'Pine Forest Peace & Safe Return',
+        items: [
+          'Quiet morning walk along Crank’s Ridge with fresh mountain pine air.',
+          'Fresh home-style satvik breakfast before departure.',
+          'Safe, on-time cab drop to Kathgodam railway station for your train home.',
+        ],
+        note: 'Safe & relaxing return journey',
+      },
+    ],
+    faqs: [
+      {
+        q: 'How do I arrange a darshan at Kainchi Dham Ashram from The Kasar Himalayan Heights?',
+        a: 'Kainchi Dham Ashram is located 45 km (~1.5 hrs scenic drive). Our private cabs depart early morning for tranquil aarti and darshan.',
+      },
+      {
+        q: 'Are the suites properly heated during the winter months (November to February)?',
+        a: 'Yes. All rooms include dual-zone electric heating, radiators, 24/7 hot water, and select suites feature cozy wood-burning fireplaces.',
+      },
+      {
+        q: 'Can your chauffeured cabs pick us up directly from Kathgodam Railway Station?',
+        a: 'Yes. Our hill chauffeurs provide direct platform pickup with luggage assistance for Kathgodam trains (85 km, ~3 hrs drive) and Pantnagar Airport.',
+      },
+      {
+        q: 'What makes Kasar Devi and Crank’s Ridge so special for peace and meditation?',
+        a: 'Kasar Devi is world-famous for its natural spiritual calm and deep silence, where Swami Vivekananda and seekers from across the world came to meditate facing the Himalayas.',
+      },
+      {
+        q: 'What kind of food is served? Is pure Satvik and vegetarian food available?',
+        a: 'We serve freshly prepared North Indian and local Kumaoni dishes. Pure Satvik food (no onion, no garlic) and fasting meals are available upon request.',
+      },
+      {
+        q: 'What is the best season to view the 180° snow peaks of Trishul and Nanda Devi?',
+        a: 'October to March offers crystal-clear panoramic views of Mount Trishul and Nanda Devi right across your private balcony.',
+      },
+    ],
+  },
   cabFleet: [
     {
       id: '4-seater',
@@ -346,6 +409,14 @@ exports.getSettings = async (req, res) => {
     // Auto-seed if database collection is empty
     if (!settings) {
       settings = await SiteSettings.create(defaultSeedData);
+    } else if (
+      !settings.landingContent ||
+      !settings.landingContent.itinerary ||
+      settings.landingContent.itinerary.length === 0
+    ) {
+      settings.landingContent = defaultSeedData.landingContent;
+      settings.markModified('landingContent');
+      await settings.save();
     }
 
     res.status(200).json({
@@ -402,6 +473,7 @@ exports.patchSection = async (req, res) => {
       'company',
       'announcement',
       'landingHero',
+      'landingContent',
       'cabFleet',
       'destinations',
       'hotelPolicies',

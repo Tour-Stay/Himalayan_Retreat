@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Container, ArrowUpRightIcon, useSiteSettings } from '@shared';
+import { useNavigate } from 'react-router-dom';
+import { Container, useSiteSettings } from '@shared';
 import { fleetData, mergeFleetWithSettings } from '../data/travelData';
 import VehicleCard from '../components/VehicleCard';
 import VehicleModal from '../components/VehicleModal';
 
 const AllCabs = () => {
+  const navigate = useNavigate();
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { settings } = useSiteSettings();
@@ -19,50 +21,72 @@ const AllCabs = () => {
   };
 
   const handleBook = (vehicleId) => {
-    window.location.href = `/#calculator`;
+    navigate('/calculator', { state: { vehicleId } });
   };
 
   return (
-    <div className="py-16 sm:py-24 px-4 bg-[#FDFBF7] min-h-screen font-sans">
-      <Container size="lg">
-        {/* Page Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C84B0F]/10 border border-[#C84B0F]/30 text-[#C84B0F] text-xs font-semibold uppercase tracking-wider mb-3">
-            <span className="text-amber-500 animate-pulse text-xs">🪔</span>
-            <span>Chauffeured Mountain Fleet • Almora Base</span>
-          </div>
-
-          <h1 className="font-serif text-3xl sm:text-5xl md:text-6xl text-[#2C2523] font-medium tracking-tight mb-4">
+    <div className="min-h-screen bg-[#FAF5EC] font-sans">
+      {/* 1. Devotional Header Banner */}
+      <section className="bg-[#541508] text-white pt-12 sm:pt-16 pb-10 sm:pb-12 px-4 border-b border-[#3D0F06]">
+        <div className="max-w-4xl mx-auto text-center">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-[#EAA722] text-[#541508] text-xs font-mono font-bold tracking-widest uppercase mb-3 shadow-xs">
+            ॥ पावन तीर्थ यात्रा • MOUNTAIN FLEET &amp; TARIFFS • 6,942 FT ॥
+          </span>
+          <h1 className="font-serif text-3xl sm:text-5xl font-normal tracking-tight mb-3 text-white">
             Our Mountain Cabs &amp; Tariffs
           </h1>
-
-          <div className="w-20 h-0.5 bg-gradient-to-r from-transparent via-[#C84B0F] to-transparent mx-auto my-4"></div>
-
-          <p className="text-[#5C5350] text-base sm:text-lg leading-relaxed font-normal">
-            Choose from clean 4-seater sedans, spacious 6-seater Innova Crystas, and 12-seater luxury minibuses driven by friendly local Pahadi chauffeurs.
+          <p className="text-[#FAF5EC]/90 text-sm sm:text-base font-light leading-relaxed max-w-2xl mx-auto">
+            Clean 4-seater hill sedans, spacious 6-seater Innova Crystas, and 12-seater luxury minibuses driven by friendly local Pahadi chauffeurs.
           </p>
         </div>
+      </section>
 
-        {/* Fleet Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {fleetList.map((vehicle) => (
-            <VehicleCard
-              key={vehicle.id}
-              vehicle={vehicle}
-              onQuickView={handleQuickView}
-              onBook={handleBook}
-            />
-          ))}
+      {/* 2. Fleet Grid */}
+      <section className="py-14 sm:py-20 px-4 sm:px-6">
+        <div className="max-w-[1560px] mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {fleetList.map((vehicle) => (
+              <VehicleCard
+                key={vehicle.id}
+                vehicle={vehicle}
+                onQuickView={handleQuickView}
+                onBook={handleBook}
+              />
+            ))}
+          </div>
+
+          {/* Bottom Fast Calculator CTA */}
+          <div className="mt-14 p-7 sm:p-9 rounded-3xl bg-[#073125] text-white border border-[#EAA722]/35 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+            <div>
+              <span className="text-xs font-mono font-bold text-[#EAA722] uppercase tracking-wider block mb-1">
+                ✦ 100% FIXED HONEST FARES
+              </span>
+              <h3 className="font-serif text-2xl sm:text-3xl text-white font-normal">
+                Want to calculate exact fare for your route?
+              </h3>
+              <p className="text-xs sm:text-sm text-[#D4DDD2] mt-1 font-light max-w-xl">
+                Select your pickup station, travel date, and destination to get an instant all-inclusive quote.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => navigate('/calculator')}
+              className="px-8 py-4 rounded-full text-xs sm:text-sm font-mono uppercase tracking-wider font-bold bg-[#EAA722] hover:bg-[#D98E16] text-[#541508] transition-all shadow-lg hover:scale-102 flex-shrink-0 cursor-pointer"
+            >
+              Open Fare Calculator ↗
+            </button>
+          </div>
+
+          {/* Vehicle Modal */}
+          <VehicleModal
+            vehicle={selectedVehicle}
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            onSelectForBooking={handleBook}
+          />
         </div>
-
-        {/* Vehicle Modal */}
-        <VehicleModal
-          vehicle={selectedVehicle}
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          onSelectForBooking={handleBook}
-        />
-      </Container>
+      </section>
     </div>
   );
 };

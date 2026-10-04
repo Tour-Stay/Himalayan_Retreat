@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { FlameIcon, MountainIcon, CompassIcon, FoodIcon, ArrowUpRightIcon } from '@shared';
 import {
   hotelAtNight,
@@ -46,18 +47,17 @@ const experiences = [
 
 const Experiences = () => {
   return (
-    <section id="experiences" className="py-10 sm:py-14 px-4 bg-[#FAF6EF]/70 text-[#2C2523] relative overflow-hidden border-b border-[#C5A059]/20">
+    <section id="experiences" className="py-14 sm:py-18 px-4 bg-[#F8FAF7] text-[#073125] relative overflow-hidden border-b border-[#073125]/10">
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-[#FAF6EF] text-[#7C1D23] text-xs font-semibold tracking-[0.2em] uppercase mb-4 border border-[#C5A059]/30 font-cinzel">
-            Things to Enjoy
+        <div className="text-center max-w-3xl mx-auto mb-10">
+          <span className="inline-block px-3 py-1 rounded-full bg-[#C9F24D] text-[#073125] text-[11px] font-mono font-bold tracking-widest uppercase mb-3 shadow-xs">
+            THINGS TO ENJOY • KASAR DEVI
           </span>
-          <h2 className="font-serif text-3xl sm:text-5xl font-medium mb-4 leading-tight tracking-tight text-[#2C2523]">
+          <h2 className="font-serif text-3xl sm:text-5xl font-normal mb-3 leading-tight tracking-tight text-[#073125]">
             Special Moments During Your Stay
           </h2>
-          <div className="w-16 h-0.5 bg-[#C5A059]/60 mx-auto my-4"></div>
-          <p className="text-[#5C5350] text-base sm:text-lg leading-relaxed font-normal">
+          <p className="text-[#073125]/80 text-base sm:text-lg leading-relaxed font-light">
             Spend relaxing days taking in golden sunrises on the snow peaks, peaceful pine forest walks, warm evening fires, and fresh home-cooked meals.
           </p>
         </div>
@@ -69,49 +69,49 @@ const Experiences = () => {
             return (
               <div
                 key={index}
-                className="bg-[#FDFBF7] rounded-3xl overflow-hidden border border-[#C5A059]/25 hover:border-[#7C1D23]/40 transition-all duration-300 flex flex-col justify-between h-full group shadow-xs hover:shadow-lg hover:-translate-y-1"
+                className="bg-white rounded-3xl overflow-hidden border border-[#073125]/10 hover:border-[#073125]/30 transition-all duration-300 flex flex-col justify-between h-full group shadow-xs hover:shadow-lg hover:-translate-y-1"
               >
                 <div>
                   {/* Image */}
-                  <div className="relative h-56 overflow-hidden bg-[#FAF6EF]">
+                  <div className="relative h-56 overflow-hidden bg-slate-900">
                     <img
                       src={exp.image}
                       alt={exp.title}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       loading="lazy"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#1C1817]/75 via-transparent to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent"></div>
 
-                    <span className="absolute top-3.5 left-3.5 bg-[#FDFBF7]/90 backdrop-blur-xs text-[#7C1D23] text-[11px] font-semibold tracking-wider uppercase px-3 py-1 rounded-full border border-[#C5A059]/30 font-cinzel">
+                    <span className="absolute top-3.5 left-3.5 bg-black/65 backdrop-blur-xs text-[#C9F24D] text-[11px] font-mono font-semibold tracking-wider uppercase px-3 py-1 rounded-full border border-white/20">
                       {exp.category}
                     </span>
 
-                    <div className="absolute bottom-3.5 right-3.5 w-9 h-9 rounded-xl bg-[#FDFBF7]/90 backdrop-blur-xs flex items-center justify-center text-[#7C1D23] border border-[#C5A059]/30 shadow-xs">
-                      <IconComponent className="w-4 h-4 text-[#7C1D23]" />
+                    <div className="absolute bottom-3.5 right-3.5 w-9 h-9 rounded-xl bg-white/90 backdrop-blur-xs flex items-center justify-center text-[#073125] border border-[#073125]/15 shadow-xs">
+                      <IconComponent className="w-4 h-4 text-[#073125]" />
                     </div>
                   </div>
 
                   {/* Content */}
                   <div className="p-6">
-                    <h3 className="font-serif text-xl font-medium text-[#2C2523] mb-2.5 group-hover:text-[#7C1D23] transition-colors leading-snug">
+                    <h3 className="font-serif text-xl font-medium text-[#073125] mb-2.5 group-hover:text-[#12433B] transition-colors leading-snug">
                       {exp.title}
                     </h3>
-                    <p className="text-[#5C5350] text-sm leading-relaxed mb-4 font-normal">
+                    <p className="text-[#073125]/75 text-sm leading-relaxed mb-4 font-light">
                       {exp.description}
                     </p>
                   </div>
                 </div>
 
                 {/* Card Footer Tag */}
-                <div className="px-6 pb-5 pt-3 border-t border-[#C5A059]/15 flex items-center justify-between text-xs text-[#7C1D23] font-semibold font-sans">
+                <div className="px-6 pb-5 pt-3 border-t border-[#073125]/10 flex items-center justify-between text-xs text-[#073125] font-semibold font-mono">
                   <span>{exp.highlight}</span>
-                  <a
-                    href="#book"
-                    className="inline-flex items-center gap-1 text-[#7C1D23] hover:text-[#5C151A] transition-colors"
+                  <Link
+                    to="/book"
+                    className="inline-flex items-center gap-1 text-[#073125] hover:underline transition-colors"
                   >
-                    <span>Learn More</span>
+                    <span>Reserve Stay</span>
                     <ArrowUpRightIcon className="w-3.5 h-3.5" />
-                  </a>
+                  </Link>
                 </div>
               </div>
             );

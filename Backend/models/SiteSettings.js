@@ -60,6 +60,24 @@ const siteSettingsSchema = new mongoose.Schema(
       },
     },
 
+    landingContent: {
+      itinerary: [
+        {
+          num: { type: String, default: '01' },
+          tag: { type: String, default: 'Day 1 • Arrival & Kainchi Darshan' },
+          title: { type: String, default: 'Kathgodam to Kainchi Dham & Kasar Ridge' },
+          items: [{ type: String }],
+          note: { type: String, default: '85 km • ~3 hrs scenic mountain drive' },
+        },
+      ],
+      faqs: [
+        {
+          q: { type: String, default: '' },
+          a: { type: String, default: '' },
+        },
+      ],
+    },
+
     // 3. Cab Fleet & Vehicle Tariffs
     cabFleet: [
       {

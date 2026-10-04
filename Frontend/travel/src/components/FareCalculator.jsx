@@ -389,26 +389,26 @@ const FareCalculator = ({
   };
 
   return (
-    <div id="calculator" className="bg-[#FAF6EF]/70 rounded-3xl p-5 sm:p-9 lg:p-11 border border-[#C5A059]/30 shadow-xl relative overflow-hidden transition-all duration-300">
-      {/* Background Saffron Ambience */}
-      <div className="absolute top-0 right-0 w-80 h-80 bg-[#C84B0F]/[0.04] rounded-full blur-3xl pointer-events-none"></div>
+    <div id="calculator" className="w-full bg-[#FAF6EF]/90 rounded-3xl p-5 sm:p-8 lg:p-10 xl:p-12 border border-[#EAA722]/35 shadow-2xl relative overflow-hidden transition-all duration-300 font-sans">
+      {/* Background Ambience */}
+      <div className="absolute top-0 right-0 w-80 h-80 bg-[#EAA722]/[0.05] rounded-full blur-3xl pointer-events-none"></div>
 
       {/* Header */}
-      <div className="text-center max-w-3xl mx-auto mb-8">
-        <span className="text-xs font-sans text-[#C84B0F] uppercase tracking-wider font-semibold block mb-2 flex items-center justify-center gap-1.5">
-          <span className="text-sm">🪔</span> Simple Mountain Cab Fare Calculator
+      <div className="text-center max-w-4xl mx-auto mb-8 sm:mb-10">
+        <span className="text-xs sm:text-sm font-sans text-[#541508] uppercase tracking-wider font-bold block mb-2 flex items-center justify-center gap-1.5 font-mono">
+          <span className="text-base">🪔</span> ॥ पावन यात्रा किराया ॥ • SIMPLE MOUNTAIN CAB FARE CALCULATOR
         </span>
-        <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-[#2C2523] font-medium tracking-tight mb-2">
+        <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-[#541508] font-normal tracking-tight mb-2">
           Calculate Your Mountain Cab Fare
         </h2>
-        <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-[#C84B0F] to-transparent mx-auto my-3"></div>
-        <p className="text-sm sm:text-base text-[#5C5350] leading-relaxed max-w-2xl mx-auto">
-          Honest hill cab prices with no hidden charges. Fuel, driver allowance, tolls, and temple darshan stops are already included.
+        <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-[#EAA722] to-transparent mx-auto my-3"></div>
+        <p className="text-base sm:text-lg text-[#5C5350] leading-relaxed max-w-2xl mx-auto font-light">
+          Honest hill cab prices with zero hidden charges. Fuel, driver allowance, tolls, and temple darshan stops are already included.
         </p>
 
         {/* 1-Click Popular Route Presets */}
-        <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-          <span className="text-[11px] font-bold text-[#7C1D23] uppercase tracking-wider flex items-center gap-1 mr-1">
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-2.5">
+          <span className="text-xs sm:text-sm font-bold text-[#541508] uppercase tracking-wider flex items-center gap-1 mr-1 font-mono">
             <span>⚡</span> Quick Routes:
           </span>
           {ROUTE_PRESETS.map((preset, idx) => {
@@ -421,14 +421,14 @@ const FareCalculator = ({
                 key={idx}
                 type="button"
                 onClick={() => handleApplyPreset(preset)}
-                className={`text-xs px-3 py-1.5 rounded-full border transition-all cursor-pointer font-medium flex items-center gap-1.5 ${
+                className={`text-xs sm:text-sm px-3.5 sm:px-4 py-2 rounded-full border transition-all cursor-pointer font-medium flex items-center gap-2 ${
                   isActive
-                    ? 'bg-[#C84B0F] text-[#FDFBF7] border-[#C84B0F] shadow-sm'
-                    : 'bg-[#FDFBF7] text-[#2C2523] border-[#C5A059]/30 hover:border-[#C84B0F]/60 hover:bg-[#FFF5EC]'
+                    ? 'bg-[#073125] text-white border-[#073125] shadow-sm'
+                    : 'bg-white text-[#2C2523] border-[#EAA722]/30 hover:border-[#EAA722] hover:bg-[#FAF5EC]'
                 }`}
               >
                 <span>{preset.label}</span>
-                <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${isActive ? 'bg-white/20 text-white' : 'bg-[#FAF6EF] text-[#C84B0F] font-semibold'}`}>
+                <span className={`text-[11px] px-2 py-0.5 rounded-full ${isActive ? 'bg-white/20 text-white' : 'bg-[#FAF5EC] text-[#541508] font-semibold'}`}>
                   {preset.tag}
                 </span>
               </button>
@@ -437,24 +437,24 @@ const FareCalculator = ({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-7 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-7 xl:gap-9 items-start">
         {/* ========================================================= */}
         {/* LEFT COLUMN: Dynamic Inputs & Options                     */}
         {/* ========================================================= */}
-        <div className="lg:col-span-7 bg-[#FDFBF7] p-5 sm:p-7 rounded-3xl border border-[#C5A059]/30 shadow-sm space-y-6">
+        <div className="lg:col-span-7 xl:col-span-7 bg-white p-6 sm:p-8 rounded-3xl border border-[#EAA722]/30 shadow-xs space-y-7">
           {/* 1. Vehicle Selection with Live Prices */}
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <label className="text-xs uppercase font-bold text-[#2C2523] tracking-wider flex items-center gap-1.5">
-                <CarIcon className="w-3.5 h-3.5 text-[#C84B0F]" />
+            <div className="flex items-center justify-between mb-2.5">
+              <label className="text-sm uppercase font-bold text-[#541508] tracking-wider flex items-center gap-2 font-mono">
+                <CarIcon className="w-4 h-4 text-[#EAA722]" />
                 <span>1. Choose Cab Size</span>
               </label>
-              <span className="text-[11px] text-[#6B615E]">
-                Selected Cab: <strong className="text-[#C84B0F]">{currentFleet.title}</strong>
+              <span className="text-xs sm:text-sm text-[#5C5350]">
+                Selected Cab: <strong className="text-[#541508]">{currentFleet.title}</strong>
               </span>
             </div>
 
-            <div className="grid grid-cols-3 gap-2.5">
+            <div className="grid grid-cols-3 gap-3">
               {fleetList.map((v) => {
                 const preview = fleetPricePreviews.find((p) => p.id === v.id);
                 const isSelected = selectedFleet === v.id;
@@ -466,27 +466,27 @@ const FareCalculator = ({
                       setSelectedFleet(v.id);
                       if (onSelectFleet) onSelectFleet(v.id);
                     }}
-                    className={`p-3 rounded-2xl border text-left transition-all cursor-pointer relative overflow-hidden ${
+                    className={`p-3.5 sm:p-4 rounded-2xl border text-left transition-all cursor-pointer relative overflow-hidden ${
                       isSelected
-                        ? 'border-[#C84B0F] bg-[#FFF5EC] ring-2 ring-[#C84B0F]/20 shadow-xs'
-                        : 'border-[#C5A059]/25 bg-[#FAF6EF]/60 hover:border-[#C84B0F]/40 hover:bg-[#FAF6EF]'
+                        ? 'border-[#EAA722] bg-[#FAF5EC] ring-2 ring-[#EAA722]/30 shadow-xs'
+                        : 'border-[#EAA722]/25 bg-[#FAF5EC]/40 hover:border-[#EAA722]/60 hover:bg-[#FAF5EC]'
                     }`}
                   >
                     {isSelected && (
-                      <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-[#C84B0F] rounded-bl-lg"></span>
+                      <span className="absolute top-0 right-0 w-3 h-3 bg-[#EAA722] rounded-bl-lg"></span>
                     )}
-                    <span className="font-serif text-sm font-bold text-[#2C2523] block leading-snug">
+                    <span className="font-serif text-base sm:text-lg font-bold text-[#541508] block leading-snug">
                       {v.seats} Seats
                     </span>
-                    <span className="text-[11px] text-[#C84B0F] font-semibold block mt-0.5 truncate">
+                    <span className="text-xs sm:text-sm text-[#541508] font-bold block mt-1 truncate">
                       {v.title.split(' ')[2] || v.title.split(' ')[1]}
                     </span>
-                    <div className="mt-1 pt-1 border-t border-[#C5A059]/20 flex items-baseline justify-between">
-                      <span className="text-[10px] text-[#6B615E] font-numeral">
+                    <div className="mt-1.5 pt-1.5 border-t border-[#EAA722]/20 flex items-baseline justify-between">
+                      <span className="text-xs text-[#5C5350] font-numeral">
                         ₹{v.perKmRate}/km
                       </span>
                       {preview && (
-                        <span className="text-[11px] font-bold text-[#7C1D23] font-numeral">
+                        <span className="text-xs sm:text-sm font-bold text-[#541508] font-numeral">
                           ₹{preview.total.toLocaleString()}
                         </span>
                       )}
@@ -503,7 +503,7 @@ const FareCalculator = ({
                 <button
                   type="button"
                   onClick={() => setSelectedFleet('6-seater')}
-                  className="px-2.5 py-1 bg-[#C84B0F] text-white rounded-lg text-[11px] font-bold whitespace-nowrap cursor-pointer hover:bg-[#E05A1B]"
+                  className="px-2.5 py-1 bg-[#073125] text-white rounded-lg text-[11px] font-bold whitespace-nowrap cursor-pointer hover:bg-[#12433B]"
                 >
                   Switch to Innova
                 </button>
@@ -515,7 +515,7 @@ const FareCalculator = ({
                 <button
                   type="button"
                   onClick={() => setSelectedFleet('12-seater')}
-                  className="px-2.5 py-1 bg-[#C84B0F] text-white rounded-lg text-[11px] font-bold whitespace-nowrap cursor-pointer hover:bg-[#E05A1B]"
+                  className="px-2.5 py-1 bg-[#073125] text-white rounded-lg text-[11px] font-bold whitespace-nowrap cursor-pointer hover:bg-[#12433B]"
                 >
                   Switch to Minibus
                 </button>
@@ -525,21 +525,21 @@ const FareCalculator = ({
 
           {/* 2. Dynamic Pickup & Destination Matrix Selection */}
           <div>
-            <label className="text-xs uppercase font-bold text-[#2C2523] tracking-wider flex items-center gap-1.5 mb-2">
-              <MapPinIcon className="w-3.5 h-3.5 text-[#C84B0F]" />
-              <span>2. Pickup & Drop Locations</span>
+            <label className="text-sm uppercase font-bold text-[#541508] tracking-wider flex items-center gap-2 mb-2.5 font-mono">
+              <MapPinIcon className="w-4 h-4 text-[#EAA722]" />
+              <span>2. Pickup &amp; Drop Locations</span>
             </label>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="calc-pickup" className="block text-[11px] font-bold text-[#6B615E] uppercase tracking-wider mb-1">
+                <label htmlFor="calc-pickup" className="block text-xs sm:text-sm font-bold text-[#5C5350] uppercase tracking-wider mb-1.5 font-mono">
                   Pickup Point *
                 </label>
                 <select
                   id="calc-pickup"
                   value={pickupPoint}
                   onChange={(e) => setPickupPoint(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF6EF] border border-[#C5A059]/30 text-xs sm:text-sm text-[#2C2523] font-semibold focus:outline-none focus:ring-2 focus:ring-[#C84B0F] cursor-pointer"
+                  className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-[#FAF5EC] border border-[#EAA722]/30 text-sm sm:text-base text-[#2C2523] font-semibold focus:outline-none focus:ring-2 focus:ring-[#EAA722] cursor-pointer"
                 >
                   <option value="Kathgodam Railway Station">Kathgodam Railway Station</option>
                   <option value="Pantnagar Airport">Pantnagar Airport</option>
@@ -549,14 +549,14 @@ const FareCalculator = ({
               </div>
 
               <div>
-                <label htmlFor="calc-dest" className="block text-[11px] font-bold text-[#6B615E] uppercase tracking-wider mb-1">
+                <label htmlFor="calc-dest" className="block text-xs sm:text-sm font-bold text-[#5C5350] uppercase tracking-wider mb-1.5 font-mono">
                   Destination / Tour *
                 </label>
                 <select
                   id="calc-dest"
                   value={selectedDest}
                   onChange={(e) => setSelectedDest(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF6EF] border border-[#C5A059]/30 text-xs sm:text-sm text-[#2C2523] font-semibold focus:outline-none focus:ring-2 focus:ring-[#C84B0F] cursor-pointer"
+                  className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-[#FAF5EC] border border-[#EAA722]/30 text-sm sm:text-base text-[#2C2523] font-semibold focus:outline-none focus:ring-2 focus:ring-[#EAA722] cursor-pointer"
                 >
                   {destinationsList.map((d) => (
                     <option key={d.id} value={d.id}>
@@ -568,39 +568,39 @@ const FareCalculator = ({
             </div>
 
             {/* Dynamic Route Terrain Banner */}
-            <div className="mt-3 p-3 rounded-2xl bg-[#FAF6EF] border border-[#C5A059]/25 flex flex-wrap items-center justify-between gap-2 text-xs">
-              <div className="flex items-center gap-2">
-                <span className="text-base">🛣️</span>
+            <div className="mt-3.5 p-4 rounded-2xl bg-[#FAF5EC] border border-[#EAA722]/25 flex flex-wrap items-center justify-between gap-3 text-sm">
+              <div className="flex items-center gap-2.5">
+                <span className="text-xl">🛣️</span>
                 <div>
-                  <span className="font-semibold text-[#2C2523] block">{routeInfo.via}</span>
-                  <span className="text-[11px] text-[#6B615E] block font-numeral">
+                  <span className="font-semibold text-[#541508] text-sm sm:text-base block">{routeInfo.via}</span>
+                  <span className="text-xs sm:text-sm text-[#5C5350] block font-numeral">
                     Route: {routeInfo.highway} • Altitude: {routeInfo.elevation}
                   </span>
                 </div>
               </div>
               <div className="text-right">
-                <span className="text-[#C84B0F] font-bold font-numeral text-sm">
+                <span className="text-[#541508] font-bold font-numeral text-base sm:text-lg block">
                   {routeInfo.km} km
                 </span>
-                <span className="text-[11px] text-[#6B615E] block">~{routeInfo.duration}</span>
+                <span className="text-xs sm:text-sm text-[#5C5350] block">~{routeInfo.duration}</span>
               </div>
             </div>
           </div>
 
           {/* 3. Trip Mode, Days & Passengers */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
             <div>
-              <label className="block text-[11px] font-bold text-[#6B615E] uppercase tracking-wider mb-1.5">
+              <label className="block text-xs sm:text-sm font-bold text-[#5C5350] uppercase tracking-wider mb-1.5 font-mono">
                 Trip Mode
               </label>
-              <div className="grid grid-cols-2 gap-1 bg-[#FAF6EF] p-1 rounded-xl border border-[#C5A059]/25 text-xs font-semibold">
+              <div className="grid grid-cols-2 gap-1.5 bg-[#FAF5EC] p-1.5 rounded-xl border border-[#EAA722]/25 text-xs sm:text-sm font-bold">
                 <button
                   type="button"
                   onClick={() => setTripType('round-trip')}
-                  className={`py-2 rounded-lg transition-all cursor-pointer ${
+                  className={`py-2.5 rounded-lg transition-all cursor-pointer ${
                     tripType === 'round-trip'
-                      ? 'bg-[#C84B0F] text-[#FDFBF7] shadow-xs'
-                      : 'text-[#5C5350] hover:text-[#C84B0F]'
+                      ? 'bg-[#073125] text-white shadow-xs'
+                      : 'text-[#5C5350] hover:text-[#073125]'
                   }`}
                 >
                   Round Trip
@@ -608,10 +608,10 @@ const FareCalculator = ({
                 <button
                   type="button"
                   onClick={() => setTripType('one-way')}
-                  className={`py-2 rounded-lg transition-all cursor-pointer ${
+                  className={`py-2.5 rounded-lg transition-all cursor-pointer ${
                     tripType === 'one-way'
-                      ? 'bg-[#C84B0F] text-[#FDFBF7] shadow-xs'
-                      : 'text-[#5C5350] hover:text-[#C84B0F]'
+                      ? 'bg-[#073125] text-white shadow-xs'
+                      : 'text-[#5C5350] hover:text-[#073125]'
                   }`}
                 >
                   One Way
@@ -620,7 +620,7 @@ const FareCalculator = ({
             </div>
 
             <div>
-              <label htmlFor="calc-days" className="block text-[11px] font-bold text-[#6B615E] uppercase tracking-wider mb-1.5">
+              <label htmlFor="calc-days" className="block text-xs sm:text-sm font-bold text-[#5C5350] uppercase tracking-wider mb-1.5 font-mono">
                 {tripType === 'round-trip' ? 'Tour Duration' : 'Transfer Type'}
               </label>
               <select
@@ -628,7 +628,7 @@ const FareCalculator = ({
                 value={days}
                 onChange={(e) => setDays(Number(e.target.value))}
                 disabled={tripType === 'one-way'}
-                className="w-full px-3 py-2 rounded-xl bg-[#FAF6EF] border border-[#C5A059]/30 text-xs text-[#2C2523] font-semibold focus:outline-none focus:ring-2 focus:ring-[#C84B0F] cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full px-4 py-2.5 sm:py-3 rounded-xl bg-[#FAF5EC] border border-[#EAA722]/30 text-xs sm:text-sm text-[#2C2523] font-semibold focus:outline-none focus:ring-2 focus:ring-[#EAA722] cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 <option value={1}>1 Day (Same Day Return)</option>
                 <option value={2}>2 Days (1 Night Halt)</option>
@@ -641,7 +641,7 @@ const FareCalculator = ({
             </div>
 
             <div>
-              <label htmlFor="calc-passengers" className="block text-[11px] font-bold text-[#6B615E] uppercase tracking-wider mb-1.5">
+              <label htmlFor="calc-passengers" className="block text-xs sm:text-sm font-bold text-[#5C5350] uppercase tracking-wider mb-1.5 font-mono">
                 Passengers
               </label>
               <div className="flex items-center gap-1">
@@ -649,7 +649,7 @@ const FareCalculator = ({
                   id="calc-passengers"
                   value={passengerCount}
                   onChange={(e) => setPassengerCount(Number(e.target.value))}
-                  className="w-full px-3 py-2 rounded-xl bg-[#FAF6EF] border border-[#C5A059]/30 text-xs text-[#2C2523] font-semibold focus:outline-none focus:ring-2 focus:ring-[#C84B0F] cursor-pointer"
+                  className="w-full px-4 py-2.5 sm:py-3 rounded-xl bg-[#FAF5EC] border border-[#EAA722]/30 text-xs sm:text-sm text-[#2C2523] font-semibold focus:outline-none focus:ring-2 focus:ring-[#EAA722] cursor-pointer"
                 >
                   {[...Array(currentFleet.seats)].map((_, i) => (
                     <option key={i + 1} value={i + 1}>
@@ -663,61 +663,61 @@ const FareCalculator = ({
 
           {/* 4. Interactive Mountain Add-ons & Complimentary Halts */}
           <div>
-            <label className="text-xs uppercase font-bold text-[#2C2523] tracking-wider flex items-center gap-1.5 mb-2">
-              <span>🪔</span>
-              <span>3. Free Mountain Halts & Add-ons</span>
+            <label className="text-sm uppercase font-bold text-[#541508] tracking-wider flex items-center gap-2 mb-2.5 font-mono">
+              <span className="text-[#EAA722]">🪔</span>
+              <span>3. Free Mountain Halts &amp; Add-ons</span>
             </label>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {/* Kainchi Dham Halt */}
               <label
-                className={`p-3 rounded-xl border transition-all cursor-pointer flex items-start gap-2.5 ${
+                className={`p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer flex items-start gap-3 ${
                   kainchiHalt
-                    ? 'border-[#C84B0F]/60 bg-[#FFF5EC]'
-                    : 'border-[#C5A059]/20 bg-[#FAF6EF]/50 hover:bg-[#FAF6EF]'
+                    ? 'border-[#EAA722] bg-[#FAF5EC]'
+                    : 'border-[#EAA722]/20 bg-[#FAF5EC]/40 hover:bg-[#FAF5EC]'
                 }`}
               >
                 <input
                   type="checkbox"
                   checked={kainchiHalt}
                   onChange={(e) => setKainchiHalt(e.target.checked)}
-                  className="mt-0.5 rounded text-[#C84B0F] focus:ring-[#C84B0F] cursor-pointer"
+                  className="mt-1 rounded text-[#073125] focus:ring-[#073125] cursor-pointer"
                 />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-[#2C2523]">Kainchi Dham Darshan</span>
-                    <span className="text-[10px] font-bold text-green-700 bg-green-100 px-1.5 py-0.5 rounded-full">
+                    <span className="text-sm sm:text-base font-bold text-[#541508]">Kainchi Dham Darshan</span>
+                    <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full font-mono">
                       FREE
                     </span>
                   </div>
-                  <span className="text-[11px] text-[#6B615E] block mt-0.5">
-                    1.5 to 2 hours free halt for darshan, aarti & prasad
+                  <span className="text-xs sm:text-sm text-[#5C5350] block mt-1">
+                    1.5 to 2 hours free halt for darshan, aarti &amp; prasad
                   </span>
                 </div>
               </label>
 
               {/* Luggage Carrier */}
               <label
-                className={`p-3 rounded-xl border transition-all cursor-pointer flex items-start gap-2.5 ${
+                className={`p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer flex items-start gap-3 ${
                   roofCarrier
-                    ? 'border-[#C84B0F]/60 bg-[#FFF5EC]'
-                    : 'border-[#C5A059]/20 bg-[#FAF6EF]/50 hover:bg-[#FAF6EF]'
+                    ? 'border-[#EAA722] bg-[#FAF5EC]'
+                    : 'border-[#EAA722]/20 bg-[#FAF5EC]/40 hover:bg-[#FAF5EC]'
                 }`}
               >
                 <input
                   type="checkbox"
                   checked={roofCarrier}
                   onChange={(e) => setRoofCarrier(e.target.checked)}
-                  className="mt-0.5 rounded text-[#C84B0F] focus:ring-[#C84B0F] cursor-pointer"
+                  className="mt-1 rounded text-[#073125] focus:ring-[#073125] cursor-pointer"
                 />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-[#2C2523]">Roof Luggage Carrier</span>
-                    <span className="text-[10px] font-bold text-green-700 bg-green-100 px-1.5 py-0.5 rounded-full">
+                    <span className="text-sm sm:text-base font-bold text-[#541508]">Roof Luggage Carrier</span>
+                    <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full font-mono">
                       FREE
                     </span>
                   </div>
-                  <span className="text-[11px] text-[#6B615E] block mt-0.5">
+                  <span className="text-xs sm:text-sm text-[#5C5350] block mt-1">
                     Waterproof cover to keep your bags safe and dry
                   </span>
                 </div>
@@ -725,26 +725,26 @@ const FareCalculator = ({
 
               {/* Bhowali Tea & Fruit Stop */}
               <label
-                className={`p-3 rounded-xl border transition-all cursor-pointer flex items-start gap-2.5 ${
+                className={`p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer flex items-start gap-3 ${
                   bhowaliTeaHalt
-                    ? 'border-[#C84B0F]/60 bg-[#FFF5EC]'
-                    : 'border-[#C5A059]/20 bg-[#FAF6EF]/50 hover:bg-[#FAF6EF]'
+                    ? 'border-[#EAA722] bg-[#FAF5EC]'
+                    : 'border-[#EAA722]/20 bg-[#FAF5EC]/40 hover:bg-[#FAF5EC]'
                 }`}
               >
                 <input
                   type="checkbox"
                   checked={bhowaliTeaHalt}
                   onChange={(e) => setBhowaliTeaHalt(e.target.checked)}
-                  className="mt-0.5 rounded text-[#C84B0F] focus:ring-[#C84B0F] cursor-pointer"
+                  className="mt-1 rounded text-[#073125] focus:ring-[#073125] cursor-pointer"
                 />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-[#2C2523]">Bhowali Tea & Fruit Stop</span>
-                    <span className="text-[10px] font-bold text-green-700 bg-green-100 px-1.5 py-0.5 rounded-full">
+                    <span className="text-sm sm:text-base font-bold text-[#541508]">Bhowali Tea &amp; Fruit Stop</span>
+                    <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full font-mono">
                       FREE
                     </span>
                   </div>
-                  <span className="text-[11px] text-[#6B615E] block mt-0.5">
+                  <span className="text-xs sm:text-sm text-[#5C5350] block mt-1">
                     30 mins relaxation at local Kumaon pine cafe
                   </span>
                 </div>
@@ -752,26 +752,26 @@ const FareCalculator = ({
 
               {/* Senior Assistance */}
               <label
-                className={`p-3 rounded-xl border transition-all cursor-pointer flex items-start gap-2.5 ${
+                className={`p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer flex items-start gap-3 ${
                   seniorAssistance
-                    ? 'border-[#C84B0F]/60 bg-[#FFF5EC]'
-                    : 'border-[#C5A059]/20 bg-[#FAF6EF]/50 hover:bg-[#FAF6EF]'
+                    ? 'border-[#EAA722] bg-[#FAF5EC]'
+                    : 'border-[#EAA722]/20 bg-[#FAF5EC]/40 hover:bg-[#FAF5EC]'
                 }`}
               >
                 <input
                   type="checkbox"
                   checked={seniorAssistance}
                   onChange={(e) => setSeniorAssistance(e.target.checked)}
-                  className="mt-0.5 rounded text-[#C84B0F] focus:ring-[#C84B0F] cursor-pointer"
+                  className="mt-1 rounded text-[#073125] focus:ring-[#073125] cursor-pointer"
                 />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-[#2C2523]">Senior Assisted Entry</span>
-                    <span className="text-[10px] font-bold text-green-700 bg-green-100 px-1.5 py-0.5 rounded-full">
+                    <span className="text-sm sm:text-base font-bold text-[#541508]">Senior Assisted Entry</span>
+                    <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full font-mono">
                       FREE
                     </span>
                   </div>
-                  <span className="text-[11px] text-[#6B615E] block mt-0.5">
+                  <span className="text-xs sm:text-sm text-[#5C5350] block mt-1">
                     Smooth gentle drive, easy low step, and driver helps with bags
                   </span>
                 </div>
@@ -780,10 +780,10 @@ const FareCalculator = ({
           </div>
 
           {/* 5. Date, Time & Contact Details */}
-          <div className="pt-2 border-t border-[#C5A059]/20 space-y-3">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="pt-3 border-t border-[#EAA722]/20 space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               <div>
-                <label htmlFor="calc-date" className="block text-[11px] font-bold text-[#6B615E] uppercase tracking-wider mb-1">
+                <label htmlFor="calc-date" className="block text-xs sm:text-sm font-bold text-[#5C5350] uppercase tracking-wider mb-1.5 font-mono">
                   Travel Date *
                 </label>
                 <input
@@ -792,19 +792,19 @@ const FareCalculator = ({
                   value={travelDate}
                   min={new Date().toISOString().split('T')[0]}
                   onChange={(e) => setTravelDate(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-[#FAF6EF] border border-[#C5A059]/30 text-xs text-[#2C2523] font-medium focus:outline-none focus:ring-2 focus:ring-[#C84B0F]"
+                  className="w-full px-4 py-3 rounded-xl bg-[#FAF5EC] border border-[#EAA722]/30 text-sm sm:text-base text-[#2C2523] font-medium focus:outline-none focus:ring-2 focus:ring-[#EAA722]"
                 />
               </div>
 
               <div>
-                <label htmlFor="calc-time" className="block text-[11px] font-bold text-[#6B615E] uppercase tracking-wider mb-1">
+                <label htmlFor="calc-time" className="block text-xs sm:text-sm font-bold text-[#5C5350] uppercase tracking-wider mb-1.5 font-mono">
                   Pickup Timing / Train Time *
                 </label>
                 <select
                   id="calc-time"
                   value={pickupTime}
                   onChange={(e) => setPickupTime(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-[#FAF6EF] border border-[#C5A059]/30 text-xs text-[#2C2523] font-medium focus:outline-none focus:ring-2 focus:ring-[#C84B0F] cursor-pointer"
+                  className="w-full px-4 py-3 rounded-xl bg-[#FAF5EC] border border-[#EAA722]/30 text-sm sm:text-base text-[#2C2523] font-medium focus:outline-none focus:ring-2 focus:ring-[#EAA722] cursor-pointer"
                 >
                   <option value="05:30 AM (Ranikhet Express Arrival)">05:30 AM (Ranikhet Express Arrival)</option>
                   <option value="06:30 AM (Kathgodam Shatabdi / Morning)">06:30 AM (Kathgodam Shatabdi / Morning)</option>
@@ -817,9 +817,9 @@ const FareCalculator = ({
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               <div>
-                <label htmlFor="calc-name" className="block text-[11px] font-bold text-[#6B615E] uppercase tracking-wider mb-1">
+                <label htmlFor="calc-name" className="block text-xs sm:text-sm font-bold text-[#5C5350] uppercase tracking-wider mb-1.5 font-mono">
                   Your Full Name *
                 </label>
                 <input
@@ -828,12 +828,12 @@ const FareCalculator = ({
                   placeholder="e.g. Rahul Sharma"
                   value={guestName}
                   onChange={(e) => setGuestName(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-[#FAF6EF] border border-[#C5A059]/30 text-xs text-[#2C2523] font-medium focus:outline-none focus:ring-2 focus:ring-[#C84B0F]"
+                  className="w-full px-4 py-3 rounded-xl bg-[#FAF5EC] border border-[#EAA722]/30 text-sm sm:text-base text-[#2C2523] font-medium focus:outline-none focus:ring-2 focus:ring-[#EAA722]"
                 />
               </div>
 
               <div>
-                <label htmlFor="calc-phone" className="block text-[11px] font-bold text-[#6B615E] uppercase tracking-wider mb-1">
+                <label htmlFor="calc-phone" className="block text-xs sm:text-sm font-bold text-[#5C5350] uppercase tracking-wider mb-1.5 font-mono">
                   WhatsApp Phone Number *
                 </label>
                 <input
@@ -842,13 +842,13 @@ const FareCalculator = ({
                   placeholder="+91 98765 43210"
                   value={guestPhone}
                   onChange={(e) => setGuestPhone(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-[#FAF6EF] border border-[#C5A059]/30 text-xs text-[#2C2523] font-medium focus:outline-none focus:ring-2 focus:ring-[#C84B0F]"
+                  className="w-full px-4 py-3 rounded-xl bg-[#FAF5EC] border border-[#EAA722]/30 text-sm sm:text-base text-[#2C2523] font-medium focus:outline-none focus:ring-2 focus:ring-[#EAA722]"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="calc-notes" className="block text-[11px] font-bold text-[#6B615E] uppercase tracking-wider mb-1">
+              <label htmlFor="calc-notes" className="block text-xs sm:text-sm font-bold text-[#5C5350] uppercase tracking-wider mb-1.5 font-mono">
                 Train / Flight Number or Special Request (Optional)
               </label>
               <input
@@ -857,7 +857,7 @@ const FareCalculator = ({
                 placeholder="e.g. Kathgodam Shatabdi #12040, 3 medium bags, stop for breakfast on the hill..."
                 value={specialNotes}
                 onChange={(e) => setSpecialNotes(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-[#FAF6EF] border border-[#C5A059]/30 text-xs text-[#2C2523] focus:outline-none focus:ring-2 focus:ring-[#C84B0F]"
+                className="w-full px-4 py-3 rounded-xl bg-[#FAF5EC] border border-[#EAA722]/30 text-sm sm:text-base text-[#2C2523] focus:outline-none focus:ring-2 focus:ring-[#EAA722]"
               />
             </div>
 
@@ -872,21 +872,21 @@ const FareCalculator = ({
         {/* ========================================================= */}
         {/* RIGHT COLUMN: Dynamic Price Receipt & Instant Booking     */}
         {/* ========================================================= */}
-        <div className="lg:col-span-5 bg-[#FDFBF7] p-5 sm:p-7 rounded-3xl border border-[#C5A059]/40 shadow-xl space-y-5 sticky top-24">
+        <div className="lg:col-span-5 xl:col-span-5 bg-white p-6 sm:p-8 rounded-3xl border border-[#EAA722]/40 shadow-xl space-y-6 sticky top-24">
           {/* Top Total Amount Card */}
-          <div className="border-b border-[#C5A059]/20 pb-4">
-            <span className="text-[11px] font-sans uppercase tracking-wider text-[#C84B0F] font-bold block mb-1">
+          <div className="border-b border-[#EAA722]/20 pb-5">
+            <span className="text-xs sm:text-sm font-sans uppercase tracking-wider text-[#541508] font-bold block mb-1.5 font-mono">
               Estimated Total Fare
             </span>
-            <div className="flex items-baseline justify-between">
-              <span className="font-serif text-3xl sm:text-4xl font-bold text-[#7C1D23] font-numeral tracking-tight">
+            <div className="flex items-baseline justify-between gap-2">
+              <span className="font-serif text-4xl sm:text-5xl font-bold text-[#541508] font-numeral tracking-tight">
                 ₹{pricing.totalFare.toLocaleString()}
               </span>
               <div className="text-right">
-                <span className="text-xs font-bold text-[#C84B0F] bg-[#FFF5EC] px-2.5 py-1 rounded-full border border-[#C84B0F]/30 block font-numeral">
+                <span className="text-xs sm:text-sm font-bold text-[#541508] bg-[#FAF5EC] px-3 py-1 rounded-full border border-[#EAA722]/35 block font-numeral">
                   ₹{pricing.perPersonFare.toLocaleString()} / person
                 </span>
-                <span className="text-[10px] text-[#6B615E] mt-0.5 block">
+                <span className="text-xs text-[#5C5350] mt-1 block">
                   for {passengerCount} {passengerCount === 1 ? 'guest' : 'guests'}
                 </span>
               </div>
@@ -894,42 +894,42 @@ const FareCalculator = ({
           </div>
 
           {/* Interactive Visual Stepper Path */}
-          <div className="p-3.5 rounded-2xl bg-[#FAF6EF] border border-[#C5A059]/25 text-xs space-y-2">
-            <div className="flex items-center justify-between text-[11px] font-bold text-[#6B615E] uppercase tracking-wider">
+          <div className="p-4 rounded-2xl bg-[#FAF5EC] border border-[#EAA722]/25 text-xs sm:text-sm space-y-2.5">
+            <div className="flex items-center justify-between text-xs font-bold text-[#5C5350] uppercase tracking-wider font-mono">
               <span>Your Travel Route</span>
-              <span className="text-[#C84B0F]">~{routeInfo.duration}</span>
+              <span className="text-[#541508] font-bold text-sm">~{routeInfo.duration}</span>
             </div>
 
-            <div className="relative pl-6 space-y-2 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-[#C84B0F]/40">
+            <div className="relative pl-6 space-y-3 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-[#EAA722]/40">
               <div className="relative">
-                <span className="absolute -left-6 top-1 w-2.5 h-2.5 rounded-full bg-[#C84B0F] ring-4 ring-[#FAF6EF]"></span>
-                <span className="font-bold text-[#2C2523] block text-xs">{pickupPoint}</span>
-                <span className="text-[10px] text-[#6B615E]">Pickup time: {pickupTime}</span>
+                <span className="absolute -left-6 top-1 w-2.5 h-2.5 rounded-full bg-[#EAA722] ring-4 ring-[#FAF5EC]"></span>
+                <span className="font-bold text-[#541508] block text-sm sm:text-base">{pickupPoint}</span>
+                <span className="text-xs text-[#5C5350]">Pickup time: {pickupTime}</span>
               </div>
 
               {kainchiHalt && (
                 <div className="relative">
-                  <span className="absolute -left-6 top-1 w-2.5 h-2.5 rounded-full bg-amber-500 ring-4 ring-[#FAF6EF]"></span>
-                  <span className="font-semibold text-amber-900 block text-xs">
+                  <span className="absolute -left-6 top-1 w-2.5 h-2.5 rounded-full bg-amber-500 ring-4 ring-[#FAF5EC]"></span>
+                  <span className="font-semibold text-amber-900 block text-xs sm:text-sm">
                     🪔 Kainchi Dham Ashram Darshan Halt
                   </span>
-                  <span className="text-[10px] text-green-700 font-semibold">1.5 to 2 hours free halt for darshan & prasad</span>
+                  <span className="text-xs text-emerald-800 font-semibold">1.5 to 2 hours free halt for darshan &amp; prasad</span>
                 </div>
               )}
 
               {bhowaliTeaHalt && (
                 <div className="relative">
-                  <span className="absolute -left-6 top-1 w-2.5 h-2.5 rounded-full bg-emerald-600 ring-4 ring-[#FAF6EF]"></span>
-                  <span className="font-semibold text-emerald-900 block text-xs">
-                    🍵 Tea & Fresh Hill Fruit Stop at Bhowali
+                  <span className="absolute -left-6 top-1 w-2.5 h-2.5 rounded-full bg-emerald-600 ring-4 ring-[#FAF5EC]"></span>
+                  <span className="font-semibold text-emerald-900 block text-xs sm:text-sm">
+                    🍵 Tea &amp; Fresh Hill Fruit Stop at Bhowali
                   </span>
                 </div>
               )}
 
               <div className="relative">
-                <span className="absolute -left-6 top-1 w-2.5 h-2.5 rounded-full bg-[#7C1D23] ring-4 ring-[#FAF6EF]"></span>
-                <span className="font-bold text-[#2C2523] block text-xs">{currentDest.name}</span>
-                <span className="text-[10px] text-[#6B615E]">
+                <span className="absolute -left-6 top-1 w-2.5 h-2.5 rounded-full bg-[#541508] ring-4 ring-[#FAF5EC]"></span>
+                <span className="font-bold text-[#541508] block text-sm sm:text-base">{currentDest.name}</span>
+                <span className="text-xs text-[#5C5350]">
                   {tripType === 'round-trip' ? `Round trip return included (${days} ${days === 1 ? 'day' : 'days'})` : 'Drop right to your hotel doorstep'}
                 </span>
               </div>
@@ -937,70 +937,70 @@ const FareCalculator = ({
           </div>
 
           {/* Itemized Dynamic Bill Breakdown */}
-          <div className="space-y-2 text-xs text-[#2C2523] bg-[#FAF6EF] p-4 rounded-2xl border border-[#C5A059]/20">
+          <div className="space-y-2.5 text-xs sm:text-sm text-[#2C2523] bg-[#FAF5EC] p-5 rounded-2xl border border-[#EAA722]/20">
             <div className="flex justify-between items-center">
-              <span className="text-[#6B615E]">Vehicle Selected:</span>
-              <strong className="text-[#2C2523]">{currentFleet.title}</strong>
+              <span className="text-[#5C5350]">Vehicle Selected:</span>
+              <strong className="text-[#541508] font-semibold">{currentFleet.title}</strong>
             </div>
 
             <div className="flex justify-between items-center">
-              <span className="text-[#6B615E]">Travel Distance:</span>
-              <span className="font-numeral font-semibold">
+              <span className="text-[#5C5350]">Travel Distance:</span>
+              <span className="font-numeral font-semibold text-[#541508]">
                 {pricing.billableDistance} km @ ₹{currentFleet.perKmRate}/km
               </span>
             </div>
 
             <div className="flex justify-between items-center">
-              <span className="text-[#6B615E]">Cab Distance Fare:</span>
-              <span className="font-numeral">₹{pricing.distanceFare.toLocaleString()}</span>
+              <span className="text-[#5C5350]">Cab Distance Fare:</span>
+              <span className="font-numeral font-medium">₹{pricing.distanceFare.toLocaleString()}</span>
             </div>
 
             <div className="flex justify-between items-center">
-              <span className="text-[#6B615E]">Driver Food & Night Allowance:</span>
-              <span className="font-numeral">₹{pricing.driverBatta.toLocaleString()}</span>
+              <span className="text-[#5C5350]">Driver Food &amp; Night Allowance:</span>
+              <span className="font-numeral font-medium">₹{pricing.driverBatta.toLocaleString()}</span>
             </div>
 
             <div className="flex justify-between items-center">
-              <span className="text-[#6B615E]">Tolls, Green Tax & FastTag:</span>
-              <span className="text-green-700 font-bold">FREE (Included)</span>
+              <span className="text-[#5C5350]">Tolls, Green Tax &amp; FastTag:</span>
+              <span className="text-emerald-800 font-bold font-mono">FREE (Included)</span>
             </div>
 
             <div className="flex justify-between items-center">
-              <span className="text-[#6B615E]">Temple Darshan Halt:</span>
-              <span className="text-green-700 font-bold">FREE (Included)</span>
+              <span className="text-[#5C5350]">Temple Darshan Halt:</span>
+              <span className="text-emerald-800 font-bold font-mono">FREE (Included)</span>
             </div>
 
-            <div className="flex justify-between items-center pt-2 border-t border-[#C5A059]/20">
-              <span className="font-bold text-[#2C2523]">Estimated Total:</span>
-              <span className="font-serif font-bold text-base text-[#7C1D23] font-numeral">
+            <div className="flex justify-between items-center pt-3 border-t border-[#EAA722]/20">
+              <span className="font-bold text-sm sm:text-base text-[#541508]">Estimated Total:</span>
+              <span className="font-serif font-bold text-xl sm:text-2xl text-[#541508] font-numeral">
                 ₹{pricing.totalFare.toLocaleString()}
               </span>
             </div>
           </div>
 
           {/* Trust Guarantees */}
-          <div className="space-y-1.5 pt-1">
-            <div className="flex items-center gap-2 text-xs text-[#2C2523]">
-              <CheckCircleIcon className="w-3.5 h-3.5 text-[#C84B0F] flex-shrink-0" />
+          <div className="space-y-2 pt-1">
+            <div className="flex items-center gap-2.5 text-xs sm:text-sm text-[#073125]">
+              <CheckCircleIcon className="w-4 h-4 text-[#EAA722] flex-shrink-0" />
               <span>100% Fixed price • Zero hidden charges on arrival</span>
             </div>
-            <div className="flex items-center gap-2 text-xs text-[#2C2523]">
-              <CheckCircleIcon className="w-3.5 h-3.5 text-[#C84B0F] flex-shrink-0" />
+            <div className="flex items-center gap-2.5 text-xs sm:text-sm text-[#073125]">
+              <CheckCircleIcon className="w-4 h-4 text-[#EAA722] flex-shrink-0" />
               <span>Friendly local Pahadi driver with 10+ years hill driving</span>
             </div>
-            <div className="flex items-center gap-2 text-xs text-[#2C2523]">
-              <CheckCircleIcon className="w-3.5 h-3.5 text-[#C84B0F] flex-shrink-0" />
+            <div className="flex items-center gap-2.5 text-xs sm:text-sm text-[#073125]">
+              <CheckCircleIcon className="w-4 h-4 text-[#EAA722] flex-shrink-0" />
               <span>Driver waits at station exit with your nameboard</span>
             </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="space-y-2.5 pt-1">
+          <div className="space-y-3 pt-1">
             <button
               type="button"
               onClick={handleOnlineBooking}
               disabled={submitting}
-              className="w-full py-3.5 rounded-full text-xs uppercase tracking-wider font-bold bg-gradient-to-r from-[#C84B0F] to-[#7C1D23] hover:from-[#E05A1B] hover:to-[#9E3304] text-[#FDFBF7] shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer border border-[#C5A059]/30"
+              className="w-full py-4 rounded-xl text-sm sm:text-base font-mono uppercase tracking-wider font-bold bg-[#073125] hover:bg-[#12433B] text-white shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
             >
               <span>{submitting ? 'Confirming Cab...' : 'Instant Online Booking ↗'}</span>
             </button>
@@ -1008,15 +1008,15 @@ const FareCalculator = ({
             <button
               type="button"
               onClick={handleWhatsAppBooking}
-              className="w-full py-3 rounded-full text-xs uppercase tracking-wider font-bold border border-[#C84B0F]/40 bg-[#FAF6EF] text-[#2C2523] hover:text-[#C84B0F] hover:bg-[#FFF5EC] transition-all flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-3.5 sm:py-4 rounded-xl text-sm sm:text-base font-mono uppercase tracking-wider font-bold border border-[#073125]/25 bg-white text-[#073125] hover:bg-[#EBF2EA] transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>Book via WhatsApp Direct ↗</span>
             </button>
           </div>
 
-          <p className="text-[11px] text-[#6B615E] text-center font-sans">
+          <p className="text-xs sm:text-sm text-[#073125]/80 text-center font-sans">
             Need urgent cab assistance? Call our Almora desk directly at{' '}
-            <a href={`tel:${SITE_CONFIG.conciergePhone}`} className="text-[#C84B0F] font-bold hover:underline font-numeral">
+            <a href={`tel:${SITE_CONFIG.conciergePhone}`} className="text-[#073125] font-bold hover:underline font-numeral">
               {SITE_CONFIG.conciergePhone}
             </a>
           </p>

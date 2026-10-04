@@ -146,19 +146,21 @@ export default function YieldManager({ rooms = [] }) {
         {/* Left Column (2 Cols): Weekend & Seasonal Rules */}
         <div className="lg:col-span-2 space-y-6">
           {/* Card 1: Weekend Surcharge */}
-          <div className="bg-[#FDFBF7] p-5 sm:p-6 rounded-3xl border border-[#C5A059]/30 shadow-xs">
+          <div className="bg-[#FAF5EC] p-5 sm:p-6 rounded-3xl border border-[#EAA722]/30 shadow-xs">
             <div className="flex items-center justify-between mb-3">
               <div>
-                <h3 className="font-cinzel font-bold text-sm text-[#7C1D23] uppercase tracking-wider flex items-center gap-2">
-                  <span>🏔️</span>
-                  <span>Weekend Mountain Surcharge (Fri & Sat Nights)</span>
+                <h3 className="font-cinzel font-bold text-sm text-[#073125] uppercase tracking-wider flex items-center gap-2">
+                  <svg className="w-4 h-4 text-[#EAA722]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                  </svg>
+                  <span>Weekend Rate Surcharge (Fri & Sat Nights)</span>
                 </h3>
                 <p className="text-xs text-stone-500 mt-0.5">
                   Automatically elevates room tariffs on Friday and Saturday nights to capture mountain weekend getaway demand.
                 </p>
               </div>
 
-              <div className="flex items-center gap-1.5 bg-[#FAF6EF] px-3 py-1.5 rounded-xl border border-[#C5A059]/40 font-mono text-sm font-bold text-[#7C1D23]">
+              <div className="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl border border-[#EAA722]/40 font-mono text-sm font-bold text-[#073125]">
                 <span>+{weekendSurcharge}%</span>
               </div>
             </div>
@@ -171,7 +173,7 @@ export default function YieldManager({ rooms = [] }) {
                 step="5"
                 value={weekendSurcharge}
                 onChange={(e) => setWeekendSurcharge(Number(e.target.value))}
-                className="w-full accent-[#7C1D23] cursor-pointer"
+                className="w-full accent-[#073125] cursor-pointer"
               />
               <span className="text-xs font-mono font-semibold text-stone-600 w-12 text-right">
                 {weekendSurcharge}%
@@ -185,11 +187,13 @@ export default function YieldManager({ rooms = [] }) {
           </div>
 
           {/* Card 2: Seasonal Date Windows */}
-          <div className="bg-[#FDFBF7] p-5 sm:p-6 rounded-3xl border border-[#C5A059]/30 shadow-xs space-y-4">
+          <div className="bg-[#FAF5EC] p-5 sm:p-6 rounded-3xl border border-[#EAA722]/30 shadow-xs space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-cinzel font-bold text-sm text-[#7C1D23] uppercase tracking-wider flex items-center gap-2">
-                  <span>❄️</span>
+                <h3 className="font-cinzel font-bold text-sm text-[#073125] uppercase tracking-wider flex items-center gap-2">
+                  <svg className="w-4 h-4 text-[#EAA722]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
                   <span>Seasonal Peak Date Windows & Surcharges</span>
                 </h3>
                 <p className="text-xs text-stone-500 mt-0.5">
@@ -200,7 +204,7 @@ export default function YieldManager({ rooms = [] }) {
               <button
                 type="button"
                 onClick={handleAddRule}
-                className="px-3 py-1.5 rounded-xl bg-[#FAF6EF] hover:bg-stone-200 text-[#2C2523] border border-[#C5A059]/40 text-xs font-cinzel font-semibold transition cursor-pointer shadow-2xs whitespace-nowrap"
+                className="px-3 py-1.5 rounded-xl bg-white hover:bg-stone-100 text-[#073125] border border-[#EAA722]/40 text-xs font-cinzel font-semibold transition cursor-pointer shadow-2xs whitespace-nowrap"
               >
                 + Add Window
               </button>

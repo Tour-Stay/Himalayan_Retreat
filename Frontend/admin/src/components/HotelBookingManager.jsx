@@ -131,7 +131,7 @@ export const HotelBookingManager = ({ bookings, setBookings, onRefresh }) => {
   const handleExportPoliceRegister = async () => {
     try {
       addToast('Preparing Uttarakhand Police Guest Register...', 'info');
-      const response = await apiClient.get('/api/hotel/bookings/police-register?date=all', {
+      const response = await apiClient.get('/hotel/bookings/police-register?date=all', {
         responseType: 'blob',
       });
       const url = window.URL.createObjectURL(new Blob([response.data], { type: 'text/csv' }));
@@ -207,8 +207,8 @@ export const HotelBookingManager = ({ bookings, setBookings, onRefresh }) => {
       {/* Office Quick Summary Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-4 bg-[#FDFBF7] rounded-2xl border border-[#C5A059]/30 shadow-xs">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#FAF6EF] border border-[#C5A059]/40 flex items-center justify-center text-lg shrink-0">
-            📋
+          <div className="w-10 h-10 rounded-xl bg-[#FAF6EF] border border-[#C5A059]/40 flex items-center justify-center shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-[#C5A059]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
           </div>
           <div>
             <div className="text-[10px] font-cinzel uppercase text-[#66605B] tracking-wider">Total Bookings</div>
@@ -217,8 +217,8 @@ export const HotelBookingManager = ({ bookings, setBookings, onRefresh }) => {
         </div>
 
         <div className="flex items-center gap-3 sm:border-l sm:border-[#C5A059]/20 sm:pl-3">
-          <div className="w-10 h-10 rounded-xl bg-purple-50 border border-purple-200 flex items-center justify-center text-lg shrink-0">
-            🛎️
+          <div className="w-10 h-10 rounded-xl bg-purple-50 border border-purple-200 flex items-center justify-center shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}><path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
           </div>
           <div>
             <div className="text-[10px] font-cinzel uppercase text-[#66605B] tracking-wider">Today's Arrivals</div>
@@ -227,8 +227,8 @@ export const HotelBookingManager = ({ bookings, setBookings, onRefresh }) => {
         </div>
 
         <div className="flex items-center gap-3 sm:border-l sm:border-[#C5A059]/20 sm:pl-3">
-          <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-300 flex items-center justify-center text-lg shrink-0">
-            ⏳
+          <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-300 flex items-center justify-center shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
           </div>
           <div>
             <div className="text-[10px] font-cinzel uppercase text-[#66605B] tracking-wider">Pending Approval</div>
@@ -237,8 +237,8 @@ export const HotelBookingManager = ({ bookings, setBookings, onRefresh }) => {
         </div>
 
         <div className="flex items-center gap-3 sm:border-l sm:border-[#C5A059]/20 sm:pl-3">
-          <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-300 flex items-center justify-center text-lg shrink-0">
-            💰
+          <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-300 flex items-center justify-center shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}><path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
           </div>
           <div>
             <div className="text-[10px] font-cinzel uppercase text-[#66605B] tracking-wider">Confirmed Value</div>
@@ -298,7 +298,7 @@ export const HotelBookingManager = ({ bookings, setBookings, onRefresh }) => {
                   : 'text-purple-800 hover:bg-purple-100/60'
               }`}
             >
-              <span>🛎️ Today ({summary.todayArrivals})</span>
+              <span className="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg> Today ({summary.todayArrivals})</span>
             </button>
             {['pending', 'confirmed', 'completed', 'cancelled'].map((status) => {
               const count = bookings.filter((b) => (b.status || 'pending').toLowerCase() === status).length;
@@ -334,7 +334,8 @@ export const HotelBookingManager = ({ bookings, setBookings, onRefresh }) => {
             className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-cinzel font-semibold bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 transition cursor-pointer shrink-0 shadow-2xs"
             title="Download Uttarakhand Tourism / Police Form C verification register CSV"
           >
-            <span>👮 Police Register</span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 text-emerald-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+            <span>Police Register</span>
           </button>
         </div>
       </div>
@@ -384,14 +385,14 @@ export const HotelBookingManager = ({ bookings, setBookings, onRefresh }) => {
                             className="text-[#7C1D23] hover:underline font-semibold flex items-center gap-1"
                             title="Click to call guest"
                           >
-                            📞 {b.guestDetails.phone}
+                            <svg xmlns="http://www.w3.org/2000/svg" className="w-3 h-3 inline mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg> {b.guestDetails.phone}
                           </a>
                         ) : (
                           <span>No phone</span>
                         )}
                       </div>
                       <div className="text-[#66605B] text-[11px] truncate max-w-[180px]">
-                        ✉️ {b.guestDetails?.email || 'No email provided'}
+                        <svg xmlns="http://www.w3.org/2000/svg" className="w-3 h-3 inline mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg> {b.guestDetails?.email || 'No email provided'}
                       </div>
                       <div className="mt-1">
                         <button
@@ -404,7 +405,7 @@ export const HotelBookingManager = ({ bookings, setBookings, onRefresh }) => {
                           }`}
                           title={b.idProofUrl || b.idProofNumber ? 'View digital guest ID proof' : 'Upload guest ID proof for police register'}
                         >
-                          <span>{b.idProofUrl || b.idProofNumber ? `🆔 ${b.idProofType || 'ID'}` : '⚠️ ID Pending'}</span>
+                          <span className="flex items-center gap-1">{b.idProofUrl || b.idProofNumber ? <><svg xmlns="http://www.w3.org/2000/svg" className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0" /></svg> {b.idProofType || 'ID'}</> : <><svg xmlns="http://www.w3.org/2000/svg" className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg> ID Pending</>}</span>
                         </button>
                       </div>
                     </td>
@@ -456,17 +457,19 @@ export const HotelBookingManager = ({ bookings, setBookings, onRefresh }) => {
                           disabled={isUpdating}
                           onChange={(e) => handleStatusChange(b._id, e.target.value)}
                           className={`px-3 py-1 rounded-full text-[11px] font-cinzel font-semibold uppercase tracking-wider border cursor-pointer focus:outline-none transition shadow-2xs ${
-                            b.status === 'confirmed'
+                            b.status === 'confirmed' || b.status === 'checked_in'
                               ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
                               : b.status === 'cancelled'
                               ? 'bg-rose-50 text-rose-800 border-rose-300'
-                              : b.status === 'completed'
+                              : b.status === 'completed' || b.status === 'checked_out'
                               ? 'bg-sky-50 text-sky-800 border-sky-300'
                               : 'bg-amber-50 text-amber-800 border-amber-300'
                           }`}
                         >
                           <option value="pending">Pending</option>
                           <option value="confirmed">Confirmed</option>
+                          <option value="checked_in">Checked In</option>
+                          <option value="checked_out">Checked Out</option>
                           <option value="completed">Completed</option>
                           <option value="cancelled">Cancelled</option>
                         </select>
@@ -497,7 +500,7 @@ export const HotelBookingManager = ({ bookings, setBookings, onRefresh }) => {
                           className="px-2.5 py-1 rounded-full text-xs font-cinzel font-semibold bg-[#FAF6EF] hover:bg-[#C5A059]/20 text-[#7C1D23] border border-[#C5A059]/50 transition cursor-pointer shadow-2xs whitespace-nowrap flex items-center gap-1"
                           title="Open Guest Folio, Add Incidentals & Print Tax Invoice"
                         >
-                          <span>Folio 🧾</span>
+                          <span className="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z" /></svg> Folio</span>
                           {b.folioExtras?.length > 0 && (
                             <span className="w-4 h-4 rounded-full bg-[#7C1D23] text-white text-[9px] font-mono flex items-center justify-center font-bold">
                               {b.folioExtras.length}
@@ -515,16 +518,16 @@ export const HotelBookingManager = ({ bookings, setBookings, onRefresh }) => {
                           }`}
                           title="Verify or Upload Guest Identity Document"
                         >
-                          <span>ID 🪪</span>
+                          <span className="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0" /></svg> ID</span>
                         </button>
 
                         {/* View Slip */}
                         <button
                           onClick={() => setViewSlipBooking(b)}
-                          className="px-2.5 py-1 rounded-full text-xs font-cinzel font-semibold bg-[#FAF6EF] hover:bg-white text-[#2C2523] border border-[#C5A059]/40 transition cursor-pointer"
+                          className="px-2.5 py-1 rounded-full text-xs font-cinzel font-semibold bg-[#FAF6EF] hover:bg-white text-[#2C2523] border border-[#C5A059]/40 transition cursor-pointer flex items-center gap-1"
                           title="View & Print Booking Slip"
                         >
-                          Slip 📄
+                          <span className="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg> Slip</span>
                         </button>
 
                         {/* WhatsApp */}
@@ -629,7 +632,7 @@ export const HotelBookingManager = ({ bookings, setBookings, onRefresh }) => {
                 onClick={() => window.print()}
                 className="px-5 py-2 rounded-full text-xs font-cinzel font-semibold text-[#FDFBF7] bg-[#7C1D23] hover:bg-[#5C151A] transition cursor-pointer shadow-xs border border-[#C5A059]/40 flex items-center gap-1.5"
               >
-                <span>Print Voucher 🖨️</span>
+                <span className="flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg> Print Voucher</span>
               </button>
             </div>
           </div>
@@ -649,31 +652,35 @@ export const HotelBookingManager = ({ bookings, setBookings, onRefresh }) => {
       />
 
       {/* GUEST FOLIO & CHECKOUT TAX INVOICE MODAL */}
-      <FolioInvoiceModal
-        booking={folioModalBooking}
-        isOpen={Boolean(folioModalBooking)}
-        onClose={() => setFolioModalBooking(null)}
-        onFolioUpdated={(updatedBooking) => {
-          setBookings((prev) =>
-            prev.map((item) => (item._id === updatedBooking._id ? updatedBooking : item))
-          );
-          setFolioModalBooking(updatedBooking);
-          if (onRefresh) onRefresh();
-        }}
-      />
+      {folioModalBooking && (
+        <FolioInvoiceModal
+          booking={folioModalBooking}
+          isOpen={Boolean(folioModalBooking)}
+          onClose={() => setFolioModalBooking(null)}
+          onFolioUpdated={(updatedBooking) => {
+            setBookings((prev) =>
+              prev.map((item) => (item._id === updatedBooking._id ? updatedBooking : item))
+            );
+            setFolioModalBooking(updatedBooking);
+            if (onRefresh) onRefresh();
+          }}
+        />
+      )}
 
       {/* DIGITAL GUEST ID PROOF MODAL */}
-      <GuestIdProofModal
-        booking={idModalBooking}
-        isOpen={Boolean(idModalBooking)}
-        onClose={() => setIdModalBooking(null)}
-        onIdProofUpdated={(updatedBooking) => {
-          setBookings((prev) =>
-            prev.map((item) => (item._id === updatedBooking._id ? updatedBooking : item))
-          );
-          if (onRefresh) onRefresh();
-        }}
-      />
+      {idModalBooking && (
+        <GuestIdProofModal
+          booking={idModalBooking}
+          isOpen={Boolean(idModalBooking)}
+          onClose={() => setIdModalBooking(null)}
+          onIdProofUpdated={(updatedBooking) => {
+            setBookings((prev) =>
+              prev.map((item) => (item._id === updatedBooking._id ? updatedBooking : item))
+            );
+            if (onRefresh) onRefresh();
+          }}
+        />
+      )}
     </div>
   );
 };

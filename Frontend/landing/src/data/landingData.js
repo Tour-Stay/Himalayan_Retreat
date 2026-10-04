@@ -52,7 +52,7 @@ export const routeData = {
       time: '3 hrs',
       route: 'Via Kathgodam - Bhimtal - Bhowali - Khairna - Almora',
       roadCondition: 'Well-maintained National Highway 109',
-      recommendedVehicle: 'Dzire Sedan (₹2,499) / Innova Crysta (₹4,499)',
+      recommendedVehicle: 'Dzire Sedan / Innova Crysta SUV',
       highlight: 'Platform meet-and-greet by our friendly local drivers with luggage assistance and direct hotel drop.',
     },
     {
@@ -120,8 +120,8 @@ export const suitesData = [
     id: 'nanda-devi',
     name: 'Nanda Devi Panoramic Heated Suite',
     tag: 'Signature Sunrise Suite',
-    tariff: '₹8,500',
-    unit: 'per night + taxes',
+    tariff: 'Available on Request',
+    unit: 'includes Satvik breakfast',
     size: '420 sq ft',
     image: snowViewSuiteImg,
     features: [
@@ -136,8 +136,8 @@ export const suitesData = [
     id: 'cedar-chalet',
     name: 'Cedar Alpine Family Chalet',
     tag: 'Two-Bedroom Residence',
-    tariff: '₹12,500',
-    unit: 'per night + taxes',
+    tariff: 'Available on Request',
+    unit: 'includes Satvik breakfast',
     size: '680 sq ft',
     image: chaletSuiteImg,
     features: [
@@ -152,8 +152,8 @@ export const suitesData = [
     id: 'attic-sanctuary',
     name: "Crank's Ridge Attic Glass Suite",
     tag: 'Peaceful Mountain Retreat',
-    tariff: '₹7,200',
-    unit: 'per night + taxes',
+    tariff: 'Available on Request',
+    unit: 'includes Satvik breakfast',
     size: '360 sq ft',
     image: atticSuiteImg,
     features: [
@@ -175,15 +175,15 @@ export const fleetData = [
     name: 'Toyota Innova Crysta (Heated Cabin)',
     type: '6+1 Luxury High-Clearance MPV',
     tag: 'Most Recommended for Hill Roads',
-    rateKathgodam: '₹4,499',
-    rateDelhi: '₹10,999',
+    rateKathgodam: 'Station Transfer',
+    rateDelhi: 'Delhi NCR Pickup',
     image: innovaImg,
     specs: [
       'Accommodates 6 passengers + 4 large check-in bags comfortably',
       'Individual rear reclining captain seats with AC & heating',
       'High ground clearance ideal for high-altitude Kumaon hill roads',
       'Driven by licensed native Pahadi chauffeurs with 10+ years experience',
-      'Zero hidden charges — fuel, driver allowances & toll included',
+      'Dedicated temple halts at Kainchi Dham and Jageshwar',
     ],
   },
   {
@@ -191,15 +191,15 @@ export const fleetData = [
     name: 'Maruti Suzuki Dzire (Private Mountain Sedan)',
     type: '4+1 Compact Executive Sedan',
     tag: 'Best for Couples & Small Families',
-    rateKathgodam: '₹2,499',
-    rateDelhi: '₹7,499',
+    rateKathgodam: 'Station Transfer',
+    rateDelhi: 'Delhi NCR Pickup',
     image: sedanImg,
     specs: [
       'Comfortable seating for 3-4 passengers + 2 medium bags',
       'Clean sanitised interior with phone chargers & water bottles',
       'Smooth hill cornering and economical transfers',
       'Punctual Kathgodam station pickup and luggage assistance',
-      'Fixed all-inclusive tariff from Almora base hub',
+      'Dedicated hill-expert chauffeur for temple circuits',
     ],
   },
   {
@@ -207,8 +207,8 @@ export const fleetData = [
     name: 'Force Urbania Luxury Minibus',
     type: '12+1 Executive Pilgrimage Carrier',
     tag: 'Large Family & Group Darshan',
-    rateKathgodam: '₹7,999',
-    rateDelhi: '₹18,500',
+    rateKathgodam: 'Station Transfer',
+    rateDelhi: 'Delhi NCR Pickup',
     image: minibusImg,
     specs: [
       '12 plush individual pushback reclining leather seats',
@@ -226,26 +226,26 @@ export const fleetData = [
 export const faqsData = [
   {
     q: 'How do I arrange a darshan at Kainchi Dham Ashram from The Kasar Himalayan Heights?',
-    a: 'Kainchi Dham Ashram is located 45 km (approximately 1.5 hours scenic drive) from our resort. Our concierge arranges private chauffeured transfers departing early morning (around 6:30 AM) to reach the ashram for the tranquil morning aarti, bypassing heavy afternoon highway traffic. The ashram remains open daily from 6:00 AM to 7:00 PM for general darshan and prasadam.',
+    a: 'Kainchi Dham Ashram is located 45 km (~1.5 hrs scenic drive). Our private cabs depart early morning for tranquil aarti and darshan.',
   },
   {
     q: 'Are the suites properly heated during the winter months (November to February)?',
-    a: 'Yes, absolutely. Winters at 6,942 FT feature night temperatures ranging from -2°C to 6°C. Every room and suite is equipped with dual-zone electric under-bed heating mats, oil radiators or ceramic blowers, high-pressure 24/7 hot water, and heavy down duvets. Select suites also feature working wood-burning fireplaces stocked with fragrant pine firewood.',
+    a: 'Yes. All rooms include dual-zone electric heating, radiators, 24/7 hot water, and select suites feature cozy wood-burning fireplaces.',
   },
   {
     q: 'Can your chauffeured cabs pick us up directly from Kathgodam Railway Station?',
-    a: 'Yes. Our mountain fleet is based in the Almora/Kathgodam corridor. For guests arriving on the Kathgodam Shatabdi Express (12040), Ranikhet Express (15014), or Uttaranchal Sampark Kranti (15036), our chauffeur greets you outside the platform gate with your name board, manages luggage, and drives directly to the resort (85 km, approximately 3 hours) with zero hassle.',
+    a: 'Yes. Our hill chauffeurs provide direct platform pickup with luggage assistance for Kathgodam trains (85 km, ~3 hrs drive) and Pantnagar Airport.',
   },
   {
-    q: 'What is the geomagnetic significance of Kasar Devi and Crank’s Ridge?',
-    a: 'Kasar Devi is scientifically verified to rest on an enormous geomagnetic field formed by the Van Allen Radiation Belt. Globally, this unique peaceful stillness is shared only with Stonehenge (England) and Machu Picchu (Peru). This distinct natural calm has historically attracted meditators including Swami Vivekananda (1890), Rabindranath Tagore, Lama Anagarika Govinda, and Buddhist scholars.',
+    q: 'What makes Kasar Devi and Crank’s Ridge so special for peace and meditation?',
+    a: 'Kasar Devi is world-famous for its natural spiritual calm and deep silence, where Swami Vivekananda and seekers from across the world came to meditate facing the Himalayas.',
   },
   {
     q: 'What kind of food is served? Is pure Satvik and vegetarian food available?',
-    a: 'Our kitchen prepares authentic Kumaoni regional cuisine alongside familiar North Indian homestyle meals. We regularly serve authentic local dishes like Bhatt ki Churkani (slow-cooked black bean broth), Gahat ki Dal, Kumaoni Mustard Raita, Mandua (finger millet) rotis, and fresh Buransh (rhododendron flower) juice. Pure Satvik meals without onion or garlic and fasting food (vrat ka khana) are readily prepared upon advance request.',
+    a: 'We serve freshly prepared North Indian and local Kumaoni dishes. Pure Satvik food (no onion, no garlic) and fasting meals are available upon request.',
   },
   {
     q: 'What is the best season to view the 180° snow peaks of Trishul and Nanda Devi?',
-    a: 'The clearest, most crystal-sharp views of Mount Trishul (7,120m) and Nanda Devi (7,816m) occur from October through March, when the skies are deep azure and crisp. During dawn, the first golden-pink light illuminates the peaks right across your private balcony.',
+    a: 'October to March offers crystal-clear panoramic views of Mount Trishul and Nanda Devi right across your private balcony.',
   },
 ];

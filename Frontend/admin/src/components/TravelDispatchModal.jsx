@@ -60,7 +60,7 @@ export default function TravelDispatchModal({ booking, isOpen, onClose, onDispat
 
     try {
       setIsSubmitting(true);
-      const res = await apiClient.put(`/api/travel/bookings/${booking._id}/dispatch`, {
+      const res = await apiClient.put(`/travel/bookings/${booking._id}/dispatch`, {
         driverName: driverName.trim(),
         driverPhone: driverPhone.trim(),
         vehiclePlate: vehiclePlate.trim(),
@@ -212,7 +212,8 @@ Wishing you a peaceful and scenic journey to the Himalayas! 🌲🏔️`;
           {/* Section 1: Driver & Vehicle Allocation */}
           <div className="bg-[#FAF6EF] border border-[#C5A059]/25 rounded-2xl p-4">
             <h3 className="text-xs font-cinzel font-bold text-[#7C1D23] uppercase tracking-wider mb-3 flex items-center gap-1.5">
-              <span>🚘</span> Chauffeur & Vehicle Allocation
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-[#7C1D23]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 17a2 2 0 100-4 2 2 0 000 4zm8 0a2 2 0 100-4 2 2 0 000 4m-11 0h14m-15-5l2-6h10l2 6m-14 0h14m-15 0v3a1 1 0 001 1h1m12-4v3a1 1 0 01-1 1h-1" /></svg>
+              <span>Chauffeur & Vehicle Allocation</span>
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
@@ -261,7 +262,8 @@ Wishing you a peaceful and scenic journey to the Himalayas! 🌲🏔️`;
           {/* Section 2: Train Tracking & Transit Details */}
           <div className="bg-[#FAF6EF] border border-[#C5A059]/25 rounded-2xl p-4">
             <h3 className="text-xs font-cinzel font-bold text-[#7C1D23] uppercase tracking-wider mb-3 flex items-center gap-1.5">
-              <span>🚆</span> Transit & Pickup Coordination
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-[#7C1D23]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" /></svg>
+              <span>Transit & Pickup Coordination</span>
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
@@ -323,7 +325,7 @@ Wishing you a peaceful and scenic journey to the Himalayas! 🌲🏔️`;
           <div className="bg-[#FAF6EF] border border-[#C5A059]/25 rounded-2xl p-4">
             <h3 className="text-xs font-cinzel font-bold text-[#7C1D23] uppercase tracking-wider mb-3 flex items-center justify-between">
               <span className="flex items-center gap-1.5">
-                <span>💰</span> Trip Settlement & Net Margin Calculator
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> Trip Settlement & Net Margin Calculator
               </span>
               <span className={`text-[11px] font-mono font-bold px-2 py-0.5 rounded-full ${netMargin >= 1000 ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-amber-100 text-amber-800 border border-amber-300'}`}>
                 Net Margin: ₹{netMargin.toLocaleString('en-IN')}
@@ -389,7 +391,7 @@ Wishing you a peaceful and scenic journey to the Himalayas! 🌲🏔️`;
                 className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-emerald-700 hover:bg-emerald-800 text-white transition cursor-pointer shadow-xs"
                 title="Send pickup instructions to driver on WhatsApp"
               >
-                <span>💬</span>
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
                 <span>Dispatch Driver via WhatsApp</span>
               </button>
 
@@ -399,7 +401,7 @@ Wishing you a peaceful and scenic journey to the Himalayas! 🌲🏔️`;
                 className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-stone-800 hover:bg-black text-white transition cursor-pointer shadow-xs"
                 title="Notify passenger with driver & cab plate details"
               >
-                <span>📲</span>
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
                 <span>Notify Guest</span>
               </button>
             </div>

@@ -45,39 +45,38 @@ const amenities = [
 
 const AmenitiesGrid = () => {
   return (
-    <section id="amenities" className="py-10 sm:py-14 px-4 bg-[#FAF6EF]/60 relative border-b border-[#C5A059]/20">
+    <section id="amenities" className="py-14 sm:py-18 px-4 bg-[#F8FAF7] relative border-b border-[#073125]/10">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-[#FAF6EF] text-[#7C1D23] text-xs font-semibold tracking-[0.2em] uppercase mb-4 border border-[#C5A059]/30 font-cinzel">
-            Hotel Facilities &amp; Comforts
+        <div className="text-center max-w-3xl mx-auto mb-10">
+          <span className="inline-block px-3 py-1 rounded-full bg-[#C9F24D] text-[#073125] text-[11px] font-mono font-bold tracking-widest uppercase mb-3 shadow-xs">
+            HOTEL FACILITIES &amp; COMFORTS
           </span>
-          <h2 className="font-serif text-3xl sm:text-5xl text-[#2C2523] font-medium mb-4 tracking-tight leading-tight">
-            Everything You Need for a Comfortable Stay
+          <h2 className="font-serif text-3xl sm:text-5xl text-[#073125] font-normal mb-3 tracking-tight leading-tight">
+            Everything You Need for Mountain Comfort
           </h2>
-          <div className="w-16 h-0.5 bg-[#C5A059]/60 mx-auto my-4"></div>
-          <p className="text-[#5C5350] text-base sm:text-lg font-normal leading-relaxed">
-            We make sure your stay is warm, cozy, and hassle-free even in the cold mountain winter.
+          <p className="text-[#073125]/80 text-base sm:text-lg font-light leading-relaxed">
+            We make sure your stay is warm, cozy, and peaceful even during the coldest winter nights.
           </p>
         </div>
 
-        {/* Luxury Amenities Grid */}
+        {/* Amenities Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-7">
           {amenities.map((item, index) => {
             const IconComponent = item.icon;
             return (
               <div
                 key={index}
-                className="bg-[#FDFBF7] p-7 rounded-3xl border border-[#C5A059]/25 shadow-xs hover:shadow-lg hover:border-[#7C1D23]/35 hover:-translate-y-1 transition-all duration-300 h-full flex flex-col justify-between group"
+                className="bg-white p-7 rounded-3xl border border-[#073125]/10 shadow-xs hover:shadow-md hover:border-[#073125]/30 hover:-translate-y-1 transition-all duration-300 h-full flex flex-col justify-between group"
               >
                 <div>
-                  <div className="w-12 h-12 rounded-2xl bg-[#FAF6EF] text-[#7C1D23] flex items-center justify-center mb-5 group-hover:bg-[#7C1D23] group-hover:text-[#FDFBF7] transition-all duration-300 border border-[#C5A059]/30 shadow-xs">
+                  <div className="w-12 h-12 rounded-2xl bg-[#EBF2EA] text-[#073125] flex items-center justify-center mb-5 group-hover:bg-[#073125] group-hover:text-[#C9F24D] transition-all duration-300 border border-[#073125]/10 shadow-xs">
                     <IconComponent className="w-6 h-6 transition-transform group-hover:scale-105" />
                   </div>
-                  <h3 className="font-serif text-lg font-medium text-[#2C2523] mb-2 group-hover:text-[#7C1D23] transition-colors">
+                  <h3 className="font-serif text-lg font-medium text-[#073125] mb-2 group-hover:text-[#12433B] transition-colors">
                     {item.title}
                   </h3>
-                  <p className="text-[#5C5350] text-sm leading-relaxed font-normal">
+                  <p className="text-[#073125]/75 text-sm leading-relaxed font-light">
                     {item.description}
                   </p>
                 </div>

@@ -1,14 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Container,
-  SectionHeading,
-  Button,
-  ArchImage,
-  apiClient,
   MountainIcon,
-  SnowIcon,
-  ShieldCheckIcon,
   initAutoScrollReveal,
   hotelBestPic,
   hotelExteriorDay,
@@ -19,26 +13,29 @@ import {
   kasarTempleTrail,
   hotelAtNight,
   hotelNightSky,
-  sunriseMeditationDeck,
   ArrowUpRightIcon,
+  WhatsAppIcon,
+  CheckCircleIcon,
+  apiClient,
   subscribeToUpdates,
+  SITE_CONFIG,
+  useSiteSettings,
 } from '@shared';
 import HeroBookingBar from '../components/HeroBookingBar';
 import SuiteShowcase from '../components/SuiteShowcase';
-import AmenitiesGrid from '../components/AmenitiesGrid';
-import Experiences from '../components/Experiences';
 import TempleTrails from '../components/TempleTrails';
 import SatvikDining from '../components/SatvikDining';
 import SanctuaryReviews from '../components/SanctuaryReviews';
-import RoomCard from '../components/RoomCard';
 import RoomModal from '../components/RoomModal';
-import BookingForm from '../components/BookingForm';
 import SnowEffect from '../components/SnowEffect';
 import { mockRooms } from '../data/mockRooms';
 
 const HotelHome = () => {
+  const navigate = useNavigate();
+  const { settings } = useSiteSettings();
+  const whatsappNumber = settings?.company?.whatsappNumber || SITE_CONFIG.whatsappNumber;
+
   const [rooms, setRooms] = useState(mockRooms);
-  const [selectedRoomId, setSelectedRoomId] = useState(mockRooms[0]._id);
   const [modalRoom, setModalRoom] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -48,7 +45,6 @@ const HotelHome = () => {
         const res = await apiClient.get('/hotel/rooms');
         if (res.data && res.data.length > 0) {
           setRooms(res.data);
-          setSelectedRoomId(res.data[0]._id);
         }
       } catch (error) {
         setRooms(mockRooms);
@@ -56,7 +52,6 @@ const HotelHome = () => {
     };
     fetchRooms();
 
-    // Instant real-time sync when rooms or availability change in Admin
     const unsubscribe = subscribeToUpdates('rooms', () => {
       fetchRooms();
     });
@@ -68,336 +63,228 @@ const HotelHome = () => {
     };
   }, []);
 
-  const handleBookNow = (roomId) => {
-    setSelectedRoomId(roomId);
-    const bookEl = document.getElementById('book');
-    if (bookEl) {
-      bookEl.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   const handleOpenQuickView = (room) => {
     setModalRoom(room);
     setIsModalOpen(true);
   };
 
   return (
-    <div className="bg-ivory text-charcoal font-sans selection:bg-gold/20 selection:text-maroon">
-      {/* 1. Hero Section with Mountain Ridge Panorama & Snow Atmosphere */}
-      <section className="relative min-h-[90vh] flex items-center justify-center bg-[#1C1817] text-[#FDFBF7] overflow-hidden pt-24 pb-28">
-        {/* Background Image: Kasar Devi High Ridge Peaks */}
+    <div className="bg-[#F8FAF7] text-[#073125] font-sans selection:bg-[#C9F24D] selection:text-[#073125]">
+      {/* 1. Hero Section */}
+      <section className="relative min-h-[85vh] flex items-center justify-center bg-black text-white overflow-hidden pt-20 pb-24">
+        {/* Background Image — Clear, crisp visibility with natural colors */}
         <div className="absolute inset-0 z-0">
           <img
             src={hotelExteriorDay || hotelBestPic}
-            alt="The Kasar Himalayan Heights Resort on Crank's Ridge"
-            className="w-full h-full object-cover opacity-60 scale-102"
+            alt="The Kasar Himalayan Heights Resort in Kasar Devi"
+            className="w-full h-full object-cover opacity-85 scale-100 transition-opacity duration-700"
           />
-          {/* Multi-layered cinematic gradient */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#1C1817] via-[#1C1817]/60 to-[#1C1817]/40"></div>
-          <div className="absolute inset-0 bg-radial-gradient from-transparent via-transparent to-[#1C1817]/70"></div>
+          {/* Subtle neutral gradient for text legibility without green tint */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/20"></div>
         </div>
 
-        {/* Snow Effect */}
-        <SnowEffect count={45} />
+        <SnowEffect count={25} />
 
-        <div className="relative z-20 max-w-5xl mx-auto px-4 text-center flex flex-col items-center">
-          <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#1C1817]/85 border border-[#C5A059]/40 text-[#C5A059] text-xs font-cinzel uppercase tracking-[0.2em] mb-6 shadow-xl backdrop-blur-md">
-            <MountainIcon className="w-3.5 h-3.5 text-[#C5A059]" />
-            <span>Kasar Devi, Almora • 6,942 FT Elevation</span>
+        <div className="relative z-20 max-w-4xl mx-auto px-4 text-center flex flex-col items-center">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/40 border border-white/25 text-[#C9F24D] text-xs sm:text-sm font-mono uppercase tracking-wider mb-5 backdrop-blur-md shadow-md">
+            <MountainIcon className="w-4 h-4 text-[#C9F24D]" />
+            <span>Kasar Devi, Almora • 6,942 FT</span>
           </div>
 
-          <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-medium tracking-tight leading-tight text-[#FDFBF7] max-w-5xl drop-shadow-md">
+          <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl font-normal tracking-tight leading-tight text-white max-w-4xl drop-shadow-[0_3px_10px_rgba(0,0,0,0.7)]">
             The Kasar Himalayan Heights
           </h1>
 
-          <p className="mt-4 font-serif text-xl sm:text-3xl text-[#C5A059] italic max-w-3xl font-light tracking-wide">
-            Peace, Warmth &amp; 180° Snow Peak Views
+          <p className="mt-3 text-xl sm:text-3xl text-[#C9F24D] font-light drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
+            Warm Rooms • Snow Peak Views • Fresh Food
           </p>
 
-          <p className="mt-5 text-base sm:text-lg text-[#FDFBF7]/85 max-w-2xl font-light leading-relaxed font-sans">
-            Warm heated rooms with private balconies facing Mount Trishul and Nanda Devi peaks. A peaceful stay with 24-hour hot water, room heaters, electric bed warmers, and fresh home-style pure veg food.
+          <p className="mt-4 text-base sm:text-lg text-white/95 max-w-2xl font-light leading-relaxed drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
+            Heated rooms with room heaters, bed warmers, and private balconies facing Mount Trishul and Nanda Devi peaks. 24-hour hot water, fresh home-cooked meals, and peaceful pine air.
           </p>
 
-          <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
-            <a
-              href="#book"
-              className="px-8 py-3.5 rounded-full text-xs font-sans uppercase tracking-widest font-semibold bg-[#7C1D23] hover:bg-[#5C151A] text-[#FDFBF7] transition-all shadow-md border border-[#C5A059]/40 hover:scale-102"
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5">
+            <Link
+              to="/book"
+              className="px-8 py-3.5 rounded-full text-xs sm:text-sm font-mono uppercase tracking-wider font-bold bg-[#C9F24D] hover:bg-[#b8e23f] text-[#073125] transition-all shadow-md hover:scale-102 flex items-center gap-2"
             >
-              Book Your Room
-            </a>
-            <a
-              href="#rooms"
-              className="px-8 py-3.5 rounded-full text-xs font-sans uppercase tracking-widest font-semibold border border-[#C5A059] bg-[#FAF6EF]/10 hover:bg-[#C5A059]/20 text-[#FDFBF7] transition-all backdrop-blur-sm hover:scale-102"
+              <span>Book a Room</span>
+              <ArrowUpRightIcon className="w-4 h-4" />
+            </Link>
+            <Link
+              to="/rooms"
+              className="px-8 py-3.5 rounded-full text-xs sm:text-sm font-mono uppercase tracking-wider font-semibold border border-white/30 bg-white/10 hover:bg-white/20 text-white transition-all backdrop-blur-sm hover:scale-102"
             >
               View Rooms &amp; Prices
-            </a>
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* 2. Floating Hero Booking Bar */}
-      <HeroBookingBar rooms={rooms} onSearch={(data) => setSelectedRoomId(data.suiteId)} />
+      {/* 2. Quick Search & Booking Bar */}
+      <HeroBookingBar rooms={rooms} />
 
-      {/* 2.5 Kumaon At A Glance */}
-      <section id="glance" className="pt-14 pb-10 sm:pt-16 sm:pb-12 px-4 bg-[#FDFBF7] border-b border-[#C5A059]/20">
-        <Container size="lg">
-          <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10 reveal">
-            <span className="text-[#C5A059] text-xs uppercase tracking-[0.2em] font-bold block mb-2 font-cinzel">
-              Kasar Devi, Almora • 6,942 Ft
+      {/* 3. Why Stay With Us (Clean 4-Card Bento Grid) */}
+      <section id="glance" className="pt-16 pb-16 sm:pt-20 sm:pb-20 px-4 bg-[#F8FAF7] border-b border-[#073125]/10">
+        <Container size="full" className="max-w-[1560px]">
+          <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12 reveal">
+            <span className="inline-block px-3.5 py-1 rounded-full bg-[#C9F24D] text-[#073125] text-xs font-mono font-bold tracking-widest uppercase mb-2.5">
+              WHY GUESTS LOVE STAYING HERE
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-[#2C2523] font-medium leading-tight">
-              Why You Will Love Staying With Us
+            <h2 className="font-serif text-3xl sm:text-5xl text-[#073125] font-normal">
+              Simple Mountain Comfort
             </h2>
-            <div className="w-16 h-0.5 bg-[#C5A059]/60 mx-auto my-3"></div>
-            <p className="mt-3 text-[#5C5350] text-sm sm:text-base font-light leading-relaxed font-sans">
-              Located in the quiet pine hills of Kasar Devi at 6,942 feet. Enjoy clear morning views of snow peaks from your bed, fresh forest air, warm rooms in winter, and delicious hot meals.
+            <p className="mt-2 text-[#073125]/80 text-base sm:text-lg font-light">
+              A peaceful stay in the quiet pine hills of Kasar Devi, just 10 minutes from the temple.
             </p>
           </div>
 
-          {/* 4-Item Bento Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 reveal">
-            {/* Bento Item 1 */}
-            <div className="group relative rounded-3xl overflow-hidden bg-slate h-80 sm:h-96 shadow-md border border-[#C5A059]/30 flex flex-col justify-end p-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6 reveal">
+            {/* 1 */}
+            <div className="relative rounded-3xl overflow-hidden bg-slate-900 h-[360px] sm:h-[390px] lg:h-[410px] shadow-lg hover:shadow-xl hover:border-black/25 transition-all duration-300 border border-black/10 flex flex-col justify-end p-5 sm:p-6">
               <img
                 src={trishulPeaksImg}
-                alt="Trishul and Nanda Devi peaks"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                alt="Snow peak views"
+                className="absolute inset-0 w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent"></div>
               <div className="relative z-10">
-                <span className="text-[#C5A059] text-[11px] uppercase font-cinzel font-semibold tracking-widest block mb-1">
-                  Private Balcony View
-                </span>
-                <h3 className="font-serif text-xl text-ivory font-medium mb-1">
+                <h3 className="font-serif text-xl sm:text-2xl text-white font-medium mb-1.5 leading-tight">
                   Snow Peak Views
                 </h3>
-                <p className="text-ivory/80 text-xs font-light line-clamp-2 font-sans">
-                  Clear 180° views of Mount Trishul and Nanda Devi peaks right from your bed and private balcony.
+                <p className="text-white/90 text-xs sm:text-sm font-light leading-relaxed">
+                  See Mount Trishul and Nanda Devi clearly from your bed and private balcony.
                 </p>
               </div>
             </div>
 
-            {/* Bento Item 2 */}
-            <div className="group relative rounded-3xl overflow-hidden bg-slate h-80 sm:h-96 shadow-md border border-[#C5A059]/30 flex flex-col justify-end p-5">
+            {/* 2 */}
+            <div className="relative rounded-3xl overflow-hidden bg-slate-900 h-[360px] sm:h-[390px] lg:h-[410px] shadow-lg hover:shadow-xl hover:border-black/25 transition-all duration-300 border border-black/10 flex flex-col justify-end p-5 sm:p-6">
               <img
                 src={chaletFamilyLiving || chaletSuiteImg}
-                alt="Cedar Alpine Chalet Interiors"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                alt="Warm heated room"
+                className="absolute inset-0 w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent"></div>
               <div className="relative z-10">
-                <span className="text-[#C5A059] text-[11px] uppercase font-cinzel font-semibold tracking-widest block mb-1">
-                  Cozy In Winter
-                </span>
-                <h3 className="font-serif text-xl text-ivory font-medium mb-1">
+                <h3 className="font-serif text-xl sm:text-2xl text-white font-medium mb-1.5 leading-tight">
                   Warm Heated Rooms
                 </h3>
-                <p className="text-ivory/80 text-xs font-light line-clamp-2 font-sans">
-                  Room heaters and electric bed warmers in every room to keep you warm and comfortable on cold nights.
+                <p className="text-white/90 text-xs sm:text-sm font-light leading-relaxed">
+                  Room heaters and electric bed warmers in every room to keep you warm on cold nights.
                 </p>
               </div>
             </div>
 
-            {/* Bento Item 3 */}
-            <div className="group relative rounded-3xl overflow-hidden bg-slate h-80 sm:h-96 shadow-md border border-[#C5A059]/30 flex flex-col justify-end p-5">
+            {/* 3 */}
+            <div className="relative rounded-3xl overflow-hidden bg-slate-900 h-[360px] sm:h-[390px] lg:h-[410px] shadow-lg hover:shadow-xl hover:border-black/25 transition-all duration-300 border border-black/10 flex flex-col justify-end p-5 sm:p-6">
               <img
                 src={kasarTempleTrail || kasarTempleImg}
-                alt="Kasar Devi ancient ridge"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                alt="Walk to Kasar Devi Temple"
+                className="absolute inset-0 w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent"></div>
               <div className="relative z-10">
-                <span className="text-[#C5A059] text-[11px] uppercase font-cinzel font-semibold tracking-widest block mb-1">
-                  10 Min Walk
-                </span>
-                <h3 className="font-serif text-xl text-ivory font-medium mb-1">
-                  Temple &amp; Nature Walks
+                <h3 className="font-serif text-xl sm:text-2xl text-white font-medium mb-1.5 leading-tight">
+                  10 Min Walk to Temple
                 </h3>
-                <p className="text-ivory/80 text-xs font-light line-clamp-2 font-sans">
-                  Walk through peaceful pine trails to the ancient Kasar Devi Temple and Swami Vivekananda caves.
+                <p className="text-white/90 text-xs sm:text-sm font-light leading-relaxed">
+                  Easy walk through pine trees to ancient Kasar Devi Temple and Vivekananda caves.
                 </p>
               </div>
             </div>
 
-            {/* Bento Item 4 */}
-            <div className="group relative rounded-3xl overflow-hidden bg-slate h-80 sm:h-96 shadow-md border border-[#C5A059]/30 flex flex-col justify-end p-5">
+            {/* 4 */}
+            <div className="relative rounded-3xl overflow-hidden bg-slate-900 h-[360px] sm:h-[390px] lg:h-[410px] shadow-lg hover:shadow-xl hover:border-black/25 transition-all duration-300 border border-black/10 flex flex-col justify-end p-5 sm:p-6">
               <img
                 src={hotelNightSky || hotelAtNight}
-                alt="Dark sky stargazing at Kasar"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                alt="Starry night sky"
+                className="absolute inset-0 w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent"></div>
               <div className="relative z-10">
-                <span className="text-[#C5A059] text-[11px] uppercase font-cinzel font-semibold tracking-widest block mb-1">
-                  Zero Pollution
-                </span>
-                <h3 className="font-serif text-xl text-ivory font-medium mb-1">
-                  Starlit Night Skies
+                <h3 className="font-serif text-xl sm:text-2xl text-white font-medium mb-1.5 leading-tight">
+                  Clean Forest Air
                 </h3>
-                <p className="text-ivory/80 text-xs font-light line-clamp-2 font-sans">
-                  Clean mountain air with zero city light pollution, full of bright stars and peaceful silence at night.
+                <p className="text-white/90 text-xs sm:text-sm font-light leading-relaxed">
+                  Clean mountain air with zero city noise and bright starry skies at night.
                 </p>
               </div>
             </div>
-          </div>
-
-          {/* Editorial Quote Banner */}
-          <div className="mt-8 sm:mt-10 text-center border-t border-b border-[#C5A059]/25 py-4 sm:py-5 reveal">
-            <p className="font-serif text-xl sm:text-2xl text-[#2C2523] italic font-light max-w-2xl mx-auto">
-              &ldquo;A peaceful mountain home where your mind and body find true rest.&rdquo;
-            </p>
-            <span className="text-[11px] uppercase tracking-[0.2em] text-[#C5A059] font-cinzel block mt-1.5 font-semibold">
-              The Kasar Himalayan Heights • Kasar Devi, Almora • 6,942 FT
-            </span>
           </div>
         </Container>
       </section>
 
-      {/* 3. Editorial Suite Showcase */}
+      {/* 4. Rooms Showcase (Clean, compact tab preview) */}
       <SuiteShowcase
         rooms={rooms}
-        onSelectSuite={(id) => handleBookNow(id)}
         onOpenQuickView={handleOpenQuickView}
       />
 
-      {/* 3.5 Our Story & History of Kasar Devi */}
-      <section id="philosophy" className="py-10 sm:py-14 px-4 bg-[#FAF6EF]/60 border-b border-[#C5A059]/20">
-        <Container size="lg">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-            {/* Left Column: Image */}
-            <div className="lg:col-span-5 reveal">
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-[#C5A059]/35 bg-slate group">
-                <img
-                  src={sunriseMeditationDeck || kasarTempleImg}
-                  alt="Kasar Devi ridge and ancient pine groves"
-                  className="w-full h-[400px] sm:h-[440px] object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1C1817]/85 via-transparent to-transparent"></div>
-                <div className="absolute bottom-6 left-6 right-6 text-ivory">
-                  <span className="text-[#C5A059] text-[11px] uppercase font-cinzel font-semibold tracking-widest block mb-1">
-                    Spiritual Heritage
-                  </span>
-                  <h4 className="font-serif text-xl font-medium text-[#FDFBF7]">
-                    The Ancient Pine Ridge of Kasar Devi
-                  </h4>
-                  <p className="text-xs text-ivory/80 mt-1 font-light font-sans">
-                    Kasar Devi, Almora • 6,942 FT Height
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Column: Story */}
-            <div className="lg:col-span-7 space-y-5 reveal">
-              <div>
-                <span className="text-[#C5A059] text-xs uppercase tracking-[0.2em] font-bold block mb-2 font-cinzel">
-                  Our Story
-                </span>
-                <h2 className="font-serif text-3xl sm:text-4xl text-[#2C2523] font-medium leading-tight">
-                  The Peace &amp; History of Kasar Devi
-                </h2>
-                <div className="w-16 h-0.5 bg-[#C5A059]/60 my-3"></div>
-              </div>
-
-              <p className="text-[#5C5350] text-sm sm:text-base font-normal leading-relaxed font-sans">
-                In 1890, Swami Vivekananda traveled to Kasar Devi for deep meditation in the quiet hill caves. Over the years, many travelers, writers, and pilgrims have visited this sacred hill to experience its quiet energy and pure mountain air.
-              </p>
-
-              <p className="text-[#5C5350] text-sm sm:text-base font-normal leading-relaxed font-sans">
-                We built The Kasar Himalayan Heights to give you that same peace in warm, modern comfort. Made with natural mountain stone and pine wood, our rooms give you wide views of the snow peaks, warm beds on cold nights, and friendly local hospitality.
-              </p>
-
-              {/* 3 Pillars */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-[#C5A059]/20">
-                <div className="bg-[#FDFBF7] p-4 rounded-2xl border border-[#C5A059]/25 shadow-xs">
-                  <span className="text-[#7C1D23] font-serif text-2xl font-bold block mb-0.5 font-numeral">180°</span>
-                  <span className="text-xs font-bold text-[#2C2523] block font-cinzel">Snow Peak View</span>
-                  <span className="text-[11px] text-[#6B615E] font-sans">Trishul &amp; Nanda Devi</span>
-                </div>
-                <div className="bg-[#FDFBF7] p-4 rounded-2xl border border-[#C5A059]/25 shadow-xs">
-                  <span className="text-[#7C1D23] font-serif text-2xl font-bold block mb-0.5 font-numeral">6,942′</span>
-                  <span className="text-xs font-bold text-[#2C2523] block font-cinzel">Mountain Height</span>
-                  <span className="text-[11px] text-[#6B615E] font-sans">Clean pine forest air</span>
-                </div>
-                <div className="bg-[#FDFBF7] p-4 rounded-2xl border border-[#C5A059]/25 shadow-xs">
-                  <span className="text-[#7C1D23] font-serif text-2xl font-bold block mb-0.5 font-numeral">100%</span>
-                  <span className="text-xs font-bold text-[#2C2523] block font-cinzel">Warm Rooms</span>
-                  <span className="text-[11px] text-[#6B615E] font-sans">Heaters &amp; bed warmers</span>
-                </div>
-              </div>
-
-              <div className="pt-1">
-                <a
-                  href="#book"
-                  className="px-6 py-3 rounded-full text-xs font-sans uppercase tracking-widest font-semibold bg-[#7C1D23] hover:bg-[#5C151A] text-[#FDFBF7] transition-all shadow-md inline-flex items-center gap-2 border border-[#C5A059]/40 hover:scale-102"
-                >
-                  <span>Book Your Stay in Kasar Devi</span>
-                  <ArrowUpRightIcon className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      {/* 3.6 Dev Bhoomi Shrines at Our Doorstep */}
-      <TempleTrails />
-
-      {/* 3.7 The Kumaoni Hearth & Fresh Satvik Dining */}
+      {/* 5. Fresh Pure Veg Food */}
       <SatvikDining />
 
-      {/* 4. Amenities Grid (Thoughtful Winter Luxury) */}
-      <AmenitiesGrid />
+      {/* 6. Temples & Nearby Sights */}
+      <TempleTrails />
 
-      {/* 5. Curated Winter Experiences */}
-      <Experiences />
-
-      {/* 5.5 Guest Sanctuary Chronicles */}
+      {/* 7. Guest Reviews */}
       <SanctuaryReviews />
 
-      {/* 6. All Suites Grid Preview */}
-      <section className="py-10 sm:py-14 px-4 bg-[#FDFBF7] border-b border-[#C5A059]/20">
-        <Container size="lg">
-          <SectionHeading
-            subtitle="Warm Heated Rooms"
-            title="Rooms Built for Mountain Warmth"
-            description="Private balconies with snow peak views, room heaters, electric bed warmers, and 24-hour hot water."
-          />
-
-          <div className="mt-8 sm:mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 reveal">
-            {rooms.slice(0, 3).map((room) => (
-              <div key={room._id} className="reveal-stagger">
-                <RoomCard room={room} onBookNow={handleBookNow} />
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-8 text-center">
-            <Link
-              to="/rooms"
-              className="px-8 py-3.5 rounded-full text-xs font-sans uppercase tracking-wider font-semibold border border-[#C5A059] bg-[#FAF6EF] hover:bg-[#C5A059]/20 text-[#2C2523] hover:text-[#7C1D23] transition-all shadow-xs inline-flex items-center gap-2 hover:scale-102"
-            >
-              <span>View All Rooms &amp; Rates</span>
-              <span className="text-[#7C1D23] text-sm">&rarr;</span>
-            </Link>
-          </div>
-        </Container>
-      </section>
-
-      {/* 7. Dedicated Booking Section */}
-      <section id="book" className="py-10 sm:py-14 px-4 bg-[#FAF6EF]/60">
+      {/* 8. Bottom Reservation Banner */}
+      <section className="py-16 sm:py-20 px-4 bg-[#031C15] text-white relative overflow-hidden border-t border-b border-white/10">
         <Container size="md">
-          <SectionHeading
-            subtitle="Book Direct"
-            title="Book Your Room"
-            description="Booking directly gets you our best rate, free hot breakfast every morning, and free cancellation up to 48 hours before check-in."
-          />
+          <div className="relative z-10 text-center max-w-2xl mx-auto space-y-5 bg-white/[0.04] p-8 sm:p-12 rounded-3xl border border-white/12 shadow-2xl backdrop-blur-sm">
+            <span className="inline-block px-3.5 py-1 rounded-full bg-[#C9F24D] text-[#073125] text-[11px] font-mono font-bold tracking-widest uppercase shadow-xs">
+              BOOK DIRECT
+            </span>
 
-          <div className="mt-8 bg-[#FDFBF7] p-6 sm:p-10 rounded-3xl border border-[#C5A059]/35 shadow-xl reveal">
-            <BookingForm
-              preSelectedRoom={selectedRoomId}
-              onSelectRoom={(id) => setSelectedRoomId(id)}
-            />
+            <h2 className="font-serif text-2xl sm:text-4xl font-normal text-white">
+              Ready for Your Stay in Kasar Devi?
+            </h2>
+
+            <p className="text-white/85 text-sm sm:text-base font-light leading-relaxed max-w-lg mx-auto">
+              Book directly with us for the best price, free hot breakfast every morning, and free cancellation up to 48 hours before check-in.
+            </p>
+
+            <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+              <Link
+                to="/book"
+                className="px-7 py-3.5 rounded-full text-xs font-mono uppercase tracking-wider font-bold bg-[#C9F24D] hover:bg-[#b8e23f] text-[#073125] transition-all shadow-lg hover:scale-102 flex items-center gap-2 cursor-pointer"
+              >
+                <span>Book a Room Now</span>
+                <ArrowUpRightIcon className="w-3.5 h-3.5" />
+              </Link>
+
+              <button
+                type="button"
+                onClick={() => {
+                  const text = encodeURIComponent(
+                    'Hello, I would like to inquire about booking a room at The Kasar Himalayan Heights.'
+                  );
+                  window.open(`https://wa.me/${whatsappNumber}?text=${text}`, '_blank');
+                }}
+                className="px-6 py-3.5 rounded-full text-xs font-mono uppercase tracking-wider font-semibold border border-white/30 hover:bg-white/10 text-white transition-all flex items-center gap-2 cursor-pointer"
+              >
+                <WhatsAppIcon className="w-4 h-4 text-[#C9F24D]" />
+                <span>Chat on WhatsApp</span>
+              </button>
+            </div>
+
+            {/* Simple Perks */}
+            <div className="pt-5 border-t border-white/15 flex flex-wrap items-center justify-center gap-5 text-xs text-white/75">
+              <span className="flex items-center gap-1.5">
+                <CheckCircleIcon className="w-3.5 h-3.5 text-[#C9F24D]" />
+                <span>Best Price Guarantee</span>
+              </span>
+              <span className="flex items-center gap-1.5">
+                <CheckCircleIcon className="w-3.5 h-3.5 text-[#C9F24D]" />
+                <span>Free Hot Breakfast</span>
+              </span>
+              <span className="flex items-center gap-1.5">
+                <CheckCircleIcon className="w-3.5 h-3.5 text-[#C9F24D]" />
+                <span>Free 48-Hour Cancellation</span>
+              </span>
+            </div>
           </div>
         </Container>
       </section>
@@ -407,7 +294,7 @@ const HotelHome = () => {
         room={modalRoom}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onBookNow={handleBookNow}
+        onBookNow={(roomId) => navigate(`/book?room=${roomId}`)}
       />
     </div>
   );

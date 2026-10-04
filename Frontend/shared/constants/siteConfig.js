@@ -23,9 +23,9 @@ export const SITE_CONFIG = {
   whatsappNumber: '919690621247',
   whatsappDisplay: '+91 96906 21247',
   email: 'concierge@kasarhimalayanheights.com',
-  peaks: ['Trishul (7,120 m)', 'Nanda Devi (7,816 m)', 'Panchachuli', 'Chaukhamba', 'Maiktoli'],
+  mapsUrl: 'https://maps.google.com/?q=The+Kasar+Himalayan+Heights,+Kasar+Devi,+Almora,+Uttarakhand',
   socials: {
-    instagram: 'https://instagram.com/kasarhimalayanheights',
-    facebook: 'https://facebook.com/kasarhimalayanheights',
+    instagram: 'https://www.instagram.com/the_kasar_himalyan_heights/?hl=en',
+    facebook: 'https://www.facebook.com/61555816868523/',
   },
 };

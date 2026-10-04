@@ -155,7 +155,7 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
     <form onSubmit={handleSubmit} className="space-y-4 font-sans">
       {/* Room Selector */}
       <div>
-        <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5 font-mono">
+        <label className="block text-xs sm:text-sm font-semibold uppercase tracking-wider text-[#073125] mb-1.5 font-mono">
           Select Room
         </label>
         <select
@@ -163,7 +163,7 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
           value={formData.room}
           onChange={handleChange}
           required
-          className="w-full px-4 py-3 rounded-xl border border-gold/30 bg-ivory text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-gold/50 transition cursor-pointer"
+          className="w-full px-4 py-3 rounded-xl border border-[#073125]/20 bg-[#FBFDFB] text-[#073125] text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-[#073125]/30 transition cursor-pointer"
         >
           {rooms.map((room) => {
             const isOccupied = occupiedRoomIds.includes(room._id);
@@ -179,7 +179,7 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
 
       {/* Date Conflict Warning Banner */}
       {isRoomUnavailable && (
-        <div className="p-3.5 bg-red-50 border border-red-200 rounded-xl flex items-center gap-2.5 text-xs text-red-700 font-semibold shadow-xs">
+        <div className="p-3.5 bg-red-50 border border-red-200 rounded-xl flex items-center gap-2.5 text-xs sm:text-sm text-red-700 font-semibold shadow-xs">
           <span className="text-base">⚠️</span>
           <span>This room is already reserved for the selected dates. Please choose another suite or alternative dates.</span>
         </div>
@@ -188,9 +188,9 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
       {/* Date Pickers */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5 font-mono flex items-center justify-between">
+          <label className="block text-xs sm:text-sm font-semibold uppercase tracking-wider text-[#073125] mb-1.5 font-mono flex items-center justify-between">
             <span>Check-In</span>
-            <span className="text-[10px] text-charcoal-muted lowercase font-normal font-sans">({checkInTime})</span>
+            <span className="text-xs text-[#073125]/60 lowercase font-normal font-sans">({checkInTime})</span>
           </label>
           <input
             type="date"
@@ -200,13 +200,13 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
             min={today}
             max={maxDateStr}
             required
-            className="w-full px-4 py-3 rounded-xl border border-gold/30 bg-ivory text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-gold/50 transition"
+            className="w-full px-4 py-3 rounded-xl border border-[#073125]/20 bg-[#FBFDFB] text-[#073125] text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-[#073125]/30 transition cursor-pointer"
           />
         </div>
         <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5 font-mono flex items-center justify-between">
+          <label className="block text-xs sm:text-sm font-semibold uppercase tracking-wider text-[#073125] mb-1.5 font-mono flex items-center justify-between">
             <span>Check-Out</span>
-            <span className="text-[10px] text-charcoal-muted lowercase font-normal font-sans">({checkOutTime})</span>
+            <span className="text-xs text-[#073125]/60 lowercase font-normal font-sans">({checkOutTime})</span>
           </label>
           <input
             type="date"
@@ -216,7 +216,7 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
             min={formData.checkInDate || today}
             max={maxDateStr}
             required
-            className="w-full px-4 py-3 rounded-xl border border-gold/30 bg-ivory text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-gold/50 transition"
+            className="w-full px-4 py-3 rounded-xl border border-[#073125]/20 bg-[#FBFDFB] text-[#073125] text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-[#073125]/30 transition cursor-pointer"
           />
         </div>
       </div>
@@ -224,7 +224,7 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
       {/* Guest Details */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5 font-mono">
+          <label className="block text-xs sm:text-sm font-semibold uppercase tracking-wider text-[#073125] mb-1.5 font-mono">
             Full Name
           </label>
           <input
@@ -234,18 +234,18 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
             onChange={handleChange}
             placeholder="e.g. Anand Sharma"
             required
-            className="w-full px-4 py-3 rounded-xl border border-gold/30 bg-ivory text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-gold/50 transition"
+            className="w-full px-4 py-3 rounded-xl border border-[#073125]/20 bg-[#FBFDFB] text-[#073125] text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-[#073125]/30 transition"
           />
         </div>
         <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5 font-mono">
+          <label className="block text-xs sm:text-sm font-semibold uppercase tracking-wider text-[#073125] mb-1.5 font-mono">
             Guests
           </label>
           <select
             name="guests"
             value={formData.guests}
             onChange={handleChange}
-            className="w-full px-4 py-3 rounded-xl border border-gold/30 bg-ivory text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-gold/50 transition cursor-pointer"
+            className="w-full px-4 py-3 rounded-xl border border-[#073125]/20 bg-[#FBFDFB] text-[#073125] text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-[#073125]/30 transition cursor-pointer"
           >
             <option value="1">1 Adult</option>
             <option value="2">2 Adults (1 Room)</option>
@@ -257,7 +257,7 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5 font-mono">
+          <label className="block text-xs sm:text-sm font-semibold uppercase tracking-wider text-[#073125] mb-1.5 font-mono">
             Email Address
           </label>
           <input
@@ -267,11 +267,11 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
             onChange={handleChange}
             placeholder="anand@example.com"
             required
-            className="w-full px-4 py-3 rounded-xl border border-gold/30 bg-ivory text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-gold/50 transition"
+            className="w-full px-4 py-3 rounded-xl border border-[#073125]/20 bg-[#FBFDFB] text-[#073125] text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-[#073125]/30 transition"
           />
         </div>
         <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5 font-mono">
+          <label className="block text-xs sm:text-sm font-semibold uppercase tracking-wider text-[#073125] mb-1.5 font-mono">
             WhatsApp / Phone
           </label>
           <input
@@ -281,30 +281,30 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
             onChange={handleChange}
             placeholder="+91 98765 43210"
             required
-            className="w-full px-4 py-3 rounded-xl border border-gold/30 bg-ivory text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-gold/50 transition"
+            className="w-full px-4 py-3 rounded-xl border border-[#073125]/20 bg-[#FBFDFB] text-[#073125] text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-[#073125]/30 transition"
           />
         </div>
       </div>
 
       {/* Live Price Summary if Dates Picked */}
       {nights > 0 && selectedRoomObj && (
-        <div className="p-4 bg-ivory-warm rounded-xl border border-gold/30 flex items-center justify-between text-sm">
+        <div className="p-4 bg-[#EBF2EA]/70 rounded-xl border border-[#073125]/15 flex items-center justify-between text-sm sm:text-base">
           <div>
-            <span className="font-medium text-charcoal block">
+            <span className="font-semibold text-[#073125] block">
               {selectedRoomObj.name}
             </span>
-            <span className="text-xs text-charcoal-muted">
+            <span className="text-xs sm:text-sm text-[#073125]/70">
               ₹{pricingResult.avgPricePerNight?.toLocaleString()} × {nights} {nights === 1 ? 'night' : 'nights'}
             </span>
             {pricingResult.hasSurcharge && (
-              <span className="inline-block mt-1 px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 text-[10px] font-medium">
+              <span className="inline-block mt-1 px-2.5 py-0.5 rounded-full bg-[#C9F24D]/30 text-[#073125] border border-[#073125]/20 text-xs font-semibold">
                 ✨ {pricingResult.activeSurchargeReason}
               </span>
             )}
           </div>
           <div className="text-right">
-            <span className="text-xs text-charcoal-muted block font-mono">Estimated Total</span>
-            <span className="font-serif text-xl font-bold text-maroon">
+            <span className="text-xs text-[#073125]/60 block font-mono">Estimated Total</span>
+            <span className="font-serif text-2xl font-bold text-[#073125]">
               ₹{totalPrice.toLocaleString()}
             </span>
           </div>
@@ -316,7 +316,7 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
         <button
           type="submit"
           disabled={loading || isRoomUnavailable}
-          className="w-full py-4 rounded-xl text-xs uppercase tracking-widest font-semibold bg-maroon hover:bg-maroon-dark text-ivory disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group transition-all duration-300 shadow-md cursor-pointer"
+          className="w-full py-4 rounded-xl text-xs sm:text-sm uppercase tracking-wider font-bold bg-[#073125] hover:bg-[#12433B] text-white disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group transition-all duration-300 shadow-md cursor-pointer"
         >
           <span>
             {loading
@@ -338,15 +338,15 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
             );
             window.open(`https://wa.me/${whatsappNumber}?text=${text}`, '_blank');
           }}
-          className="w-full py-3.5 rounded-xl text-xs uppercase tracking-widest font-semibold border border-gold/40 hover:bg-gold/10 text-charcoal flex items-center justify-center gap-2 transition-all duration-300 cursor-pointer"
+          className="w-full py-3.5 rounded-xl text-xs sm:text-sm uppercase tracking-wider font-bold border border-[#073125]/30 hover:bg-[#EBF2EA] text-[#073125] flex items-center justify-center gap-2 transition-all duration-300 cursor-pointer"
         >
-          <WhatsAppIcon className="w-4 h-4 text-maroon" />
+          <WhatsAppIcon className="w-4 h-4 text-[#073125]" />
           <span>Book on WhatsApp</span>
         </button>
       </div>
 
-      <p className="text-center text-[11px] text-charcoal-muted pt-1">
-        Best rate guarantee • {cancellationPolicy} • Free hot breakfast included
+      <p className="text-center text-xs text-[#073125]/65 pt-1">
+        Best price guaranteed • {cancellationPolicy} • Free hot breakfast included
       </p>
     </form>
   );

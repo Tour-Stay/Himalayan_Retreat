@@ -1,137 +1,113 @@
 import { useState } from 'react';
-import { Container, CheckCircleIcon, APP_URLS, captionImg } from '@shared';
+import { Container, CheckCircleIcon, APP_URLS } from '@shared';
 import { suitesData } from '../data/landingData';
 
 const HotelGatewaySection = () => {
   const [activeSuiteIdx, setActiveSuiteIdx] = useState(0);
 
   return (
-    <section id="hotel-gateway" className="py-16 sm:py-24 px-4 bg-gradient-to-b from-[#FDFBF7] via-[#FFF7EE]/40 to-[#FDFBF7] relative overflow-hidden">
-      {/* Subtle sacred symbol watermark */}
-      <div className="absolute top-12 right-6 text-[#C84B0F]/[0.025] text-[160px] font-devanagari select-none pointer-events-none leading-none z-0">
-        ॐ
-      </div>
-
+    <section id="hotel-gateway" className="py-20 sm:py-28 px-4 bg-[#541508] border-b border-[#3D0F06] text-white relative overflow-hidden">
       <Container size="lg">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6 relative z-10">
-          <div className="max-w-xl">
-            <span className="text-xs font-sans text-[#C84B0F] uppercase tracking-wider font-semibold block mb-2 flex items-center gap-1.5">
-              <span className="text-sm">🪔</span> Boutique Mountain Stay • 6,942 FT
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6 relative z-10">
+          <div className="max-w-2xl">
+            <span className="font-serif text-sm uppercase tracking-widest text-[#EAA722] font-semibold block mb-2">
+              The Retreat Sanctuary • 6,942 FT Altitude
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl text-[#2C2523] font-medium leading-tight">
-              Cozy Heated Rooms <span className="font-sans font-light">&</span> Mountain Chalets
+            <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl text-white font-normal leading-tight">
+              Heated Alpine Chalets <br />
+              <span className="italic text-[#EAA722] font-normal">&amp; Snow Peak Views</span>
             </h2>
-            <p className="text-[#5C5350] text-base leading-relaxed mt-2 font-normal">
-              Heated alpine rooms crafted with warm wood and river stone, each with a private balcony facing the snow peaks of Trishul and Nanda Devi.
+            <p className="font-serif text-lg sm:text-xl text-[#FAF5EC]/90 leading-relaxed mt-4 font-normal">
+              Heated chalets crafted with mountain cedar and river stone. Each chalet opens to an intimate private balcony overlooking Mount Trishul and Nanda Devi.
             </p>
           </div>
 
+          <div className="flex-shrink-0">
             <a
               href={APP_URLS.hotel}
               target="_blank"
               rel="noreferrer"
-              className="group px-6 py-3 rounded-full text-xs font-sans uppercase tracking-wider font-semibold bg-gradient-to-r from-[#C84B0F] to-[#7C1D23] hover:from-[#E05A1B] hover:to-[#9E3304] text-[#FDFBF7] shadow-md hover:shadow-lg transition-all duration-300 inline-flex items-center gap-2 flex-shrink-0 border border-[#C5A059]/30"
+              className="btn-nkb-gold px-8 py-3.5 text-xs sm:text-sm font-bold tracking-widest uppercase inline-flex items-center gap-2 cursor-pointer"
             >
-              <span>View All Rooms</span>
-              <span className="text-sm leading-none group-hover:translate-x-0.5 transition-transform text-[#DFCA9B]">↗</span>
+              <span>Explore Retreat Suites</span>
+              <span className="text-base leading-none">↗</span>
             </a>
           </div>
+        </div>
 
-        {/* Interactive Suite Showcase */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-          {/* Left: Suite Image */}
-          <div className="lg:col-span-7 flex flex-col">
-            <div className="relative rounded-2xl overflow-hidden h-72 sm:h-[400px] shadow-lg border border-[#C5A059]/20 flex-1">
+        {/* Traditional Suite Showcase */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
+          {/* Left: Suite Photo */}
+          <div className="lg:col-span-7">
+            <div className="relative rounded-3xl overflow-hidden h-80 sm:h-[420px] shadow-2xl border-2 border-[#EAA722]/30 bg-[#3D0F06]">
               <img
                 src={suitesData[activeSuiteIdx].image}
                 alt={suitesData[activeSuiteIdx].name}
-                className="w-full h-full object-cover transition-all duration-700"
+                className="w-full h-full object-cover transition-transform duration-700 hover:scale-102"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#1B2838]/40 via-transparent to-transparent"></div>
-              <div className="absolute bottom-4 right-4 px-5 py-2 rounded-full bg-[#FDFBF7]/95 text-[#2C2523] shadow-md border border-[#C5A059]/30 flex items-baseline gap-1.5">
-                <span className="text-[#C84B0F] font-numeral text-xl font-bold tracking-tight">{suitesData[activeSuiteIdx].tariff}</span>
-                <span className="text-xs text-[#6B615E]">{suitesData[activeSuiteIdx].unit}</span>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+              <div className="absolute bottom-5 right-5 px-5 py-2 rounded-full bg-[#12433B]/90 text-white shadow-xl border border-[#EAA722]/40 flex items-center gap-2">
+                <span className="text-[#EAA722] font-serif text-sm uppercase tracking-wider font-semibold">
+                  Heated Mountain Suite
+                </span>
               </div>
             </div>
 
             {/* Suite Selector */}
-            <div className="grid grid-cols-3 gap-3 mt-4">
+            <div className="grid grid-cols-3 gap-3 sm:gap-4 mt-5">
               {suitesData.map((suite, sIdx) => (
                 <button
                   key={suite.id}
                   type="button"
                   onClick={() => setActiveSuiteIdx(sIdx)}
-                  className={`p-3 rounded-xl text-left border transition-all duration-300 cursor-pointer ${
+                  className={`p-3.5 rounded-2xl text-left border-2 transition-all cursor-pointer ${
                     activeSuiteIdx === sIdx
-                      ? 'border-[#C84B0F]/70 bg-[#FAF6EF] shadow-xs'
-                      : 'border-[#C5A059]/15 bg-transparent hover:border-[#C84B0F]/40'
+                      ? 'border-[#EAA722] bg-[#3D0F06] shadow-md'
+                      : 'border-[#EAA722]/25 bg-[#541508] hover:border-[#EAA722]/60'
                   }`}
                 >
-                  <span className="font-serif text-sm font-medium text-[#2C2523] block truncate">
-                    {suite.name.split(' ')[0]} {suite.name.split(' ')[1]}
+                  <span className="font-serif text-base font-semibold text-white block truncate">
+                    {suite.name}
                   </span>
-                  <span className="text-xs font-sans text-[#C84B0F] font-semibold mt-0.5 block">
-                    {suite.tariff}
+                  <span className="text-xs font-serif text-[#EAA722] font-semibold mt-1 block tracking-wide">
+                    {suite.size}
                   </span>
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Right: Details */}
-          <div className="lg:col-span-5 flex flex-col justify-between">
-            <div>
-              <span className="text-xs font-sans text-[#C5A059] uppercase tracking-wider font-semibold block mb-2">
-                {suitesData[activeSuiteIdx].size} • Valley & Peak View
-              </span>
-              <h3 className="font-serif text-2xl font-medium text-[#2C2523] mb-4 leading-snug">
-                {suitesData[activeSuiteIdx].name}
-              </h3>
+          {/* Right: Suite Highlights */}
+          <div className="lg:col-span-5 bg-[#3D0F06] p-8 sm:p-10 rounded-3xl border border-[#EAA722]/30 shadow-xl">
+            <span className="font-serif text-sm uppercase tracking-widest text-[#EAA722] font-semibold block mb-2">
+              {suitesData[activeSuiteIdx].size} • Valley &amp; Peak Facing
+            </span>
+            <h3 className="font-serif text-3xl sm:text-4xl font-normal text-white mb-6">
+              {suitesData[activeSuiteIdx].name}
+            </h3>
 
-              <div className="space-y-2.5 mb-6">
-                {suitesData[activeSuiteIdx].features.map((feature, fIdx) => (
-                  <div key={fIdx} className="flex items-start gap-3 text-sm sm:text-base text-[#2C2523]/90">
-                    <CheckCircleIcon className="w-4 h-4 text-[#C5A059] flex-shrink-0 mt-1" />
-                    <span>{feature}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* Fresh Food & Cafe Callout with Authentic Photo */}
-              <div className="p-3.5 sm:p-4 rounded-2xl bg-[#FAF6EF] border border-[#C5A059]/25 mb-6 flex items-center gap-4">
-                <img
-                  src={captionImg}
-                  alt="The Kasar Himalayan Heights Cafe & Dining"
-                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl object-cover flex-shrink-0 border border-[#C5A059]/30 shadow-xs"
-                />
-                <div>
-                  <strong className="text-[#C84B0F] font-serif text-base block mb-0.5">
-                    Fresh Satvik Dining & Cafe
-                  </strong>
-                  <p className="text-xs text-[#5C5350] leading-relaxed">
-                    Homemade vegetarian food, fresh rotis, local lentils, mountain honey, and hot herbal tea made to order in our rustic mountain cafe.
-                  </p>
+            <div className="space-y-4 mb-8">
+              {suitesData[activeSuiteIdx].features.map((feature, fIdx) => (
+                <div key={fIdx} className="flex items-start gap-3.5 text-base sm:text-lg text-[#FAF5EC]/90 font-serif">
+                  <CheckCircleIcon className="w-5 h-5 text-[#EAA722] flex-shrink-0 mt-1" />
+                  <span className="leading-snug">{feature}</span>
                 </div>
-              </div>
+              ))}
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3">
-              <a
-                href={`${APP_URLS.hotel}/rooms`}
-                target="_blank"
-                rel="noreferrer"
-                className="flex-1 py-3 rounded-full text-center text-xs font-sans uppercase tracking-wider font-semibold bg-gradient-to-r from-[#C84B0F] to-[#7C1D23] text-[#FDFBF7] hover:from-[#E05A1B] hover:to-[#9E3304] transition-all duration-300 shadow-md border border-[#C5A059]/30"
-              >
-                View Rooms & Photos ↗
-              </a>
+            <div className="pt-6 border-t border-[#EAA722]/20 flex items-center justify-between">
+              <span className="text-base text-[#FAF5EC]/70 font-serif">
+                Includes Breakfast &bull; Heated Beds
+              </span>
               <a
                 href={`${APP_URLS.hotel}#book`}
                 target="_blank"
                 rel="noreferrer"
-                className="flex-1 py-3 rounded-full text-center text-xs font-sans uppercase tracking-wider font-semibold border border-[#C84B0F]/40 bg-[#FDFBF7] text-[#2C2523] hover:text-[#C84B0F] transition-all duration-300"
+                className="text-base font-serif font-bold text-[#EAA722] hover:text-white flex items-center gap-1.5"
               >
-                Check Dates ↗
+                <span>Reserve Room</span>
+                <span>↗</span>
               </a>
             </div>
           </div>

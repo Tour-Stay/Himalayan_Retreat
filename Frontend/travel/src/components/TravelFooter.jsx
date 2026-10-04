@@ -1,5 +1,5 @@
 import React from 'react';
-import { APP_URLS, SITE_CONFIG, PhoneIcon, MailIcon, WhatsAppIcon, MapPinIcon, CarIcon, MountainIcon, BedIcon, useSiteSettings } from '@shared';
+import { APP_URLS, SITE_CONFIG, PhoneIcon, MailIcon, WhatsAppIcon, MapPinIcon, CarIcon, MountainIcon, BedIcon, SparklesIcon, useSiteSettings } from '@shared';
 import Logo from '@shared/components/Logo';
 
 const TravelFooter = () => {
@@ -11,225 +11,237 @@ const TravelFooter = () => {
   const whatsappNumber = company?.whatsappNumber || SITE_CONFIG.whatsappNumber;
   const whatsappDisplay = company?.whatsappDisplay || SITE_CONFIG.whatsappDisplay;
   const travelAddress = company?.travelHubAddress || "Station Base Hub, Almora / Kasar Devi, Uttarakhand 263601";
+  const elevation = company?.elevation || '6,942 FT';
 
   const handleWhatsAppClick = () => {
     const message = encodeURIComponent(
       `*॥ ॐ नमः शिवाय • जय श्री नीब करौरी महाराज ॥*\n` +
-      `Hello Almora Cab Desk! I need assistance with a private cab booking / Kathgodam station pickup.`
+      `Hello Almora Cab Desk! I need assistance with a private mountain cab booking / Kathgodam station pickup.`
     );
     window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
   };
 
   return (
-    <footer className="bg-[#FAF6EF] text-[#2C2523] border-t border-[#C5A059]/30 font-sans">
-      {/* 1. TOP CONCIERGE CALLOUT STRIP */}
-      <div className="bg-[#FDFBF7] border-b border-[#C5A059]/20 py-10 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
-          <div className="text-center lg:text-left max-w-2xl">
-            <span className="text-[11px] uppercase tracking-wider text-[#C84B0F] font-bold block mb-2">
-              ॥ 🪔 24/7 Almora Mountain Cab Desk 🪔 ॥
-            </span>
-            <h3 className="font-serif text-2xl sm:text-4xl text-[#2C2523] font-medium tracking-tight leading-snug">
-              Need a trusted hill cab or station pickup?
-            </h3>
-            <p className="text-sm sm:text-base text-[#5C5350] mt-2 font-normal leading-relaxed">
-              Our Almora fleet base is ready 24/7 for Kathgodam Railway pickups, early morning Kainchi Dham aarti departures, and scenic hill station tours.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 flex-shrink-0">
-            <button
-              type="button"
-              onClick={handleWhatsAppClick}
-              className="px-6 py-3.5 rounded-full text-xs uppercase tracking-wider font-bold bg-[#7C1D23] hover:bg-[#5C151A] text-[#FAF6EF] shadow-md hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer border border-[#C5A059]/30"
-            >
-              <WhatsAppIcon className="w-4 h-4 text-[#C5A059]" />
-              <span>WhatsApp Cab Desk</span>
-            </button>
-
-            <a
-              href={`tel:${conciergePhone}`}
-              className="px-6 py-3.5 rounded-full text-xs uppercase tracking-wider font-bold border border-[#C5A059]/50 bg-[#FAF6EF] hover:bg-[#FFF5EC] text-[#2C2523] transition-all flex items-center gap-2 cursor-pointer shadow-xs"
-            >
-              <PhoneIcon className="w-4 h-4 text-[#7C1D23]" />
-              <span className="font-numeral font-bold">{conciergePhone}</span>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      {/* 2. MAIN FOOTER GRID */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8">
-          {/* Col 1: Brand & Fleet Hub */}
-          <div className="lg:col-span-4 space-y-4">
+    <footer className="bg-[#541508] text-white border-t-2 border-[#EAA722]/40 font-sans selection:bg-[#EAA722]/30 selection:text-white">
+      {/* MAIN TRAVEL FOOTER GRID */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-8">
+          
+          {/* Col 1: Brand & Heritage (Span 4) */}
+          <div className="lg:col-span-4 space-y-3.5">
             <a href="/" className="flex items-center gap-3 group inline-flex">
               <Logo size={42} />
               <div className="flex flex-col">
-                <span className="font-cinzel text-base sm:text-lg font-bold text-[#2C2523] tracking-tight group-hover:text-[#7C1D23] transition-colors">
+                <span className="font-serif text-lg font-bold text-white tracking-tight group-hover:text-[#EAA722] transition-colors leading-tight">
                   The Kasar Himalayan Heights
                 </span>
-                <span className="text-[10px] tracking-widest uppercase text-[#C5A059] font-semibold font-cinzel">
-                  Chauffeured Mountain Travel • Kasar Devi (6,942 FT)
+                <span className="text-[10px] tracking-[0.2em] uppercase text-[#EAA722] font-semibold font-mono">
+                  पावन तीर्थ यात्रा • Almora Fleet • 6,942 FT
                 </span>
               </div>
             </a>
 
-            <p className="text-sm text-[#5C5350] leading-relaxed font-normal">
-              Reliable, clean mountain cabs with experienced Pahadi drivers. Dedicated temple yatra transfers for Kainchi Dham, Jageshwar, Kasar Devi, and scenic Uttarakhand hill stations.
+            <p className="text-xs sm:text-sm text-[#FAF5EC]/85 leading-relaxed font-light">
+              Trusted, comfortable mountain cabs with respectful local Pahadi drivers. Dedicated pilgrimage transfers to Kainchi Dham, Jageshwar Dham, and on-time Kathgodam train station meet &amp; greet pickups.
             </p>
 
+            {/* Quiet Luxury Badges */}
             <div className="flex flex-wrap gap-2 pt-1">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FDFBF7] border border-[#C5A059]/35 text-xs text-[#2C2523] font-semibold shadow-xs">
-                <CarIcon className="w-3.5 h-3.5 text-[#C84B0F]" />
-                <span>Pahadi Hill Drivers</span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#3D0F06] border border-[#EAA722]/30 text-[11px] text-[#FAF5EC]">
+                <CarIcon className="w-3.5 h-3.5 text-[#EAA722]" />
+                <span className="font-semibold">Local Pahadi Drivers</span>
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FDFBF7] border border-[#C5A059]/35 text-xs text-[#2C2523] font-semibold shadow-xs">
-                <MountainIcon className="w-3.5 h-3.5 text-[#C84B0F]" />
-                <span>Fixed Upfront Fares</span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#3D0F06] border border-[#EAA722]/30 text-[11px] text-[#FAF5EC]">
+                <MountainIcon className="w-3.5 h-3.5 text-[#EAA722]" />
+                <span className="font-semibold">100% Fixed Upfront Fares</span>
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#3D0F06] border border-[#EAA722]/30 text-[11px] text-[#FAF5EC]">
+                <SparklesIcon className="w-3.5 h-3.5 text-[#EAA722]" />
+                <span className="font-semibold">Kathgodam On-Time Pickup</span>
               </span>
             </div>
 
-            <div className="pt-2 text-xs text-[#7C1D23] font-serif italic font-semibold">
-              ॥ प्रेम, सेवा और पावन यात्रा का संकल्प ॥
+            <div className="pt-1 text-xs text-[#EAA722] font-serif italic">
+              ॥ ॐ नमः शिवाय • जय श्री नीब करौरी महाराज ॥
             </div>
           </div>
 
-          {/* Col 2: Our Mountain Cabs */}
+          {/* Col 2: Our Mountain Cabs (Span 3) */}
           <div className="lg:col-span-3 space-y-3">
-            <h4 className="font-cinzel text-xs font-bold uppercase tracking-wider text-[#7C1D23] border-b border-[#C5A059]/30 pb-2">
+            <h4 className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-[#EAA722] border-b border-[#EAA722]/25 pb-2">
               Our Mountain Fleet
             </h4>
-            <ul className="space-y-2 text-sm text-[#5C5350]">
+            <ul className="space-y-2.5 text-xs sm:text-sm text-[#FAF5EC]/85">
               <li>
-                <a href="#cabs" className="hover:text-[#C84B0F] transition-colors flex items-center gap-1.5">
-                  <span className="text-[#C5A059]">›</span>
+                <a href="#cabs" className="hover:text-[#EAA722] transition-colors flex items-center gap-2 group">
+                  <span className="text-[#EAA722] text-xs transition-transform group-hover:translate-x-0.5">›</span>
                   <span>4-Seater Mountain Sedan (Dzire)</span>
                 </a>
               </li>
               <li>
-                <a href="#cabs" className="hover:text-[#C84B0F] transition-colors flex items-center gap-1.5">
-                  <span className="text-[#C5A059]">›</span>
+                <a href="#cabs" className="hover:text-[#EAA722] transition-colors flex items-center gap-2 group">
+                  <span className="text-[#EAA722] text-xs transition-transform group-hover:translate-x-0.5">›</span>
                   <span>6-Seater SUV (Innova Crysta)</span>
                 </a>
               </li>
               <li>
-                <a href="#cabs" className="hover:text-[#C84B0F] transition-colors flex items-center gap-1.5">
-                  <span className="text-[#C5A059]">›</span>
+                <a href="#cabs" className="hover:text-[#EAA722] transition-colors flex items-center gap-2 group">
+                  <span className="text-[#EAA722] text-xs transition-transform group-hover:translate-x-0.5">›</span>
                   <span>12-Seater Luxury Minibus (Urbania)</span>
                 </a>
               </li>
               <li>
-                <a href="#calculator" className="hover:text-[#C84B0F] transition-colors flex items-center gap-1.5">
-                  <span className="text-[#C5A059]">›</span>
-                  <span>Fare Calculator & Rates</span>
+                <a href="/calculator" className="hover:text-[#EAA722] transition-colors flex items-center gap-2 group">
+                  <span className="text-[#EAA722] text-xs transition-transform group-hover:translate-x-0.5">›</span>
+                  <span>Fare Calculator &amp; Honest Rates</span>
                 </a>
               </li>
-              <li>
-                <a href="#safety" className="hover:text-[#C84B0F] transition-colors flex items-center gap-1.5">
-                  <span className="text-[#C5A059]">›</span>
-                  <span>Safety & Winter Hill Driving</span>
+              <li className="pt-2 border-t border-[#EAA722]/20 flex items-center gap-3">
+                <a href="/cabs" className="text-[#EAA722] hover:underline font-semibold font-mono text-xs inline-flex items-center gap-1">
+                  <span>Explore All Cabs &rarr;</span>
                 </a>
               </li>
             </ul>
           </div>
 
-          {/* Col 3: Popular Temple Tours */}
+          {/* Col 3: Sacred Pilgrimage Circuits (Span 2) */}
           <div className="lg:col-span-2 space-y-3">
-            <h4 className="font-cinzel text-xs font-bold uppercase tracking-wider text-[#7C1D23] border-b border-[#C5A059]/30 pb-2">
-              Temple Circuits
+            <h4 className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-[#EAA722] border-b border-[#EAA722]/25 pb-2">
+              Holy Circuits
             </h4>
-            <ul className="space-y-2 text-sm text-[#5C5350]">
+            <ul className="space-y-2.5 text-xs sm:text-sm text-[#FAF5EC]/85">
               <li>
-                <a href="#circuits" className="hover:text-[#C84B0F] transition-colors flex items-center gap-1.5">
-                  <span className="text-[#C5A059]">›</span>
-                  <span>Kainchi Dham Darshan (45 km)</span>
+                <a href="#circuits" className="hover:text-[#EAA722] transition-colors flex items-center gap-2 group">
+                  <span className="text-[#EAA722] text-xs transition-transform group-hover:translate-x-0.5">›</span>
+                  <span>Kainchi Dham (45 km)</span>
                 </a>
               </li>
               <li>
-                <a href="#circuits" className="hover:text-[#C84B0F] transition-colors flex items-center gap-1.5">
-                  <span className="text-[#C5A059]">›</span>
+                <a href="#circuits" className="hover:text-[#EAA722] transition-colors flex items-center gap-2 group">
+                  <span className="text-[#EAA722] text-xs transition-transform group-hover:translate-x-0.5">›</span>
                   <span>Jageshwar Dham (35 km)</span>
                 </a>
               </li>
               <li>
-                <a href="#circuits" className="hover:text-[#C84B0F] transition-colors flex items-center gap-1.5">
-                  <span className="text-[#C5A059]">›</span>
+                <a href="#circuits" className="hover:text-[#EAA722] transition-colors flex items-center gap-2 group">
+                  <span className="text-[#EAA722] text-xs transition-transform group-hover:translate-x-0.5">›</span>
                   <span>Kasar Devi Ridge (8 km)</span>
                 </a>
               </li>
               <li>
-                <a href="#circuits" className="hover:text-[#C84B0F] transition-colors flex items-center gap-1.5">
-                  <span className="text-[#C5A059]">›</span>
-                  <span>Nainital Lake Tour (63 km)</span>
+                <a href="#circuits" className="hover:text-[#EAA722] transition-colors flex items-center gap-2 group">
+                  <span className="text-[#EAA722] text-xs transition-transform group-hover:translate-x-0.5">›</span>
+                  <span>Kathgodam Pickup</span>
                 </a>
               </li>
               <li>
-                <a href="#circuits" className="hover:text-[#C84B0F] transition-colors flex items-center gap-1.5">
-                  <span className="text-[#C5A059]">›</span>
-                  <span>Kathgodam Station Pickup</span>
+                <a href="#circuits" className="hover:text-[#EAA722] transition-colors flex items-center gap-2 group">
+                  <span className="text-[#EAA722] text-xs transition-transform group-hover:translate-x-0.5">›</span>
+                  <span>Kausani Peaks (52 km)</span>
                 </a>
               </li>
             </ul>
           </div>
 
-          {/* Col 4: Hub & Contact */}
+          {/* Col 4: Fleet Hub & Location with Google Maps (Span 3) */}
           <div className="lg:col-span-3 space-y-3">
-            <h4 className="font-cinzel text-xs font-bold uppercase tracking-wider text-[#7C1D23] border-b border-[#C5A059]/30 pb-2">
-              Fleet Hub & Help
+            <h4 className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-[#EAA722] border-b border-[#EAA722]/25 pb-2">
+              Cab Desk &amp; Location
             </h4>
-            <div className="space-y-2.5 text-sm text-[#5C5350]">
-              <div className="flex items-start gap-2">
-                <MapPinIcon className="w-4 h-4 text-[#7C1D23] flex-shrink-0 mt-0.5" />
-                <span>{travelAddress}</span>
+
+            {/* Address */}
+            <div className="flex items-start gap-2 text-xs sm:text-sm text-[#FAF5EC]/85 font-light">
+              <MapPinIcon className="w-4 h-4 text-[#EAA722] flex-shrink-0 mt-0.5" />
+              <span className="leading-snug">
+                {travelAddress}
+              </span>
+            </div>
+
+            {/* Compact Google Map Preview Card */}
+            <a
+              href="https://maps.google.com/?q=The+Kasar+Himalayan+Heights,+Kasar+Devi,+Almora,+Uttarakhand"
+              target="_blank"
+              rel="noreferrer"
+              className="group relative block w-full h-24 rounded-xl overflow-hidden border border-[#EAA722]/30 hover:border-[#EAA722] shadow-sm transition-all duration-300 cursor-pointer bg-[#3D0F06]"
+              title="Click to open location in Google Maps"
+            >
+              <iframe
+                title="The Kasar Himalayan Heights Location Map"
+                src="https://maps.google.com/maps?q=The+Kasar+Himalayan+Heights+Kasar+Devi+Almora&t=&z=14&ie=UTF8&iwloc=&output=embed"
+                className="w-full h-full border-0 pointer-events-none filter contrast-105 opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent flex items-end justify-between p-2">
+                <span className="inline-flex items-center gap-1 text-[11px] font-mono font-semibold text-white bg-[#541508]/90 group-hover:bg-[#EAA722] group-hover:text-[#541508] px-2 py-0.5 rounded border border-[#EAA722]/40 transition-colors">
+                  <MapPinIcon className="w-3 h-3 text-[#EAA722] group-hover:text-[#541508]" />
+                  <span>Open in Google Maps ↗</span>
+                </span>
+                <span className="text-[10px] font-mono text-[#FAF5EC]/70">
+                  Almora Base
+                </span>
               </div>
-              <div className="flex items-center gap-2">
-                <PhoneIcon className="w-4 h-4 text-[#7C1D23] flex-shrink-0" />
-                <a href={`tel:${conciergePhone}`} className="text-[#2C2523] font-bold font-numeral">
-                  {conciergePhone}
-                </a>
-              </div>
-              <div className="flex items-center gap-2">
-                <WhatsAppIcon className="w-4 h-4 text-[#7C1D23] flex-shrink-0" />
-                <a href={`https://wa.me/${whatsappNumber}`} className="text-[#2C2523] hover:underline">
-                  {whatsappDisplay}
-                </a>
-              </div>
-              <div className="pt-2 border-t border-[#C5A059]/20">
-                <a
-                  href={APP_URLS.hotel}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-xs font-semibold text-[#7C1D23] hover:underline flex items-center gap-1.5"
-                >
-                  <BedIcon className="w-3.5 h-3.5" />
-                  <span>The Kasar Himalayan Heights (Hotel) ↗</span>
-                </a>
-              </div>
+            </a>
+
+            {/* Direct Contact Row */}
+            <div className="pt-1 border-t border-[#EAA722]/20 flex flex-wrap items-center gap-3 text-xs sm:text-sm">
+              <a
+                href={`tel:${conciergePhone}`}
+                className="inline-flex items-center gap-1.5 text-white hover:text-[#EAA722] font-mono font-bold transition-colors"
+                title="Call Almora Cab Desk"
+              >
+                <PhoneIcon className="w-3.5 h-3.5 text-[#EAA722]" />
+                <span>{conciergePhone}</span>
+              </a>
+
+              <span className="text-white/30">•</span>
+
+              <button
+                type="button"
+                onClick={handleWhatsAppClick}
+                className="inline-flex items-center gap-1.5 text-[#FAF5EC]/85 hover:text-white transition-colors cursor-pointer"
+                title="WhatsApp Cab Desk"
+              >
+                <WhatsAppIcon className="w-3.5 h-3.5 text-[#25D366]" />
+                <span>WhatsApp</span>
+              </button>
+            </div>
+
+            {/* Direct Link to Hotel Retreat */}
+            <div className="pt-1">
+              <a
+                href={APP_URLS.hotel}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-semibold text-[#EAA722] hover:underline flex items-center gap-1.5 font-mono"
+              >
+                <BedIcon className="w-3.5 h-3.5" />
+                <span>The Kasar Himalayan Heights (Hotel Suites) ↗</span>
+              </a>
             </div>
           </div>
+
         </div>
 
         {/* Bottom Strip */}
-        <div className="mt-12 pt-6 border-t border-[#C5A059]/30 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#6B615E]">
+        <div className="mt-10 pt-6 border-t border-[#3D0F06] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#FAF5EC]/75">
           <p>
-            &copy; {currentYear} The Kasar Himalayan Heights & Expeditions. All rights reserved.
+            &copy; {currentYear} The Kasar Himalayan Heights &amp; Expeditions. All rights reserved.
           </p>
 
-          <p className="font-serif italic text-[#7C1D23] text-center text-xs font-semibold">
-            ॥ ॐ श्री नीब करौरी महाराजाय नमः ॥
+          <p className="font-serif italic text-[#EAA722] text-center text-xs font-semibold">
+            ॥ ॐ श्री नीब करौरी महाराजाय नमः • सुरक्षित यात्रा ॥
           </p>
 
-          <div className="flex items-center gap-4 text-[11px]">
-            <a href="#faq" className="hover:text-[#7C1D23] transition-colors">
+          <div className="flex items-center gap-4 text-[11px] font-mono">
+            <a href="#faq" className="hover:text-white transition-colors">
               Cab FAQs
             </a>
             <span>•</span>
-            <a href={APP_URLS.landing} className="hover:text-[#7C1D23] transition-colors">
+            <a href={APP_URLS.landing} className="hover:text-white transition-colors">
               Dev Bhoomi Guide
             </a>
             <span>•</span>
-            <a href={APP_URLS.admin} className="hover:text-[#7C1D23] transition-colors">
+            <a href={APP_URLS.admin} className="hover:text-white transition-colors">
               Driver Portal
             </a>
           </div>

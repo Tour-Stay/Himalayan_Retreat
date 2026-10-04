@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Container, ArrowUpRightIcon, SITE_CONFIG, useSiteSettings, kainchiWebp } from '@shared';
+import { useNavigate } from 'react-router-dom';
+import { Container, ArrowUpRightIcon, MapPinIcon, SparklesIcon, useSiteSettings, kainchiWebp } from '@shared';
 import { destinationsData, mergeDestinationsWithSettings } from '../data/travelData';
 
 const PilgrimageCircuits = ({ onSelectDestination }) => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('all');
   const { settings } = useSiteSettings();
 
@@ -17,53 +19,43 @@ const PilgrimageCircuits = ({ onSelectDestination }) => {
   const handleBookCircuit = (dest) => {
     if (onSelectDestination) {
       onSelectDestination(dest.id);
-    }
-    const calcEl = document.getElementById('calculator');
-    if (calcEl) {
-      calcEl.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate('/calculator', { state: { destinationId: dest.id } });
     }
   };
 
   return (
-    <section id="circuits" className="py-20 sm:py-28 px-4 bg-gradient-to-b from-[#FAF6EF]/60 via-[#FFF5EC]/40 to-[#FAF6EF]/60 border-b border-[#C5A059]/20 relative overflow-hidden">
-      {/* Subtle sacred watermark */}
-      <div className="absolute top-12 left-6 text-[#C84B0F]/[0.025] text-[180px] font-devanagari select-none pointer-events-none leading-none z-0">
-        ॐ
-      </div>
-
-      <Container size="lg">
-        <div className="text-center max-w-3xl mx-auto mb-14 relative z-10">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C84B0F]/10 border border-[#C84B0F]/30 text-[#C84B0F] text-xs font-semibold uppercase tracking-wider mb-4 shadow-xs">
-            <span className="text-amber-500 animate-pulse text-xs">🪔</span>
-            <span className="font-devanagari">॥ पावन तीर्थ यात्रा एवं दर्शनीय स्थल ॥</span>
-          </div>
-
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-[#2C2523] font-medium tracking-tight mb-4">
-            Popular Pilgrimage &amp; Sightseeing Tours
+    <section id="circuits" className="py-16 sm:py-20 px-4 sm:px-6 bg-[#FAF5EC] border-b border-[#EAA722]/30 relative">
+      <div className="max-w-[1560px] mx-auto">
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12 reveal">
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#EAA722] text-[#541508] text-[11px] font-mono font-bold tracking-widest uppercase mb-2.5 shadow-xs">
+            <span className="text-xs">🪔</span>
+            <span>॥ पावन तीर्थ यात्रा एवं दर्शनीय स्थल ॥</span>
+          </span>
+          <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-[#541508] font-normal">
+            Sacred Pilgrimage &amp; Mountain Circuits
           </h2>
-
-          <div className="w-20 h-0.5 bg-gradient-to-r from-transparent via-[#C84B0F] to-transparent mx-auto my-4"></div>
-
-          <p className="text-[#5C5350] text-base sm:text-lg leading-relaxed font-normal">
-            Fixed transparent cab tours from Almora and Kasar Devi to the most sacred temples and scenic mountain viewpoints of Uttarakhand.
+          <p className="mt-2 text-[#541508]/80 text-sm sm:text-base font-light">
+            Transparent fixed-fare cab tours from Almora and Kasar Devi to sacred temples and scenic viewpoints.
           </p>
 
           {/* Filter Pills */}
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
             {[
-              { id: 'all', label: 'All Tours' },
+              { id: 'all', label: 'All Circuits' },
               { id: 'temple', label: 'Sacred Temples & Dhams' },
-              { id: 'hillstation', label: 'Scenic Hill Stations' },
+              { id: 'hillstation', label: 'Scenic Mountain Viewpoints' },
               { id: 'transfer', label: 'Station Transfers' },
             ].map((tab) => (
               <button
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-4 py-2 rounded-full text-xs uppercase tracking-wider font-semibold transition-all cursor-pointer ${
+                className={`px-4 py-2 rounded-full text-xs font-mono uppercase tracking-wider transition-all duration-300 cursor-pointer ${
                   activeTab === tab.id
-                    ? 'bg-gradient-to-r from-[#C84B0F] to-[#7C1D23] text-[#FDFBF7] shadow-sm'
-                    : 'bg-[#FDFBF7] text-[#5C5350] border border-[#C5A059]/30 hover:border-[#C84B0F]'
+                    ? 'bg-[#541508] text-white font-bold shadow-md'
+                    : 'bg-white border border-[#541508]/20 text-[#541508] hover:bg-[#FAF0E6] font-medium'
                 }`}
               >
                 {tab.label}
@@ -72,16 +64,16 @@ const PilgrimageCircuits = ({ onSelectDestination }) => {
           </div>
         </div>
 
-        {/* Tours Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 relative z-10">
+        {/* 2-in-a-Row Spacious Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 reveal">
           {filtered.map((dest) => (
             <div
               key={dest.id}
-              className="card-luxury bg-[#FDFBF7] rounded-3xl overflow-hidden border border-[#C5A059]/25 hover:border-[#C84B0F]/40 shadow-xs flex flex-col justify-between transition-all duration-300 group"
+              className="bg-white rounded-3xl overflow-hidden border border-[#EAA722]/30 hover:border-[#EAA722]/70 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
             >
               <div>
-                {/* Real Picture */}
-                <div className="relative h-52 overflow-hidden bg-[#FAF6EF]">
+                {/* Large Photo Showcase */}
+                <div className="relative h-64 sm:h-76 lg:h-80 overflow-hidden bg-slate-900">
                   <img
                     src={dest.image}
                     alt={dest.name}
@@ -90,76 +82,93 @@ const PilgrimageCircuits = ({ onSelectDestination }) => {
                       const fallback = destinationsData.find((item) => item.id === dest.id)?.image || kainchiWebp;
                       e.currentTarget.src = fallback;
                     }}
-                    className="w-full h-full object-cover group-hover:scale-104 transition-transform duration-700"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-104"
                     loading="lazy"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#1C1817]/75 via-transparent to-transparent"></div>
-                  
-                  <div className="absolute top-3 left-3 bg-[#1C1817]/85 backdrop-blur-md text-[#DFCA9B] text-[11px] font-semibold px-3 py-1 rounded-full border border-white/20">
-                    {dest.distance}
-                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
 
-                  {dest.saffronTag && (
-                    <div className="absolute bottom-3 left-3 right-3 text-right">
-                      <span className="font-devanagari text-[11px] text-[#FFD8B3] bg-[#7C1D23]/80 px-2.5 py-1 rounded-full backdrop-blur-xs font-semibold">
+                  {/* Top Badges */}
+                  <div className="absolute top-4 left-4 right-4 flex items-center justify-between gap-2">
+                    <span className="bg-[#EAA722] text-[#541508] text-xs font-mono uppercase tracking-wider font-bold px-3.5 py-1.5 rounded-full shadow-md">
+                      {dest.categoryLabel || 'Mountain Tour'}
+                    </span>
+                    {dest.saffronTag && (
+                      <span className="bg-black/65 backdrop-blur-md text-[#EAA722] text-xs font-devanagari px-3.5 py-1.5 rounded-full border border-white/20 font-semibold">
                         {dest.saffronTag}
                       </span>
-                    </div>
-                  )}
+                    )}
+                  </div>
+
+                  {/* Bottom Image Specs */}
+                  <div className="absolute bottom-3.5 left-4 right-4 flex items-center justify-between text-xs text-white">
+                    <span className="bg-black/65 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/20 font-mono font-medium flex items-center gap-1.5 text-xs">
+                      <MapPinIcon className="w-3.5 h-3.5 text-[#EAA722]" />
+                      <span>{dest.distance}</span>
+                    </span>
+                    <span className="bg-black/65 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/20 font-mono font-medium text-[#EAA722] text-xs">
+                      {dest.elevationProfile || 'High-Altitude Ghat'}
+                    </span>
+                  </div>
                 </div>
 
-                {/* Content */}
-                <div className="p-6">
-                  <span className="text-[11px] font-sans uppercase tracking-wider text-[#C84B0F] font-bold block mb-1">
-                    {dest.categoryLabel}
-                  </span>
-                  <h3 className="font-serif text-2xl font-medium text-[#2C2523] mb-2 leading-snug">
+                {/* Card Content */}
+                <div className="p-6 sm:p-7">
+                  <h3 className="font-serif text-2xl sm:text-3xl font-medium text-[#541508] mb-2 leading-snug">
                     {dest.name}
                   </h3>
-                  <p className="text-sm text-[#5C5350] leading-relaxed mb-4">
+
+                  <p className="text-[#5C5350] text-sm leading-relaxed mb-5 font-light">
                     {dest.description}
                   </p>
 
-                  {/* Highlights */}
-                  <div className="flex flex-wrap gap-1.5 pt-3 border-t border-[#C5A059]/15">
+                  {/* Highlights Tags */}
+                  <div className="flex flex-wrap gap-2 pt-2">
                     {dest.highlights.map((h, i) => (
                       <span
                         key={i}
-                        className="text-[11px] font-sans bg-[#FAF6EF] text-[#2C2523] px-2.5 py-1 rounded-lg border border-[#C5A059]/20"
+                        className="text-xs text-[#541508] bg-[#FAF5EC] px-3 py-1 rounded-lg border border-[#EAA722]/30 font-medium"
                       >
-                        {h}
+                        ✦ {h}
                       </span>
                     ))}
                   </div>
                 </div>
               </div>
 
-              {/* Bottom Tariff & Action */}
-              <div className="p-6 pt-0 border-t border-[#C5A059]/15 mt-auto">
-                <div className="flex items-center justify-between text-xs py-3">
+              {/* Bottom Tariff & Action Bar */}
+              <div className="p-6 sm:p-7 pt-4 border-t border-[#EAA722]/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-auto bg-[#FAFDF9]">
+                <div className="flex items-center gap-6">
                   <div>
-                    <span className="text-[#6B615E] block text-[10px] uppercase">Sedan Fare</span>
-                    <strong className="text-[#C84B0F] font-numeral text-sm font-bold">{dest.typicalFareSedan}</strong>
+                    <span className="text-[10px] text-[#5C5350] block leading-none mb-1 uppercase tracking-wider font-mono">
+                      Sedan (4-Seater)
+                    </span>
+                    <span className="text-[#541508] font-serif text-xl sm:text-2xl font-semibold font-numeral">
+                      {dest.typicalFareSedan}
+                    </span>
                   </div>
-                  <div className="text-right">
-                    <span className="text-[#6B615E] block text-[10px] uppercase">Innova SUV</span>
-                    <strong className="text-[#2C2523] font-numeral text-sm font-bold">{dest.typicalFareInnova}</strong>
+                  <div className="pl-4 border-l border-[#EAA722]/20">
+                    <span className="text-[10px] text-[#5C5350] block leading-none mb-1 uppercase tracking-wider font-mono">
+                      Innova SUV (6-Seater)
+                    </span>
+                    <span className="text-[#541508] font-serif text-xl sm:text-2xl font-semibold font-numeral">
+                      {dest.typicalFareInnova}
+                    </span>
                   </div>
                 </div>
 
                 <button
                   type="button"
                   onClick={() => handleBookCircuit(dest)}
-                  className="w-full py-3 rounded-xl text-xs uppercase tracking-wider font-bold bg-[#FAF6EF] hover:bg-gradient-to-r hover:from-[#C84B0F] hover:to-[#7C1D23] text-[#2C2523] hover:text-[#FDFBF7] border border-[#C84B0F]/30 hover:border-transparent transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
+                  className="px-6 py-3 rounded-full text-xs font-mono uppercase tracking-wider font-bold bg-[#EAA722] hover:bg-[#D98E16] text-[#541508] flex items-center justify-center gap-1.5 transition-all shadow-md cursor-pointer group/btn hover:scale-102"
                 >
-                  <span>Book Cab for this Tour</span>
-                  <ArrowUpRightIcon className="w-3.5 h-3.5" />
+                  <span>Select &amp; Check Fare</span>
+                  <ArrowUpRightIcon className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-300" />
                 </button>
               </div>
             </div>
           ))}
         </div>
-      </Container>
+      </div>
     </section>
   );
 };

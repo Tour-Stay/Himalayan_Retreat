@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { apiClient, Loader, Container, SectionHeading, subscribeToUpdates } from '@shared';
+import { apiClient, Loader, Container, subscribeToUpdates } from '@shared';
 import RoomCard from '../components/RoomCard';
 import { mockRooms } from '../data/mockRooms';
 
@@ -24,7 +24,6 @@ const AllRooms = () => {
     };
     fetchRooms();
 
-    // Instant real-time sync when rooms change in Admin
     const unsubscribe = subscribeToUpdates('rooms', () => {
       fetchRooms();
     });
@@ -50,60 +49,65 @@ const AllRooms = () => {
   });
 
   return (
-    <div className="pt-28 pb-24 px-4 min-h-screen bg-ivory font-sans">
-      <Container size="lg">
-        {/* Page Header */}
-        <div className="text-center mb-14">
-          <span className="text-[#C5A059] text-xs font-cinzel font-semibold tracking-[0.2em] uppercase mb-3 block">
-            Rooms &amp; Rates • Kasar Devi • 6,942 FT
-          </span>
-          <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl text-[#2C2523] font-medium mb-4">
-            Warm Rooms &amp; Heated Suites
-          </h1>
-          <div className="w-16 h-0.5 bg-[#C5A059]/60 mx-auto my-4"></div>
-          <p className="text-[#5C5350] text-base sm:text-lg max-w-xl mx-auto font-light leading-relaxed font-sans">
-            Every room is built with natural pine wood and stone, equipped with room heaters, electric bed warmers, and private balconies overlooking 180° of the Himalayas.
-          </p>
+    <div className="min-h-screen bg-[#F8FAF7] font-sans">
+      {/* 1. Green Header Banner */}
+      <section className="bg-[#073125] text-white pt-24 pb-14 px-4 border-b border-white/10">
+        <Container size="lg">
+          <div className="text-center max-w-2xl mx-auto">
+            <span className="inline-block px-3 py-1 rounded-full bg-[#C9F24D] text-[#073125] text-[11px] font-mono font-bold tracking-widest uppercase mb-3 shadow-xs">
+              ROOMS &amp; RATES • 6,942 FT
+            </span>
+            <h1 className="font-serif text-3xl sm:text-5xl font-normal tracking-tight mb-3 text-white">
+              Our Rooms &amp; Rates
+            </h1>
+            <p className="text-white/80 text-sm sm:text-base font-light leading-relaxed">
+              Every room has room heaters, electric bed warmers, 24-hour hot water, and a private balcony overlooking snow peaks.
+            </p>
 
-          {/* Filter Pills */}
-          <div className="flex flex-wrap items-center justify-center gap-2.5 mt-8">
-            {filterOptions.map((filter) => (
+            {/* Filter Pills */}
+            <div className="flex flex-wrap items-center justify-center gap-2 mt-6">
+              {filterOptions.map((filter) => (
+                <button
+                  key={filter}
+                  onClick={() => setSelectedFilter(filter)}
+                  className={`px-4 py-2 rounded-full text-xs font-mono uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                    selectedFilter === filter
+                      ? 'bg-[#C9F24D] text-[#073125] font-bold shadow-md'
+                      : 'bg-white/10 border border-white/20 text-white hover:bg-white/20 font-medium'
+                  }`}
+                >
+                  {filter}
+                </button>
+              ))}
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* 2. Room Grid Section */}
+      <section className="py-12 sm:py-16 px-4">
+        <Container size="lg">
+          {loading ? (
+            <Loader />
+          ) : filteredRooms.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredRooms.map((room) => (
+                <RoomCard key={room._id} room={room} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-16 bg-white rounded-3xl border border-[#073125]/10 max-w-md mx-auto p-8 shadow-xs">
+              <p className="text-[#073125]/70 text-base">No rooms found for this category.</p>
               <button
-                key={filter}
-                onClick={() => setSelectedFilter(filter)}
-                className={`px-5 py-2 rounded-full text-xs font-cinzel uppercase tracking-wider transition-all duration-300 cursor-pointer ${
-                  selectedFilter === filter
-                    ? 'bg-[#7C1D23] text-[#FDFBF7] font-bold shadow-md border border-[#C5A059]/40'
-                    : 'bg-[#FAF6EF] border border-[#C5A059]/30 text-[#2C2523] hover:border-[#C5A059] font-semibold'
-                }`}
+                onClick={() => setSelectedFilter('All')}
+                className="mt-4 bg-[#073125] text-white hover:bg-[#12433B] text-xs uppercase tracking-wider px-6 py-2.5 rounded-full font-semibold transition cursor-pointer"
               >
-                {filter}
+                Show All Rooms
               </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Room Grid */}
-        {loading ? (
-          <Loader />
-        ) : filteredRooms.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredRooms.map((room) => (
-              <RoomCard key={room._id} room={room} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-20 bg-ivory-warm rounded-3xl border border-gold/20">
-            <p className="text-charcoal-muted text-base">No rooms found for this category.</p>
-            <button
-              onClick={() => setSelectedFilter('All')}
-              className="mt-4 bg-maroon text-ivory text-xs uppercase tracking-wider px-6 py-3 rounded-full font-semibold"
-            >
-              Reset Filters
-            </button>
-          </div>
-        )}
-      </Container>
+            </div>
+          )}
+        </Container>
+      </section>
     </div>
   );
 };

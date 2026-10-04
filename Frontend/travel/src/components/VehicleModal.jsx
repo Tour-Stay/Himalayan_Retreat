@@ -29,7 +29,7 @@ const VehicleModal = ({ vehicle, isOpen, onClose, onSelectForBooking }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs animate-fadeIn">
       <div
-        className="bg-[#FDFBF7] rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-[#C5A059]/40 shadow-2xl relative"
+        className="bg-[#FAF5EC] rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-[#EAA722]/40 shadow-2xl relative font-sans"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
@@ -37,7 +37,7 @@ const VehicleModal = ({ vehicle, isOpen, onClose, onSelectForBooking }) => {
           onClick={onClose}
           type="button"
           aria-label="Close modal"
-          className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-white/80 hover:bg-white text-[#2C2523] flex items-center justify-center transition-all shadow-md cursor-pointer border border-[#C5A059]/30"
+          className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-white/85 hover:bg-white text-[#541508] flex items-center justify-center transition-all shadow-md cursor-pointer border border-[#EAA722]/30 text-lg font-bold"
         >
           &times;
         </button>
@@ -57,8 +57,8 @@ const VehicleModal = ({ vehicle, isOpen, onClose, onSelectForBooking }) => {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
           
-          <div className="absolute top-4 left-4 bg-gradient-to-r from-[#9E3304] to-[#7C1D23] text-[#FDFBF7] text-xs font-semibold px-3.5 py-1 rounded-full border border-[#C5A059]/40 shadow-md">
-            {vehicle.tag}
+          <div className="absolute top-4 left-4 bg-[#EAA722] text-[#541508] text-xs font-mono font-bold px-3.5 py-1 rounded-full shadow-md">
+            {vehicle.tag} • ॥ पवित्र यात्रा ॥
           </div>
 
           {/* Photo Gallery Selector Tabs (Exterior vs Interior) */}
@@ -69,8 +69,8 @@ const VehicleModal = ({ vehicle, isOpen, onClose, onSelectForBooking }) => {
                 onClick={() => setActiveImage(vehicle.image)}
                 className={`px-3 py-1 rounded-full text-[11px] font-semibold transition-all cursor-pointer ${
                   activeImage === vehicle.image
-                    ? 'bg-[#C84B0F] text-[#FDFBF7] shadow-xs'
-                    : 'text-[#FAF6EF]/80 hover:text-white'
+                    ? 'bg-[#EAA722] text-[#541508] font-bold shadow-xs'
+                    : 'text-[#FAF5EC]/80 hover:text-white'
                 }`}
               >
                 Exterior
@@ -80,8 +80,8 @@ const VehicleModal = ({ vehicle, isOpen, onClose, onSelectForBooking }) => {
                 onClick={() => setActiveImage(vehicle.interiorImage)}
                 className={`px-3 py-1 rounded-full text-[11px] font-semibold transition-all cursor-pointer ${
                   activeImage === vehicle.interiorImage
-                    ? 'bg-[#C84B0F] text-[#FDFBF7] shadow-xs'
-                    : 'text-[#FAF6EF]/80 hover:text-white'
+                    ? 'bg-[#EAA722] text-[#541508] font-bold shadow-xs'
+                    : 'text-[#FAF5EC]/80 hover:text-white'
                 }`}
               >
                 Luxury Interior
@@ -89,18 +89,18 @@ const VehicleModal = ({ vehicle, isOpen, onClose, onSelectForBooking }) => {
             </div>
           )}
 
-          <div className="absolute bottom-4 left-6 right-6 flex items-center justify-between text-[#FDFBF7]">
+          <div className="absolute bottom-4 left-6 right-6 flex items-center justify-between text-white">
             <div>
               <h3 className="font-serif text-2xl sm:text-3xl font-medium leading-tight">
                 {vehicle.title}
               </h3>
-              <p className="text-xs text-[#DFCA9B] font-semibold tracking-wider uppercase mt-0.5">
+              <p className="text-xs text-[#EAA722] font-semibold tracking-wider uppercase mt-0.5 font-mono">
                 {vehicle.model}
               </p>
             </div>
             <div className="text-right">
-              <span className="text-xs text-[#FAF6EF]/80 uppercase block">Starting At</span>
-              <span className="font-serif text-2xl sm:text-3xl font-bold text-[#FFD8B3]">
+              <span className="text-[10px] text-[#FAF5EC]/70 uppercase tracking-wider block font-mono">Starting At</span>
+              <span className="font-serif text-2xl sm:text-3xl font-bold text-[#EAA722] font-numeral">
                 ₹{vehicle.dailyRate?.toLocaleString()}
               </span>
             </div>
@@ -111,46 +111,46 @@ const VehicleModal = ({ vehicle, isOpen, onClose, onSelectForBooking }) => {
         <div className="p-6 sm:p-8 space-y-6">
           {/* Key Specs Pills */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-            <div className="p-3 rounded-xl bg-[#FAF6EF] border border-[#C5A059]/25 text-center">
-              <UsersIcon className="w-4 h-4 text-[#C84B0F] mx-auto mb-1" />
-              <span className="text-[11px] font-bold text-[#2C2523] block">{vehicle.seats} Passengers</span>
-              <span className="text-[10px] text-[#6B615E]">Comfortable Seating</span>
+            <div className="p-3 rounded-2xl bg-white border border-[#EAA722]/25 text-center shadow-xs">
+              <UsersIcon className="w-4 h-4 text-[#EAA722] mx-auto mb-1" />
+              <span className="text-[12px] font-bold text-[#541508] block">{vehicle.seats} Passengers</span>
+              <span className="text-[10px] text-[#5C5350]">Comfort Seating</span>
             </div>
 
-            <div className="p-3 rounded-xl bg-[#FAF6EF] border border-[#C5A059]/25 text-center">
-              <LuggageIcon className="w-4 h-4 text-[#C84B0F] mx-auto mb-1" />
-              <span className="text-[11px] font-bold text-[#2C2523] block">{vehicle.luggage.split(' ')[0]} Bags</span>
-              <span className="text-[10px] text-[#6B615E]">Boot & Roof Carrier</span>
+            <div className="p-3 rounded-2xl bg-white border border-[#EAA722]/25 text-center shadow-xs">
+              <LuggageIcon className="w-4 h-4 text-[#EAA722] mx-auto mb-1" />
+              <span className="text-[12px] font-bold text-[#541508] block">{vehicle.luggage.split(' ')[0]} Bags</span>
+              <span className="text-[10px] text-[#5C5350]">Boot &amp; Roof Rack</span>
             </div>
 
-            <div className="p-3 rounded-xl bg-[#FAF6EF] border border-[#C5A059]/25 text-center">
-              <span className="text-base text-[#C84B0F] block">🏔️</span>
-              <span className="text-[11px] font-bold text-[#2C2523] block">Pahadi Driver</span>
-              <span className="text-[10px] text-[#6B615E]">10+ Yrs Hill Exp</span>
+            <div className="p-3 rounded-2xl bg-white border border-[#EAA722]/25 text-center shadow-xs">
+              <span className="text-base text-[#EAA722] block">🏔️</span>
+              <span className="text-[12px] font-bold text-[#541508] block">Pahadi Driver</span>
+              <span className="text-[10px] text-[#5C5350]">10+ Yrs Hill Exp</span>
             </div>
 
-            <div className="p-3 rounded-xl bg-[#FAF6EF] border border-[#C5A059]/25 text-center">
-              <span className="text-base text-[#C84B0F] block">❄️</span>
-              <span className="text-[11px] font-bold text-[#2C2523] block">Heater & AC</span>
-              <span className="text-[10px] text-[#6B615E]">All-Weather Ready</span>
+            <div className="p-3 rounded-2xl bg-white border border-[#EAA722]/25 text-center shadow-xs">
+              <span className="text-base text-[#EAA722] block">❄️</span>
+              <span className="text-[12px] font-bold text-[#541508] block">Heater &amp; AC</span>
+              <span className="text-[10px] text-[#5C5350]">All-Weather Ready</span>
             </div>
           </div>
 
           {/* Description */}
           <div>
-            <h4 className="font-serif text-lg font-medium text-[#2C2523] mb-2">About This Cab</h4>
-            <p className="text-sm text-[#5C5350] leading-relaxed">
+            <h4 className="font-serif text-lg font-medium text-[#541508] mb-1.5">About This Cab</h4>
+            <p className="text-sm sm:text-[15px] text-[#5C5350] leading-relaxed">
               {vehicle.description || vehicle.idealFor}
             </p>
           </div>
 
           {/* Features Checklist */}
           <div>
-            <h4 className="font-serif text-lg font-medium text-[#2C2523] mb-3">Vehicle Features & Inclusions</h4>
-            <div className="space-y-2.5">
+            <h4 className="font-serif text-lg font-medium text-[#541508] mb-3">Vehicle Features &amp; Inclusions</h4>
+            <div className="space-y-2">
               {vehicle.features.map((feat, idx) => (
-                <div key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-[#2C2523]">
-                  <CheckCircleIcon className="w-4 h-4 text-[#C84B0F] flex-shrink-0 mt-0.5" />
+                <div key={idx} className="flex items-center gap-2.5 text-sm text-[#2C2523]">
+                  <CheckCircleIcon className="w-4 h-4 text-[#EAA722] flex-shrink-0" />
                   <span>{feat}</span>
                 </div>
               ))}
@@ -158,16 +158,16 @@ const VehicleModal = ({ vehicle, isOpen, onClose, onSelectForBooking }) => {
           </div>
 
           {/* Fixed Transfers Reference Card */}
-          <div className="p-4 rounded-2xl bg-[#FAF6EF] border border-[#C5A059]/30 text-xs text-[#2C2523] space-y-1.5">
+          <div className="p-4 rounded-2xl bg-white border border-[#EAA722]/30 text-xs sm:text-sm text-[#2C2523] space-y-1.5 shadow-xs">
             <div className="flex justify-between items-center">
-              <span className="text-[#6B615E]">Kathgodam to Kasar Devi / Almora:</span>
-              <strong className="text-[#C84B0F] font-numeral text-sm font-bold">{vehicle.rateKathgodam}</strong>
+              <span className="text-[#5C5350]">Kathgodam to Kasar Devi / Almora:</span>
+              <strong className="text-[#541508] font-numeral text-sm font-bold">{vehicle.rateKathgodam}</strong>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-[#6B615E]">Delhi Airport / NCR to Kasar Devi:</span>
-              <strong className="text-[#2C2523] font-numeral text-sm font-bold">{vehicle.rateDelhi}</strong>
+              <span className="text-[#5C5350]">Delhi Airport / NCR to Kasar Devi:</span>
+              <strong className="text-[#541508] font-numeral text-sm font-bold">{vehicle.rateDelhi}</strong>
             </div>
-            <p className="text-[11px] text-[#6B615E] pt-1.5 border-t border-[#C5A059]/20">
+            <p className="text-[11px] text-[#5C5350] pt-1.5 border-t border-[#EAA722]/20 font-light">
               Rates include fuel, driver allowance, tolls, and parking taxes.
             </p>
           </div>
@@ -178,18 +178,16 @@ const VehicleModal = ({ vehicle, isOpen, onClose, onSelectForBooking }) => {
               onClick={() => {
                 onClose();
                 if (onSelectForBooking) onSelectForBooking(vehicle.id);
-                const calcEl = document.getElementById('calculator');
-                if (calcEl) calcEl.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="flex-1 py-3.5 rounded-full text-xs uppercase tracking-wider font-bold bg-gradient-to-r from-[#C84B0F] to-[#7C1D23] hover:from-[#E05A1B] hover:to-[#9E3304] text-[#FDFBF7] shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer border border-[#C5A059]/30"
+              className="flex-1 py-3.5 rounded-full text-xs font-mono uppercase tracking-wider font-bold bg-[#EAA722] hover:bg-[#D98E16] text-[#541508] shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer hover:scale-102"
             >
-              <span>Select & Calculate Fare</span>
-              <ArrowUpRightIcon className="w-3.5 h-3.5" />
+              <span>Select &amp; Calculate Fare</span>
+              <ArrowUpRightIcon className="w-3.5 h-3.5 text-[#541508]" />
             </button>
 
             <button
               onClick={handleWhatsAppInquiry}
-              className="flex-1 py-3.5 rounded-full text-xs uppercase tracking-wider font-bold border border-[#C84B0F]/40 bg-[#FAF6EF] text-[#2C2523] hover:text-[#C84B0F] hover:bg-[#FFF5EC] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+              className="flex-1 py-3.5 rounded-full text-xs font-mono uppercase tracking-wider font-bold border border-[#073125]/30 bg-white text-[#073125] hover:bg-[#EBF2EA] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
             >
               <span>Inquire on WhatsApp ↗</span>
             </button>

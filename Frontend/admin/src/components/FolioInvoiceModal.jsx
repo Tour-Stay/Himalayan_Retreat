@@ -19,34 +19,43 @@ export default function FolioInvoiceModal({ booking, isOpen, onClose, onFolioUpd
 
   // Preset charges for quick 1-click addition
   const PRESET_CHARGES = [
-    { label: '🍲 Pahadi Thali Dinner', item: 'Pahadi Kumaoni Dinner Thali', amount: 350 },
-    { label: '🔥 Evening Bonfire', item: 'Private Evening Bonfire & Wood Log', amount: 500 },
-    { label: '♨️ Room Heater (1 Day)', item: 'Oil Radiator Winter Room Heater', amount: 300 },
-    { label: '🪔 Kainchi Pooja Thali', item: 'Consecrated Temple Offering Basket', amount: 250 },
-    { label: '☕ Herbal Mountain Tea', item: 'Herbal Himalayan Tea Kettle Service', amount: 150 },
-    { label: '🧺 Laundry Service', item: 'Garment Pressing & Laundry', amount: 200 },
+    { label: 'Pahadi Thali Dinner', item: 'Pahadi Kumaoni Dinner Thali', amount: 350 },
+    { label: 'Evening Bonfire', item: 'Private Evening Bonfire & Wood Log', amount: 500 },
+    { label: 'Room Heater (1 Day)', item: 'Oil Radiator Winter Room Heater', amount: 300 },
+    { label: 'Kainchi Pooja Thali', item: 'Consecrated Temple Offering Basket', amount: 250 },
+    { label: 'Herbal Mountain Tea', item: 'Herbal Himalayan Tea Kettle Service', amount: 150 },
+    { label: 'Laundry Service', item: 'Garment Pressing & Laundry', amount: 200 },
   ];
 
   if (!isOpen || !booking) return null;
 
-  // Nights calculation
-  const nights = useMemo(() => {
+  // Nights calculation (plain calculation to prevent React Hook count mismatches)
+  let nights = 1;
+  if (booking.checkInDate && booking.checkOutDate) {
     try {
       const inDate = new Date(booking.checkInDate);
       const outDate = new Date(booking.checkOutDate);
       const diffTime = outDate.getTime() - inDate.getTime();
-      return Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+      const calcNights = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      if (!isNaN(calcNights) && calcNights > 0) {
+        nights = calcNights;
+      }
     } catch {
-      return 1;
+      nights = 1;
     }
-  }, [booking.checkInDate, booking.checkOutDate]);
+  }
+
+  // Safe IDs
+  const rawId = booking._id ? String(booking._id) : '';
+  const folioShortId = rawId ? rawId.slice(-6).toUpperCase() : 'RESRV';
+  const invoiceShortId = rawId ? rawId.slice(-8).toUpperCase() : 'INV-001';
 
   // Base Room Tariff subtotal
   const roomPricePerNight = Number(booking.room?.pricePerNight || 0);
   const baseRoomTotal = roomPricePerNight > 0 ? nights * roomPricePerNight : Number(booking.totalAmount || 0);
 
   // Folio extras list & total
-  const extrasList = booking.folioExtras || [];
+  const extrasList = Array.isArray(booking.folioExtras) ? booking.folioExtras : [];
   const extrasTotal = extrasList.reduce((sum, item) => sum + Number(item.amount || 0), 0);
 
   // Gross total, advance, balance
@@ -79,7 +88,7 @@ export default function FolioInvoiceModal({ booking, isOpen, onClose, onFolioUpd
 
     try {
       setIsAdding(true);
-      const res = await apiClient.post(`/api/hotel/bookings/${booking._id}/folio`, {
+      const res = await apiClient.post(`/hotel/bookings/${booking._id}/folio`, {
         item: newItemDesc.trim(),
         amount: amountNum,
       });
@@ -103,7 +112,7 @@ export default function FolioInvoiceModal({ booking, isOpen, onClose, onFolioUpd
   const handleQuickAdd = async (preset) => {
     try {
       setIsAdding(true);
-      const res = await apiClient.post(`/api/hotel/bookings/${booking._id}/folio`, {
+      const res = await apiClient.post(`/hotel/bookings/${booking._id}/folio`, {
         item: preset.item,
         amount: preset.amount,
       });
@@ -123,7 +132,7 @@ export default function FolioInvoiceModal({ booking, isOpen, onClose, onFolioUpd
   // Remove Item from Folio
   const handleRemoveFolioItem = async (chargeId) => {
     try {
-      const res = await apiClient.delete(`/api/hotel/bookings/${booking._id}/folio/${chargeId}`);
+      const res = await apiClient.delete(`/hotel/bookings/${booking._id}/folio/${chargeId}`);
       addToast('Folio charge removed successfully.', 'info');
       if (onFolioUpdated && res.data?.booking) {
         onFolioUpdated(res.data.booking);
@@ -146,7 +155,7 @@ export default function FolioInvoiceModal({ booking, isOpen, onClose, onFolioUpd
 
     try {
       setIsSettling(true);
-      const res = await apiClient.put(`/api/hotel/bookings/${booking._id}/settle`, {
+      const res = await apiClient.put(`/hotel/bookings/${booking._id}/settle`, {
         amountPaid: amountToSettle,
         paymentMode: settleMode,
         markCheckedOut: markCheckedOut,
@@ -209,10 +218,11 @@ Thank you for staying with us at Kasar Devi! 🙏`;
   };
 
   // UPI payment link for QR Code
-  const upiId = settings.company?.upiId || 'kasarhimalayan@upi';
+  const company = settings?.company || {};
+  const upiId = company.upiId || 'kasarhimalayan@upi';
   const upiString = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(
-    settings.company?.brandName || 'The Kasar Himalayan Heights'
-  )}&am=${balanceDue}&cu=INR&tn=${encodeURIComponent(`Checkout Folio ${booking._id?.slice(-6)}`)}`;
+    company.brandName || 'The Kasar Himalayan Heights'
+  )}&am=${balanceDue}&cu=INR&tn=${encodeURIComponent(`Checkout Folio ${folioShortId}`)}`;
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(
     upiString
   )}`;
@@ -235,7 +245,7 @@ Thank you for staying with us at Kasar Devi! 🙏`;
             </span>
             <span className="text-xs text-white/50">•</span>
             <span className="text-[10px] font-mono text-amber-400 bg-amber-950/60 px-2 py-0.5 rounded-full border border-amber-800">
-              Folio #{booking._id?.slice(-6).toUpperCase()}
+              Folio #{folioShortId}
             </span>
           </div>
 
@@ -260,7 +270,7 @@ Thank you for staying with us at Kasar Devi! 🙏`;
                     : 'text-stone-300 hover:text-white'
                 }`}
               >
-                Folio Ledger 📋
+                <span className="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg> Folio Ledger</span>
               </button>
               <button
                 type="button"
@@ -271,7 +281,7 @@ Thank you for staying with us at Kasar Devi! 🙏`;
                     : 'text-stone-300 hover:text-white'
                 }`}
               >
-                Tax Invoice 📄
+                <span className="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg> Tax Invoice</span>
               </button>
             </div>
           </div>
@@ -305,7 +315,7 @@ Thank you for staying with us at Kasar Devi! 🙏`;
             {/* Quick Preset Buttons */}
             <div className="bg-[#FAF6EF] p-4 rounded-2xl border border-[#C5A059]/25">
               <h4 className="text-[11px] font-cinzel font-bold uppercase tracking-wider text-[#7C1D23] mb-2.5">
-                ⚡ 1-Click Quick Add Incidentals
+                <span className="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 text-[#7C1D23]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg> 1-Click Quick Add Incidentals</span>
               </h4>
               <div className="flex flex-wrap gap-2">
                 {PRESET_CHARGES.map((preset, idx) => (
@@ -325,8 +335,9 @@ Thank you for staying with us at Kasar Devi! 🙏`;
 
             {/* Manual Add Custom Charge */}
             <form onSubmit={handleAddFolioItem} className="bg-white p-4 rounded-2xl border border-[#C5A059]/30 shadow-2xs">
-              <h4 className="text-[11px] font-cinzel font-bold uppercase tracking-wider text-[#2C2523] mb-3">
-                ➕ Add Custom Charge / Meal / Service
+              <h4 className="text-[11px] font-cinzel font-bold uppercase tracking-wider text-[#2C2523] mb-3 flex items-center gap-1.5">
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 text-[#7C1D23]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
+                <span>Add Custom Charge / Meal / Service</span>
               </h4>
               <div className="flex flex-col sm:flex-row items-center gap-2.5">
                 <input
@@ -429,8 +440,9 @@ Thank you for staying with us at Kasar Devi! 🙏`;
             {/* Payment Settlement & Checkout Box */}
             <form onSubmit={handleSettlePayment} className="p-4 bg-[#FAF6EF] rounded-2xl border border-[#C5A059]/40 space-y-3">
               <div className="flex items-center justify-between">
-                <h4 className="text-xs font-cinzel font-bold uppercase tracking-wider text-[#2C2523]">
-                  💵 Front-Desk Payment Settlement & Checkout
+                <h4 className="text-xs font-cinzel font-bold uppercase tracking-wider text-[#2C2523] flex items-center gap-1.5">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 text-[#7C1D23]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                  <span>Front-Desk Payment Settlement & Checkout</span>
                 </h4>
                 <span className="text-xs font-mono font-bold text-[#7C1D23]">
                   Due: ₹{balanceDue.toLocaleString('en-IN')}
@@ -488,7 +500,7 @@ Thank you for staying with us at Kasar Devi! 🙏`;
                     onClick={handleWhatsAppStatement}
                     className="px-3 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs shadow-2xs transition cursor-pointer flex items-center gap-1.5"
                   >
-                    <span>💬</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
                     <span>Share Statement on WhatsApp</span>
                   </button>
 
@@ -497,7 +509,7 @@ Thank you for staying with us at Kasar Devi! 🙏`;
                     onClick={() => setActiveTab('invoice')}
                     className="px-3 py-2 rounded-xl bg-stone-800 hover:bg-black text-white font-semibold text-xs shadow-2xs transition cursor-pointer flex items-center gap-1.5"
                   >
-                    <span>📄</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 text-[#C5A059]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                     <span>View & Print Tax Invoice</span>
                   </button>
                 </div>
@@ -526,13 +538,13 @@ Thank you for staying with us at Kasar Devi! 🙏`;
                     Tax Invoice & Folio Statement
                   </span>
                   <h1 className="text-2xl font-bold font-serif text-[#2C2523]">
-                    {settings.company?.hotelName || 'The Kasar Himalayan Heights'}
+                    {company.hotelName || 'The Kasar Himalayan Heights'}
                   </h1>
                   <p className="text-xs font-sans text-stone-500 mt-1 max-w-sm">
-                    {settings.company?.hotelAddress || "Crank's Ridge, Kasar Devi, Almora, Uttarakhand, India (6,942 ft)"}
+                    {company.hotelAddress || "Crank's Ridge, Kasar Devi, Almora, Uttarakhand, India (6,942 ft)"}
                   </p>
                   <p className="text-xs font-sans text-stone-500">
-                    Phone: {settings.company?.conciergePhone || '+91 96906 21247'} • Email: {settings.company?.email}
+                    Phone: {company.conciergePhone || '+91 96906 21247'} • Email: {company.email || 'concierge@kasarhimalayanheights.com'}
                   </p>
                   <p className="text-[11px] font-mono text-stone-600 mt-0.5">
                     GSTIN: 05AAACH1234F1Z9 • SAC Code: 996311 (Hotel Accommodation)
@@ -541,7 +553,7 @@ Thank you for staying with us at Kasar Devi! 🙏`;
 
                 <div className="text-right sm:text-right font-sans">
                   <div className="inline-block bg-[#FAF6EF] border border-[#C5A059]/40 px-3 py-1.5 rounded-xl text-xs font-mono font-bold text-[#7C1D23] mb-1">
-                    INVOICE #{booking._id?.slice(-8).toUpperCase()}
+                    INVOICE #{invoiceShortId}
                   </div>
                   <div className="text-xs text-stone-500">
                     Date: {new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
@@ -695,14 +707,14 @@ Thank you for staying with us at Kasar Devi! 🙏`;
                   onClick={handleWhatsAppStatement}
                   className="px-4 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs shadow-xs transition cursor-pointer flex items-center gap-1.5"
                 >
-                  <span>💬 WhatsApp Invoice</span>
+                  <span className="flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg> WhatsApp Invoice</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => window.print()}
                   className="px-6 py-2 rounded-xl bg-linear-to-r from-[#7C1D23] to-[#9B232A] hover:brightness-110 text-white font-cinzel font-bold text-xs uppercase tracking-wider shadow-md transition cursor-pointer flex items-center gap-1.5"
                 >
-                  <span>Print Tax Invoice 🖨️</span>
+                  <span className="flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg> Print Tax Invoice</span>
                 </button>
               </div>
             </div>

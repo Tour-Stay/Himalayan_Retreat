@@ -4,64 +4,90 @@
 @source "../../shared/**/*.{js,jsx,ts,tsx}";
 
 /* ================================================================
-   THE KASAR HIMALAYAN HEIGHTS — PREMIUM TYPOGRAPHY & DESIGN SYSTEM
-   Inspired by nkbashram.org (Cormorant Garamond) + postcardresorts.com (Raleway)
+   THE KASAR HIMALAYAN HEIGHTS & EXPEDITIONS — DEVOTIONAL ASHRAM AESTHETIC
+   Faithful to nkbashram.org (EB Garamond / Cormorant Garamond, Marcellus, Cinzel)
+   Traditional Devotional Temple Vibe • Reduced Content • Generous Font Sizes
    ================================================================ */
 
-/* Base Body — Clean Luxury Raleway (postcardresorts.com standard) */
 body,
 html {
-  font-family: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-variant-numeric: lining-nums proportional-nums;
-  -webkit-font-feature-settings: "lnum" 1, "pnum" 1;
-  font-feature-settings: "lnum" 1, "pnum" 1;
-  color: #2C2523;
+  font-family: 'EB Garamond', 'Cormorant Garamond', Georgia, serif;
+  font-size: 19px;
+  line-height: 1.7;
+  color: #FFFFFF;
+  background-color: #12433B;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Exact Reference Colors from nkbashram.org */
+:root {
+  --nkb-green: #12433B;
+  --nkb-green-dark: #0D332D;
+  --nkb-maroon: #541508;
+  --nkb-maroon-dark: #421006;
+  --nkb-gold: #EAA722;
+  --nkb-gold-hover: #D98E16;
+  --nkb-sand: #E7D2B6;
+  --nkb-cream: #FAF5EC;
+}
+
+/* Devotional Pill Button (from nkbashram.org) */
+.btn-nkb-gold {
+  background-color: #EAA722;
+  color: #12433B;
+  font-family: 'Cinzel', 'EB Garamond', serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-radius: 9999px;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 14px rgba(234, 167, 34, 0.35);
+}
+
+.btn-nkb-gold:hover {
+  background-color: #D98E16;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(234, 167, 34, 0.5);
 }
 
 /* Clean simple ampersand font fallback — targets only the '&' character (U+0026) */
 @font-face {
   font-family: 'CleanAmp';
-  src: local('Raleway'), local('Inter'), local('Segoe UI'), local('Roboto'), local('Arial'), local('Helvetica Neue');
+  src: local('EB Garamond'), local('Raleway'), local('Inter'), local('Segoe UI'), local('Roboto'), local('Arial'), local('Helvetica Neue');
   unicode-range: U+0026;
   font-style: normal;
 }
 
-/* Editorial Serif Headings (nkbashram.org Cormorant Garamond standard) */
+/* Traditional Devotional Serif Headings */
 .font-serif {
-  font-family: 'CleanAmp', 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
-  font-variant-numeric: lining-nums proportional-nums;
-  -webkit-font-feature-settings: "lnum" 1, "pnum" 1;
-  font-feature-settings: "lnum" 1, "pnum" 1;
+  font-family: 'CleanAmp', 'Cormorant Garamond', 'EB Garamond', Georgia, serif;
+  letter-spacing: 0.01em;
 }
 
-/* Clean ampersand override — forces a straight sans-serif & */
+/* Classical Inscriptions & Temple Monograms */
+.font-cinzel {
+  font-family: 'CleanAmp', 'Cinzel', 'Marcellus', Georgia, serif;
+  letter-spacing: 0.08em;
+}
+
+/* Clean ampersand override */
 .clean-amp,
 .font-serif .font-sans,
 .font-cinzel .font-sans {
-  font-family: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-family: 'EB Garamond', Georgia, serif !important;
   font-style: normal !important;
   font-weight: 400 !important;
 }
 
-/* Classical Roman Inscriptions — Badges, Eyebrows, CTA Buttons */
-.font-cinzel {
-  font-family: 'CleanAmp', 'Cinzel', Georgia, serif;
-  letter-spacing: 0.08em;
-}
-
-/* Devotional Sanskrit & Hindi Temple Chants */
+/* Sacred Sanskrit / Hindi Scripture Text */
 .font-devanagari {
-  font-family: 'Rozha One', 'Tiro Devanagari Hindi', 'Playfair Display', Georgia, serif;
+  font-family: 'Tiro Devanagari Hindi', 'EB Garamond', Georgia, serif;
 }
 
-/* Body Sans — Same Raleway with lining numerals */
+/* Secondary Clean Reading Text */
 .font-sans {
-  font-family: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-variant-numeric: lining-nums proportional-nums;
-  -webkit-font-feature-settings: "lnum" 1, "pnum" 1;
-  font-feature-settings: "lnum" 1, "pnum" 1;
+  font-family: 'EB Garamond', Georgia, serif;
 }
 
 /* Clean Lining Numerals */

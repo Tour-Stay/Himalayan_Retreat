@@ -9,7 +9,8 @@ import kainchiWebp from '../assets/images/Kainchi-Dham.webp';
 import kainchiJpg from '../assets/images/kainchi-dham.jpg';
 import kasarTempleImg from '../assets/images/kasar-devi-temple.jpg';
 import trishulPeaksImg from '../assets/images/Trishul-&-Nanda-Devi.jpg';
-import babaPortraitImg from '../assets/images/neem-karoli-baba.jpg';
+import babaPortraitImg from '../assets/images/neem-karoli-baba1.jpg';
+import babaPortraitOldImg from '../assets/images/neem-karoli-baba.jpg';
 
 // Resort & Suites
 import hotelBestPic from '../assets/images/hotel-best-pic.jpg';

@@ -6,7 +6,7 @@ export const LANDING_CONTENT = {
   // Top Notice Bar (Dismissible)
   announcement: {
     enabled: true,
-    message: '॥ ॐ नमः शिवाय • जय श्री नीब करौरी महाराज ॥ Visiting Kainchi Dham or Kasar Devi? Consecrated yatra assistance, heated chalet suites & temple cabs are open for booking.',
+    message: '॥ ॐ नमः शिवाय • जय श्री नीब करौरी महाराज ॥ Visiting Kainchi Dham or Kasar Devi? Sacred yatra support, heated chalet rooms & temple cabs are open for booking.',
     linkText: 'Yatra Booking ↗',
     linkHref: '#enquiry',
   },
@@ -82,14 +82,14 @@ export const LANDING_CONTENT = {
         title: 'Himalayan Expeditions',
         category: 'Chauffeured Mountain Fleet & Tours',
         elevation: 'Almora Station Hub Origin',
-        description: 'Dedicated fleet of Mountain Sedans (4-seater), Luxury SUVs (6-seater Innova Crysta), and Minibuses (12-seater). Real-time distance and vehicle fare calculator with experienced hill chauffeurs.',
+        description: 'Dedicated fleet of Mountain Sedans (4-seater), Luxury SUVs (6-seater Innova Crysta), and Minibuses (12-seater). Chauffeured sacred temple yatras and station pickups with experienced hill drivers.',
         image: '/shared/assets/images/innova-crysta.jpg',
         features: [
           'Direct circuit transfers from Almora Station Base',
-          'Transparent per-km mountain tariffs with no hidden charges',
-          'Hill-expert chauffeurs & state passenger permits included',
+          'Dedicated hill-certified drivers & state passenger permits included',
+          'Luggage assistance and unhurried temple halts',
         ],
-        ctaText: 'Explore Fleet & Tariffs',
+        ctaText: 'Explore Fleet & Services',
         appTarget: 'travel',
       },
     ],
@@ -127,8 +127,8 @@ export const LANDING_CONTENT = {
         content: 'Jageshwar Mahamrityunjaya Dham is 35 km (approx. 1 hour drive) through pine forests. Kainchi Dham (Neem Karoli Baba Ashram) is 45 km (approx. 1.5 hours drive). We arrange curated day pilgrimages with chauffeur service.',
       },
       {
-        title: 'How does the Tour & Travel fare calculator work?',
-        content: 'Our fare calculator is based on verified road distances originating from Almora Station Base. You choose your circuit and vehicle type (Sedan at ₹14/km, SUV at ₹18/km, Minibus at ₹26/km). The formula transparently adds fuel, permits, and driver allowance.',
+        title: 'How does the Tour & Travel booking work?',
+        content: 'Our mountain travel service operates across verified road circuits originating from Almora and Kathgodam. You choose your sacred pilgrimage destination and preferred vehicle type (Sedan, SUV, Minibus) with dedicated hill-certified chauffeurs.',
       },
     ],
   },

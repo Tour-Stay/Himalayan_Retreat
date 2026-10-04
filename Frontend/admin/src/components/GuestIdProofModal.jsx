@@ -51,7 +51,7 @@ export default function GuestIdProofModal({ booking, isOpen, onClose, onIdProofU
         formData.append('idProof', selectedFile);
       }
 
-      const res = await apiClient.post(`/api/hotel/bookings/${booking._id}/id-proof`, formData, {
+      const res = await apiClient.post(`/hotel/bookings/${booking._id}/id-proof`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
@@ -110,7 +110,7 @@ export default function GuestIdProofModal({ booking, isOpen, onClose, onIdProofU
             <div>
               <span className="text-stone-400 text-[10px] uppercase font-cinzel block">Verification Status</span>
               <span className={`font-mono text-[11px] font-semibold ${previewUrl || idNumber ? 'text-emerald-400' : 'text-amber-400'}`}>
-                {previewUrl || idNumber ? '✓ Verified on File' : '⚠️ Pending'}
+                {previewUrl || idNumber ? '✓ Verified on File' : <><svg xmlns="http://www.w3.org/2000/svg" className="w-3 h-3 inline mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg> Pending</>}
               </span>
             </div>
           </div>
@@ -182,8 +182,8 @@ export default function GuestIdProofModal({ booking, isOpen, onClose, onIdProofU
               </div>
             ) : (
               <label className="border-2 border-dashed border-[#C5A059]/50 hover:border-[#7C1D23] rounded-2xl p-6 bg-[#FAF6EF]/60 hover:bg-[#FAF6EF] transition cursor-pointer flex flex-col items-center justify-center text-center group">
-                <div className="w-12 h-12 rounded-full bg-white border border-[#C5A059]/40 flex items-center justify-center text-xl shadow-2xs mb-2 group-hover:scale-105 transition">
-                  🪪
+                <div className="w-12 h-12 rounded-full bg-white border border-[#C5A059]/40 flex items-center justify-center shadow-2xs mb-2 group-hover:scale-105 transition text-[#7C1D23]">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0" /></svg>
                 </div>
                 <span className="font-cinzel font-bold text-xs text-[#2C2523]">
                   Click or drag photo of Aadhaar / Passport
@@ -203,7 +203,7 @@ export default function GuestIdProofModal({ booking, isOpen, onClose, onIdProofU
 
           {/* Compliance Assurance Note */}
           <div className="p-3 bg-amber-50/70 rounded-xl border border-amber-200 text-[11px] text-amber-900 flex items-start gap-2">
-            <span className="text-base shrink-0">🛡️</span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 shrink-0 text-amber-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
             <div>
               <strong>Police & Tourism Compliance:</strong> In accordance with Uttarakhand Tourism & Police guidelines, all hotels and homestays at Kasar Devi / Almora must maintain verified guest identity documents. Data is encrypted and accessible only to authorized staff.
             </div>

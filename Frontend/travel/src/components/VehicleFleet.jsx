@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Container, ArrowUpRightIcon, useSiteSettings } from '@shared';
+import { Link } from 'react-router-dom';
+import { ArrowUpRightIcon, useSiteSettings } from '@shared';
 import { fleetData, mergeFleetWithSettings } from '../data/travelData';
 import VehicleCard from './VehicleCard';
 
@@ -21,23 +22,20 @@ const VehicleFleet = ({ onBookFleet, onQuickView }) => {
       });
 
   return (
-    <section id="cabs" className="py-20 sm:py-28 px-4 bg-[#FDFBF7] border-b border-[#C5A059]/20 relative overflow-hidden">
-      {/* Subtle background sacred watermark */}
-      <div className="absolute top-10 right-8 text-[#C84B0F]/[0.025] text-[180px] font-devanagari select-none pointer-events-none leading-none z-0">
-        🔱
-      </div>
-
-      <Container size="lg">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6 relative z-10">
+    <section id="cabs" className="py-16 sm:py-20 px-4 sm:px-6 bg-[#541508] text-white border-b border-[#3D0F06] relative overflow-hidden">
+      <div className="max-w-[1560px] mx-auto">
+        {/* Section Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 sm:mb-12 gap-6 relative z-10 reveal">
           <div className="max-w-xl">
-            <span className="text-xs font-sans text-[#C84B0F] uppercase tracking-wider font-semibold block mb-2 flex items-center gap-1.5">
-              <span className="text-sm">🪔</span> Verified Mountain Fleet • Almora Base
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#EAA722] text-[#541508] text-[11px] font-mono font-bold tracking-widest uppercase mb-2.5 shadow-xs">
+              <span className="text-xs">🪔</span>
+              <span>॥ पावन तीर्थ यात्रा • MOUNTAIN FLEET ॥</span>
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-[#2C2523] font-medium leading-tight">
-              Our Clean Mountain Cabs
+            <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-white font-normal leading-tight">
+              Our Clean Mountain &amp; Yatra Cabs
             </h2>
-            <p className="text-[#5C5350] text-base leading-relaxed mt-2 font-normal">
-              High-clearance vehicles inspected for hill roads, driven by friendly local Pahadi drivers who know every mountain turn. Transparent fixed rates with no hidden costs.
+            <p className="text-[#FAF5EC]/85 text-sm sm:text-base leading-relaxed mt-2 font-light">
+              Inspected mountain cabs driven by respectful local Pahadi drivers. Kainchi Dham, Jageshwar, and station transfers at transparent fixed rates.
             </p>
           </div>
 
@@ -53,10 +51,10 @@ const VehicleFleet = ({ onBookFleet, onQuickView }) => {
                 key={tab.id}
                 type="button"
                 onClick={() => setFilter(tab.id)}
-                className={`px-4 py-2 rounded-full text-xs uppercase tracking-wider font-semibold transition-all cursor-pointer ${
+                className={`px-4 py-2 rounded-full text-xs font-mono uppercase tracking-wider transition-all duration-300 cursor-pointer ${
                   filter === tab.id
-                    ? 'bg-gradient-to-r from-[#C84B0F] to-[#7C1D23] text-[#FDFBF7] shadow-sm'
-                    : 'bg-[#FAF6EF] text-[#5C5350] border border-[#C5A059]/30 hover:border-[#C84B0F]'
+                    ? 'bg-[#EAA722] text-[#541508] font-bold shadow-md'
+                    : 'bg-white/10 border border-[#EAA722]/30 text-white hover:bg-white/20 font-medium'
                 }`}
               >
                 {tab.label}
@@ -66,7 +64,7 @@ const VehicleFleet = ({ onBookFleet, onQuickView }) => {
         </div>
 
         {/* Fleet Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 relative z-10 reveal">
           {filteredFleet.map((vehicle) => (
             <VehicleCard
               key={vehicle.id}
@@ -77,26 +75,26 @@ const VehicleFleet = ({ onBookFleet, onQuickView }) => {
           ))}
         </div>
 
-        {/* Bottom Banner */}
-        <div className="mt-14 p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#FFF5EC] via-[#FAF6EF] to-[#FFF5EC] border border-[#C84B0F]/30 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left relative z-10 shadow-xs">
+        {/* Bottom Custom Tour Banner */}
+        <div className="mt-12 sm:mt-14 p-6 sm:p-8 rounded-3xl bg-[#3D0F06] border border-[#EAA722]/40 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left relative z-10 backdrop-blur-sm shadow-xl">
           <div>
-            <h4 className="font-serif text-xl sm:text-2xl font-medium text-[#2C2523] flex items-center justify-center sm:justify-start gap-2">
-              <span>Looking for a Custom Multi-Day Tour?</span>
-              <span className="text-xs font-devanagari text-[#C84B0F]">॥ शुभ यात्रा ॥</span>
+            <h4 className="font-serif text-xl sm:text-2xl font-normal text-white flex items-center justify-center sm:justify-start gap-2">
+              <span>Looking for a Custom Multi-Day Tour or Chardham Yatra?</span>
+              <span className="text-xs font-devanagari text-[#EAA722] font-semibold">॥ जय श्री नीब करौरी महाराज ॥</span>
             </h4>
-            <p className="text-xs sm:text-sm text-[#5C5350] mt-1 leading-relaxed">
-              We arrange customized temple itineraries, airport pickups from Delhi/Pantnagar, and Chardham Yatra escorts with dedicated hill drivers.
+            <p className="text-xs sm:text-sm text-[#FAF5EC]/80 mt-1 leading-relaxed font-light">
+              Custom temple itineraries, airport/station pickups, and multi-day Chardham Yatra tours.
             </p>
           </div>
 
-          <a
-            href="#calculator"
-            className="px-6 py-3 rounded-full text-xs uppercase tracking-wider font-bold bg-[#7C1D23] hover:bg-[#5C151A] text-[#FDFBF7] transition-all shadow-md flex-shrink-0 flex items-center gap-1.5 border border-[#C5A059]/30"
+          <Link
+            to="/calculator"
+            className="px-6 py-3 rounded-full text-xs font-mono uppercase tracking-wider font-bold bg-[#EAA722] hover:bg-[#D98E16] text-[#541508] transition-all shadow-md flex-shrink-0 flex items-center gap-1.5 cursor-pointer hover:scale-102"
           >
             <span>Plan Custom Trip ↗</span>
-          </a>
+          </Link>
         </div>
-      </Container>
+      </div>
     </section>
   );
 };
