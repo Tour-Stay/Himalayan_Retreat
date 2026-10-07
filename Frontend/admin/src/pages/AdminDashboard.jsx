@@ -1,24 +1,26 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, lazy, Suspense } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { AuthContext, Loader } from '@shared';
 import useAdminData from '../hooks/useAdminData';
 import AdminHeader from '../components/AdminHeader';
 import AdminSidebar from '../components/AdminSidebar';
 import KpiCards from '../components/KpiCards';
-import RoomManager from '../components/RoomManager';
-import HotelBookingManager from '../components/HotelBookingManager';
-import TravelBookingManager from '../components/TravelBookingManager';
-import TourManager from '../components/TourManager';
-import ReviewManager from '../components/ReviewManager';
-import CompanyManager from '../components/CompanyManager';
-import FleetManager from '../components/FleetManager';
-import RouteManager from '../components/RouteManager';
-import AnnouncementManager from '../components/AnnouncementManager';
-import LandingCmsManager from '../components/LandingCmsManager';
-import PolicyManager from '../components/PolicyManager';
-import YieldManager from '../components/YieldManager';
 import QuickBookingModal from '../components/QuickBookingModal';
 import { ADMIN_ROUTES, ADMIN_TAB_TITLES, resolveTabFromLocation } from '../constants/adminRoutes';
+
+// Lazy-loaded tab panels — only downloaded when the admin navigates to that tab
+const RoomManager = lazy(() => import('../components/RoomManager'));
+const HotelBookingManager = lazy(() => import('../components/HotelBookingManager'));
+const TravelBookingManager = lazy(() => import('../components/TravelBookingManager'));
+const TourManager = lazy(() => import('../components/TourManager'));
+const ReviewManager = lazy(() => import('../components/ReviewManager'));
+const CompanyManager = lazy(() => import('../components/CompanyManager'));
+const FleetManager = lazy(() => import('../components/FleetManager'));
+const RouteManager = lazy(() => import('../components/RouteManager'));
+const AnnouncementManager = lazy(() => import('../components/AnnouncementManager'));
+const LandingCmsManager = lazy(() => import('../components/LandingCmsManager'));
+const PolicyManager = lazy(() => import('../components/PolicyManager'));
+const YieldManager = lazy(() => import('../components/YieldManager'));
 
 const AdminDashboard = ({ tab }) => {
   const { isAdminLoggedIn } = useContext(AuthContext);
@@ -152,7 +154,16 @@ const AdminDashboard = ({ tab }) => {
               </p>
             </div>
           ) : (
-            <>
+            <Suspense
+              fallback={
+                <div className="flex flex-col items-center justify-center py-16 text-[#5C5350]">
+                  <Loader />
+                  <p className="mt-3 text-xs font-cinzel uppercase tracking-wider text-[#C5A059] font-semibold">
+                    Loading Module...
+                  </p>
+                </div>
+              }
+            >
               {activeTab === 'rooms' && (
                 <RoomManager
                   rooms={rooms}
@@ -200,7 +211,7 @@ const AdminDashboard = ({ tab }) => {
               {activeTab === 'landing-cms' && <LandingCmsManager />}
               {activeTab === 'policies' && <PolicyManager />}
               {activeTab === 'yield' && <YieldManager rooms={rooms} />}
-            </>
+            </Suspense>
           )}
         </main>
       </div>

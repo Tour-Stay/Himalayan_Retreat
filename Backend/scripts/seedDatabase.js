@@ -6,19 +6,19 @@ require('dotenv').config({ path: path.join(__dirname, '../.env') });
 const Room = require('../models/Room');
 const TourPackage = require('../models/TourPackage');
 const SiteSettings = require('../models/SiteSettings');
+const { uploadToCloudinary } = require('../config/cloudinary');
 
-// Helper to convert local image to base64 data URI
-const getBase64Image = (fileName) => {
+// Helper to upload local image to Cloudinary
+const uploadLocalImageToCloudinary = async (fileName, folder) => {
   try {
     const filePath = path.join(__dirname, '../../Frontend/shared/assets/images', fileName);
     if (fs.existsSync(filePath)) {
-      const ext = path.extname(fileName).toLowerCase().replace('.', '');
-      const mime = ext === 'webp' ? 'image/webp' : ext === 'png' ? 'image/png' : 'image/jpeg';
       const fileBuffer = fs.readFileSync(filePath);
-      return `data:${mime};base64,${fileBuffer.toString('base64')}`;
+      const result = await uploadToCloudinary(fileBuffer, folder);
+      return result.secure_url;
     }
   } catch (err) {
-    console.warn(`Could not load image ${fileName}:`, err.message);
+    console.warn(`Could not upload image ${fileName}:`, err.message);
   }
   return '';
 };
@@ -135,9 +135,11 @@ const seed = async () => {
     for (const rData of roomsToSeed) {
       const existing = await Room.findOne({ name: rData.name });
       if (!existing) {
-        const imageURLs = rData.imageFiles
-          .map((f) => getBase64Image(f))
-          .filter(Boolean);
+        const imageURLs = [];
+        for (const f of rData.imageFiles) {
+          const url = await uploadLocalImageToCloudinary(f, 'hotel-rooms');
+          if (url) imageURLs.push(url);
+        }
 
         const newRoom = new Room({
           name: rData.name,
@@ -260,9 +262,11 @@ const seed = async () => {
     for (const tData of toursToSeed) {
       const existing = await TourPackage.findOne({ title: tData.title });
       if (!existing) {
-        const imageURLs = tData.imageFiles
-          .map((f) => getBase64Image(f))
-          .filter(Boolean);
+        const imageURLs = [];
+        for (const f of tData.imageFiles) {
+          const url = await uploadLocalImageToCloudinary(f, 'tour-packages');
+          if (url) imageURLs.push(url);
+        }
 
         const newTour = new TourPackage({
           title: tData.title,

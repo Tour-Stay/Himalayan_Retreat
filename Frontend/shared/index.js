@@ -35,6 +35,7 @@ export * from './constants/assets';
 
 // Hooks
 export { useScrollReveal, useStaggerReveal, initAutoScrollReveal } from './hooks/useScrollReveal';
+export { useRazorpay } from './hooks/useRazorpay';
 
 // Dynamic Pricing & Yield Engine
 export { calculateStayTariff } from './utils/pricingEngine';

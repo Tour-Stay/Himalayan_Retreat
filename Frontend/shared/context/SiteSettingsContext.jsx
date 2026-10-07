@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import apiClient from '../services/apiClient';
 import { SITE_CONFIG } from '../constants/siteConfig';
 import { broadcastUpdate, subscribeToUpdates } from '../utils/syncBroadcaster';
@@ -332,6 +332,29 @@ const fallbackSettings = {
   },
 };
 
+// ==========================================
+// LOCALSTORAGE CACHE (Stale-While-Revalidate)
+// ==========================================
+const CACHE_KEY = 'kasar_site_settings_cache';
+const STALE_TIME_MS = 5 * 60 * 1000; // 5 minutes — only refetch if older than this
+
+const getCachedSettings = () => {
+  try {
+    const cached = localStorage.getItem(CACHE_KEY);
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      if (parsed?.data && parsed?.timestamp) return parsed;
+    }
+  } catch (e) { /* ignore */ }
+  return null;
+};
+
+const setCachedSettings = (data) => {
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify({ data, timestamp: Date.now() }));
+  } catch (e) { /* ignore quota errors */ }
+};
+
 export const SiteSettingsContext = createContext({
   settings: fallbackSettings,
   loading: false,
@@ -341,9 +364,13 @@ export const SiteSettingsContext = createContext({
 });
 
 export const SiteSettingsProvider = ({ children }) => {
-  const [settings, setSettings] = useState(fallbackSettings);
-  const [loading, setLoading] = useState(true);
+  const [settings, setSettings] = useState(() => {
+    const cached = getCachedSettings();
+    return cached ? cached.data : fallbackSettings;
+  });
+  const [loading, setLoading] = useState(() => !getCachedSettings());
   const [error, setError] = useState(null);
+  const lastFetchRef = useRef(0);
 
   const fetchSettings = useCallback(async (silent = false) => {
     try {
@@ -351,12 +378,14 @@ export const SiteSettingsProvider = ({ children }) => {
       const res = await apiClient.get('/settings');
       if (res.data?.success && res.data?.data) {
         setSettings(res.data.data);
+        setCachedSettings(res.data.data);
+        lastFetchRef.current = Date.now();
         setError(null);
       }
     } catch (err) {
       console.warn('SiteSettingsProvider: Could not reach /api/settings. Using resilient fallback.', err.message);
       setError(err.message);
-      // Retain fallbackSettings so the app never breaks
+      // Retain current settings (cached or fallback) so the app never breaks
     } finally {
       if (!silent) setLoading(false);
     }
@@ -369,36 +398,32 @@ export const SiteSettingsProvider = ({ children }) => {
   }, [fetchSettings]);
 
   useEffect(() => {
-    // 1. Initial fetch on mount
-    fetchSettings(false);
+    // 1. Stale-while-revalidate: if cached data loaded, refresh silently in background
+    //    If no cache exists, fetch with loading indicator
+    const hasCachedData = !!getCachedSettings();
+    fetchSettings(hasCachedData);
 
-    // 2. Real-time broadcast sync (triggers instantly when Admin saves)
+    // 2. Real-time broadcast sync (triggers instantly when Admin saves settings)
     const unsubscribe = subscribeToUpdates('settings', () => {
       fetchSettings(true);
     });
 
-    // 3. Tab visibility / window focus revalidation
-    const handleFocus = () => {
-      fetchSettings(true);
-    };
+    // 3. Tab visibility revalidation (with 5-minute cooldown to prevent excessive API calls)
     const handleVisibility = () => {
       if (document.visibilityState === 'visible') {
-        fetchSettings(true);
+        const timeSinceLastFetch = Date.now() - lastFetchRef.current;
+        if (timeSinceLastFetch > STALE_TIME_MS) {
+          fetchSettings(true);
+        }
       }
     };
-    window.addEventListener('focus', handleFocus);
     document.addEventListener('visibilitychange', handleVisibility);
 
-    // 4. Periodic background heartbeat check (every 45s)
-    const interval = setInterval(() => {
-      fetchSettings(true);
-    }, 45000);
+    // No 45-second polling — BroadcastChannel handles instant admin sync
 
     return () => {
       unsubscribe();
-      window.removeEventListener('focus', handleFocus);
       document.removeEventListener('visibilitychange', handleVisibility);
-      clearInterval(interval);
     };
   }, [fetchSettings]);
 

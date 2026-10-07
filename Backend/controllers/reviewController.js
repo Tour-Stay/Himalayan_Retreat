@@ -61,12 +61,8 @@ const createReview = async (req, res) => {
         const results = await Promise.all(uploadPromises);
         photos = results.map((result) => result.secure_url);
       } catch (cloudErr) {
-        console.warn('⚠️ Cloudinary upload warning (using base64 fallback):', cloudErr.message || cloudErr);
-        // Fallback: convert file buffer to base64 data URI
-        photos = req.files.map((file) => {
-          const mime = file.mimetype || 'image/jpeg';
-          return `data:${mime};base64,${file.buffer.toString('base64')}`;
-        });
+        console.error('Cloudinary upload failed:', cloudErr.message || cloudErr);
+        return res.status(500).json({ message: 'Image upload failed. Please check Cloudinary credentials.', error: cloudErr.message });
       }
     }
 
@@ -128,12 +124,8 @@ const updateReview = async (req, res) => {
         const newPhotos = results.map((result) => result.secure_url);
         photos = [...photos, ...newPhotos]; // Append new photos to existing
       } catch (cloudErr) {
-        console.warn('⚠️ Cloudinary upload warning (using base64 fallback):', cloudErr.message || cloudErr);
-        const newPhotos = req.files.map((file) => {
-          const mime = file.mimetype || 'image/jpeg';
-          return `data:${mime};base64,${file.buffer.toString('base64')}`;
-        });
-        photos = [...photos, ...newPhotos];
+        console.error('Cloudinary upload failed:', cloudErr.message || cloudErr);
+        return res.status(500).json({ message: 'Image upload failed. Please check Cloudinary credentials.', error: cloudErr.message });
       }
     }
 

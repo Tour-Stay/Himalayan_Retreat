@@ -46,8 +46,17 @@ const travelBookingSchema = new mongoose.Schema({
   },
   paymentStatus: {
     type: String,
-    enum: ['pending', 'paid', 'failed'],
-    default: 'pending',
+    enum: ['Pending', 'Paid', 'Failed', 'Refunded'],
+    default: 'Pending',
+  },
+  razorpayOrderId: {
+    type: String
+  },
+  razorpayPaymentId: {
+    type: String
+  },
+  razorpaySignature: {
+    type: String
   },
   status: {
     type: String,
@@ -68,5 +77,10 @@ const travelBookingSchema = new mongoose.Schema({
     dispatchedAt: { type: Date },
   },
 }, { timestamps: true });
+
+// Database Indexes for Performance
+travelBookingSchema.index({ packageId: 1 });
+travelBookingSchema.index({ travelDate: 1 });
+travelBookingSchema.index({ status: 1 });
 
 module.exports = mongoose.model('TravelBooking', travelBookingSchema);

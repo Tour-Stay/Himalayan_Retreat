@@ -51,11 +51,8 @@ const addTour = async (req, res) => {
         const results = await Promise.all(uploadPromises);
         imageURLs = results.map((result) => result.secure_url);
       } catch (cloudErr) {
-        console.warn('⚠️ Cloudinary upload warning (using base64 fallback):', cloudErr.message || cloudErr);
-        imageURLs = req.files.map((file) => {
-          const mime = file.mimetype || 'image/jpeg';
-          return `data:${mime};base64,${file.buffer.toString('base64')}`;
-        });
+        console.error('Cloudinary upload failed:', cloudErr.message || cloudErr);
+        return res.status(500).json({ message: 'Image upload failed. Please check Cloudinary credentials.', error: cloudErr.message });
       }
     }
 
@@ -157,11 +154,8 @@ const updateTour = async (req, res) => {
         const results = await Promise.all(uploadPromises);
         newImageURLs = results.map((result) => result.secure_url);
       } catch (cloudErr) {
-        console.warn('\u26a0\ufe0f Cloudinary upload warning (using base64 fallback):', cloudErr.message || cloudErr);
-        newImageURLs = req.files.map((file) => {
-          const mime = file.mimetype || 'image/jpeg';
-          return `data:${mime};base64,${file.buffer.toString('base64')}`;
-        });
+        console.error('Cloudinary upload failed:', cloudErr.message || cloudErr);
+        return res.status(500).json({ message: 'Image upload failed. Please check Cloudinary credentials.', error: cloudErr.message });
       }
       updateData.imageURLs = newImageURLs;
     }
