@@ -63,11 +63,30 @@ const bookingSchema = new mongoose.Schema({
     type: String,
     default: 'Aadhaar Card'
   },
+  paymentStatus: {
+    type: String,
+    enum: ['Pending', 'Paid', 'Failed', 'Refunded'],
+    default: 'Pending'
+  },
+  razorpayOrderId: {
+    type: String
+  },
+  razorpayPaymentId: {
+    type: String
+  },
+  razorpaySignature: {
+    type: String
+  },
   status: {
     type: String,
     enum: ['pending', 'confirmed', 'checked_in', 'checked_out', 'completed', 'cancelled'],
     default: 'pending'
   }
 }, { timestamps: true });
+
+// Database Indexes for Performance
+bookingSchema.index({ room: 1 });
+bookingSchema.index({ checkInDate: 1, checkOutDate: 1 });
+bookingSchema.index({ status: 1 });
 
 module.exports = mongoose.model('Booking', bookingSchema);

@@ -3,18 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import {
   apiClient,
   SITE_CONFIG,
-  ArrowUpRightIcon,
-  CheckCircleIcon,
-  MapPinIcon,
-  CalendarIcon,
-  UsersIcon,
-  CarIcon,
-  LuggageIcon,
-  TrainIcon,
-  StarIcon,
   useSiteSettings,
+  useRazorpay,
 } from '@shared';
 import { fleetData, destinationsData, mergeFleetWithSettings, mergeDestinationsWithSettings } from '../data/travelData';
+
+// Sub-components (split from original 52KB monolith for maintainability)
+import FleetSelector from './fare/FleetSelector';
+import RouteSelector from './fare/RouteSelector';
+import TripOptions from './fare/TripOptions';
+import MountainAddons from './fare/MountainAddons';
+import GuestContactForm from './fare/GuestContactForm';
+import FareSummaryPanel from './fare/FareSummaryPanel';
 
 // Dynamic Mountain Highway Route & Terrain Engine
 export const ROUTE_MATRIX = {
@@ -114,6 +114,7 @@ const FareCalculator = ({
   onSelectFleet,
 }) => {
   const navigate = useNavigate();
+  const { initializePayment, isProcessing: paymentProcessing } = useRazorpay();
 
   // Dynamic States
   const [selectedFleet, setSelectedFleet] = useState(selectedFleetId || '6-seater');
@@ -329,7 +330,7 @@ const FareCalculator = ({
     };
 
     try {
-      await apiClient.post('/travel/bookings', {
+      const response = await apiClient.post('/travel/bookings', {
         vehicleType: currentFleet.id,
         circuit: `${currentDest.name} (${routeInfo.km} km, ${routeInfo.via})`,
         pickupLocation: pickupPoint,
@@ -345,11 +346,34 @@ const FareCalculator = ({
           email: 'concierge@himalayanretreat.com',
         },
       });
+
+      const dbBookingId = response.data?.booking?._id || bookingId;
+
+      await initializePayment({
+        amount: pricing.totalFare,
+        receiptId: dbBookingId,
+        bookingType: 'travel',
+        prefill: {
+          name: guestName,
+          contact: guestPhone,
+          email: 'concierge@himalayanretreat.com',
+        },
+        onSuccess: (paymentResponse) => {
+          setSubmitting(false);
+          navigate('/booking-confirmation', {
+            state: {
+              booking: { ...bookingDetails, paymentId: paymentResponse.razorpay_payment_id },
+            },
+          });
+        },
+        onFailure: (error) => {
+          setErrorMessage('Payment failed or was cancelled. Please try again.');
+          setSubmitting(false);
+        },
+      });
     } catch (err) {
-      // Graceful fallback to guarantee smooth user experience
-    } finally {
+      setErrorMessage('Failed to connect to the booking server. Please try again.');
       setSubmitting(false);
-      navigate('/booking-confirmation', { state: { booking: bookingDetails } });
     }
   };
 
@@ -443,584 +467,84 @@ const FareCalculator = ({
         {/* ========================================================= */}
         <div className="lg:col-span-7 xl:col-span-7 bg-white p-6 sm:p-8 rounded-3xl border border-[#EAA722]/30 shadow-xs space-y-7">
           {/* 1. Vehicle Selection with Live Prices */}
-          <div>
-            <div className="flex items-center justify-between mb-2.5">
-              <label className="text-sm uppercase font-bold text-[#541508] tracking-wider flex items-center gap-2 font-mono">
-                <CarIcon className="w-4 h-4 text-[#EAA722]" />
-                <span>1. Choose Cab Size</span>
-              </label>
-              <span className="text-xs sm:text-sm text-[#5C5350]">
-                Selected Cab: <strong className="text-[#541508]">{currentFleet.title}</strong>
-              </span>
-            </div>
-
-            <div className="grid grid-cols-3 gap-3">
-              {fleetList.map((v) => {
-                const preview = fleetPricePreviews.find((p) => p.id === v.id);
-                const isSelected = selectedFleet === v.id;
-                return (
-                  <button
-                    key={v.id}
-                    type="button"
-                    onClick={() => {
-                      setSelectedFleet(v.id);
-                      if (onSelectFleet) onSelectFleet(v.id);
-                    }}
-                    className={`p-3.5 sm:p-4 rounded-2xl border text-left transition-all cursor-pointer relative overflow-hidden ${
-                      isSelected
-                        ? 'border-[#EAA722] bg-[#FAF5EC] ring-2 ring-[#EAA722]/30 shadow-xs'
-                        : 'border-[#EAA722]/25 bg-[#FAF5EC]/40 hover:border-[#EAA722]/60 hover:bg-[#FAF5EC]'
-                    }`}
-                  >
-                    {isSelected && (
-                      <span className="absolute top-0 right-0 w-3 h-3 bg-[#EAA722] rounded-bl-lg"></span>
-                    )}
-                    <span className="font-serif text-base sm:text-lg font-bold text-[#541508] block leading-snug">
-                      {v.seats} Seats
-                    </span>
-                    <span className="text-xs sm:text-sm text-[#541508] font-bold block mt-1 truncate">
-                      {v.title.split(' ')[2] || v.title.split(' ')[1]}
-                    </span>
-                    <div className="mt-1.5 pt-1.5 border-t border-[#EAA722]/20 flex items-baseline justify-between">
-                      <span className="text-xs text-[#5C5350] font-numeral">
-                        ₹{v.perKmRate}/km
-                      </span>
-                      {preview && (
-                        <span className="text-xs sm:text-sm font-bold text-[#541508] font-numeral">
-                          ₹{preview.total.toLocaleString()}
-                        </span>
-                      )}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Smart Capacity Recommendations */}
-            {passengerCount > 4 && selectedFleet === '4-seater' && (
-              <div className="mt-2.5 p-2.5 bg-[#FFF4E5] border border-amber-300 rounded-xl text-xs text-amber-900 flex items-center justify-between gap-2">
-                <span>⚠️ Dzire Sedan fits 4 guests. For {passengerCount} guests with luggage, Innova Crysta is recommended.</span>
-                <button
-                  type="button"
-                  onClick={() => setSelectedFleet('6-seater')}
-                  className="px-2.5 py-1 bg-[#073125] text-white rounded-lg text-[11px] font-bold whitespace-nowrap cursor-pointer hover:bg-[#12433B]"
-                >
-                  Switch to Innova
-                </button>
-              </div>
-            )}
-            {passengerCount > 6 && selectedFleet === '6-seater' && (
-              <div className="mt-2.5 p-2.5 bg-[#FFF4E5] border border-amber-300 rounded-xl text-xs text-amber-900 flex items-center justify-between gap-2">
-                <span>⚠️ Innova Crysta fits 6 guests. For {passengerCount} guests, our 12-Seater Luxury Minibus is best.</span>
-                <button
-                  type="button"
-                  onClick={() => setSelectedFleet('12-seater')}
-                  className="px-2.5 py-1 bg-[#073125] text-white rounded-lg text-[11px] font-bold whitespace-nowrap cursor-pointer hover:bg-[#12433B]"
-                >
-                  Switch to Minibus
-                </button>
-              </div>
-            )}
-          </div>
+          <FleetSelector
+            fleetList={fleetList}
+            selectedFleet={selectedFleet}
+            setSelectedFleet={setSelectedFleet}
+            fleetPricePreviews={fleetPricePreviews}
+            passengerCount={passengerCount}
+            currentFleet={currentFleet}
+            onSelectFleet={onSelectFleet}
+          />
 
           {/* 2. Dynamic Pickup & Destination Matrix Selection */}
-          <div>
-            <label className="text-sm uppercase font-bold text-[#541508] tracking-wider flex items-center gap-2 mb-2.5 font-mono">
-              <MapPinIcon className="w-4 h-4 text-[#EAA722]" />
-              <span>2. Pickup &amp; Drop Locations</span>
-            </label>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="calc-pickup" className="block text-xs sm:text-sm font-bold text-[#5C5350] uppercase tracking-wider mb-1.5 font-mono">
-                  Pickup Point *
-                </label>
-                <select
-                  id="calc-pickup"
-                  value={pickupPoint}
-                  onChange={(e) => setPickupPoint(e.target.value)}
-                  className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-[#FAF5EC] border border-[#EAA722]/30 text-sm sm:text-base text-[#2C2523] font-semibold focus:outline-none focus:ring-2 focus:ring-[#EAA722] cursor-pointer"
-                >
-                  <option value="Kathgodam Railway Station">Kathgodam Railway Station</option>
-                  <option value="Pantnagar Airport">Pantnagar Airport</option>
-                  <option value="Delhi Airport / NCR">Delhi Airport / NCR</option>
-                  <option value="Almora / Kasar Devi Base">Almora / Kasar Devi Base</option>
-                </select>
-              </div>
-
-              <div>
-                <label htmlFor="calc-dest" className="block text-xs sm:text-sm font-bold text-[#5C5350] uppercase tracking-wider mb-1.5 font-mono">
-                  Destination / Tour *
-                </label>
-                <select
-                  id="calc-dest"
-                  value={selectedDest}
-                  onChange={(e) => setSelectedDest(e.target.value)}
-                  className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-[#FAF5EC] border border-[#EAA722]/30 text-sm sm:text-base text-[#2C2523] font-semibold focus:outline-none focus:ring-2 focus:ring-[#EAA722] cursor-pointer"
-                >
-                  {destinationsList.map((d) => (
-                    <option key={d.id} value={d.id}>
-                      {d.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            {/* Dynamic Route Terrain Banner */}
-            <div className="mt-3.5 p-4 rounded-2xl bg-[#FAF5EC] border border-[#EAA722]/25 flex flex-wrap items-center justify-between gap-3 text-sm">
-              <div className="flex items-center gap-2.5">
-                <span className="text-xl">🛣️</span>
-                <div>
-                  <span className="font-semibold text-[#541508] text-sm sm:text-base block">{routeInfo.via}</span>
-                  <span className="text-xs sm:text-sm text-[#5C5350] block font-numeral">
-                    Route: {routeInfo.highway} • Altitude: {routeInfo.elevation}
-                  </span>
-                </div>
-              </div>
-              <div className="text-right">
-                <span className="text-[#541508] font-bold font-numeral text-base sm:text-lg block">
-                  {routeInfo.km} km
-                </span>
-                <span className="text-xs sm:text-sm text-[#5C5350] block">~{routeInfo.duration}</span>
-              </div>
-            </div>
-          </div>
+          <RouteSelector
+            pickupPoint={pickupPoint}
+            setPickupPoint={setPickupPoint}
+            selectedDest={selectedDest}
+            setSelectedDest={setSelectedDest}
+            destinationsList={destinationsList}
+            routeInfo={routeInfo}
+          />
 
           {/* 3. Trip Mode, Days & Passengers */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-            <div>
-              <label className="block text-xs sm:text-sm font-bold text-[#5C5350] uppercase tracking-wider mb-1.5 font-mono">
-                Trip Mode
-              </label>
-              <div className="grid grid-cols-2 gap-1.5 bg-[#FAF5EC] p-1.5 rounded-xl border border-[#EAA722]/25 text-xs sm:text-sm font-bold">
-                <button
-                  type="button"
-                  onClick={() => setTripType('round-trip')}
-                  className={`py-2.5 rounded-lg transition-all cursor-pointer ${
-                    tripType === 'round-trip'
-                      ? 'bg-[#073125] text-white shadow-xs'
-                      : 'text-[#5C5350] hover:text-[#073125]'
-                  }`}
-                >
-                  Round Trip
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setTripType('one-way')}
-                  className={`py-2.5 rounded-lg transition-all cursor-pointer ${
-                    tripType === 'one-way'
-                      ? 'bg-[#073125] text-white shadow-xs'
-                      : 'text-[#5C5350] hover:text-[#073125]'
-                  }`}
-                >
-                  One Way
-                </button>
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="calc-days" className="block text-xs sm:text-sm font-bold text-[#5C5350] uppercase tracking-wider mb-1.5 font-mono">
-                {tripType === 'round-trip' ? 'Tour Duration' : 'Transfer Type'}
-              </label>
-              <select
-                id="calc-days"
-                value={days}
-                onChange={(e) => setDays(Number(e.target.value))}
-                disabled={tripType === 'one-way'}
-                className="w-full px-4 py-2.5 sm:py-3 rounded-xl bg-[#FAF5EC] border border-[#EAA722]/30 text-xs sm:text-sm text-[#2C2523] font-semibold focus:outline-none focus:ring-2 focus:ring-[#EAA722] cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
-              >
-                <option value={1}>1 Day (Same Day Return)</option>
-                <option value={2}>2 Days (1 Night Halt)</option>
-                <option value={3}>3 Days (2 Nights Tour)</option>
-                <option value={4}>4 Days (Extended Circuit)</option>
-                <option value={5}>5 Days (Kumaon Highlights)</option>
-                <option value={7}>7 Days (Sacred Full Circuit)</option>
-                <option value={10}>10 Days (Chardham Yatra)</option>
-              </select>
-            </div>
-
-            <div>
-              <label htmlFor="calc-passengers" className="block text-xs sm:text-sm font-bold text-[#5C5350] uppercase tracking-wider mb-1.5 font-mono">
-                Passengers
-              </label>
-              <div className="flex items-center gap-1">
-                <select
-                  id="calc-passengers"
-                  value={passengerCount}
-                  onChange={(e) => setPassengerCount(Number(e.target.value))}
-                  className="w-full px-4 py-2.5 sm:py-3 rounded-xl bg-[#FAF5EC] border border-[#EAA722]/30 text-xs sm:text-sm text-[#2C2523] font-semibold focus:outline-none focus:ring-2 focus:ring-[#EAA722] cursor-pointer"
-                >
-                  {[...Array(currentFleet.seats)].map((_, i) => (
-                    <option key={i + 1} value={i + 1}>
-                      {i + 1} {i === 0 ? 'Passenger' : 'Passengers'}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </div>
+          <TripOptions
+            tripType={tripType}
+            setTripType={setTripType}
+            days={days}
+            setDays={setDays}
+            passengerCount={passengerCount}
+            setPassengerCount={setPassengerCount}
+            currentFleet={currentFleet}
+          />
 
           {/* 4. Interactive Mountain Add-ons & Complimentary Halts */}
-          <div>
-            <label className="text-sm uppercase font-bold text-[#541508] tracking-wider flex items-center gap-2 mb-2.5 font-mono">
-              <span className="text-[#EAA722]">🪔</span>
-              <span>3. Free Mountain Halts &amp; Add-ons</span>
-            </label>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {/* Kainchi Dham Halt */}
-              <label
-                className={`p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer flex items-start gap-3 ${
-                  kainchiHalt
-                    ? 'border-[#EAA722] bg-[#FAF5EC]'
-                    : 'border-[#EAA722]/20 bg-[#FAF5EC]/40 hover:bg-[#FAF5EC]'
-                }`}
-              >
-                <input
-                  type="checkbox"
-                  checked={kainchiHalt}
-                  onChange={(e) => setKainchiHalt(e.target.checked)}
-                  className="mt-1 rounded text-[#073125] focus:ring-[#073125] cursor-pointer"
-                />
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm sm:text-base font-bold text-[#541508]">Kainchi Dham Darshan</span>
-                    <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full font-mono">
-                      FREE
-                    </span>
-                  </div>
-                  <span className="text-xs sm:text-sm text-[#5C5350] block mt-1">
-                    1.5 to 2 hours free halt for darshan, aarti &amp; prasad
-                  </span>
-                </div>
-              </label>
-
-              {/* Luggage Carrier */}
-              <label
-                className={`p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer flex items-start gap-3 ${
-                  roofCarrier
-                    ? 'border-[#EAA722] bg-[#FAF5EC]'
-                    : 'border-[#EAA722]/20 bg-[#FAF5EC]/40 hover:bg-[#FAF5EC]'
-                }`}
-              >
-                <input
-                  type="checkbox"
-                  checked={roofCarrier}
-                  onChange={(e) => setRoofCarrier(e.target.checked)}
-                  className="mt-1 rounded text-[#073125] focus:ring-[#073125] cursor-pointer"
-                />
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm sm:text-base font-bold text-[#541508]">Roof Luggage Carrier</span>
-                    <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full font-mono">
-                      FREE
-                    </span>
-                  </div>
-                  <span className="text-xs sm:text-sm text-[#5C5350] block mt-1">
-                    Waterproof cover to keep your bags safe and dry
-                  </span>
-                </div>
-              </label>
-
-              {/* Bhowali Tea & Fruit Stop */}
-              <label
-                className={`p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer flex items-start gap-3 ${
-                  bhowaliTeaHalt
-                    ? 'border-[#EAA722] bg-[#FAF5EC]'
-                    : 'border-[#EAA722]/20 bg-[#FAF5EC]/40 hover:bg-[#FAF5EC]'
-                }`}
-              >
-                <input
-                  type="checkbox"
-                  checked={bhowaliTeaHalt}
-                  onChange={(e) => setBhowaliTeaHalt(e.target.checked)}
-                  className="mt-1 rounded text-[#073125] focus:ring-[#073125] cursor-pointer"
-                />
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm sm:text-base font-bold text-[#541508]">Bhowali Tea &amp; Fruit Stop</span>
-                    <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full font-mono">
-                      FREE
-                    </span>
-                  </div>
-                  <span className="text-xs sm:text-sm text-[#5C5350] block mt-1">
-                    30 mins relaxation at local Kumaon pine cafe
-                  </span>
-                </div>
-              </label>
-
-              {/* Senior Assistance */}
-              <label
-                className={`p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer flex items-start gap-3 ${
-                  seniorAssistance
-                    ? 'border-[#EAA722] bg-[#FAF5EC]'
-                    : 'border-[#EAA722]/20 bg-[#FAF5EC]/40 hover:bg-[#FAF5EC]'
-                }`}
-              >
-                <input
-                  type="checkbox"
-                  checked={seniorAssistance}
-                  onChange={(e) => setSeniorAssistance(e.target.checked)}
-                  className="mt-1 rounded text-[#073125] focus:ring-[#073125] cursor-pointer"
-                />
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm sm:text-base font-bold text-[#541508]">Senior Assisted Entry</span>
-                    <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full font-mono">
-                      FREE
-                    </span>
-                  </div>
-                  <span className="text-xs sm:text-sm text-[#5C5350] block mt-1">
-                    Smooth gentle drive, easy low step, and driver helps with bags
-                  </span>
-                </div>
-              </label>
-            </div>
-          </div>
+          <MountainAddons
+            kainchiHalt={kainchiHalt}
+            setKainchiHalt={setKainchiHalt}
+            roofCarrier={roofCarrier}
+            setRoofCarrier={setRoofCarrier}
+            bhowaliTeaHalt={bhowaliTeaHalt}
+            setBhowaliTeaHalt={setBhowaliTeaHalt}
+            seniorAssistance={seniorAssistance}
+            setSeniorAssistance={setSeniorAssistance}
+          />
 
           {/* 5. Date, Time & Contact Details */}
-          <div className="pt-3 border-t border-[#EAA722]/20 space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-              <div>
-                <label htmlFor="calc-date" className="block text-xs sm:text-sm font-bold text-[#5C5350] uppercase tracking-wider mb-1.5 font-mono">
-                  Travel Date *
-                </label>
-                <input
-                  id="calc-date"
-                  type="date"
-                  value={travelDate}
-                  min={new Date().toISOString().split('T')[0]}
-                  onChange={(e) => setTravelDate(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-[#FAF5EC] border border-[#EAA722]/30 text-sm sm:text-base text-[#2C2523] font-medium focus:outline-none focus:ring-2 focus:ring-[#EAA722]"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="calc-time" className="block text-xs sm:text-sm font-bold text-[#5C5350] uppercase tracking-wider mb-1.5 font-mono">
-                  Pickup Timing / Train Time *
-                </label>
-                <select
-                  id="calc-time"
-                  value={pickupTime}
-                  onChange={(e) => setPickupTime(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-[#FAF5EC] border border-[#EAA722]/30 text-sm sm:text-base text-[#2C2523] font-medium focus:outline-none focus:ring-2 focus:ring-[#EAA722] cursor-pointer"
-                >
-                  <option value="05:30 AM (Ranikhet Express Arrival)">05:30 AM (Ranikhet Express Arrival)</option>
-                  <option value="06:30 AM (Kathgodam Shatabdi / Morning)">06:30 AM (Kathgodam Shatabdi / Morning)</option>
-                  <option value="09:00 AM (Relaxed Morning)">09:00 AM (Relaxed Morning)</option>
-                  <option value="11:30 AM (Sampark Kranti / Noon)">11:30 AM (Sampark Kranti / Noon)</option>
-                  <option value="02:30 PM (Afternoon Transfer)">02:30 PM (Afternoon Transfer)</option>
-                  <option value="05:30 PM (Evening Arrival)">05:30 PM (Evening Arrival)</option>
-                  <option value="08:30 PM (Night Train Pickup)">08:30 PM (Night Train Pickup)</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-              <div>
-                <label htmlFor="calc-name" className="block text-xs sm:text-sm font-bold text-[#5C5350] uppercase tracking-wider mb-1.5 font-mono">
-                  Your Full Name *
-                </label>
-                <input
-                  id="calc-name"
-                  type="text"
-                  placeholder="e.g. Rahul Sharma"
-                  value={guestName}
-                  onChange={(e) => setGuestName(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-[#FAF5EC] border border-[#EAA722]/30 text-sm sm:text-base text-[#2C2523] font-medium focus:outline-none focus:ring-2 focus:ring-[#EAA722]"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="calc-phone" className="block text-xs sm:text-sm font-bold text-[#5C5350] uppercase tracking-wider mb-1.5 font-mono">
-                  WhatsApp Phone Number *
-                </label>
-                <input
-                  id="calc-phone"
-                  type="tel"
-                  placeholder="+91 98765 43210"
-                  value={guestPhone}
-                  onChange={(e) => setGuestPhone(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-[#FAF5EC] border border-[#EAA722]/30 text-sm sm:text-base text-[#2C2523] font-medium focus:outline-none focus:ring-2 focus:ring-[#EAA722]"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="calc-notes" className="block text-xs sm:text-sm font-bold text-[#5C5350] uppercase tracking-wider mb-1.5 font-mono">
-                Train / Flight Number or Special Request (Optional)
-              </label>
-              <input
-                id="calc-notes"
-                type="text"
-                placeholder="e.g. Kathgodam Shatabdi #12040, 3 medium bags, stop for breakfast on the hill..."
-                value={specialNotes}
-                onChange={(e) => setSpecialNotes(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-[#FAF5EC] border border-[#EAA722]/30 text-sm sm:text-base text-[#2C2523] focus:outline-none focus:ring-2 focus:ring-[#EAA722]"
-              />
-            </div>
-
-            {errorMessage && (
-              <p className="text-xs text-red-600 font-semibold bg-red-50 p-2.5 rounded-xl border border-red-200">
-                {errorMessage}
-              </p>
-            )}
-          </div>
+          <GuestContactForm
+            travelDate={travelDate}
+            setTravelDate={setTravelDate}
+            pickupTime={pickupTime}
+            setPickupTime={setPickupTime}
+            guestName={guestName}
+            setGuestName={setGuestName}
+            guestPhone={guestPhone}
+            setGuestPhone={setGuestPhone}
+            specialNotes={specialNotes}
+            setSpecialNotes={setSpecialNotes}
+            errorMessage={errorMessage}
+          />
         </div>
 
         {/* ========================================================= */}
         {/* RIGHT COLUMN: Dynamic Price Receipt & Instant Booking     */}
         {/* ========================================================= */}
-        <div className="lg:col-span-5 xl:col-span-5 bg-white p-6 sm:p-8 rounded-3xl border border-[#EAA722]/40 shadow-xl space-y-6 sticky top-24">
-          {/* Top Total Amount Card */}
-          <div className="border-b border-[#EAA722]/20 pb-5">
-            <span className="text-xs sm:text-sm font-sans uppercase tracking-wider text-[#541508] font-bold block mb-1.5 font-mono">
-              Estimated Total Fare
-            </span>
-            <div className="flex items-baseline justify-between gap-2">
-              <span className="font-serif text-4xl sm:text-5xl font-bold text-[#541508] font-numeral tracking-tight">
-                ₹{pricing.totalFare.toLocaleString()}
-              </span>
-              <div className="text-right">
-                <span className="text-xs sm:text-sm font-bold text-[#541508] bg-[#FAF5EC] px-3 py-1 rounded-full border border-[#EAA722]/35 block font-numeral">
-                  ₹{pricing.perPersonFare.toLocaleString()} / person
-                </span>
-                <span className="text-xs text-[#5C5350] mt-1 block">
-                  for {passengerCount} {passengerCount === 1 ? 'guest' : 'guests'}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Interactive Visual Stepper Path */}
-          <div className="p-4 rounded-2xl bg-[#FAF5EC] border border-[#EAA722]/25 text-xs sm:text-sm space-y-2.5">
-            <div className="flex items-center justify-between text-xs font-bold text-[#5C5350] uppercase tracking-wider font-mono">
-              <span>Your Travel Route</span>
-              <span className="text-[#541508] font-bold text-sm">~{routeInfo.duration}</span>
-            </div>
-
-            <div className="relative pl-6 space-y-3 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-[#EAA722]/40">
-              <div className="relative">
-                <span className="absolute -left-6 top-1 w-2.5 h-2.5 rounded-full bg-[#EAA722] ring-4 ring-[#FAF5EC]"></span>
-                <span className="font-bold text-[#541508] block text-sm sm:text-base">{pickupPoint}</span>
-                <span className="text-xs text-[#5C5350]">Pickup time: {pickupTime}</span>
-              </div>
-
-              {kainchiHalt && (
-                <div className="relative">
-                  <span className="absolute -left-6 top-1 w-2.5 h-2.5 rounded-full bg-amber-500 ring-4 ring-[#FAF5EC]"></span>
-                  <span className="font-semibold text-amber-900 block text-xs sm:text-sm">
-                    🪔 Kainchi Dham Ashram Darshan Halt
-                  </span>
-                  <span className="text-xs text-emerald-800 font-semibold">1.5 to 2 hours free halt for darshan &amp; prasad</span>
-                </div>
-              )}
-
-              {bhowaliTeaHalt && (
-                <div className="relative">
-                  <span className="absolute -left-6 top-1 w-2.5 h-2.5 rounded-full bg-emerald-600 ring-4 ring-[#FAF5EC]"></span>
-                  <span className="font-semibold text-emerald-900 block text-xs sm:text-sm">
-                    🍵 Tea &amp; Fresh Hill Fruit Stop at Bhowali
-                  </span>
-                </div>
-              )}
-
-              <div className="relative">
-                <span className="absolute -left-6 top-1 w-2.5 h-2.5 rounded-full bg-[#541508] ring-4 ring-[#FAF5EC]"></span>
-                <span className="font-bold text-[#541508] block text-sm sm:text-base">{currentDest.name}</span>
-                <span className="text-xs text-[#5C5350]">
-                  {tripType === 'round-trip' ? `Round trip return included (${days} ${days === 1 ? 'day' : 'days'})` : 'Drop right to your hotel doorstep'}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Itemized Dynamic Bill Breakdown */}
-          <div className="space-y-2.5 text-xs sm:text-sm text-[#2C2523] bg-[#FAF5EC] p-5 rounded-2xl border border-[#EAA722]/20">
-            <div className="flex justify-between items-center">
-              <span className="text-[#5C5350]">Vehicle Selected:</span>
-              <strong className="text-[#541508] font-semibold">{currentFleet.title}</strong>
-            </div>
-
-            <div className="flex justify-between items-center">
-              <span className="text-[#5C5350]">Travel Distance:</span>
-              <span className="font-numeral font-semibold text-[#541508]">
-                {pricing.billableDistance} km @ ₹{currentFleet.perKmRate}/km
-              </span>
-            </div>
-
-            <div className="flex justify-between items-center">
-              <span className="text-[#5C5350]">Cab Distance Fare:</span>
-              <span className="font-numeral font-medium">₹{pricing.distanceFare.toLocaleString()}</span>
-            </div>
-
-            <div className="flex justify-between items-center">
-              <span className="text-[#5C5350]">Driver Food &amp; Night Allowance:</span>
-              <span className="font-numeral font-medium">₹{pricing.driverBatta.toLocaleString()}</span>
-            </div>
-
-            <div className="flex justify-between items-center">
-              <span className="text-[#5C5350]">Tolls, Green Tax &amp; FastTag:</span>
-              <span className="text-emerald-800 font-bold font-mono">FREE (Included)</span>
-            </div>
-
-            <div className="flex justify-between items-center">
-              <span className="text-[#5C5350]">Temple Darshan Halt:</span>
-              <span className="text-emerald-800 font-bold font-mono">FREE (Included)</span>
-            </div>
-
-            <div className="flex justify-between items-center pt-3 border-t border-[#EAA722]/20">
-              <span className="font-bold text-sm sm:text-base text-[#541508]">Estimated Total:</span>
-              <span className="font-serif font-bold text-xl sm:text-2xl text-[#541508] font-numeral">
-                ₹{pricing.totalFare.toLocaleString()}
-              </span>
-            </div>
-          </div>
-
-          {/* Trust Guarantees */}
-          <div className="space-y-2 pt-1">
-            <div className="flex items-center gap-2.5 text-xs sm:text-sm text-[#073125]">
-              <CheckCircleIcon className="w-4 h-4 text-[#EAA722] flex-shrink-0" />
-              <span>100% Fixed price • Zero hidden charges on arrival</span>
-            </div>
-            <div className="flex items-center gap-2.5 text-xs sm:text-sm text-[#073125]">
-              <CheckCircleIcon className="w-4 h-4 text-[#EAA722] flex-shrink-0" />
-              <span>Friendly local Pahadi driver with 10+ years hill driving</span>
-            </div>
-            <div className="flex items-center gap-2.5 text-xs sm:text-sm text-[#073125]">
-              <CheckCircleIcon className="w-4 h-4 text-[#EAA722] flex-shrink-0" />
-              <span>Driver waits at station exit with your nameboard</span>
-            </div>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="space-y-3 pt-1">
-            <button
-              type="button"
-              onClick={handleOnlineBooking}
-              disabled={submitting}
-              className="w-full py-4 rounded-xl text-sm sm:text-base font-mono uppercase tracking-wider font-bold bg-[#073125] hover:bg-[#12433B] text-white shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
-            >
-              <span>{submitting ? 'Confirming Cab...' : 'Instant Online Booking ↗'}</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={handleWhatsAppBooking}
-              className="w-full py-3.5 sm:py-4 rounded-xl text-sm sm:text-base font-mono uppercase tracking-wider font-bold border border-[#073125]/25 bg-white text-[#073125] hover:bg-[#EBF2EA] transition-all flex items-center justify-center gap-2 cursor-pointer"
-            >
-              <span>Book via WhatsApp Direct ↗</span>
-            </button>
-          </div>
-
-          <p className="text-xs sm:text-sm text-[#073125]/80 text-center font-sans">
-            Need urgent cab assistance? Call our Almora desk directly at{' '}
-            <a href={`tel:${SITE_CONFIG.conciergePhone}`} className="text-[#073125] font-bold hover:underline font-numeral">
-              {SITE_CONFIG.conciergePhone}
-            </a>
-          </p>
-        </div>
+        <FareSummaryPanel
+          pricing={pricing}
+          passengerCount={passengerCount}
+          pickupPoint={pickupPoint}
+          pickupTime={pickupTime}
+          currentFleet={currentFleet}
+          currentDest={currentDest}
+          routeInfo={routeInfo}
+          tripType={tripType}
+          days={days}
+          kainchiHalt={kainchiHalt}
+          bhowaliTeaHalt={bhowaliTeaHalt}
+          submitting={submitting || paymentProcessing}
+          onOnlineBooking={handleOnlineBooking}
+          onWhatsAppBooking={handleWhatsAppBooking}
+        />
       </div>
     </div>
   );

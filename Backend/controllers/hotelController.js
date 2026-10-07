@@ -133,12 +133,8 @@ const addRoom = async (req, res) => {
         const results = await Promise.all(uploadPromises);
         imageURLs = results.map((result) => result.secure_url);
       } catch (cloudErr) {
-        console.warn('⚠️ Cloudinary upload warning (using base64 fallback):', cloudErr.message || cloudErr);
-        // Fallback: convert file buffer to base64 data URI so image displays seamlessly
-        imageURLs = req.files.map((file) => {
-          const mime = file.mimetype || 'image/jpeg';
-          return `data:${mime};base64,${file.buffer.toString('base64')}`;
-        });
+        console.error('Cloudinary upload failed:', cloudErr.message || cloudErr);
+        return res.status(500).json({ message: 'Image upload failed. Please check Cloudinary credentials.', error: cloudErr.message });
       }
     }
 
@@ -188,11 +184,8 @@ const updateRoom = async (req, res) => {
         const results = await Promise.all(uploadPromises);
         newImageURLs = results.map((result) => result.secure_url);
       } catch (cloudErr) {
-        console.warn('⚠️ Cloudinary upload warning (using base64 fallback):', cloudErr.message || cloudErr);
-        newImageURLs = req.files.map((file) => {
-          const mime = file.mimetype || 'image/jpeg';
-          return `data:${mime};base64,${file.buffer.toString('base64')}`;
-        });
+        console.error('Cloudinary upload failed:', cloudErr.message || cloudErr);
+        return res.status(500).json({ message: 'Image upload failed. Please check Cloudinary credentials.', error: cloudErr.message });
       }
       // Replace existing images with new uploads
       updateData.imageURLs = newImageURLs;
@@ -490,9 +483,8 @@ const uploadGuestIdProof = async (req, res) => {
         const uploadResult = await uploadToCloudinary(req.file.buffer, 'guest-id-proofs');
         idProofUrl = uploadResult.secure_url;
       } catch (cloudErr) {
-        console.warn('Cloudinary upload warning for ID proof (using base64 fallback):', cloudErr.message || cloudErr);
-        const mime = req.file.mimetype || 'image/jpeg';
-        idProofUrl = `data:${mime};base64,${req.file.buffer.toString('base64')}`;
+        console.error('Cloudinary upload failed:', cloudErr.message || cloudErr);
+        return res.status(500).json({ message: 'ID Proof upload failed. Please check Cloudinary credentials.', error: cloudErr.message });
       }
     }
 

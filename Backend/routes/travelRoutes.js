@@ -35,8 +35,11 @@ router.post('/bookings', createTravelBooking); // Create a new travel booking
 // REVIEW ROUTES (Public + Email-Verified Edit)
 // ========================
 router.get('/reviews', getAllReviews);                                         // Fetch all approved reviews
+router.get('/reviews/admin', authMiddleware, getAdminReviews); // Fetch ALL reviews (approved & pending)
 router.post('/reviews', upload.array('photos', 5), createReview);             // Submit a new review (up to 5 photos)
+router.put('/reviews/:id/approve', authMiddleware, toggleReviewApproval); // Toggle approval status
 router.put('/reviews/:id', upload.array('photos', 5), updateReview);          // Edit own review (email-verified)
+router.delete('/reviews/:id', authMiddleware, deleteReview);  // Admin delete review
 
 // ============================
 // PROTECTED ROUTES (Admin only)
@@ -49,9 +52,6 @@ router.put('/bookings/:id/status', authMiddleware, updateTravelBookingStatus); /
 router.put('/bookings/:id/payment', authMiddleware, updateTravelPaymentStatus); // Update payment status
 router.put('/bookings/:id/dispatch', authMiddleware, dispatchTravelBooking); // Assign driver & dispatch details
 router.delete('/bookings/:id', authMiddleware, deleteTravelBooking); // Delete booking
-router.get('/reviews/admin', authMiddleware, getAdminReviews); // Fetch ALL reviews (approved & pending)
-router.put('/reviews/:id/approve', authMiddleware, toggleReviewApproval); // Toggle approval status
-router.delete('/reviews/:id', authMiddleware, deleteReview);  // Admin delete review
 
 module.exports = router;
 
