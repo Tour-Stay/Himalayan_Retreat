@@ -7,13 +7,30 @@ const { sendHotelBookingEmail } = require('../config/emailService');
 // ROOM CONTROLLERS (CRUD)
 // ========================
 
-// @desc    Get all available rooms
+// @desc    Get all rooms (includes available & unavailable with due date metadata for customers)
 // @route   GET /api/hotel/rooms
 // @access  Public
 const getAllRooms = async (req, res) => {
   try {
-    const rooms = await Room.find({ isAvailable: true });
-    res.status(200).json(rooms);
+    const rooms = await Room.find().sort({ pricePerNight: 1 });
+    const now = new Date();
+
+    const processedRooms = rooms.map((room) => {
+      const roomObj = room.toObject();
+      // If unavailableUntil due date has passed, automatically consider available
+      const hasPassedDueDate = room.unavailableUntil && new Date(room.unavailableUntil) <= now;
+      const isAvailable = hasPassedDueDate ? true : Boolean(room.isAvailable);
+
+      return {
+        ...roomObj,
+        isAvailable,
+        unavailableUntil: hasPassedDueDate ? null : room.unavailableUntil,
+        totalRooms: room.totalRooms ?? 1,
+        location: room.location || 'Kasar Devi, Almora',
+      };
+    });
+
+    res.status(200).json(processedRooms);
   } catch (error) {
     res.status(500).json({ message: 'Server error.', error: error.message });
   }
@@ -58,13 +75,26 @@ const checkRoomAvailability = async (req, res) => {
     const conflictingBookings = await Booking.find(filter).select('room checkInDate checkOutDate status');
     const occupiedRoomIds = conflictingBookings.map((b) => b.room.toString());
 
-    // Fetch all currently active rooms
-    const allRooms = await Room.find({ isAvailable: true }).sort({ pricePerNight: 1 });
+    // Fetch all rooms (including their administrative availability status)
+    const allRooms = await Room.find().sort({ pricePerNight: 1 });
+    const now = new Date();
+
     const roomsWithAvailability = allRooms.map((room) => {
       const isOccupied = occupiedRoomIds.includes(room._id.toString());
+      const hasPassedDueDate = room.unavailableUntil && new Date(room.unavailableUntil) <= now;
+      const isRoomAdminAvailable = hasPassedDueDate ? true : Boolean(room.isAvailable);
+
+      // Also if checkIn date is before unavailableUntil date
+      const isBlockedByDueDate =
+        room.unavailableUntil && !hasPassedDueDate && checkInDate < new Date(room.unavailableUntil);
+
       return {
         ...room.toObject(),
-        isAvailableForDates: !isOccupied,
+        isAvailable: isRoomAdminAvailable,
+        unavailableUntil: hasPassedDueDate ? null : room.unavailableUntil,
+        totalRooms: room.totalRooms ?? 1,
+        location: room.location || 'Kasar Devi, Almora',
+        isAvailableForDates: !isOccupied && isRoomAdminAvailable && !isBlockedByDueDate,
       };
     });
 
@@ -114,7 +144,7 @@ const getRoomById = async (req, res) => {
 // @access  Protected (Admin only)
 const addRoom = async (req, res) => {
   try {
-    const { name, description, pricePerNight } = req.body;
+    const { name, description, pricePerNight, view, totalRooms, location, unavailableUntil, unavailableReason, isAvailable } = req.body;
     let capacity = req.body.capacity;
     let amenities = req.body.amenities;
 
@@ -145,9 +175,15 @@ const addRoom = async (req, res) => {
       name,
       description,
       pricePerNight,
+      view: view || '',
       capacity,
       amenities,
       imageURLs,
+      totalRooms: Number(totalRooms) || 1,
+      location: location || 'Kasar Devi, Almora',
+      unavailableUntil: unavailableUntil ? new Date(unavailableUntil) : null,
+      unavailableReason: unavailableReason || '',
+      isAvailable: isAvailable !== undefined ? Boolean(isAvailable) : true,
     });
 
     res.status(201).json({ message: 'Room added successfully.', room });
@@ -175,6 +211,15 @@ const updateRoom = async (req, res) => {
     }
     if (typeof updateData.amenities === 'string') {
       try { updateData.amenities = JSON.parse(updateData.amenities); } catch (e) { }
+    }
+    if (updateData.totalRooms !== undefined) {
+      updateData.totalRooms = Number(updateData.totalRooms) || 1;
+    }
+    if (updateData.unavailableUntil !== undefined) {
+      updateData.unavailableUntil = updateData.unavailableUntil ? new Date(updateData.unavailableUntil) : null;
+    }
+    if (updateData.isAvailable !== undefined) {
+      updateData.isAvailable = updateData.isAvailable === true || updateData.isAvailable === 'true';
     }
 
     // Handle new image uploads if provided
@@ -223,7 +268,7 @@ const deleteRoom = async (req, res) => {
   }
 };
 
-// @desc    Toggle room availability (enable/disable without deleting)
+// @desc    Toggle room availability (enable/disable or set due date & inventory)
 // @route   PUT /api/hotel/rooms/:id/toggle
 // @access  Protected (Admin only)
 const toggleRoomAvailability = async (req, res) => {
@@ -233,11 +278,42 @@ const toggleRoomAvailability = async (req, res) => {
       return res.status(404).json({ message: 'Room not found.' });
     }
 
-    room.isAvailable = !room.isAvailable;
+    if (req.body && Object.keys(req.body).length > 0) {
+      if (req.body.isAvailable !== undefined) {
+        room.isAvailable = Boolean(req.body.isAvailable);
+      } else {
+        room.isAvailable = !room.isAvailable;
+      }
+
+      if (req.body.unavailableUntil !== undefined) {
+        room.unavailableUntil = req.body.unavailableUntil ? new Date(req.body.unavailableUntil) : null;
+      } else if (room.isAvailable) {
+        room.unavailableUntil = null;
+      }
+
+      if (req.body.unavailableReason !== undefined) {
+        room.unavailableReason = req.body.unavailableReason;
+      }
+
+      if (req.body.totalRooms !== undefined) {
+        room.totalRooms = Number(req.body.totalRooms) || room.totalRooms || 1;
+      }
+
+      if (req.body.location !== undefined) {
+        room.location = req.body.location;
+      }
+    } else {
+      room.isAvailable = !room.isAvailable;
+      if (room.isAvailable) {
+        room.unavailableUntil = null;
+        room.unavailableReason = '';
+      }
+    }
+
     await room.save();
 
     res.status(200).json({
-      message: `Room ${room.isAvailable ? 'enabled' : 'disabled'} successfully.`,
+      message: `Room status updated successfully to ${room.isAvailable ? 'available' : 'unavailable'}.`,
       room,
     });
   } catch (error) {
@@ -281,6 +357,26 @@ const createBooking = async (req, res) => {
     const roomData = await Room.findById(room);
     if (!roomData) {
       return res.status(404).json({ message: 'Room not found.' });
+    }
+
+    // Check if room is administratively unavailable or within unavailableUntil window
+    const now = new Date();
+    const hasPassedDueDate = roomData.unavailableUntil && new Date(roomData.unavailableUntil) <= now;
+    const isRoomAdminAvailable = hasPassedDueDate ? true : Boolean(roomData.isAvailable);
+
+    if (!isRoomAdminAvailable) {
+      const dueStr = roomData.unavailableUntil
+        ? ` until ${new Date(roomData.unavailableUntil).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}`
+        : '';
+      return res.status(400).json({
+        message: `This suite is currently unavailable for bookings${dueStr} (${roomData.unavailableReason || 'No rooms left at this location'}).`,
+      });
+    }
+
+    if (roomData.unavailableUntil && !hasPassedDueDate && new Date(checkInDate) < new Date(roomData.unavailableUntil)) {
+      return res.status(400).json({
+        message: `This suite is unavailable for check-in before ${new Date(roomData.unavailableUntil).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}.`,
+      });
     }
 
     const nights = Math.ceil(

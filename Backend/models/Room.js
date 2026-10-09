@@ -26,6 +26,22 @@ const roomSchema = new mongoose.Schema({
   isAvailable: {
     type: Boolean,
     default: true,
+  },
+  totalRooms: {
+    type: Number,
+    default: 1,
+  },
+  location: {
+    type: String,
+    default: 'Kasar Devi, Almora',
+  },
+  unavailableUntil: {
+    type: Date,
+    default: null,
+  },
+  unavailableReason: {
+    type: String,
+    default: '',
   }
 }, { timestamps: true });
 

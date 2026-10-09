@@ -1,4 +1,4 @@
-export const StatusBadge = ({ status, type = 'booking' }) => {
+export const StatusBadge = ({ status, type = 'booking', dueDate = null, reason = '' }) => {
   const normalized = String(status ?? '').toLowerCase();
 
   let styles = 'bg-[#F5EFE6] text-[#5C5350] border-[#C5A059]/40';
@@ -41,7 +41,7 @@ export const StatusBadge = ({ status, type = 'booking' }) => {
     if (status === true || normalized === 'true' || normalized === 'available' || normalized === 'active') {
       styles = 'bg-emerald-50 text-emerald-800 border-emerald-300';
     } else {
-      styles = 'bg-[#F5EFE6] text-[#7C1D23] border-[#7C1D23]/30';
+      styles = 'bg-amber-50 text-amber-900 border-amber-300';
     }
   } else if (type === 'review') {
     if (status === true || normalized === 'true' || normalized === 'approved') {
@@ -51,11 +51,29 @@ export const StatusBadge = ({ status, type = 'booking' }) => {
     }
   }
 
+  let formattedDueDate = '';
+  if (dueDate) {
+    try {
+      const d = new Date(dueDate);
+      if (!isNaN(d.getTime())) {
+        formattedDueDate = d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+      }
+    } catch (e) {
+      formattedDueDate = String(dueDate);
+    }
+  }
+
   const label =
     type === 'availability'
-      ? status === true || normalized === 'true' ? 'Active / Available' : 'Disabled'
+      ? status === true || normalized === 'true'
+        ? 'Active / Available'
+        : formattedDueDate
+        ? `Unavailable (Till ${formattedDueDate})`
+        : 'Unavailable / Sold Out'
       : type === 'review'
-      ? status === true || normalized === 'true' ? 'Approved' : 'Pending Approval'
+      ? status === true || normalized === 'true'
+        ? 'Approved'
+        : 'Pending Approval'
       : (status || 'Unknown');
 
   return (
