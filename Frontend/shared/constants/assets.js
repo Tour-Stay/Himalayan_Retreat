@@ -8,6 +8,7 @@ import jageshwarImg from '../assets/images/Jageshwar-Mahamrityunjaya-Dham.jpg';
 import kainchiWebp from '../assets/images/Kainchi-Dham.webp';
 import kainchiJpg from '../assets/images/kainchi-dham.jpg';
 import kasarTempleImg from '../assets/images/kasar-devi-temple.jpg';
+import goluDevtaImg from '../assets/images/Chitai_Golu_devta_Temple.jpg';
 import trishulPeaksImg from '../assets/images/Trishul-&-Nanda-Devi.jpg';
 import babaPortraitImg from '../assets/images/neem-karoli-baba1.jpg';
 import babaPortraitOldImg from '../assets/images/neem-karoli-baba.jpg';
@@ -16,6 +17,7 @@ import babaPortraitOldImg from '../assets/images/neem-karoli-baba.jpg';
 import hotelBestPic from '../assets/images/hotel-best-pic.jpg';
 import hotelExteriorDay from '../assets/images/hotel-exterior-day.jpg';
 import hotelInSnow from '../assets/images/hotel-in-snow.jpg';
+import mountainViewImg from '../assets/images/mountain-view.jpg';
 
 import hotelAtNight from '../assets/images/hotel-at-night.jpg';
 import hotelNightSky from '../assets/images/hotel-night-sky.jpg';
@@ -64,6 +66,7 @@ export const SHARED_IMAGES = {
   kainchi: kainchiWebp,
   kainchiAlt: kainchiJpg,
   kasarDevi: kasarTempleImg,
+  goluDevta: goluDevtaImg,
   trishulPeaks: trishulPeaksImg,
   babaPortrait: babaPortraitImg,
 
@@ -72,6 +75,7 @@ export const SHARED_IMAGES = {
   hotelBestPic: hotelBestPic,
   hotelExteriorDay: hotelExteriorDay,
   hotelSnow: hotelInSnow,
+  mountainView: mountainViewImg,
 
   hotelNight: hotelAtNight,
   hotelNightSky: hotelNightSky,
@@ -120,12 +124,14 @@ export {
   kainchiWebp,
   kainchiJpg,
   kasarTempleImg,
+  goluDevtaImg,
   trishulPeaksImg,
   babaPortraitImg,
   hotelBestPic,
   hotelExteriorDay,
   hotelInSnow,
   hotelInSnow as hotelSnowPanorama,
+  mountainViewImg,
 
   hotelAtNight,
   hotelNightSky,
