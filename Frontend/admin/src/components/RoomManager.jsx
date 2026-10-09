@@ -623,8 +623,7 @@ export const RoomManager = ({ rooms, setRooms, onRefresh }) => {
                   <input
                     type="number"
                     required
-                    min={500}
-                    step={100}
+                    min={1}
                     value={formData.pricePerNight}
                     onChange={(e) => setFormData({ ...formData, pricePerNight: e.target.value })}
                     placeholder="e.g. 5800"

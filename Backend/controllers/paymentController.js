@@ -2,6 +2,8 @@ const crypto = require('crypto');
 const razorpayInstance = require('../config/razorpay');
 const Booking = require('../models/Booking');
 const TravelBooking = require('../models/TravelBooking');
+const Room = require('../models/Room');
+const { sendHotelBookingEmail, sendAdminNewHotelBookingEmail } = require('../config/emailService');
 
 // Get Razorpay Key ID for Frontend
 const getKey = (req, res) => {
@@ -61,6 +63,7 @@ const verifyPayment = async (req, res) => {
       // Payment is verified, update the database
       if (bookingId) {
         const updateData = {
+          status: 'confirmed',
           paymentStatus: 'Paid',
           razorpayOrderId: razorpay_order_id,
           razorpayPaymentId: razorpay_payment_id,
@@ -68,7 +71,18 @@ const verifyPayment = async (req, res) => {
         };
 
         if (bookingType === 'hotel') {
-          await Booking.findByIdAndUpdate(bookingId, updateData);
+          const updatedBooking = await Booking.findByIdAndUpdate(bookingId, updateData, { new: true });
+          
+          if (updatedBooking) {
+            const roomData = await Room.findById(updatedBooking.room);
+            // Send final booking confirmation email with PDF receipt
+            try {
+              await sendHotelBookingEmail(updatedBooking, roomData);
+              await sendAdminNewHotelBookingEmail(updatedBooking, roomData);
+            } catch (emailError) {
+              console.error('Email sending failed after payment verification:', emailError.message);
+            }
+          }
         } else {
           await TravelBooking.findByIdAndUpdate(bookingId, updateData);
         }

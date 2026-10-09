@@ -272,7 +272,7 @@ const AdminLogin = () => {
                       <label className="text-[11px] font-cinzel uppercase tracking-[0.14em] font-bold text-[#2C2523]">
                         Staff Email Address
                       </label>
-                      <span className="text-[10px] text-stone-400 font-mono">admin@himalayan.com</span>
+                      <span className="text-[10px] text-stone-400 font-mono">divyanthakur856@gmail.com</span>
                     </div>
 
                     <div className="relative group">
@@ -286,7 +286,7 @@ const AdminLogin = () => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
-                        placeholder="admin@himalayan.com"
+                        placeholder="divyanthakur856@gmail.com"
                         autoComplete="email"
                         className="w-full pl-10 pr-4 py-3 rounded-xl bg-white border border-[#C5A059]/40 text-[#2C2523] placeholder-stone-400 text-xs sm:text-sm font-sans focus:outline-hidden focus:border-[#7C1D23] focus:ring-2 focus:ring-[#7C1D23]/15 transition-all shadow-xs"
                       />

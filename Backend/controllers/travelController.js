@@ -233,7 +233,7 @@ const createTravelBooking = async (req, res) => {
       travelDate,
       travelers: travelers || 2,
       totalAmount: finalAmount,
-      paymentStatus: 'pending',
+      paymentStatus: 'Pending',
     });
 
     // Send confirmation email (non-blocking)
