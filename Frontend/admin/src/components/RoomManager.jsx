@@ -31,13 +31,19 @@ export const RoomManager = ({ rooms, setRooms, onRefresh }) => {
   const { addToast } = useToast();
 
   const [search, setSearch] = useState('');
-  const [filterAvailability, setFilterAvailability] = useState('all'); // 'all' | 'active' | 'disabled'
+  const [filterAvailability, setFilterAvailability] = useState('all'); // 'all' | 'active' | 'unavailable'
   const [viewMode, setViewMode] = useState('table'); // 'table' | 'cards'
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingRoom, setEditingRoom] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Unavailability Modal State (shown when admin disables a room)
+  const [unavailTarget, setUnavailTarget] = useState(null); // room being set unavailable
+  const [unavailUntil, setUnavailUntil] = useState('');
+  const [unavailReason, setUnavailReason] = useState('');
+  const [isTogglingAvail, setIsTogglingAvail] = useState(false);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -49,6 +55,8 @@ export const RoomManager = ({ rooms, setRooms, onRefresh }) => {
     children: 0,
     amenities: ['WiFi', 'Mountain View', 'Heater', 'Geyser'],
     fallbackImageUrl: '',
+    totalRooms: 1,
+    location: 'Kasar Devi, Almora',
   });
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [filePreviews, setFilePreviews] = useState([]);
@@ -68,7 +76,7 @@ export const RoomManager = ({ rooms, setRooms, onRefresh }) => {
       const matchesFilter =
         filterAvailability === 'all' ||
         (filterAvailability === 'active' && Boolean(room.isAvailable)) ||
-        (filterAvailability === 'disabled' && !room.isAvailable);
+        (filterAvailability === 'unavailable' && !room.isAvailable);
 
       return matchesSearch && matchesFilter;
     });
@@ -86,6 +94,8 @@ export const RoomManager = ({ rooms, setRooms, onRefresh }) => {
       children: 0,
       amenities: ['WiFi', 'Mountain View', 'Heater', 'Geyser'],
       fallbackImageUrl: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1200&q=80',
+      totalRooms: 1,
+      location: 'Kasar Devi, Almora',
     });
     setSelectedFiles([]);
     setFilePreviews([]);
@@ -104,6 +114,8 @@ export const RoomManager = ({ rooms, setRooms, onRefresh }) => {
       children: room.capacity?.children || 0,
       amenities: room.amenities || [],
       fallbackImageUrl: (room.imageURLs && room.imageURLs[0]) || '',
+      totalRooms: room.totalRooms || 1,
+      location: room.location || 'Kasar Devi, Almora',
     });
     setSelectedFiles([]);
     setFilePreviews([]);
@@ -131,27 +143,73 @@ export const RoomManager = ({ rooms, setRooms, onRefresh }) => {
     setFilePreviews(previews);
   };
 
-  // Toggle Room Availability
+  // Toggle Room Availability — if enabling, do it directly; if disabling, show unavailability modal
   const handleToggleAvailability = async (room) => {
-    const originalStatus = Boolean(room.isAvailable);
-    // Optimistic UI update
+    if (room.isAvailable) {
+      // Room is currently active → admin wants to make it unavailable → show modal
+      setUnavailTarget(room);
+      setUnavailUntil(room.unavailableUntil ? new Date(room.unavailableUntil).toISOString().split('T')[0] : '');
+      setUnavailReason(room.unavailableReason || '');
+    } else {
+      // Room is currently unavailable → admin wants to re-enable it → do it directly
+      const originalRoom = { ...room };
+      setRooms((prev) =>
+        prev.map((r) => (r._id === room._id ? { ...r, isAvailable: true, unavailableUntil: null, unavailableReason: '' } : r))
+      );
+      try {
+        const res = await apiClient.put(`/hotel/rooms/${room._id}/toggle`, {
+          isAvailable: true,
+          unavailableUntil: null,
+          unavailableReason: '',
+        });
+        addToast(`Suite "${room.name}" is now Active & Open for Booking`, 'success');
+        broadcastUpdate('rooms');
+      } catch (err) {
+        setRooms((prev) =>
+          prev.map((r) => (r._id === room._id ? originalRoom : r))
+        );
+        addToast('Failed to update room: ' + (err.response?.data?.message || err.message), 'error');
+      }
+    }
+  };
+
+  // Confirm unavailability with due date and reason
+  const handleConfirmUnavailable = async () => {
+    if (!unavailTarget) return;
+    setIsTogglingAvail(true);
+    const originalRoom = { ...unavailTarget };
+
+    // Optimistic update
     setRooms((prev) =>
-      prev.map((r) => (r._id === room._id ? { ...r, isAvailable: !originalStatus } : r))
+      prev.map((r) => (r._id === unavailTarget._id ? {
+        ...r,
+        isAvailable: false,
+        unavailableUntil: unavailUntil || null,
+        unavailableReason: unavailReason || 'No rooms available at this location',
+      } : r))
     );
 
     try {
-      const res = await apiClient.put(`/hotel/rooms/${room._id}/toggle`);
-      addToast(
-        `Suite "${room.name}" is now ${res.data?.room?.isAvailable ? 'Active' : 'Disabled'}`,
-        'success'
-      );
+      const res = await apiClient.put(`/hotel/rooms/${unavailTarget._id}/toggle`, {
+        isAvailable: false,
+        unavailableUntil: unavailUntil || null,
+        unavailableReason: unavailReason || 'No rooms available at this location',
+      });
+      const dueLabel = unavailUntil
+        ? ` until ${new Date(unavailUntil).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}`
+        : '';
+      addToast(`Suite "${unavailTarget.name}" marked Unavailable${dueLabel}`, 'info');
       broadcastUpdate('rooms');
+      setUnavailTarget(null);
+      setUnavailUntil('');
+      setUnavailReason('');
     } catch (err) {
-      // Revert optimistic update
       setRooms((prev) =>
-        prev.map((r) => (r._id === room._id ? { ...r, isAvailable: originalStatus } : r))
+        prev.map((r) => (r._id === unavailTarget._id ? originalRoom : r))
       );
-      addToast('Failed to toggle room availability: ' + (err.response?.data?.message || err.message), 'error');
+      addToast('Failed to update room: ' + (err.response?.data?.message || err.message), 'error');
+    } finally {
+      setIsTogglingAvail(false);
     }
   };
 
@@ -287,14 +345,14 @@ export const RoomManager = ({ rooms, setRooms, onRefresh }) => {
               Active ({rooms.filter((r) => r.isAvailable).length})
             </button>
             <button
-              onClick={() => setFilterAvailability('disabled')}
+              onClick={() => setFilterAvailability('unavailable')}
               className={`px-3 py-1 rounded-lg font-cinzel font-semibold transition cursor-pointer ${
-                filterAvailability === 'disabled'
-                  ? 'bg-[#5C5350] text-white shadow-2xs'
+                filterAvailability === 'unavailable'
+                  ? 'bg-amber-700 text-white shadow-2xs'
                   : 'text-[#5C5350] hover:text-[#2C2523]'
               }`}
             >
-              Disabled ({rooms.filter((r) => !r.isAvailable).length})
+              Unavailable ({rooms.filter((r) => !r.isAvailable).length})
             </button>
           </div>
         </div>
@@ -415,7 +473,7 @@ export const RoomManager = ({ rooms, setRooms, onRefresh }) => {
 
                     {/* Status Badge */}
                     <td className="py-3 px-4">
-                      <StatusBadge status={room.isAvailable} type="availability" />
+                      <StatusBadge status={room.isAvailable} type="availability" dueDate={room.unavailableUntil} reason={room.unavailableReason} />
                     </td>
 
                     {/* Quick Availability Toggle Switch */}
@@ -423,9 +481,9 @@ export const RoomManager = ({ rooms, setRooms, onRefresh }) => {
                       <button
                         onClick={() => handleToggleAvailability(room)}
                         className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                          room.isAvailable ? 'bg-emerald-600' : 'bg-stone-300'
+                          room.isAvailable ? 'bg-emerald-600' : 'bg-amber-500'
                         }`}
-                        title={room.isAvailable ? 'Click to disable' : 'Click to enable'}
+                        title={room.isAvailable ? 'Click to set Unavailable' : 'Click to make Available'}
                       >
                         <span
                           className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
@@ -485,7 +543,7 @@ export const RoomManager = ({ rooms, setRooms, onRefresh }) => {
                       loading="lazy"
                     />
                     <div className="absolute top-2.5 right-2.5">
-                      <StatusBadge status={room.isAvailable} type="availability" />
+                      <StatusBadge status={room.isAvailable} type="availability" dueDate={room.unavailableUntil} reason={room.unavailableReason} />
                     </div>
                     <div className="absolute bottom-2.5 left-2.5 bg-[#FAF6EF]/95 backdrop-blur-xs px-3 py-1 rounded-xl border border-[#C5A059]/40 text-xs font-mono font-bold text-[#7C1D23] shadow-xs">
                       ₹{Number(room.pricePerNight).toLocaleString('en-IN')}{' '}
@@ -522,11 +580,11 @@ export const RoomManager = ({ rooms, setRooms, onRefresh }) => {
 
                 <div className="p-4 pt-0 border-t border-[#C5A059]/20 mt-2 flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-[#5C5350]">Active</span>
+                    <span className="text-xs text-[#5C5350]">{room.isAvailable ? 'Active' : 'Unavailable'}</span>
                     <button
                       onClick={() => handleToggleAvailability(room)}
                       className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                        room.isAvailable ? 'bg-emerald-600' : 'bg-stone-300'
+                        room.isAvailable ? 'bg-emerald-600' : 'bg-amber-500'
                       }`}
                     >
                       <span
@@ -761,6 +819,37 @@ export const RoomManager = ({ rooms, setRooms, onRefresh }) => {
                 )}
               </div>
 
+              {/* Total Rooms & Location */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                <div>
+                  <label className="block text-xs uppercase font-cinzel font-semibold text-[#2C2523] mb-1.5">
+                    Total Rooms (Inventory at Location)
+                  </label>
+                  <input
+                    type="number"
+                    min={1}
+                    max={100}
+                    value={formData.totalRooms}
+                    onChange={(e) => setFormData({ ...formData, totalRooms: e.target.value })}
+                    className="w-full px-4 py-2.5 bg-[#FAF6EF] border border-[#C5A059]/35 rounded-xl text-sm text-[#2C2523] focus:outline-none focus:border-[#7C1D23] font-mono transition"
+                  />
+                  <p className="text-[10px] text-[#66605B] mt-1">How many physical rooms of this type exist at the property</p>
+                </div>
+
+                <div>
+                  <label className="block text-xs uppercase font-cinzel font-semibold text-[#2C2523] mb-1.5">
+                    Location / Property
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.location}
+                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                    placeholder="e.g. Kasar Devi, Almora"
+                    className="w-full px-4 py-2.5 bg-[#FAF6EF] border border-[#C5A059]/35 rounded-xl text-sm text-[#2C2523] focus:outline-none focus:border-[#7C1D23] transition"
+                  />
+                </div>
+              </div>
+
               {/* Footer Actions */}
               <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#C5A059]/30">
                 <button
@@ -783,6 +872,91 @@ export const RoomManager = ({ rooms, setRooms, onRefresh }) => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* UNAVAILABILITY DUE DATE MODAL */}
+      {unavailTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-2xs animate-fade-in">
+          <div className="w-full max-w-md bg-[#FDFBF7] border border-[#C5A059]/40 rounded-3xl shadow-2xl p-6 sm:p-8 text-[#2C2523]">
+            <div className="flex items-center justify-between pb-4 border-b border-[#C5A059]/30 mb-5">
+              <div>
+                <span className="text-[10px] uppercase font-cinzel tracking-[0.2em] text-amber-700 font-bold block mb-0.5">
+                  Room Unavailability
+                </span>
+                <h3 className="font-serif text-lg sm:text-xl font-bold text-[#2C2523]">
+                  Mark "{unavailTarget.name}" Unavailable
+                </h3>
+              </div>
+              <button
+                onClick={() => { setUnavailTarget(null); setUnavailUntil(''); setUnavailReason(''); }}
+                className="text-[#66605B] hover:text-[#2C2523] p-2 rounded-xl text-xl cursor-pointer"
+              >
+                &times;
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800 leading-relaxed">
+                <strong>Note:</strong> This room will be shown as <strong>"Unavailable"</strong> to customers on the website instead of being hidden. They'll see the due date you set below.
+              </div>
+
+              <div>
+                <label className="block text-xs uppercase font-cinzel font-semibold text-[#2C2523] mb-1.5">
+                  Available Again On (Due Date)
+                </label>
+                <input
+                  type="date"
+                  value={unavailUntil}
+                  min={new Date().toISOString().split('T')[0]}
+                  onChange={(e) => setUnavailUntil(e.target.value)}
+                  className="w-full px-4 py-2.5 bg-[#FAF6EF] border border-[#C5A059]/35 rounded-xl text-sm text-[#2C2523] focus:outline-none focus:border-[#7C1D23] transition cursor-pointer"
+                />
+                <p className="text-[10px] text-[#66605B] mt-1">Leave empty if no specific date is planned. Room will stay unavailable until you manually re-enable it.</p>
+              </div>
+
+              <div>
+                <label className="block text-xs uppercase font-cinzel font-semibold text-[#2C2523] mb-1.5">
+                  Reason (Shown to Customers)
+                </label>
+                <select
+                  value={unavailReason}
+                  onChange={(e) => setUnavailReason(e.target.value)}
+                  className="w-full px-4 py-2.5 bg-[#FAF6EF] border border-[#C5A059]/35 rounded-xl text-sm text-[#2C2523] focus:outline-none focus:border-[#7C1D23] transition cursor-pointer"
+                >
+                  <option value="">Select a reason...</option>
+                  <option value="No rooms left at this location">No rooms left at this location</option>
+                  <option value="All rooms booked for the season">All rooms booked for the season</option>
+                  <option value="Under renovation">Under renovation</option>
+                  <option value="Seasonal closure">Seasonal closure</option>
+                  <option value="Maintenance in progress">Maintenance in progress</option>
+                  <option value="Fully booked">Fully booked</option>
+                </select>
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#C5A059]/30">
+                <button
+                  type="button"
+                  onClick={() => { setUnavailTarget(null); setUnavailUntil(''); setUnavailReason(''); }}
+                  disabled={isTogglingAvail}
+                  className="px-4 py-2 rounded-full text-xs font-cinzel font-semibold text-[#5C5350] hover:text-[#2C2523] hover:bg-[#FAF6EF] border border-[#C5A059]/40 transition cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleConfirmUnavailable}
+                  disabled={isTogglingAvail}
+                  className="flex items-center gap-2 px-5 py-2 rounded-full text-xs font-cinzel font-semibold text-white bg-amber-700 hover:bg-amber-800 transition cursor-pointer shadow-xs border border-amber-600 disabled:opacity-50"
+                >
+                  {isTogglingAvail && (
+                    <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  )}
+                  <span>Mark Unavailable</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

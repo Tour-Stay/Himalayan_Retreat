@@ -5,16 +5,28 @@ import { BedIcon, SnowIcon, ArrowUpRightIcon, snowViewSuiteImg } from '@shared';
 const RoomCard = ({ room, onBookNow }) => {
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const images = room.imageURLs && room.imageURLs.length > 0 ? room.imageURLs : [snowViewSuiteImg];
+  const isUnavailable = room.isAvailable === false;
+
+  // Format unavailableUntil due date for display
+  let dueDateLabel = '';
+  if (isUnavailable && room.unavailableUntil) {
+    try {
+      const d = new Date(room.unavailableUntil);
+      if (!isNaN(d.getTime())) {
+        dueDateLabel = d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+      }
+    } catch (e) {}
+  }
 
   return (
-    <div className="bg-white rounded-3xl overflow-hidden border border-[#073125]/10 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between h-full group card-luxury">
+    <div className={`bg-white rounded-3xl overflow-hidden border shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between h-full group card-luxury ${isUnavailable ? 'border-amber-300/60 opacity-85' : 'border-[#073125]/10'}`}>
       <div>
         {/* Room Image Container with Interactive Image Switcher */}
         <div className="relative h-64 overflow-hidden bg-slate-900">
           <img
             src={images[currentImgIndex]}
             alt={room.name}
-            className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
+            className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-105 ${isUnavailable ? 'grayscale-[30%]' : ''}`}
             onError={(e) => {
               e.target.onerror = null;
               e.target.src = snowViewSuiteImg;
@@ -22,6 +34,21 @@ const RoomCard = ({ room, onBookNow }) => {
           />
           {/* Subtle Gradient Shade */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/20"></div>
+
+          {/* Unavailable Overlay */}
+          {isUnavailable && (
+            <div className="absolute inset-0 bg-black/30 flex items-center justify-center z-10">
+              <div className="bg-amber-600/95 backdrop-blur-md text-white px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg border border-amber-400/50 text-center">
+                <span className="block">Currently Unavailable</span>
+                {dueDateLabel && (
+                  <span className="block text-[10px] font-normal opacity-90 mt-0.5">Available from {dueDateLabel}</span>
+                )}
+                {!dueDateLabel && room.unavailableReason && (
+                  <span className="block text-[10px] font-normal opacity-90 mt-0.5">{room.unavailableReason}</span>
+                )}
+              </div>
+            </div>
+          )}
 
           {/* Badges */}
           <div className="absolute top-3.5 left-3.5 flex flex-wrap gap-2">
@@ -115,13 +142,22 @@ const RoomCard = ({ room, onBookNow }) => {
           >
             Details
           </Link>
-          <Link
-            to={`/book?room=${room._id}`}
-            className="bg-[#073125] hover:bg-[#12433B] text-white text-xs font-semibold px-4 py-2 rounded-full inline-flex items-center gap-1 group/btn transition-colors shadow-sm"
-          >
-            <span>Book</span>
-            <ArrowUpRightIcon className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-300" />
-          </Link>
+          {isUnavailable ? (
+            <span className="bg-amber-100 text-amber-800 text-xs font-semibold px-4 py-2 rounded-full border border-amber-300 inline-flex items-center gap-1.5">
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+              </svg>
+              <span>Unavailable</span>
+            </span>
+          ) : (
+            <Link
+              to={`/book?room=${room._id}`}
+              className="bg-[#073125] hover:bg-[#12433B] text-white text-xs font-semibold px-4 py-2 rounded-full inline-flex items-center gap-1 group/btn transition-colors shadow-sm"
+            >
+              <span>Book</span>
+              <ArrowUpRightIcon className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-300" />
+            </Link>
+          )}
         </div>
       </div>
     </div>
