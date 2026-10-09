@@ -13,6 +13,7 @@ import {
   snowViewSuiteImg,
   chaletSuiteImg,
 } from '@shared';
+import mountainViewImg from '@shared/assets/images/mountain-view.jpg';
 import BookingForm from '../components/BookingForm';
 import { mockRooms } from '../data/mockRooms';
 
@@ -51,20 +52,32 @@ const BookRoom = () => {
 
   return (
     <div className="min-h-screen bg-[#F8FAF7] text-[#073125] font-sans">
-      {/* 1. Green Header Banner */}
-      <section className="bg-[#073125] text-white pt-24 pb-12 px-4 border-b border-white/10">
-        <Container size="lg">
+      {/* 1. Mountain View Header Banner */}
+      <section className="relative text-white pt-28 pb-14 px-4 border-b border-white/10 overflow-hidden bg-[#073125]">
+        {/* Mountain View Background Image & Ambient Gradients */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src={mountainViewImg}
+            alt="Himalayan Mountain View at Kasar Devi"
+            className="w-full h-full object-cover object-center filter brightness-[0.88] contrast-[1.06]"
+          />
+          {/* Delicate hint of brand green while keeping mountain peaks clear */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#073125]/45 via-black/15 to-[#073125]/50"></div>
+          <div className="absolute inset-0 bg-black/10"></div>
+        </div>
+
+        <Container size="lg" className="relative z-10">
           <div className="text-center max-w-2xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-[#C9F24D] text-xs font-mono uppercase tracking-wider mb-3">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#073125]/75 border border-[#C9F24D]/40 text-[#C9F24D] text-xs font-mono uppercase tracking-wider mb-3 backdrop-blur-xs shadow-md">
               <MountainIcon className="w-3.5 h-3.5 text-[#C9F24D]" />
               <span>KASAR DEVI • 6,942 FT</span>
             </div>
 
-            <h1 className="font-serif text-3xl sm:text-5xl font-normal tracking-tight text-white mb-2">
+            <h1 className="font-serif text-3xl sm:text-5xl font-normal tracking-tight text-white mb-2 drop-shadow-md">
               Book Your Room
             </h1>
 
-            <p className="text-white/80 text-sm sm:text-base font-light leading-relaxed">
+            <p className="text-[#FAF5EC]/90 text-sm sm:text-base font-light leading-relaxed drop-shadow">
               Book directly with us for the best price, free hot breakfast, and free 48-hour cancellation.
             </p>
           </div>

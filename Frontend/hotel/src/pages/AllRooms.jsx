@@ -3,6 +3,8 @@ import { apiClient, Loader, Container, subscribeToUpdates } from '@shared';
 import RoomCard from '../components/RoomCard';
 import { mockRooms } from '../data/mockRooms';
 
+import mountainViewImg from '@shared/assets/images/mountain-view.jpg';
+
 const AllRooms = () => {
   const [rooms, setRooms] = useState(mockRooms);
   const [loading, setLoading] = useState(false);
@@ -50,17 +52,29 @@ const AllRooms = () => {
 
   return (
     <div className="min-h-screen bg-[#F8FAF7] font-sans">
-      {/* 1. Green Header Banner */}
-      <section className="bg-[#073125] text-white pt-24 pb-14 px-4 border-b border-white/10">
-        <Container size="lg">
+      {/* 1. Mountain View Header Banner */}
+      <section className="relative text-white pt-28 pb-16 px-4 border-b border-white/10 overflow-hidden bg-[#073125]">
+        {/* Mountain View Background Image & Ambient Gradients */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src={mountainViewImg}
+            alt="Himalayan Mountain View at Kasar Devi"
+            className="w-full h-full object-cover object-center filter brightness-[0.88] contrast-[1.06]"
+          />
+          {/* Delicate hint of brand green while keeping mountain peaks clear */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#073125]/45 via-black/15 to-[#073125]/50"></div>
+          <div className="absolute inset-0 bg-black/10"></div>
+        </div>
+
+        <Container size="lg" className="relative z-10">
           <div className="text-center max-w-2xl mx-auto">
-            <span className="inline-block px-3 py-1 rounded-full bg-[#C9F24D] text-[#073125] text-[11px] font-mono font-bold tracking-widest uppercase mb-3 shadow-xs">
+            <span className="inline-block px-3.5 py-1 rounded-full bg-[#C9F24D] text-[#073125] text-[11px] font-mono font-bold tracking-widest uppercase mb-3 shadow-md backdrop-blur-xs">
               ROOMS &amp; RATES • 6,942 FT
             </span>
-            <h1 className="font-serif text-3xl sm:text-5xl font-normal tracking-tight mb-3 text-white">
+            <h1 className="font-serif text-3xl sm:text-5xl font-normal tracking-tight mb-3 text-white drop-shadow-md">
               Our Rooms &amp; Rates
             </h1>
-            <p className="text-white/80 text-sm sm:text-base font-light leading-relaxed">
+            <p className="text-[#FAF5EC]/90 text-sm sm:text-base font-light leading-relaxed drop-shadow">
               Every room has room heaters, electric bed warmers, 24-hour hot water, and a private balcony overlooking snow peaks.
             </p>
 
@@ -70,10 +84,10 @@ const AllRooms = () => {
                 <button
                   key={filter}
                   onClick={() => setSelectedFilter(filter)}
-                  className={`px-4 py-2 rounded-full text-xs font-mono uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                  className={`px-4 py-2 rounded-full text-xs font-mono uppercase tracking-wider transition-all duration-300 cursor-pointer backdrop-blur-xs ${
                     selectedFilter === filter
-                      ? 'bg-[#C9F24D] text-[#073125] font-bold shadow-md'
-                      : 'bg-white/10 border border-white/20 text-white hover:bg-white/20 font-medium'
+                      ? 'bg-[#C9F24D] text-[#073125] font-bold shadow-lg scale-102'
+                      : 'bg-[#073125]/60 border border-white/25 text-white hover:bg-white/20 font-medium'
                   }`}
                 >
                   {filter}

@@ -54,10 +54,12 @@ const SuiteShowcase = ({ onOpenQuickView, rooms }) => {
             </p>
             <Link
               to="/rooms"
-              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-mono uppercase tracking-wider text-[#C9F24D] font-bold hover:underline"
+              className="mt-2 inline-flex items-center gap-3 px-6 py-3 rounded-full bg-[#EAA722] hover:bg-[#D98E16] text-[#073125] font-mono text-xs sm:text-sm font-black uppercase tracking-wider shadow-xl shadow-[#EAA722]/35 hover:shadow-2xl hover:shadow-[#EAA722]/55 ring-4 ring-[#EAA722]/25 hover:ring-[#EAA722]/45 transition-all duration-300 transform hover:-translate-y-0.5 hover:scale-102 border-2 border-[#F3D8B0]/60 group cursor-pointer"
             >
-              <span>Explore All Rooms &amp; Rates</span>
-              <ArrowUpRightIcon className="w-3.5 h-3.5" />
+              <span className="font-extrabold tracking-wide text-[#073125]">Explore All Rooms &amp; Rates</span>
+              <span className="w-6 h-6 rounded-full bg-[#073125] text-[#EAA722] group-hover:bg-[#073125] group-hover:text-white flex items-center justify-center transition-all duration-300 group-hover:rotate-45 shadow-sm">
+                <ArrowUpRightIcon className="w-3.5 h-3.5" />
+              </span>
             </Link>
           </div>
         </div>

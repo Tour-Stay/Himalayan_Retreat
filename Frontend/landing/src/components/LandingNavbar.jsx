@@ -72,8 +72,8 @@ const LandingNavbar = () => {
               <a href="#maharajji" className="hover:text-white transition-colors underline-offset-4 hover:underline font-medium">
                 Home
               </a>
-              <a href="#maharajji-tribute" className="hover:text-white transition-colors underline-offset-4 hover:underline font-medium">
-                About Maharaj-ji
+              <a href="#kasar-devi" className="hover:text-white transition-colors underline-offset-4 hover:underline font-medium">
+                About Maa Kasar Devi
               </a>
               <a href="#uttarakhand" className="hover:text-white transition-colors underline-offset-4 hover:underline font-medium">
                 Holy Shrines
@@ -171,11 +171,11 @@ const LandingNavbar = () => {
             <a href="#maharajji" onClick={() => setMobileMenuOpen(false)} className="block py-1 text-base hover:text-white">
               Home
             </a>
-            <a href="#maharajji-tribute" onClick={() => setMobileMenuOpen(false)} className="block py-1 text-base hover:text-white">
-              About Sri Neem Karoli Baba
+            <a href="#kasar-devi" onClick={() => setMobileMenuOpen(false)} className="block py-1 text-base hover:text-white">
+              About Maa Kasar Devi
             </a>
             <a href="#uttarakhand" onClick={() => setMobileMenuOpen(false)} className="block py-1 text-base hover:text-white">
-              Holy Shrines (Kainchi &amp; Jageshwar)
+              Holy Shrines of Kumaon
             </a>
             <a href="#about-retreat" onClick={() => setMobileMenuOpen(false)} className="block py-1 text-base hover:text-white">
               The Retreat &amp; Cabs
