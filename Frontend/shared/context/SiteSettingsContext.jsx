@@ -392,7 +392,7 @@ export const SiteSettingsProvider = ({ children }) => {
   }, []);
 
   const refreshSettings = useCallback(async () => {
-    await fetchSettings(false);
+    await fetchSettings(true); // Fetch silently to avoid unmounting the dashboard
     // Notify all open tabs across Landing, Hotel, and Travel portals instantly
     broadcastUpdate('settings');
   }, [fetchSettings]);

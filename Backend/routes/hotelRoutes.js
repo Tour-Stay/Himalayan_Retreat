@@ -34,7 +34,7 @@ router.get('/reviews', (req, res, next) => {                     // Fetch approv
   req.category = 'hotel';
   return getAllReviews(req, res, next);
 });
-router.post('/reviews', (req, res, next) => {                    // Submit a new hotel review
+router.post('/reviews', upload.array('photos', 5), (req, res, next) => {                    // Submit a new hotel review
   req.body = Object.assign({}, req.body, { category: 'hotel' });
   return createReview(req, res, next);
 });

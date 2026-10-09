@@ -1,7 +1,5 @@
 const cloudinary = require('cloudinary').v2;
-
-// Cloudinary auto-configures from CLOUDINARY_URL in .env
-// No manual config needed!
+require('dotenv').config();
 
 // Helper function: Upload a buffer (from multer memory) directly to Cloudinary
 const uploadToCloudinary = (fileBuffer, folder) => {

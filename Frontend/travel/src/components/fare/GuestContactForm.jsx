@@ -7,6 +7,8 @@ const GuestContactForm = ({
   setGuestName,
   guestPhone,
   setGuestPhone,
+  guestEmail,
+  setGuestEmail,
   specialNotes,
   setSpecialNotes,
   errorMessage,
@@ -63,7 +65,9 @@ const GuestContactForm = ({
             className="w-full px-4 py-3 rounded-xl bg-[#FAF5EC] border border-[#EAA722]/30 text-sm sm:text-base text-[#2C2523] font-medium focus:outline-none focus:ring-2 focus:ring-[#EAA722]"
           />
         </div>
+      </div>
 
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
         <div>
           <label htmlFor="calc-phone" className="block text-xs sm:text-sm font-bold text-[#5C5350] uppercase tracking-wider mb-1.5 font-mono">
             WhatsApp Phone Number *
@@ -74,6 +78,20 @@ const GuestContactForm = ({
             placeholder="+91 98765 43210"
             value={guestPhone}
             onChange={(e) => setGuestPhone(e.target.value)}
+            className="w-full px-4 py-3 rounded-xl bg-[#FAF5EC] border border-[#EAA722]/30 text-sm sm:text-base text-[#2C2523] font-medium focus:outline-none focus:ring-2 focus:ring-[#EAA722]"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="calc-email" className="block text-xs sm:text-sm font-bold text-[#5C5350] uppercase tracking-wider mb-1.5 font-mono">
+            Email Address *
+          </label>
+          <input
+            id="calc-email"
+            type="email"
+            placeholder="e.g. rahul@example.com"
+            value={guestEmail}
+            onChange={(e) => setGuestEmail(e.target.value)}
             className="w-full px-4 py-3 rounded-xl bg-[#FAF5EC] border border-[#EAA722]/30 text-sm sm:text-base text-[#2C2523] font-medium focus:outline-none focus:ring-2 focus:ring-[#EAA722]"
           />
         </div>

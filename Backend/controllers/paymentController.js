@@ -3,7 +3,7 @@ const razorpayInstance = require('../config/razorpay');
 const Booking = require('../models/Booking');
 const TravelBooking = require('../models/TravelBooking');
 const Room = require('../models/Room');
-const { sendHotelBookingEmail, sendAdminNewHotelBookingEmail } = require('../config/emailService');
+const { sendHotelBookingEmail, sendAdminNewHotelBookingEmail, sendTravelBookingEmail, sendAdminNewTravelBookingEmail } = require('../config/emailService');
 
 // Get Razorpay Key ID for Frontend
 const getKey = (req, res) => {
@@ -84,7 +84,16 @@ const verifyPayment = async (req, res) => {
             }
           }
         } else {
-          await TravelBooking.findByIdAndUpdate(bookingId, updateData);
+          const updatedTravelBooking = await TravelBooking.findByIdAndUpdate(bookingId, updateData, { new: true });
+          
+          if (updatedTravelBooking) {
+            try {
+              await sendTravelBookingEmail(updatedTravelBooking, {}); // second param is tourPackage, pass empty object for generic cabs
+              await sendAdminNewTravelBookingEmail(updatedTravelBooking, {});
+            } catch (emailError) {
+              console.error('Travel email sending failed after payment verification:', emailError.message);
+            }
+          }
         }
       }
 

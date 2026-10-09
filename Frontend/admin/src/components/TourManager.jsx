@@ -410,8 +410,8 @@ export const TourManager = ({ tours, setTours, onRefresh }) => {
                   <input
                     type="number"
                     required
-                    min={500}
-                    step={100}
+                    min={1}
+                    step={1}
                     value={formData.pricePerPerson}
                     onChange={(e) => setFormData({ ...formData, pricePerPerson: e.target.value })}
                     placeholder="e.g. 8500"
