@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Container, StarIcon, apiClient, subscribeToUpdates } from '@shared';
+import { Container, StarIcon, apiClient, subscribeToUpdates, WriteReviewModal } from '@shared';
 import { travelReviewsData } from '../data/travelData';
 
 const TravelReviews = () => {
-  const [reviews, setReviews] = useState(travelReviewsData);
+  const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(false);
   const [previewPhoto, setPreviewPhoto] = useState(null);
+  const [isWriteModalOpen, setIsWriteModalOpen] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const fetchReviews = async () => {
     try {
@@ -13,11 +15,11 @@ const TravelReviews = () => {
       if (res.data && Array.isArray(res.data) && res.data.length > 0) {
         setReviews(res.data);
       } else {
-        setReviews(travelReviewsData);
+        setReviews([]);
       }
     } catch (err) {
-      console.warn('Could not load travel reviews from database, using verified fallback:', err.message);
-      setReviews(travelReviewsData);
+      console.warn('Could not load travel reviews from database:', err.message);
+      setReviews([]);
     }
   };
 
@@ -45,9 +47,20 @@ const TravelReviews = () => {
           <h2 className="font-serif text-2xl sm:text-4xl text-[#541508] font-normal">
             Loved by Pilgrims &amp; Families
           </h2>
-          <p className="mt-2 text-[#541508]/85 text-sm sm:text-base font-light leading-relaxed">
+          <p className="mt-2 text-[#541508]/85 text-sm sm:text-base font-light leading-relaxed mb-6">
             Real guest experiences and verified photos from pilgrims and families who traveled with our mountain chauffeurs.
           </p>
+          <button
+            onClick={() => setIsWriteModalOpen(true)}
+            className="px-6 py-2.5 bg-[#EAA722] text-[#541508] rounded-full text-sm font-bold hover:bg-[#D98E16] transition-colors shadow-md cursor-pointer"
+          >
+            Write a Review
+          </button>
+          {successMessage && (
+            <p className="mt-4 text-sm font-medium text-green-700 bg-green-50 py-2 px-4 rounded-xl inline-block border border-green-200">
+              {successMessage}
+            </p>
+          )}
         </div>
 
         {loading ? (
@@ -148,6 +161,17 @@ const TravelReviews = () => {
           </div>
         )}
       </Container>
+
+      {/* Write Review Modal */}
+      <WriteReviewModal
+        isOpen={isWriteModalOpen}
+        onClose={() => setIsWriteModalOpen(false)}
+        category="travel"
+        onSuccess={() => {
+          setSuccessMessage('Thank you! Your travel story has been submitted for approval.');
+          setTimeout(() => setSuccessMessage(''), 5000);
+        }}
+      />
     </section>
   );
 };

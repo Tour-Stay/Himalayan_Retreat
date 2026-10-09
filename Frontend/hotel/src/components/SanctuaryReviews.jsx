@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Container, SparklesIcon, apiClient, subscribeToUpdates } from '@shared';
+import { Container, SparklesIcon, apiClient, subscribeToUpdates, WriteReviewModal } from '@shared';
 
 const SanctuaryReviews = () => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [previewPhoto, setPreviewPhoto] = useState(null);
+  const [isWriteModalOpen, setIsWriteModalOpen] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const fetchReviews = async () => {
     try {
@@ -43,9 +45,20 @@ const SanctuaryReviews = () => {
           <h2 className="font-serif text-2xl sm:text-4xl text-[#073125] font-normal">
             What Our Guests Say
           </h2>
-          <p className="mt-2 text-[#073125]/75 text-sm sm:text-base font-light leading-relaxed">
+          <p className="mt-2 text-[#073125]/75 text-sm sm:text-base font-light leading-relaxed mb-6">
             Real feedback from guests who stayed with us in Kasar Devi.
           </p>
+          <button
+            onClick={() => setIsWriteModalOpen(true)}
+            className="px-6 py-2.5 bg-[#073125] text-[#C9F24D] rounded-full text-sm font-semibold hover:bg-[#0a4232] transition-colors shadow-md cursor-pointer"
+          >
+            Write a Review
+          </button>
+          {successMessage && (
+            <p className="mt-4 text-sm font-medium text-green-700 bg-green-50 py-2 px-4 rounded-xl inline-block">
+              {successMessage}
+            </p>
+          )}
         </div>
 
         {/* Dynamic Reviews Grid */}
@@ -167,6 +180,17 @@ const SanctuaryReviews = () => {
           </div>
         </div>
       )}
+
+      {/* Write Review Modal */}
+      <WriteReviewModal
+        isOpen={isWriteModalOpen}
+        onClose={() => setIsWriteModalOpen(false)}
+        category="hotel"
+        onSuccess={() => {
+          setSuccessMessage('Thank you! Your review has been submitted for approval.');
+          setTimeout(() => setSuccessMessage(''), 5000);
+        }}
+      />
     </section>
   );
 };

@@ -46,7 +46,7 @@ const sendHotelBookingEmail = async (booking, room) => {
               <td style="padding: 10px 0; font-weight: bold; text-align: right; color: #2d6a4f; font-size: 18px;">₹${booking.totalAmount}</td>
             </tr>
           </table>
-          <p style="color: #555;">If you have any questions, feel free to reach out via WhatsApp or call us.</p>
+          <p style="color: #555;">If you have any questions, feel free to reach out via WhatsApp or call us at <strong>+91 96906 21247</strong>.</p>
           <p style="color: #888; font-size: 12px; margin-top: 30px;">This is an automated confirmation. Please do not reply to this email.</p>
         </div>
       </div>
@@ -134,8 +134,45 @@ const sendTravelBookingEmail = async (booking, tourPackage) => {
               <td style="padding: 10px 0; font-weight: bold; text-align: right; color: #2d6a4f; font-size: 18px;">₹${booking.totalAmount}</td>
             </tr>
           </table>
-          <p style="color: #555;">We'll be in touch with more details closer to your travel date.</p>
+          <p style="color: #555;">We'll be in touch with more details closer to your travel date. If you need immediate assistance, call or WhatsApp our Admin desk at <strong>+91 96906 21247</strong>.</p>
           <p style="color: #888; font-size: 12px; margin-top: 30px;">This is an automated confirmation. Please do not reply to this email.</p>
+        </div>
+      </div>
+    `,
+  };
+
+  await transporter.sendMail(mailOptions);
+};
+
+// ========================
+// ADMIN ALERT: NEW TRAVEL BOOKING
+// ========================
+const sendAdminNewTravelBookingEmail = async (booking, tourPackage) => {
+  const adminEmail = process.env.ADMIN_EMAIL || 'concierge@kasarhimalayanheights.com';
+  
+  const mailOptions = {
+    from: `"Kasar Booking System" <${process.env.SENDER_EMAIL}>`,
+    to: adminEmail,
+    subject: `🚐 NEW TRAVEL BOOKING PAID: ${booking.guestDetails.name}`,
+    html: `
+      <div style="font-family: 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; background: #fff; border: 1px solid #ddd; border-radius: 8px;">
+        <div style="background: #0f3443; padding: 20px; color: #fff; text-align: center; border-radius: 8px 8px 0 0;">
+          <h2 style="margin: 0;">New Travel Booking</h2>
+          <p style="margin: 5px 0 0; color: #34e89e;">Action Required: Please check the Admin Portal</p>
+        </div>
+        <div style="padding: 20px;">
+          <p><strong>Guest Name:</strong> ${booking.guestDetails.name}</p>
+          <p><strong>Guest Phone:</strong> ${booking.guestDetails.phone}</p>
+          <p><strong>Guest Email:</strong> ${booking.guestDetails.email}</p>
+          <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+          <p><strong>Package/Destination:</strong> ${tourPackage?.title || tourPackage?.destination || booking.circuit || 'Custom Trip'}</p>
+          <p><strong>Travel Date:</strong> ${new Date(booking.travelDate).toDateString()}</p>
+          <p><strong>Travelers:</strong> ${booking.travelers}</p>
+          <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+          <p><strong>Total Amount:</strong> ₹${booking.totalAmount}</p>
+          <p><strong>Razorpay Order ID:</strong> ${booking.razorpayOrderId || 'N/A'}</p>
+          <p><strong>Razorpay Payment ID:</strong> ${booking.razorpayPaymentId || 'N/A'}</p>
+          ${booking.notes ? `<p><strong>Notes:</strong> ${booking.notes}</p>` : ''}
         </div>
       </div>
     `,
@@ -213,6 +250,7 @@ const sendReviewThankYouEmail = async (review) => {
 module.exports = { 
   sendHotelBookingEmail, 
   sendTravelBookingEmail, 
+  sendAdminNewTravelBookingEmail,
   sendReviewThankYouEmail,
   sendAdminNewHotelBookingEmail
 };

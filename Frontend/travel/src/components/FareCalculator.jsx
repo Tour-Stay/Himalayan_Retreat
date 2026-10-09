@@ -139,6 +139,7 @@ const FareCalculator = ({
   // Guest Contact Form
   const [guestName, setGuestName] = useState('');
   const [guestPhone, setGuestPhone] = useState('');
+  const [guestEmail, setGuestEmail] = useState('');
   const [specialNotes, setSpecialNotes] = useState('');
 
   // Submission States
@@ -293,8 +294,8 @@ const FareCalculator = ({
   // Submit Online and Navigate to /booking-confirmation
   const handleOnlineBooking = async (e) => {
     e.preventDefault();
-    if (!guestName || !guestPhone) {
-      setErrorMessage('Please provide your name and phone number to confirm your cab.');
+    if (!guestName || !guestPhone || !guestEmail) {
+      setErrorMessage('Please provide your name, phone number, and email to confirm your cab.');
       return;
     }
     setErrorMessage('');
@@ -325,6 +326,7 @@ const FareCalculator = ({
       addons: addonsSelected,
       guestName,
       guestPhone,
+      guestEmail,
       specialNotes,
       bookedAt: new Date().toISOString(),
     };
@@ -343,7 +345,7 @@ const FareCalculator = ({
         guestDetails: {
           name: guestName,
           phone: guestPhone,
-          email: 'concierge@himalayanretreat.com',
+          email: guestEmail,
         },
       });
 
@@ -356,7 +358,7 @@ const FareCalculator = ({
         prefill: {
           name: guestName,
           contact: guestPhone,
-          email: 'concierge@himalayanretreat.com',
+          email: guestEmail,
         },
         onSuccess: (paymentResponse) => {
           setSubmitting(false);
@@ -520,6 +522,8 @@ const FareCalculator = ({
             setGuestName={setGuestName}
             guestPhone={guestPhone}
             setGuestPhone={setGuestPhone}
+            guestEmail={guestEmail}
+            setGuestEmail={setGuestEmail}
             specialNotes={specialNotes}
             setSpecialNotes={setSpecialNotes}
             errorMessage={errorMessage}

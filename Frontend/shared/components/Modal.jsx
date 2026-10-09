@@ -28,13 +28,13 @@ const Modal = ({ isOpen, onClose, title, children, maxWidth = 'max-w-2xl' }) => 
 
       {/* Modal Dialog Card */}
       <div
-        className={`relative w-full ${maxWidth} bg-ivory rounded-2xl shadow-2xl border border-gold/30 z-10 my-8 overflow-hidden transform transition-all animate-fade-in`}
+        className={`relative w-full ${maxWidth} bg-white rounded-2xl shadow-2xl border border-gold/30 z-10 my-8 overflow-hidden transform transition-all animate-fade-in`}
         role="dialog"
         aria-modal="true"
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gold/15 bg-ivory-warm">
-          <h3 className="text-xl font-serif text-charcoal font-medium">{title}</h3>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gray-50">
+          <h3 className="text-xl font-serif text-[#073125] font-medium">{title}</h3>
           <button
             onClick={onClose}
             className="p-1 text-charcoal-muted hover:text-maroon rounded-full transition-colors cursor-pointer"
