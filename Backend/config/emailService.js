@@ -57,6 +57,45 @@ const sendHotelBookingEmail = async (booking, room) => {
 };
 
 // ========================
+// ADMIN ALERT: NEW HOTEL BOOKING
+// ========================
+const sendAdminNewHotelBookingEmail = async (booking, room) => {
+  const adminEmail = process.env.ADMIN_EMAIL || 'concierge@kasarhimalayanheights.com';
+  
+  const mailOptions = {
+    from: `"Kasar Booking System" <${process.env.SENDER_EMAIL}>`,
+    to: adminEmail,
+    subject: `🔔 NEW BOOKING PAID: ${room.name} - ${booking.guestDetails.name}`,
+    html: `
+      <div style="font-family: 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; background: #fff; border: 1px solid #ddd; border-radius: 8px;">
+        <div style="background: #073125; padding: 20px; color: #fff; text-align: center; border-radius: 8px 8px 0 0;">
+          <h2 style="margin: 0;">New Confirmed Booking</h2>
+          <p style="margin: 5px 0 0; color: #C9F24D;">Action Required: Please check the Admin Portal</p>
+        </div>
+        <div style="padding: 20px;">
+          <p><strong>Guest Name:</strong> ${booking.guestDetails.name}</p>
+          <p><strong>Guest Phone:</strong> ${booking.guestDetails.phone}</p>
+          <p><strong>Guest Email:</strong> ${booking.guestDetails.email}</p>
+          <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+          <p><strong>Room:</strong> ${room.name}</p>
+          <p><strong>Check-in:</strong> ${new Date(booking.checkInDate).toDateString()}</p>
+          <p><strong>Check-out:</strong> ${new Date(booking.checkOutDate).toDateString()}</p>
+          <p><strong>Guests:</strong> ${booking.guests || 'N/A'}</p>
+          <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+          <p><strong>Total Amount:</strong> ₹${booking.totalAmount}</p>
+          <p><strong>Advance Paid:</strong> ₹${booking.advancePaid || booking.totalAmount}</p>
+          <p><strong>Razorpay Order ID:</strong> ${booking.razorpayOrderId || 'N/A'}</p>
+          <p><strong>Razorpay Payment ID:</strong> ${booking.razorpayPaymentId || 'N/A'}</p>
+          ${booking.specialRequest ? `<p><strong>Special Request:</strong> ${booking.specialRequest}</p>` : ''}
+        </div>
+      </div>
+    `,
+  };
+
+  await transporter.sendMail(mailOptions);
+};
+
+// ========================
 // TRAVEL BOOKING CONFIRMATION
 // ========================
 const sendTravelBookingEmail = async (booking, tourPackage) => {
@@ -171,4 +210,9 @@ const sendReviewThankYouEmail = async (review) => {
   await transporter.sendMail(mailOptions);
 };
 
-module.exports = { sendHotelBookingEmail, sendTravelBookingEmail, sendReviewThankYouEmail };
+module.exports = { 
+  sendHotelBookingEmail, 
+  sendTravelBookingEmail, 
+  sendReviewThankYouEmail,
+  sendAdminNewHotelBookingEmail
+};

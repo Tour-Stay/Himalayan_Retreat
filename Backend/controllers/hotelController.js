@@ -42,10 +42,13 @@ const checkRoomAvailability = async (req, res) => {
     }
 
     // Find any non-cancelled bookings that overlap with requested range
+    const bCheckInStart = new Date(`${checkIn}T23:59:59.999Z`);
+    const bCheckOutEnd = new Date(`${checkOut}T00:00:00.000Z`);
+
     const filter = {
       status: { $ne: 'cancelled' },
-      checkInDate: { $lt: checkOutDate },
-      checkOutDate: { $gt: checkInDate },
+      checkInDate: { $lt: bCheckOutEnd },
+      checkOutDate: { $gt: bCheckInStart },
     };
 
     if (roomId) {
@@ -117,10 +120,10 @@ const addRoom = async (req, res) => {
 
     // Parse if they come as strings from FormData
     if (typeof capacity === 'string') {
-      try { capacity = JSON.parse(capacity); } catch (e) {}
+      try { capacity = JSON.parse(capacity); } catch (e) { }
     }
     if (typeof amenities === 'string') {
-      try { amenities = JSON.parse(amenities); } catch (e) {}
+      try { amenities = JSON.parse(amenities); } catch (e) { }
     }
 
     // Upload images to Cloudinary (with automatic base64 fallback if Cloudinary credentials fail)
@@ -168,10 +171,10 @@ const updateRoom = async (req, res) => {
 
     // Parse FormData string fields
     if (typeof updateData.capacity === 'string') {
-      try { updateData.capacity = JSON.parse(updateData.capacity); } catch (e) {}
+      try { updateData.capacity = JSON.parse(updateData.capacity); } catch (e) { }
     }
     if (typeof updateData.amenities === 'string') {
-      try { updateData.amenities = JSON.parse(updateData.amenities); } catch (e) {}
+      try { updateData.amenities = JSON.parse(updateData.amenities); } catch (e) { }
     }
 
     // Handle new image uploads if provided
@@ -259,15 +262,15 @@ const createBooking = async (req, res) => {
     }
 
     // Check for date conflicts — ensure the room is not already booked for those dates
+    // Using start and end of day to flawlessly handle same-day check-in/check-out overlap
+    const bCheckInStart = new Date(`${checkInDate}T23:59:59.999Z`);
+    const bCheckOutEnd = new Date(`${checkOutDate}T00:00:00.000Z`);
+
     const conflictingBooking = await Booking.findOne({
       room: room,
       status: { $ne: 'cancelled' }, // Ignore cancelled bookings
-      $or: [
-        {
-          checkInDate: { $lt: new Date(checkOutDate) },
-          checkOutDate: { $gt: new Date(checkInDate) },
-        },
-      ],
+      checkInDate: { $lt: bCheckOutEnd },
+      checkOutDate: { $gt: bCheckInStart },
     });
 
     if (conflictingBooking) {
@@ -306,13 +309,6 @@ const createBooking = async (req, res) => {
       specialNotes,
       status,
     });
-
-    // Send confirmation email (non-blocking — don't fail booking if email fails)
-    try {
-      await sendHotelBookingEmail(booking, roomData);
-    } catch (emailError) {
-      console.error('Email sending failed:', emailError.message);
-    }
 
     res.status(201).json({ message: 'Booking created successfully.', booking });
   } catch (error) {

@@ -1,11 +1,12 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { apiClient, ArrowUpRightIcon, WhatsAppIcon, SITE_CONFIG, useSiteSettings, calculateStayTariff } from '@shared';
+import { apiClient, ArrowUpRightIcon, WhatsAppIcon, SITE_CONFIG, useSiteSettings, calculateStayTariff, useRazorpay } from '@shared';
 import { mockRooms } from '../data/mockRooms';
 
 const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
   const navigate = useNavigate();
   const { settings } = useSiteSettings();
+  const { initializePayment, isProcessing: paymentProcessing } = useRazorpay();
   const policies = settings?.hotelPolicies;
   const company = settings?.company;
 
@@ -28,6 +29,9 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
   const [loading, setLoading] = useState(false);
   const [occupiedRoomIds, setOccupiedRoomIds] = useState([]);
   const [isRoomUnavailable, setIsRoomUnavailable] = useState(false);
+  const [paymentPending, setPaymentPending] = useState(false);
+  const [pendingBookingPayload, setPendingBookingPayload] = useState(null);
+  const [conflictError, setConflictError] = useState('');
 
   // Real-time server availability check to prevent double bookings
   useEffect(() => {
@@ -94,6 +98,7 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
     if (name === 'room' && onSelectRoom) {
       onSelectRoom(value);
     }
+    setConflictError('');
   };
 
   // Find selected room for pricing calculation
@@ -115,8 +120,41 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
   const nights = pricingResult.nights;
   const totalPrice = pricingResult.totalAmount;
 
+  const handleRetryPayment = async () => {
+    if (!pendingBookingPayload) return;
+    setLoading(true);
+    try {
+      await initializePayment({
+        amount: pendingBookingPayload.totalAmount,
+        receiptId: pendingBookingPayload.dbBookingId,
+        bookingType: 'hotel',
+        prefill: {
+          name: pendingBookingPayload.guestDetails.name,
+          contact: pendingBookingPayload.guestDetails.phone,
+          email: pendingBookingPayload.guestDetails.email,
+        },
+        onSuccess: (paymentResponse) => {
+          setLoading(false);
+          setPaymentPending(false);
+          navigate('/booking-confirmation', {
+            state: {
+              booking: { ...pendingBookingPayload, paymentId: paymentResponse.razorpay_payment_id },
+            },
+          });
+        },
+        onFailure: (error) => {
+          setLoading(false);
+        },
+      });
+    } catch (err) {
+      setLoading(false);
+      alert('Failed to initialize payment. Please try again.');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setConflictError('');
     setLoading(true);
 
     const bookingPayload = {
@@ -137,12 +175,41 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
     };
 
     try {
-      await apiClient.post('/hotel/bookings', bookingPayload);
+      const response = await apiClient.post('/hotel/bookings', bookingPayload);
+      const dbBookingId = response.data?.booking?._id || bookingPayload.bookingId;
+
+      await initializePayment({
+        amount: bookingPayload.totalAmount,
+        receiptId: dbBookingId,
+        bookingType: 'hotel',
+        prefill: {
+          name: bookingPayload.guestDetails.name,
+          contact: bookingPayload.guestDetails.phone,
+          email: bookingPayload.guestDetails.email,
+        },
+        onSuccess: (paymentResponse) => {
+          setLoading(false);
+          navigate('/booking-confirmation', {
+            state: {
+              booking: { ...bookingPayload, paymentId: paymentResponse.razorpay_payment_id },
+            },
+          });
+        },
+        onFailure: (error) => {
+          setLoading(false);
+          setPaymentPending(true);
+          setPendingBookingPayload({ ...bookingPayload, dbBookingId });
+        },
+      });
     } catch (err) {
-      console.warn('Backend unavailable; proceeding with demo booking confirmation.', err.message);
-    } finally {
+      console.warn('Backend unavailable or error occurred.', err.message);
       setLoading(false);
-      navigate('/booking-confirmation', { state: { booking: bookingPayload } });
+      const errorMsg = err.response?.data?.message?.toLowerCase() || '';
+      if (err.response?.status === 409 || errorMsg.includes('already reserved') || errorMsg.includes('already booked')) {
+        setConflictError("We're sorry, another guest just reserved this suite for these dates. Please select different dates.");
+      } else {
+        alert('Failed to connect to the booking server. Please try again.');
+      }
     }
   };
 
@@ -182,6 +249,13 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
         <div className="p-3.5 bg-red-50 border border-red-200 rounded-xl flex items-center gap-2.5 text-xs sm:text-sm text-red-700 font-semibold shadow-xs">
           <span className="text-base">⚠️</span>
           <span>This room is already reserved for the selected dates. Please choose another suite or alternative dates.</span>
+        </div>
+      )}
+
+      {conflictError && (
+        <div className="p-3.5 bg-red-50 border border-red-200 rounded-xl flex items-center gap-2.5 text-xs sm:text-sm text-red-700 font-semibold shadow-xs">
+          <span className="text-base">⚠️</span>
+          <span>{conflictError}</span>
         </div>
       )}
 
@@ -311,39 +385,64 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
         </div>
       )}
 
-      {/* Submit Button */}
-      <div className="space-y-2.5 pt-2">
-        <button
-          type="submit"
-          disabled={loading || isRoomUnavailable}
-          className="w-full py-4 rounded-xl text-xs sm:text-sm uppercase tracking-wider font-bold bg-[#073125] hover:bg-[#12433B] text-white disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group transition-all duration-300 shadow-md cursor-pointer"
-        >
-          <span>
-            {loading
-              ? 'Confirming Booking...'
-              : isRoomUnavailable
-              ? 'Dates Unavailable — Select Alternative Room'
-              : 'Book Your Room Now'}
-          </span>
-          {!loading && !isRoomUnavailable && (
-            <ArrowUpRightIcon className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5" />
-          )}
-        </button>
+      {/* Submit Button or Retry State */}
+      {paymentPending ? (
+        <div className="p-6 bg-yellow-50 border border-yellow-200 rounded-xl text-center space-y-4">
+          <div className="text-yellow-600 text-4xl mb-2">⚠️</div>
+          <h3 className="text-xl font-serif text-[#073125] font-bold">Payment Pending</h3>
+          <p className="text-sm text-[#073125]/80">
+            Your booking is reserved, but the payment was not completed. Please complete the payment to confirm your stay.
+          </p>
+          <button
+            type="button"
+            onClick={handleRetryPayment}
+            disabled={loading}
+            className="w-full py-4 rounded-xl text-sm uppercase tracking-wider font-bold bg-[#C9F24D] text-[#073125] hover:bg-[#b8e23f] transition-all shadow-md cursor-pointer"
+          >
+            {loading ? 'Processing...' : 'Retry Payment'}
+          </button>
+          <button
+            type="button"
+            onClick={() => setPaymentPending(false)}
+            className="text-xs text-[#073125]/60 hover:underline pt-2 cursor-pointer"
+          >
+            Cancel and edit details
+          </button>
+        </div>
+      ) : (
+        <div className="space-y-2.5 pt-2">
+          <button
+            type="submit"
+            disabled={loading || isRoomUnavailable}
+            className="w-full py-4 rounded-xl text-xs sm:text-sm uppercase tracking-wider font-bold bg-[#073125] hover:bg-[#12433B] text-white disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group transition-all duration-300 shadow-md cursor-pointer"
+          >
+            <span>
+              {loading
+                ? 'Confirming Booking...'
+                : isRoomUnavailable
+                ? 'Dates Unavailable — Select Alternative Room'
+                : 'Book Your Room Now'}
+            </span>
+            {!loading && !isRoomUnavailable && (
+              <ArrowUpRightIcon className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5" />
+            )}
+          </button>
 
-        <button
-          type="button"
-          onClick={() => {
-            const text = encodeURIComponent(
-              `Hello Kasar Himalayan Heights! I would like to book ${selectedRoomObj?.name || 'a room'} from ${formData.checkInDate || 'upcoming dates'} for ${formData.guests} guest(s).`
-            );
-            window.open(`https://wa.me/${whatsappNumber}?text=${text}`, '_blank');
-          }}
-          className="w-full py-3.5 rounded-xl text-xs sm:text-sm uppercase tracking-wider font-bold border border-[#073125]/30 hover:bg-[#EBF2EA] text-[#073125] flex items-center justify-center gap-2 transition-all duration-300 cursor-pointer"
-        >
-          <WhatsAppIcon className="w-4 h-4 text-[#073125]" />
-          <span>Book on WhatsApp</span>
-        </button>
-      </div>
+          <button
+            type="button"
+            onClick={() => {
+              const text = encodeURIComponent(
+                `Hello Kasar Himalayan Heights! I would like to book ${selectedRoomObj?.name || 'a room'} from ${formData.checkInDate || 'upcoming dates'} for ${formData.guests} guest(s).`
+              );
+              window.open(`https://wa.me/${whatsappNumber}?text=${text}`, '_blank');
+            }}
+            className="w-full py-3.5 rounded-xl text-xs sm:text-sm uppercase tracking-wider font-bold border border-[#073125]/30 hover:bg-[#EBF2EA] text-[#073125] flex items-center justify-center gap-2 transition-all duration-300 cursor-pointer"
+          >
+            <WhatsAppIcon className="w-4 h-4 text-[#073125]" />
+            <span>Book on WhatsApp</span>
+          </button>
+        </div>
+      )}
 
       <p className="text-center text-xs text-[#073125]/65 pt-1">
         Best price guaranteed • {cancellationPolicy} • Free hot breakfast included

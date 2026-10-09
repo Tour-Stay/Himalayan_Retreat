@@ -20,6 +20,8 @@ const HotelNavbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const isCheckout = location.pathname === '/book';
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 25);
@@ -27,6 +29,32 @@ const HotelNavbar = () => {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  if (isCheckout) {
+    return (
+      <header className="sticky top-0 z-50 w-full font-sans transition-all duration-300">
+        <div className="w-full transition-all duration-300 bg-[#073125] text-white py-3.5 shadow-lg">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-4">
+            <Link to="/" className="flex items-center gap-3 group flex-shrink-0 whitespace-nowrap">
+              <Logo size={42} />
+              <div className="flex flex-col">
+                <span className="font-serif text-lg sm:text-xl lg:text-2xl font-bold text-white leading-tight whitespace-nowrap">
+                  The Kasar Himalayan Heights
+                </span>
+                <span className="text-xs tracking-wider uppercase text-[#C9F24D] font-semibold font-mono flex items-center gap-1.5 whitespace-nowrap">
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8V7z" /></svg>
+                  SECURE CHECKOUT
+                </span>
+              </div>
+            </Link>
+            <Link to="/rooms" className="px-4 py-2 rounded-full text-xs sm:text-sm font-mono font-semibold uppercase tracking-wider border border-white/20 bg-white/10 text-white hover:bg-white/20 transition-all flex items-center gap-1.5 shadow-xs whitespace-nowrap flex-shrink-0 cursor-pointer">
+              <span>&larr; Back</span>
+            </Link>
+          </div>
+        </div>
+      </header>
+    );
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full font-sans transition-all duration-300">

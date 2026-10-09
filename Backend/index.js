@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const mongoSanitize = require('express-mongo-sanitize');
+const mongoSanitize = require('mongo-sanitize-express5');
 const connectDB = require('./config/db');
 require('dotenv').config();
 
@@ -70,4 +70,30 @@ app.use('/api/payments', require('./routes/paymentRoutes'));
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+
+  // Background Job: Auto-cancel pending bookings if payment is not received within 15 minutes
+  const Booking = require('./models/Booking');
+  const TravelBooking = require('./models/TravelBooking');
+  
+  setInterval(async () => {
+    try {
+      const timeoutThreshold = new Date(Date.now() - 15 * 60 * 1000); // 15 mins ago
+      
+      const hotelResult = await Booking.updateMany(
+        { status: 'pending', createdAt: { $lt: timeoutThreshold } },
+        { $set: { status: 'cancelled', specialNotes: 'Auto-cancelled due to payment timeout (15 mins)' } }
+      );
+      
+      const travelResult = await TravelBooking.updateMany(
+        { status: 'pending', createdAt: { $lt: timeoutThreshold } },
+        { $set: { status: 'cancelled' } }
+      );
+      
+      if (hotelResult.modifiedCount > 0 || travelResult.modifiedCount > 0) {
+        console.log(`[Cron] Auto-cancelled ${hotelResult.modifiedCount} hotel and ${travelResult.modifiedCount} travel abandoned bookings.`);
+      }
+    } catch (err) {
+      console.error('[Cron] Error in auto-cancellation background job:', err);
+    }
+  }, 5 * 60 * 1000); // Runs every 5 minutes
 });
