@@ -3,12 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import { apiClient, ArrowUpRightIcon, WhatsAppIcon, SITE_CONFIG, useSiteSettings, calculateStayTariff, useRazorpay } from '@shared';
 import { mockRooms } from '../data/mockRooms';
 
-const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
+const BookingForm = ({ preSelectedRoom = null, initialCheckIn = '', initialCheckOut = '', onSelectRoom }) => {
   const navigate = useNavigate();
   const { settings } = useSiteSettings();
   const { initializePayment, isProcessing: paymentProcessing } = useRazorpay();
   const policies = settings?.hotelPolicies;
   const company = settings?.company;
+
+  const today = new Date().toISOString().split('T')[0];
+  const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+  const maxDate = new Date();
+  maxDate.setFullYear(maxDate.getFullYear() + 2);
+  const maxDateStr = maxDate.toISOString().split('T')[0];
 
   const checkInTime = policies?.checkInTime || '12:00 PM';
   const checkOutTime = policies?.checkOutTime || '10:00 AM';
@@ -21,8 +27,8 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
     name: '',
     email: '',
     phone: '',
-    checkInDate: '',
-    checkOutDate: '',
+    checkInDate: initialCheckIn || today,
+    checkOutDate: initialCheckOut || tomorrow,
     guests: '2',
     specialRequest: '',
   });
@@ -32,6 +38,17 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
   const [paymentPending, setPaymentPending] = useState(false);
   const [pendingBookingPayload, setPendingBookingPayload] = useState(null);
   const [conflictError, setConflictError] = useState('');
+
+  // Synchronize initial check-in & check-out dates from query parameters
+  useEffect(() => {
+    if (initialCheckIn || initialCheckOut) {
+      setFormData((prev) => ({
+        ...prev,
+        ...(initialCheckIn ? { checkInDate: initialCheckIn } : {}),
+        ...(initialCheckOut ? { checkOutDate: initialCheckOut } : {}),
+      }));
+    }
+  }, [initialCheckIn, initialCheckOut]);
 
   // Real-time server availability check to prevent double bookings
   useEffect(() => {
@@ -77,6 +94,18 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
           setRooms(res.data);
           if (!preSelectedRoom) {
             setFormData((prev) => ({ ...prev, room: res.data[0]._id }));
+          } else {
+            const exists = res.data.some((r) => r._id === preSelectedRoom);
+            if (!exists) {
+              const mock = mockRooms.find((m) => m._id === preSelectedRoom);
+              const nameMatch = res.data.find(
+                (r) => mock && r.name && r.name.toLowerCase().includes(mock.name.split(' ')[0].toLowerCase())
+              );
+              if (nameMatch) {
+                setFormData((prev) => ({ ...prev, room: nameMatch._id }));
+                if (onSelectRoom) onSelectRoom(nameMatch._id);
+              }
+            }
           }
         }
       } catch (error) {
@@ -84,7 +113,7 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
       }
     };
     fetchRooms();
-  }, [preSelectedRoom]);
+  }, [preSelectedRoom, onSelectRoom]);
 
   useEffect(() => {
     if (preSelectedRoom) {
@@ -94,7 +123,14 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => {
+      const updated = { ...prev, [name]: value };
+      if (name === 'checkInDate' && value >= prev.checkOutDate) {
+        const nextDay = new Date(new Date(value).getTime() + 86400000).toISOString().split('T')[0];
+        updated.checkOutDate = nextDay;
+      }
+      return updated;
+    });
     if (name === 'room' && onSelectRoom) {
       onSelectRoom(value);
     }
@@ -212,11 +248,6 @@ const BookingForm = ({ preSelectedRoom = null, onSelectRoom }) => {
       }
     }
   };
-
-  const today = new Date().toISOString().split('T')[0];
-  const maxDate = new Date();
-  maxDate.setFullYear(maxDate.getFullYear() + 2);
-  const maxDateStr = maxDate.toISOString().split('T')[0];
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 font-sans">

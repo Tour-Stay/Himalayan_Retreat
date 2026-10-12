@@ -213,8 +213,35 @@ Wishing you a peaceful and scenic journey to the Himalayas! 🌲🏔️`;
           <div className="bg-[#FAF6EF] border border-[#C5A059]/25 rounded-2xl p-4">
             <h3 className="text-xs font-cinzel font-bold text-[#7C1D23] uppercase tracking-wider mb-3 flex items-center gap-1.5">
               <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-[#7C1D23]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 17a2 2 0 100-4 2 2 0 000 4zm8 0a2 2 0 100-4 2 2 0 000 4m-11 0h14m-15-5l2-6h10l2 6m-14 0h14m-15 0v3a1 1 0 001 1h1m12-4v3a1 1 0 01-1 1h-1" /></svg>
-              <span>Chauffeur & Vehicle Allocation</span>
+              <span>Chauffeur &amp; Vehicle Allocation</span>
             </h3>
+
+            {settings?.travelPolicies?.driverRoster?.length > 0 && (
+              <div className="mb-3 p-2 bg-white/80 rounded-xl border border-[#C5A059]/30 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <span className="text-[11px] font-semibold text-[#541508]">
+                  ⚡ 1-Click Pick from Driver Roster:
+                </span>
+                <select
+                  onChange={(e) => {
+                    const selected = settings.travelPolicies.driverRoster.find((d) => d.id === e.target.value);
+                    if (selected) {
+                      setDriverName(selected.name);
+                      setDriverPhone(selected.phone);
+                    }
+                  }}
+                  defaultValue=""
+                  className="text-xs px-2.5 py-1 rounded-lg border border-[#C5A059]/40 bg-white text-[#2C2523] font-medium"
+                >
+                  <option value="" disabled>-- Select Verified Driver --</option>
+                  {settings.travelPolicies.driverRoster.map((d) => (
+                    <option key={d.id} value={d.id}>
+                      {d.name} ({d.vehicleAssigned || 'Cab'} • {d.phone})
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label className="block text-[11px] font-semibold text-[#2C2523] mb-1">

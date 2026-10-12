@@ -92,20 +92,31 @@ const FareSummaryPanel = ({
         </div>
 
         <div className="flex justify-between items-center">
-          <span className="text-[#5C5350]">Travel Distance:</span>
+          <span className="text-[#5C5350]">Distance Fare:</span>
           <span className="font-numeral font-semibold text-[#541508]">
-            {pricing.billableDistance} km @ ₹{currentFleet.perKmRate}/km
+            {pricing.billableDistance} km × ₹{currentFleet.perKmRate} = ₹{pricing.distanceFare.toLocaleString()}
           </span>
         </div>
 
         <div className="flex justify-between items-center">
-          <span className="text-[#5C5350]">Cab Distance Fare:</span>
-          <span className="font-numeral font-medium">₹{pricing.distanceFare.toLocaleString()}</span>
-        </div>
-
-        <div className="flex justify-between items-center">
-          <span className="text-[#5C5350]">Driver Food &amp; Night Allowance:</span>
-          <span className="font-numeral font-medium">₹{pricing.driverBatta.toLocaleString()}</span>
+          <span className="text-[#5C5350]">Driver Allowance:</span>
+          <span className="font-numeral font-semibold text-[#541508] text-right">
+            {pricing.driverBatta > 0 ? (
+              tripType === 'round-trip' ? (
+                days > 1 && pricing.nightHaltTotal > 0 ? (
+                  `₹${pricing.driverDailyAllowance}/d × ${days}d + ₹${pricing.nightHaltTotal} (${days - 1} ${days - 1 === 1 ? 'night' : 'nights'}) = ₹${pricing.driverBatta.toLocaleString()}`
+                ) : (
+                  `₹${pricing.driverDailyAllowance} / day (${days} ${days === 1 ? 'day' : 'days'}) = ₹${pricing.driverBatta.toLocaleString()}`
+                )
+              ) : (
+                routeInfo.km > 70
+                  ? `₹${pricing.driverBatta.toLocaleString()} (Highway Drop Batta)`
+                  : `₹${pricing.driverBatta.toLocaleString()} (Local Short Trip Batta)`
+              )
+            ) : (
+              <span className="text-emerald-800 font-bold font-mono">₹0 (Waived)</span>
+            )}
+          </span>
         </div>
 
         <div className="flex justify-between items-center">

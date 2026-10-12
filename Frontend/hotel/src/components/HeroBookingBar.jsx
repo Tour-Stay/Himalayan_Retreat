@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CalendarIcon, BedIcon, ArrowUpRightIcon, CheckCircleIcon } from '@shared';
 import { mockRooms } from '../data/mockRooms';
@@ -16,6 +16,33 @@ const HeroBookingBar = ({ onSearch, rooms }) => {
   const [checkIn, setCheckIn] = useState(today);
   const [checkOut, setCheckOut] = useState(tomorrow);
   const [selectedSuite, setSelectedSuite] = useState(suiteList[0]?._id || '');
+
+  // Synchronize selected room once live backend data arrives
+  useEffect(() => {
+    if (rooms && rooms.length > 0) {
+      setSelectedSuite((prev) => {
+        if (!prev || prev.startsWith('mock-')) {
+          const mockMatch = mockRooms.find((m) => m._id === prev);
+          if (mockMatch) {
+            const backendMatch = rooms.find(
+              (r) => r.name && mockMatch.name && r.name.toLowerCase().includes(mockMatch.name.split(' ')[0].toLowerCase())
+            );
+            if (backendMatch) return backendMatch._id;
+          }
+          return rooms[0]._id;
+        }
+        return prev;
+      });
+    }
+  }, [rooms]);
+
+  const handleCheckInChange = (newVal) => {
+    setCheckIn(newVal);
+    if (newVal >= checkOut) {
+      const nextDay = new Date(new Date(newVal).getTime() + 86400000).toISOString().split('T')[0];
+      setCheckOut(nextDay);
+    }
+  };
 
   // Calculate nights
   let nights = 1;
@@ -60,7 +87,7 @@ const HeroBookingBar = ({ onSearch, rooms }) => {
             value={checkIn}
             min={today}
             max={maxDateStr}
-            onChange={(e) => setCheckIn(e.target.value)}
+            onChange={(e) => handleCheckInChange(e.target.value)}
             className="w-full bg-transparent text-sm sm:text-base font-semibold text-[#073125] focus:outline-none cursor-pointer"
           />
         </div>

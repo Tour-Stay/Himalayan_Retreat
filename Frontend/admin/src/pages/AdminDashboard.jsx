@@ -16,6 +16,7 @@ const TourManager = lazy(() => import('../components/TourManager'));
 const ReviewManager = lazy(() => import('../components/ReviewManager'));
 const CompanyManager = lazy(() => import('../components/CompanyManager'));
 const FleetManager = lazy(() => import('../components/FleetManager'));
+const DriverManager = lazy(() => import('../components/DriverManager'));
 const RouteManager = lazy(() => import('../components/RouteManager'));
 const AnnouncementManager = lazy(() => import('../components/AnnouncementManager'));
 const LandingCmsManager = lazy(() => import('../components/LandingCmsManager'));
@@ -113,6 +114,7 @@ const AdminDashboard = ({ tab }) => {
                 {activeTab === 'yield' && 'Weekend & Seasonal Rates'}
                 {activeTab === 'travel-bookings' && 'Cab Bookings & Driver Dispatch'}
                 {activeTab === 'fleet' && 'Cab Fleet & Rates'}
+                {activeTab === 'drivers' && 'Driver Batta, Plain vs Mountain Tariffs & Roster'}
                 {activeTab === 'routes' && 'Temple & Sightseeing Fares'}
                 {activeTab === 'tours' && 'Tour Packages'}
                 {activeTab === 'announcements' && 'Website Notice Banner'}
@@ -127,6 +129,7 @@ const AdminDashboard = ({ tab }) => {
                 {activeTab === 'yield' && 'Set extra charges for busy weekends (Friday & Saturday) or winter peak holiday dates.'}
                 {activeTab === 'travel-bookings' && 'View incoming taxi pickup requests, assign your drivers, and track trip status.'}
                 {activeTab === 'fleet' && 'Set vehicle daily rates and per-kilometer charges for Swift Dzire, Innova, and Minibus.'}
+                {activeTab === 'drivers' && 'Set daily driver hill allowances, short-trip plain vs mountain rates, night halt charges, guidelines, and manage your chauffeur roster.'}
                 {activeTab === 'routes' && 'Set fixed taxi fares for trips to Kainchi Dham, Jageshwar, Kathgodam Station, and Nainital.'}
                 {activeTab === 'tours' && 'Create and edit multi-day pilgrimage and sightseeing packages across Kumaon.'}
                 {activeTab === 'announcements' && 'Write a notice or alert message that will display across the top of your websites.'}
@@ -206,6 +209,7 @@ const AdminDashboard = ({ tab }) => {
 
               {activeTab === 'company' && <CompanyManager />}
               {activeTab === 'fleet' && <FleetManager />}
+              {activeTab === 'drivers' && <DriverManager />}
               {activeTab === 'routes' && <RouteManager />}
               {activeTab === 'announcements' && <AnnouncementManager />}
               {activeTab === 'landing-cms' && <LandingCmsManager />}

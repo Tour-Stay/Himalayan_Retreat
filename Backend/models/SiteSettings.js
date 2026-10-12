@@ -141,6 +141,24 @@ const siteSettingsSchema = new mongoose.Schema(
     travelPolicies: {
       nightChargeAmount: { type: Number, default: 300 },
       driverAllowancePerDay: { type: Number, default: 500 },
+      driverShortTripAllowance: { type: Number, default: 250 },
+      driverLongDayDropAllowance: { type: Number, default: 450 },
+      driverNightHaltCharge: { type: Number, default: 300 },
+      driverGuidelines: {
+        type: String,
+        default: 'Standard mountain duty hours: 06:00 AM - 09:00 PM. High-altitude Ghat driving safety protocols apply. All chauffeurs receive free food and lodging allowances.',
+      },
+      driverRoster: [
+        {
+          id: { type: String },
+          name: { type: String },
+          phone: { type: String },
+          experience: { type: String },
+          vehicleAssigned: { type: String },
+          rating: { type: Number, default: 4.9 },
+          status: { type: String, default: 'Available' },
+        },
+      ],
       faqs: [
         {
           q: { type: String },

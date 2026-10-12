@@ -36,8 +36,8 @@ export const PolicyManager = () => {
     }
     if (settings?.travelPolicies) {
       setTravelPolicies({
-        nightChargeAmount: settings.travelPolicies.nightChargeAmount || 300,
-        driverAllowancePerDay: settings.travelPolicies.driverAllowancePerDay || 500,
+        nightChargeAmount: settings.travelPolicies.nightChargeAmount !== undefined ? settings.travelPolicies.nightChargeAmount : 300,
+        driverAllowancePerDay: settings.travelPolicies.driverAllowancePerDay !== undefined ? settings.travelPolicies.driverAllowancePerDay : 500,
         faqs: settings.travelPolicies.faqs || [],
       });
     }

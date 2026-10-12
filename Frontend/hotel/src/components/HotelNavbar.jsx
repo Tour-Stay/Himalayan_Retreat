@@ -22,6 +22,23 @@ const HotelNavbar = () => {
 
   const isCheckout = location.pathname === '/book';
 
+  const handleNavClick = (href) => {
+    if (mobileMenuOpen) setMobileMenuOpen(false);
+    if (href.startsWith('/#') && location.pathname === '/') {
+      const targetId = href.replace('/#', '');
+      const el = document.getElementById(targetId);
+      if (el) {
+        const headerOffset = 80;
+        const elementPosition = el.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        window.scrollTo({
+          top: Math.max(0, offsetPosition),
+          behavior: 'smooth',
+        });
+      }
+    }
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 25);
@@ -114,11 +131,14 @@ const HotelNavbar = () => {
           {/* Simple Clean Desktop Menu Links (Prominent Serif Buttons) */}
           <nav className="nav-desktop-menu items-center gap-1.5 sm:gap-2.5 lg:gap-3.5 flex-nowrap whitespace-nowrap flex-shrink-0">
             {navLinks.map((link, idx) => {
-              const isActive = link.href === '/rooms' && location.pathname === '/rooms';
+              const isActive =
+                (link.href === '/rooms' && location.pathname === '/rooms') ||
+                (link.href.startsWith('/#') && location.pathname === '/' && location.hash === link.href.replace('/', ''));
               return (
-                <a
+                <Link
                   key={idx}
-                  href={link.href}
+                  to={link.href}
+                  onClick={() => handleNavClick(link.href)}
                   className={`px-3.5 py-1.5 rounded-full text-[19px] sm:text-[20px] lg:text-[21px] font-serif font-medium transition-all whitespace-nowrap flex-shrink-0 tracking-wide ${
                     isActive
                       ? 'bg-white/15 text-[#C9F24D] shadow-xs'
@@ -126,7 +146,7 @@ const HotelNavbar = () => {
                   }`}
                 >
                   {link.label}
-                </a>
+                </Link>
               );
             })}
           </nav>
@@ -177,14 +197,14 @@ const HotelNavbar = () => {
         <div className="nav-mobile-panel bg-[#073125] border-b border-white/15 px-6 py-5 space-y-3.5 shadow-xl text-white">
           <div className="space-y-1.5 pb-3 border-b border-white/10">
             {navLinks.map((link, idx) => (
-              <a
+              <Link
                 key={idx}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
+                to={link.href}
+                onClick={() => handleNavClick(link.href)}
                 className="block py-2 text-[20px] font-serif font-medium text-white/95 hover:text-[#C9F24D] transition-colors"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </div>
 

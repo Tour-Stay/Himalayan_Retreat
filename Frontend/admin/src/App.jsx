@@ -92,6 +92,22 @@ function App() {
                 }
               />
               <Route
+                path="/settings/drivers"
+                element={
+                  <ProtectedRoute>
+                    <AdminDashboard tab="drivers" />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/drivers"
+                element={
+                  <ProtectedRoute>
+                    <Navigate to="/settings/drivers" replace />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="/settings/routes"
                 element={
                   <ProtectedRoute>

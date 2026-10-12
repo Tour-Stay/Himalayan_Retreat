@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { APP_URLS } from '../constants/siteConfig';
 
 const AnnouncementBar = ({
   message = 'Spring & Summer Himalayan Pilgrimages: Special Kumaon & Chardham circuits now open.',
@@ -11,14 +12,37 @@ const AnnouncementBar = ({
 
   if (!visible) return null;
 
+  // Resolve cross-portal anchor links intelligently
+  const getResolvedHref = (href) => {
+    if (!href) return '';
+    const trimmed = href.trim();
+
+    // If it's an anchor link (e.g. #enquiry)
+    if (trimmed.startsWith('#')) {
+      if (typeof window !== 'undefined') {
+        const landingBase = (APP_URLS?.landing || 'http://localhost:5173').replace(/\/+$/, '');
+        const currentOrigin = window.location.origin.replace(/\/+$/, '');
+        // If we are on a different origin (e.g. Hotel :5174 or Travel :5175), route to Landing portal
+        if (currentOrigin !== landingBase) {
+          return `${landingBase}/${trimmed}`;
+        }
+      }
+      return trimmed;
+    }
+
+    return trimmed;
+  };
+
+  const resolvedHref = getResolvedHref(linkHref);
+
   return (
     <div className={`text-[#FDFBF7] text-xs py-2 px-4 border-b border-[#C5A059]/40 relative z-50 ${className || 'bg-[#5C151A]'}`}>
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
         <div className="flex-1 text-center font-sans tracking-wide">
           <span className="font-light">{message}</span>{' '}
-          {linkHref && linkText && (
+          {resolvedHref && linkText && (
             <a
-              href={linkHref}
+              href={resolvedHref}
               className="text-[#C5A059] font-semibold underline underline-offset-4 hover:text-[#DFCA9B] ml-2 transition-colors inline-block"
             >
               {linkText} &rarr;
