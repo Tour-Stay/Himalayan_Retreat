@@ -242,12 +242,32 @@ const FareCalculator = ({
     const ratePerKm = currentFleet.perKmRate;
     const distanceFare = billableDistance * ratePerKm;
 
-    // Driver hill allowance: ₹500/day for multi-day trips, or ₹400 for long day transfers
+    // Driver hill & plain allowances: configured dynamically via Admin CMS (travelPolicies)
+    const tp = settings?.travelPolicies;
+    const driverDailyAllowance = tp?.driverAllowancePerDay !== undefined
+      ? Number(tp.driverAllowancePerDay)
+      : 500;
+    const driverShortTripAllowance = tp?.driverShortTripAllowance !== undefined
+      ? Number(tp.driverShortTripAllowance)
+      : 250;
+    const driverLongDayDropAllowance = tp?.driverLongDayDropAllowance !== undefined
+      ? Number(tp.driverLongDayDropAllowance)
+      : 450;
+    const driverNightHaltCharge = tp?.driverNightHaltCharge !== undefined
+      ? Number(tp.driverNightHaltCharge)
+      : (tp?.nightChargeAmount !== undefined ? Number(tp.nightChargeAmount) : 300);
+
     let driverBatta = 0;
+    let nightHaltTotal = 0;
     if (isRoundTrip) {
-      driverBatta = 500 * days;
+      const baseDailyBatta = driverDailyAllowance * days;
+      const nights = Math.max(0, days - 1);
+      nightHaltTotal = nights * driverNightHaltCharge;
+      driverBatta = baseDailyBatta + nightHaltTotal;
     } else {
-      driverBatta = oneWayDistance > 70 ? 450 : 250;
+      // Terrain & distance differentiation:
+      // Short distance (<= 70km, local/plains transfers) vs Long mountain highway drops (> 70km)
+      driverBatta = oneWayDistance > 70 ? driverLongDayDropAllowance : driverShortTripAllowance;
     }
 
     // All add-on halts (Kainchi Dham, Bhowali tea, Roof carrier) are 100% complimentary
@@ -259,14 +279,44 @@ const FareCalculator = ({
       billableDistance,
       distanceFare,
       driverBatta,
+      driverDailyAllowance,
+      driverShortTripAllowance,
+      driverLongDayDropAllowance,
+      driverNightHaltCharge,
+      nightHaltTotal,
       totalFare,
       perPersonFare,
       isRoundTrip,
     };
-  }, [routeInfo.km, tripType, days, currentFleet.perKmRate, passengerCount]);
+  }, [
+    routeInfo.km,
+    tripType,
+    days,
+    currentFleet.perKmRate,
+    passengerCount,
+    settings?.travelPolicies?.driverAllowancePerDay,
+    settings?.travelPolicies?.driverShortTripAllowance,
+    settings?.travelPolicies?.driverLongDayDropAllowance,
+    settings?.travelPolicies?.driverNightHaltCharge,
+    settings?.travelPolicies?.nightChargeAmount,
+  ]);
 
   // Calculate live preview prices for all vehicle types
   const fleetPricePreviews = useMemo(() => {
+    const tp = settings?.travelPolicies;
+    const driverDailyAllowance = tp?.driverAllowancePerDay !== undefined
+      ? Number(tp.driverAllowancePerDay)
+      : 500;
+    const driverShortTripAllowance = tp?.driverShortTripAllowance !== undefined
+      ? Number(tp.driverShortTripAllowance)
+      : 250;
+    const driverLongDayDropAllowance = tp?.driverLongDayDropAllowance !== undefined
+      ? Number(tp.driverLongDayDropAllowance)
+      : 450;
+    const driverNightHaltCharge = tp?.driverNightHaltCharge !== undefined
+      ? Number(tp.driverNightHaltCharge)
+      : (tp?.nightChargeAmount !== undefined ? Number(tp.nightChargeAmount) : 300);
+
     return fleetList.map((v) => {
       let billableKm = 0;
       if (tripType === 'round-trip') {
@@ -274,11 +324,27 @@ const FareCalculator = ({
       } else {
         billableKm = routeInfo.km <= 25 ? Math.max(routeInfo.km, 25) : Math.round(routeInfo.km * (routeInfo.km <= 95 ? 1.5 : 1.7));
       }
-      const batta = tripType === 'round-trip' ? 500 * days : (routeInfo.km > 70 ? 450 : 250);
+      let batta = 0;
+      if (tripType === 'round-trip') {
+        const nights = Math.max(0, days - 1);
+        batta = (driverDailyAllowance * days) + (nights * driverNightHaltCharge);
+      } else {
+        batta = routeInfo.km > 70 ? driverLongDayDropAllowance : driverShortTripAllowance;
+      }
       const total = Math.round(billableKm * v.perKmRate + batta);
-      return { id: v.id, total };
+      return { id: v.id, total, driverBatta: batta, distanceFare: Math.round(billableKm * v.perKmRate) };
     });
-  }, [routeInfo.km, tripType, days]);
+  }, [
+    routeInfo.km,
+    tripType,
+    days,
+    fleetList,
+    settings?.travelPolicies?.driverAllowancePerDay,
+    settings?.travelPolicies?.driverShortTripAllowance,
+    settings?.travelPolicies?.driverLongDayDropAllowance,
+    settings?.travelPolicies?.driverNightHaltCharge,
+    settings?.travelPolicies?.nightChargeAmount,
+  ]);
 
   // Handle Preset Clicks
   const handleApplyPreset = (preset) => {
@@ -341,7 +407,7 @@ const FareCalculator = ({
         travelDate,
         travelers: Number(passengerCount),
         totalAmount: pricing.totalFare,
-        notes: `Mode: ${tripType}, ${pricing.billableDistance} billable km @ ₹${currentFleet.perKmRate}/km. Add-ons: ${addonsSelected.join(', ')}. ${specialNotes}`,
+        notes: `Mode: ${tripType}, Distance: ${pricing.billableDistance} km @ ₹${currentFleet.perKmRate}/km (₹${pricing.distanceFare}), Driver Allowance: ₹${pricing.driverBatta}. Add-ons: ${addonsSelected.join(', ')}. ${specialNotes}`,
         guestDetails: {
           name: guestName,
           phone: guestPhone,
@@ -352,7 +418,7 @@ const FareCalculator = ({
       const dbBookingId = response.data?.booking?._id || bookingId;
 
       await initializePayment({
-        amount: pricing.totalFare,
+        bookingId: dbBookingId,
         receiptId: dbBookingId,
         bookingType: 'travel',
         prefill: {
@@ -401,7 +467,8 @@ const FareCalculator = ({
       `*🔄 Trip Mode:* ${tripType === 'round-trip' ? `Round Trip (${days} ${days === 1 ? 'Day' : 'Days'})` : 'One-Way Drop'}\n` +
       `*📅 Travel Date:* ${travelDate}\n` +
       `*👥 Passengers:* ${passengerCount} Guests (₹${pricing.perPersonFare.toLocaleString()} per person)\n` +
-      `*📏 Distance:* ${pricing.billableDistance} km (₹${currentFleet.perKmRate}/km)\n` +
+      `*📏 Distance Fare:* ${pricing.billableDistance} km × ₹${currentFleet.perKmRate}/km = ₹${pricing.distanceFare.toLocaleString()}\n` +
+      `*⛰️ Driver Allowance:* ${pricing.driverBatta > 0 ? `₹${pricing.driverBatta.toLocaleString()} (${tripType === 'round-trip' ? `₹${pricing.driverDailyAllowance || 500}/day × ${days}d` : 'Day transfer'})` : '₹0 (Waived)'}\n` +
       `----------------------------------------\n` +
       (addonsList ? `*Free Included Halts & Extras:*\n${addonsList}\n----------------------------------------\n` : '') +
       `*💰 Total All-Inclusive Fare:* ₹${pricing.totalFare.toLocaleString()} (Driver allowance, fuel, tolls & green tax included)\n` +

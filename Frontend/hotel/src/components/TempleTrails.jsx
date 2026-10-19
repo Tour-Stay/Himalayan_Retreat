@@ -7,6 +7,7 @@ import {
   MapPinIcon,
   CarIcon,
   SparklesIcon,
+  APP_URLS,
 } from '@shared';
 
 const holyTrails = [
@@ -133,7 +134,7 @@ const TempleTrails = () => {
 
                 {!trail.isWalk ? (
                   <a
-                    href="http://localhost:5175"
+                    href={APP_URLS.travel}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-mono uppercase tracking-wider font-semibold border border-white/25 bg-white/10 hover:bg-[#C9F24D] hover:text-[#073125] text-white transition-all shadow-xs cursor-pointer"

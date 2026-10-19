@@ -23,6 +23,8 @@
 /* Base HTML & Body — Increased font sizes for enhanced readability across the whole page */
 html {
   font-size: 17px;
+  scroll-behavior: smooth;
+  scroll-padding-top: 85px;
 }
 
 @media (min-width: 768px) {

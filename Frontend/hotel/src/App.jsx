@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import {
   AnnouncementBar,
   BackToTop,
+  ScrollManager,
   initAutoScrollReveal,
   SiteSettingsProvider,
   useSiteSettings,
@@ -26,6 +27,9 @@ function HotelAppContent() {
 
   return (
     <div className="min-h-screen bg-[#F8FAF7] text-[#073125] font-sans flex flex-col selection:bg-[#C9F24D]/30 selection:text-[#073125] text-base sm:text-lg">
+      {/* 0. Universal Scroll & Hash Navigation Manager */}
+      <ScrollManager />
+
       {/* 1. Top Announcement Bar */}
       {announcement?.enabled !== false && (
         <AnnouncementBar

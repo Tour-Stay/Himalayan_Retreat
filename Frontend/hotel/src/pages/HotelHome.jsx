@@ -45,6 +45,13 @@ const HotelHome = () => {
         const res = await apiClient.get('/hotel/rooms');
         if (res.data && res.data.length > 0) {
           setRooms(res.data);
+          // Preload suite images in browser cache so booking form opens with images instantly cached
+          res.data.forEach((room) => {
+            if (room.imageURLs?.[0]) {
+              const img = new Image();
+              img.src = room.imageURLs[0];
+            }
+          });
         }
       } catch (error) {
         setRooms(mockRooms);

@@ -1,5 +1,8 @@
 const Room = require('../models/Room');
 const Booking = require('../models/Booking');
+const SiteSettings = require('../models/SiteSettings');
+const { calculateStayTariff } = require('../config/pricingEngine');
+const jwt = require('jsonwebtoken');
 const { uploadToCloudinary } = require('../config/cloudinary');
 const { sendHotelBookingEmail } = require('../config/emailService');
 
@@ -325,15 +328,28 @@ const toggleRoomAvailability = async (req, res) => {
 // BOOKING CONTROLLERS
 // ============================
 
-// @desc    Create a new hotel booking (with date conflict check)
+// @desc    Create a new hotel booking (with date conflict check & authoritative server pricing)
 // @route   POST /api/hotel/bookings
 // @access  Public
 const createBooking = async (req, res) => {
   try {
     const { room, guestDetails, checkInDate, checkOutDate } = req.body;
 
-    // Validate dates
-    if (new Date(checkInDate) >= new Date(checkOutDate)) {
+    // 1. Strict Date Validation
+    const checkIn = new Date(checkInDate);
+    const checkOut = new Date(checkOutDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (isNaN(checkIn.getTime()) || isNaN(checkOut.getTime())) {
+      return res.status(400).json({ message: 'Invalid check-in or check-out date format.' });
+    }
+
+    if (checkIn < today) {
+      return res.status(400).json({ message: 'Check-in date cannot be in the past.' });
+    }
+
+    if (checkIn >= checkOut) {
       return res.status(400).json({ message: 'Check-out date must be after check-in date.' });
     }
 
@@ -353,7 +369,7 @@ const createBooking = async (req, res) => {
       return res.status(409).json({ message: 'This room is already booked for the selected dates.' });
     }
 
-    // Calculate total amount
+    // 2. Fetch room data
     const roomData = await Room.findById(room);
     if (!roomData) {
       return res.status(404).json({ message: 'Room not found.' });
@@ -373,30 +389,55 @@ const createBooking = async (req, res) => {
       });
     }
 
-    if (roomData.unavailableUntil && !hasPassedDueDate && new Date(checkInDate) < new Date(roomData.unavailableUntil)) {
+    if (roomData.unavailableUntil && !hasPassedDueDate && checkIn < new Date(roomData.unavailableUntil)) {
       return res.status(400).json({
         message: `This suite is unavailable for check-in before ${new Date(roomData.unavailableUntil).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}.`,
       });
     }
 
-    const nights = Math.ceil(
-      (new Date(checkOutDate) - new Date(checkInDate)) / (1000 * 60 * 60 * 24)
+    // 3. Authoritative server-side price calculation
+    const siteSettings = await SiteSettings.findOne();
+    const tariffResult = calculateStayTariff(
+      roomData.pricePerNight,
+      checkInDate,
+      checkOutDate,
+      siteSettings?.pricingRules || {}
     );
-    const calculatedTotal = nights * roomData.pricePerNight;
-    const totalAmount = Number(req.body.totalAmount) || calculatedTotal;
+    const authoritativeTotal = tariffResult.totalAmount;
+
+    // Check if the request comes from an authenticated admin (e.g. Admin QuickBookingModal)
+    let totalAmount = authoritativeTotal;
+    let isAdminUser = false;
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+      try {
+        const token = req.headers.authorization.split(' ')[1];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        if (decoded && (decoded.role === 'admin' || decoded.role === 'superadmin' || decoded.id)) {
+          isAdminUser = true;
+        }
+      } catch (tokenErr) {
+        isAdminUser = false;
+      }
+    }
+
+    // Only allow manual totalAmount override if request is from an authenticated admin
+    if (isAdminUser && req.body.totalAmount !== undefined && Number(req.body.totalAmount) > 0) {
+      totalAmount = Number(req.body.totalAmount);
+    }
+
     const advancePaid = Number(req.body.advancePaid) || 0;
     const balanceDue = Math.max(0, totalAmount - advancePaid);
     const status = req.body.status || 'pending';
     const paymentMode = req.body.paymentMode || (advancePaid > 0 ? 'Cash' : 'Pending');
-    const source = req.body.source || 'Website';
+    const source = req.body.source || (isAdminUser ? 'Admin' : 'Website');
     const specialNotes = req.body.specialNotes || '';
 
     // Create the booking
     const booking = await Booking.create({
       room,
       guestDetails,
-      checkInDate,
-      checkOutDate,
+      checkInDate: checkIn,
+      checkOutDate: checkOut,
       totalAmount,
       advancePaid,
       balanceDue,

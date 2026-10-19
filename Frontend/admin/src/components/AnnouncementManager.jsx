@@ -184,6 +184,9 @@ export const AnnouncementManager = () => {
                     placeholder="e.g. #enquiry or https://..."
                     className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-[#C5A059]/40 text-[#2C2523] focus:outline-hidden focus:border-[#7C1D23]"
                   />
+                  <p className="text-[10px] text-[#2C2523]/60 mt-1">
+                    Anchors like <code className="text-[#7C1D23] font-semibold">#enquiry</code> automatically route to the Landing page when clicked from the Hotel or Travel portals.
+                  </p>
                 </div>
               </div>
             </div>

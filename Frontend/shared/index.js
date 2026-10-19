@@ -12,6 +12,7 @@ export { default as Modal } from './components/Modal';
 export { default as Loader } from './components/Loader';
 export { default as Logo } from './components/Logo';
 export { default as BackToTop } from './components/BackToTop';
+export { default as ScrollManager } from './components/ScrollManager';
 export { default as WriteReviewModal } from './components/WriteReviewModal';
 export * from './components/Icons';
 

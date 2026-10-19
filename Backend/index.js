@@ -50,8 +50,15 @@ app.use(
   }),
 );
 
-// Body Parser (with 1MB limit to prevent DoS attacks)
-app.use(express.json({ limit: "1mb" }));
+// Body Parser (with 1MB limit and raw body capture for webhook signature verification)
+app.use(
+  express.json({
+    limit: "1mb",
+    verify: (req, res, buf) => {
+      req.rawBody = buf;
+    },
+  })
+);
 
 // NoSQL Injection Sanitization: Strips prohibited MongoDB operators ($ and .) from request inputs
 app.use(mongoSanitize());

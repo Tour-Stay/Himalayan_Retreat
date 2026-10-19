@@ -1,5 +1,8 @@
 const TourPackage = require('../models/TourPackage');
 const TravelBooking = require('../models/TravelBooking');
+const SiteSettings = require('../models/SiteSettings');
+const { calculateCabFare } = require('../config/pricingEngine');
+const jwt = require('jsonwebtoken');
 const { uploadToCloudinary } = require('../config/cloudinary');
 const { sendTravelBookingEmail } = require('../config/emailService');
 
@@ -211,15 +214,64 @@ const createTravelBooking = async (req, res) => {
       totalAmount: clientAmount,
     } = req.body;
 
-    let tourPackage = null;
-    let finalAmount = clientAmount || 0;
+    // 1. Strict Input & Date Validation
+    const validTravelers = Math.max(1, parseInt(travelers, 10) || 1);
+    const validTripDays = Math.max(1, parseInt(tripDays, 10) || 1);
 
-    // If packageId is provided, look up the package
+    const parsedTravelDate = new Date(travelDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (isNaN(parsedTravelDate.getTime())) {
+      return res.status(400).json({ message: 'Invalid travel date format.' });
+    }
+
+    if (parsedTravelDate < today) {
+      return res.status(400).json({ message: 'Travel date cannot be in the past.' });
+    }
+
+    // 2. Authoritative Price Calculation
+    let tourPackage = null;
+    let authoritativeAmount = 0;
+
     if (packageId) {
       tourPackage = await TourPackage.findById(packageId);
-      if (tourPackage && tourPackage.pricePerPerson) {
-        finalAmount = (travelers || 1) * tourPackage.pricePerPerson;
+      if (!tourPackage) {
+        return res.status(404).json({ message: 'Tour package not found.' });
       }
+      authoritativeAmount = validTravelers * (Number(tourPackage.pricePerPerson) || 0);
+    } else {
+      // Custom cab transfer: Calculate authoritative fare on server
+      const siteSettings = await SiteSettings.findOne();
+      authoritativeAmount = calculateCabFare(
+        {
+          vehicleType: vehicleType || '6-seater',
+          circuit: circuit || '',
+          tripDays: validTripDays,
+          travelers: validTravelers,
+        },
+        siteSettings || {}
+      );
+    }
+
+    // 3. Admin Override Check
+    let finalAmount = authoritativeAmount;
+    let isAdminUser = false;
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+      try {
+        const token = req.headers.authorization.split(' ')[1];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        if (decoded && (decoded.role === 'admin' || decoded.role === 'superadmin' || decoded.id)) {
+          isAdminUser = true;
+        }
+      } catch (tokenErr) {
+        isAdminUser = false;
+      }
+    }
+
+    // Only allow manual totalAmount override if request is from an authenticated admin
+    if (isAdminUser && clientAmount !== undefined && Number(clientAmount) > 0) {
+      finalAmount = Number(clientAmount);
     }
 
     const booking = await TravelBooking.create({
@@ -227,11 +279,11 @@ const createTravelBooking = async (req, res) => {
       vehicleType: vehicleType || '6-seater',
       circuit: circuit || 'Hill Stations & Temples',
       pickupLocation: pickupLocation || 'Kathgodam / Kasar Devi',
-      tripDays: tripDays || 1,
+      tripDays: validTripDays,
       notes: notes || '',
       guestDetails,
-      travelDate,
-      travelers: travelers || 2,
+      travelDate: parsedTravelDate,
+      travelers: validTravelers,
       totalAmount: finalAmount,
       paymentStatus: 'Pending',
     });

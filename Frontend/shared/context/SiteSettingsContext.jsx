@@ -262,6 +262,39 @@ const fallbackSettings = {
   travelPolicies: {
     nightChargeAmount: 300,
     driverAllowancePerDay: 500,
+    driverShortTripAllowance: 250,
+    driverLongDayDropAllowance: 450,
+    driverNightHaltCharge: 300,
+    driverGuidelines: 'Standard mountain duty hours: 06:00 AM - 09:00 PM. High-altitude Ghat driving safety protocols apply. All chauffeurs receive free food and lodging allowances.',
+    driverRoster: [
+      {
+        id: 'drv-1',
+        name: 'Ramesh Bisht',
+        phone: '+91 94120 12345',
+        experience: '12 Years (Kumaon Hills)',
+        vehicleAssigned: 'Maruti Suzuki Dzire',
+        rating: 4.9,
+        status: 'Available',
+      },
+      {
+        id: 'drv-2',
+        name: 'Kailash Tiwari',
+        phone: '+91 94120 54321',
+        experience: '15 Years (Char Dham & Kumaon)',
+        vehicleAssigned: 'Toyota Innova Crysta',
+        rating: 5.0,
+        status: 'Available',
+      },
+      {
+        id: 'drv-3',
+        name: 'Devendra Rawat',
+        phone: '+91 94120 98765',
+        experience: '18 Years (Highway & Mountains)',
+        vehicleAssigned: 'Force Urbania Minibus',
+        rating: 4.9,
+        status: 'Available',
+      },
+    ],
     faqs: [
       {
         q: 'How do I book a cab from Kathgodam Railway Station?',

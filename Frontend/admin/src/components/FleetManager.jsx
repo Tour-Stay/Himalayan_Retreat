@@ -1,17 +1,23 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useSiteSettings, apiClient } from '@shared';
 import { useToast } from './Toast';
 
 export const FleetManager = () => {
+  const navigate = useNavigate();
   const { settings, refreshSettings } = useSiteSettings();
   const { showToast } = useToast();
 
   const [fleet, setFleet] = useState([]);
+  const [driverAllowance, setDriverAllowance] = useState(500);
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     if (settings?.cabFleet && Array.isArray(settings.cabFleet)) {
       setFleet(JSON.parse(JSON.stringify(settings.cabFleet)));
+    }
+    if (settings?.travelPolicies?.driverAllowancePerDay !== undefined) {
+      setDriverAllowance(settings.travelPolicies.driverAllowancePerDay);
     }
   }, [settings]);
 
@@ -34,11 +40,15 @@ export const FleetManager = () => {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      const res = await apiClient.patch('/settings/cabFleet', fleet);
-      if (res.data?.success) {
-        showToast('Cab fleet pricing & tariffs updated across Travel site!', 'success');
-        await refreshSettings();
-      }
+      await apiClient.patch('/settings/cabFleet', fleet);
+      const currentPolicies = settings?.travelPolicies || {};
+      const numericAllowance = driverAllowance === '' ? 0 : Math.max(0, Number(driverAllowance));
+      await apiClient.patch('/settings/travelPolicies', {
+        ...currentPolicies,
+        driverAllowancePerDay: isNaN(numericAllowance) ? 0 : numericAllowance,
+      });
+      showToast('Cab fleet pricing & Driver Hill Allowance updated across Travel site!', 'success');
+      await refreshSettings();
     } catch (err) {
       console.error('Error saving fleet tariffs:', err);
       showToast(err.response?.data?.message || 'Failed to update fleet tariffs', 'error');
@@ -82,6 +92,44 @@ export const FleetManager = () => {
               </>
             )}
           </button>
+        </div>
+
+        {/* Global Driver Allowance Configuration Card */}
+        <div className="mb-6 p-4.5 bg-[#FAF5EC] rounded-2xl border border-[#C5A059]/40 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xs">
+          <div className="flex-1">
+            <div className="flex items-center gap-2">
+              <span className="text-lg">⛰️</span>
+              <h4 className="font-serif text-base font-bold text-[#2C2523]">
+                Daily Driver Hill Allowance / Batta
+              </h4>
+            </div>
+            <p className="text-xs text-[#5C5350] mt-1 max-w-2xl leading-relaxed">
+              Standard mountain allowance covering the local driver's food &amp; lodging during high-altitude trips. Set to <code className="text-[#7C1D23] font-bold font-mono">0</code> to completely waive or disable driver allowance in the live Fare Calculator.
+            </p>
+            <div className="mt-2">
+              <button
+                type="button"
+                onClick={() => navigate('/settings/drivers')}
+                className="text-[11px] font-semibold text-[#7C1D23] hover:text-[#5C151A] hover:underline inline-flex items-center gap-1 cursor-pointer"
+              >
+                <span>👨‍✈️ Manage Plain vs Mountain Rates &amp; Chauffeur Roster in Drivers &amp; Batta Tab ↗</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 self-start md:self-center bg-white px-3.5 py-2 rounded-xl border border-[#C5A059]/40 shadow-xs">
+            <span className="text-xs font-semibold text-[#541508] font-mono">₹</span>
+            <input
+              type="number"
+              min="0"
+              step="50"
+              value={driverAllowance}
+              onChange={(e) => setDriverAllowance(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))}
+              className="w-24 bg-transparent text-sm font-bold font-mono text-[#541508] focus:outline-none"
+              placeholder="500"
+            />
+            <span className="text-xs font-medium text-[#5C5350]">/ day</span>
+          </div>
         </div>
 
         {/* Vehicles Grid */}

@@ -20,6 +20,8 @@ import { mockRooms } from '../data/mockRooms';
 const BookRoom = () => {
   const [searchParams] = useSearchParams();
   const roomIdParam = searchParams.get('room');
+  const checkInParam = searchParams.get('checkIn');
+  const checkOutParam = searchParams.get('checkOut');
   const [rooms, setRooms] = useState(mockRooms);
   const [selectedRoomId, setSelectedRoomId] = useState(roomIdParam || mockRooms[0]._id);
 
@@ -36,7 +38,16 @@ const BookRoom = () => {
         if (res.data && res.data.length > 0) {
           setRooms(res.data);
           if (roomIdParam) {
-            setSelectedRoomId(roomIdParam);
+            const directMatch = res.data.find((r) => r._id === roomIdParam);
+            if (directMatch) {
+              setSelectedRoomId(directMatch._id);
+            } else {
+              const mock = mockRooms.find((m) => m._id === roomIdParam);
+              const nameMatch = res.data.find(
+                (r) => mock && r.name && r.name.toLowerCase().includes(mock.name.split(' ')[0].toLowerCase())
+              );
+              setSelectedRoomId(nameMatch ? nameMatch._id : res.data[0]._id);
+            }
           } else {
             setSelectedRoomId(res.data[0]._id);
           }
@@ -48,7 +59,29 @@ const BookRoom = () => {
     fetchRooms();
   }, [roomIdParam]);
 
+  // Preload all room preview images into browser cache for instantaneous swapping
+  useEffect(() => {
+    if (rooms && rooms.length > 0) {
+      rooms.forEach((room) => {
+        if (room.imageURLs && Array.isArray(room.imageURLs)) {
+          room.imageURLs.slice(0, 2).forEach((url) => {
+            if (url) {
+              const img = new Image();
+              img.src = url;
+            }
+          });
+        }
+      });
+    }
+  }, [rooms]);
+
   const selectedRoom = rooms.find((r) => r._id === selectedRoomId) || rooms[0];
+  const currentImageSrc = selectedRoom?.imageURLs?.[0] || chaletSuiteImg || snowViewSuiteImg;
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  useEffect(() => {
+    setImageLoaded(false);
+  }, [currentImageSrc]);
 
   return (
     <div className="min-h-screen bg-[#F8FAF7] text-[#073125] font-sans">
@@ -101,6 +134,8 @@ const BookRoom = () => {
 
               <BookingForm
                 preSelectedRoom={selectedRoomId}
+                initialCheckIn={checkInParam}
+                initialCheckOut={checkOutParam}
                 onSelectRoom={(id) => setSelectedRoomId(id)}
               />
             </div>
@@ -110,12 +145,21 @@ const BookRoom = () => {
               {selectedRoom && (
                 <div className="bg-white rounded-3xl overflow-hidden border border-[#073125]/10 shadow-sm">
                   <div className="relative h-48 overflow-hidden bg-[#073125]">
+                    {!imageLoaded && (
+                      <div className="absolute inset-0 bg-[#0B2B21] animate-pulse flex items-center justify-center z-0">
+                        <span className="text-[#C9F24D]/60 text-xs font-mono">Loading Suite View...</span>
+                      </div>
+                    )}
                     <img
-                      src={selectedRoom.imageURLs?.[0] || chaletSuiteImg || snowViewSuiteImg}
+                      key={currentImageSrc}
+                      src={currentImageSrc}
                       alt={selectedRoom.name}
-                      className="w-full h-full object-cover"
+                      onLoad={() => setImageLoaded(true)}
+                      className={`w-full h-full object-cover transition-opacity duration-300 ${
+                        imageLoaded ? 'opacity-100' : 'opacity-0'
+                      }`}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none"></div>
                     <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-white text-xs">
                       <span className="bg-[#073125]/85 px-2.5 py-0.5 rounded-full border border-white/20 font-medium text-[11px]">
                         {selectedRoom.view || '180° Snow Peak View'}

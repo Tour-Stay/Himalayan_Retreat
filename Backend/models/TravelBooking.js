@@ -53,7 +53,9 @@ const travelBookingSchema = new mongoose.Schema({
     type: String
   },
   razorpayPaymentId: {
-    type: String
+    type: String,
+    unique: true,
+    sparse: true,
   },
   razorpaySignature: {
     type: String
@@ -78,9 +80,10 @@ const travelBookingSchema = new mongoose.Schema({
   },
 }, { timestamps: true });
 
-// Database Indexes for Performance
+// Database Indexes for Performance & Security
 travelBookingSchema.index({ packageId: 1 });
 travelBookingSchema.index({ travelDate: 1 });
 travelBookingSchema.index({ status: 1 });
+travelBookingSchema.index({ razorpayPaymentId: 1 }, { unique: true, sparse: true });
 
 module.exports = mongoose.model('TravelBooking', travelBookingSchema);

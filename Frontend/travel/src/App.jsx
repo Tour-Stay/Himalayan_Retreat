@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AnnouncementBar, BackToTop, SiteSettingsProvider, useSiteSettings } from '@shared';
+import { AnnouncementBar, BackToTop, ScrollManager, SiteSettingsProvider, useSiteSettings } from '@shared';
 import TravelNavbar from './components/TravelNavbar';
 import TravelFooter from './components/TravelFooter';
 import TravelHome from './pages/TravelHome';
@@ -14,6 +14,9 @@ function TravelAppContent() {
 
   return (
     <div className="min-h-screen bg-[#FAF7F2] text-[#2C2523] font-sans flex flex-col selection:bg-[#EAA722]/30 selection:text-[#541508]">
+      {/* 0. Universal Scroll & Hash Navigation Manager */}
+      <ScrollManager />
+
       {/* 1. Top Announcement Bar (like Hotel & Landing) */}
       {announcement?.enabled !== false && (
         <AnnouncementBar
