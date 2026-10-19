@@ -418,7 +418,7 @@ const FareCalculator = ({
       const dbBookingId = response.data?.booking?._id || bookingId;
 
       await initializePayment({
-        amount: pricing.totalFare,
+        bookingId: dbBookingId,
         receiptId: dbBookingId,
         bookingType: 'travel',
         prefill: {

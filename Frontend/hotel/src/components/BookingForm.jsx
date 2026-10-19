@@ -161,7 +161,7 @@ const BookingForm = ({ preSelectedRoom = null, initialCheckIn = '', initialCheck
     setLoading(true);
     try {
       await initializePayment({
-        amount: pendingBookingPayload.totalAmount,
+        bookingId: pendingBookingPayload.dbBookingId,
         receiptId: pendingBookingPayload.dbBookingId,
         bookingType: 'hotel',
         prefill: {
@@ -215,7 +215,7 @@ const BookingForm = ({ preSelectedRoom = null, initialCheckIn = '', initialCheck
       const dbBookingId = response.data?.booking?._id || bookingPayload.bookingId;
 
       await initializePayment({
-        amount: bookingPayload.totalAmount,
+        bookingId: dbBookingId,
         receiptId: dbBookingId,
         bookingType: 'hotel',
         prefill: {
