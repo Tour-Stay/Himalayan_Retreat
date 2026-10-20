@@ -113,6 +113,6 @@ app.listen(PORT, () => {
         console.error("[Cron] Error in auto-cancellation background job:", err);
       }
     },
-    5 * 60 * 1000,
-  ); // Runs every 5 minutes
+    60 * 1000,
+  ); // Runs every 1 minute to promptly release expired holds
 });

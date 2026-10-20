@@ -28,7 +28,7 @@ const AllRooms = () => {
 
     const unsubscribe = subscribeToUpdates('rooms', () => {
       fetchRooms();
-    });
+    }, 60 * 1000);
 
     return () => {
       unsubscribe();

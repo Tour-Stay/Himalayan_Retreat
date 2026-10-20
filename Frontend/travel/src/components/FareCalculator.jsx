@@ -399,6 +399,7 @@ const FareCalculator = ({
 
     try {
       const response = await apiClient.post('/travel/bookings', {
+        tripType,
         vehicleType: currentFleet.id,
         circuit: `${currentDest.name} (${routeInfo.km} km, ${routeInfo.via})`,
         pickupLocation: pickupPoint,

@@ -31,7 +31,11 @@ const sendHotelBookingEmail = async (booking, room) => {
           <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
             <tr style="border-bottom: 1px solid #eee;">
               <td style="padding: 10px 0; color: #888;">Room</td>
-              <td style="padding: 10px 0; font-weight: bold; text-align: right;">${room.name}</td>
+              <td style="padding: 10px 0; font-weight: bold; text-align: right;">${room.name} (${booking.roomsBooked || 1} ${(booking.roomsBooked || 1) === 1 ? 'Room' : 'Rooms'})</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #eee;">
+              <td style="padding: 10px 0; color: #888;">Rooms Booked</td>
+              <td style="padding: 10px 0; font-weight: bold; text-align: right;">${booking.roomsBooked || 1}</td>
             </tr>
             <tr style="border-bottom: 1px solid #eee;">
               <td style="padding: 10px 0; color: #888;">Check-in</td>
@@ -65,7 +69,7 @@ const sendAdminNewHotelBookingEmail = async (booking, room) => {
   const mailOptions = {
     from: `"Kasar Booking System" <${process.env.SENDER_EMAIL}>`,
     to: adminEmail,
-    subject: `🔔 NEW BOOKING PAID: ${room.name} - ${booking.guestDetails.name}`,
+    subject: `🔔 NEW BOOKING PAID: ${room.name} (${booking.roomsBooked || 1} Room${(booking.roomsBooked || 1) > 1 ? 's' : ''}) - ${booking.guestDetails.name}`,
     html: `
       <div style="font-family: 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; background: #fff; border: 1px solid #ddd; border-radius: 8px;">
         <div style="background: #073125; padding: 20px; color: #fff; text-align: center; border-radius: 8px 8px 0 0;">
@@ -78,6 +82,7 @@ const sendAdminNewHotelBookingEmail = async (booking, room) => {
           <p><strong>Guest Email:</strong> ${booking.guestDetails.email}</p>
           <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
           <p><strong>Room:</strong> ${room.name}</p>
+          <p><strong>Rooms Booked:</strong> ${booking.roomsBooked || 1}</p>
           <p><strong>Check-in:</strong> ${new Date(booking.checkInDate).toDateString()}</p>
           <p><strong>Check-out:</strong> ${new Date(booking.checkOutDate).toDateString()}</p>
           <p><strong>Guests:</strong> ${booking.guests || 'N/A'}</p>

@@ -4,7 +4,6 @@ const SiteSettings = require('../models/SiteSettings');
 const { calculateCabFare } = require('../config/pricingEngine');
 const jwt = require('jsonwebtoken');
 const { uploadToCloudinary } = require('../config/cloudinary');
-const { sendTravelBookingEmail } = require('../config/emailService');
 
 // ================================
 // TOUR PACKAGE CONTROLLERS (CRUD)
@@ -207,6 +206,7 @@ const createTravelBooking = async (req, res) => {
       circuit,
       pickupLocation,
       tripDays,
+      tripType,
       notes,
       guestDetails,
       travelDate,
@@ -217,6 +217,7 @@ const createTravelBooking = async (req, res) => {
     // 1. Strict Input & Date Validation
     const validTravelers = Math.max(1, parseInt(travelers, 10) || 1);
     const validTripDays = Math.max(1, parseInt(tripDays, 10) || 1);
+    const normalizedTripType = tripType === 'round-trip' || validTripDays > 1 ? 'round-trip' : 'one-way';
 
     const parsedTravelDate = new Date(travelDate);
     const today = new Date();
@@ -249,6 +250,7 @@ const createTravelBooking = async (req, res) => {
           circuit: circuit || '',
           tripDays: validTripDays,
           travelers: validTravelers,
+          tripType: normalizedTripType,
         },
         siteSettings || {}
       );
@@ -280,6 +282,7 @@ const createTravelBooking = async (req, res) => {
       circuit: circuit || 'Hill Stations & Temples',
       pickupLocation: pickupLocation || 'Kathgodam / Kasar Devi',
       tripDays: validTripDays,
+      tripType: normalizedTripType,
       notes: notes || '',
       guestDetails,
       travelDate: parsedTravelDate,
@@ -287,15 +290,6 @@ const createTravelBooking = async (req, res) => {
       totalAmount: finalAmount,
       paymentStatus: 'Pending',
     });
-
-    // Send confirmation email (non-blocking)
-    if (tourPackage) {
-      try {
-        await sendTravelBookingEmail(booking, tourPackage);
-      } catch (emailError) {
-        console.error('Email sending failed:', emailError.message);
-      }
-    }
 
     res.status(201).json({ message: 'Travel booking created successfully.', booking });
   } catch (error) {

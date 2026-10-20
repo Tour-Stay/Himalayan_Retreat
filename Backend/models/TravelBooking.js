@@ -23,6 +23,11 @@ const travelBookingSchema = new mongoose.Schema({
     type: Number,
     default: 1,
   },
+  tripType: {
+    type: String,
+    enum: ['one-way', 'round-trip'],
+    default: 'one-way',
+  },
   notes: {
     type: String,
     default: '',
