@@ -163,6 +163,22 @@ const ClientCompanySection = () => {
     return () => clearInterval(timer);
   }, []);
 
+  // Auto-advance hotel carousel every 5s
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setHotelIdx((prev) => (prev + 1) % hotelSlides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Auto-advance travel carousel every 5s
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTravelIdx((prev) => (prev + 1) % travelSlides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
   const prevHotel = () => {
     setHotelIdx((prev) => (prev - 1 + hotelSlides.length) % hotelSlides.length);
   };
@@ -186,10 +202,6 @@ const ClientCompanySection = () => {
 
         {/* Section Header: Client Name Centered at Top */}
         <div className="text-center max-w-4xl mx-auto mb-14 sm:mb-16 relative z-10 space-y-3 sm:space-y-4">
-          <span className="inline-block px-4 py-1.5 rounded-full text-xs sm:text-sm font-sans font-medium bg-[#061814] text-[#EAA722] border border-[#EAA722]/40 tracking-wider uppercase">
-            Boutique Alpine Sanctuary &bull; 6,942 FT Elevation
-          </span>
-
           <h2 className="font-heading text-2xl sm:text-4xl lg:text-5xl text-[#EAA722] font-semibold tracking-normal leading-tight sm:leading-snug">
             The Kasar Himalayan Heights
           </h2>
@@ -203,10 +215,6 @@ const ClientCompanySection = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center relative z-10 mb-20 sm:mb-24">
           {/* Content Left */}
           <div className="lg:col-span-6 space-y-6 text-left">
-            <span className="editorial-eyebrow block">
-              01 / SANCTUARY OVERVIEW
-            </span>
-
             <p className="text-base sm:text-lg lg:text-[19px] text-[#FAF5EC]/90 leading-[1.8] sm:leading-[1.85] font-normal">
               Perched on the ancient pine crest of Crank’s Ridge with an uninterrupted 180° panorama of the Greater Himalayan snow peaks, we welcome travelers to warm heated chalet hospitality, pure satvik mountain food, and reliable chauffeured mountain travel across Kumaon.
             </p>
@@ -289,10 +297,7 @@ const ClientCompanySection = () => {
             PART 2: THE BOUTIQUE CHALET (Interactive Slider Left | Content Right)
             ========================================================================= */}
         {/* Mobile-Only Heading for Part 2 */}
-        <div className="lg:hidden text-left mb-6 space-y-2">
-          <span className="editorial-eyebrow block">
-            02 / HEATED CHALET SUITES
-          </span>
+        <div className="lg:hidden text-left mb-6">
           <h3 className="font-heading text-xl sm:text-3xl text-[#F3D8B0] font-semibold leading-snug">
             Heated Wooden Suites &amp; Alpine Comforts
           </h3>
@@ -365,19 +370,11 @@ const ClientCompanySection = () => {
                 ))}
               </div>
             </div>
-
-            {/* Micro Caption */}
-            <p className="text-xs sm:text-sm text-[#FAF5EC]/70 text-center mt-3">
-              Click arrows to view heated suites, private snow balconies, rooftop terrace &amp; satvik dining
-            </p>
           </div>
 
           {/* Hotel Content & Facilities Right */}
           <div className="lg:col-span-6 space-y-6 text-left">
-            <div className="hidden lg:block space-y-2">
-              <span className="editorial-eyebrow block">
-                02 / HEATED CHALET SUITES
-              </span>
+            <div className="hidden lg:block">
               <h3 className="font-heading text-xl sm:text-3xl lg:text-4xl text-[#F3D8B0] font-semibold leading-snug">
                 Heated Wooden Suites &amp; Alpine Comforts
               </h3>
@@ -423,10 +420,7 @@ const ClientCompanySection = () => {
             PART 3: THE CHAUFFEURED TRAVEL FLEET (Content Left | Fleet Slider Right)
             ========================================================================= */}
         {/* Mobile-Only Heading for Part 3 */}
-        <div className="lg:hidden text-left mb-6 space-y-2">
-          <span className="editorial-eyebrow block">
-            03 / CHAUFFEURED MOUNTAIN FLEET
-          </span>
+        <div className="lg:hidden text-left mb-6">
           <h3 className="font-heading text-xl sm:text-3xl text-[#F3D8B0] font-semibold leading-snug">
             Safe, Punctual &amp; Dedicated Hill Expeditions
           </h3>
@@ -502,12 +496,9 @@ const ClientCompanySection = () => {
 
             {/* Quick Transit Distances Card with Interactive Selector */}
             <div className="bg-[#061814] border border-[#EAA722]/30 rounded-2xl p-5 sm:p-6 shadow-xl luxury-card">
-              <div className="flex items-center justify-between border-b border-[#EAA722]/20 pb-3 mb-4">
+              <div className="border-b border-[#EAA722]/20 pb-3 mb-4">
                 <span className="text-xs uppercase tracking-widest text-[#EAA722] font-semibold">
                   Pilgrimage Transit Distances from Kasar Devi
-                </span>
-                <span className="text-xs text-[#FAF5EC]/70 hidden sm:inline">
-                  Click destination to view route tip
                 </span>
               </div>
 
@@ -544,10 +535,7 @@ const ClientCompanySection = () => {
 
           {/* Travel Content Left: on desktop appears on left (lg:order-1); on mobile comes after slider */}
           <div className="lg:col-span-6 space-y-6 text-left lg:order-1">
-            <div className="hidden lg:block space-y-2">
-              <span className="editorial-eyebrow block">
-                03 / CHAUFFEURED MOUNTAIN FLEET
-              </span>
+            <div className="hidden lg:block">
               <h3 className="font-heading text-xl sm:text-3xl lg:text-4xl text-[#F3D8B0] font-semibold leading-snug">
                 Safe, Punctual &amp; Dedicated Hill Expeditions
               </h3>

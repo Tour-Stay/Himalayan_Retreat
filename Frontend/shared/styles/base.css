@@ -7,14 +7,14 @@
 }
 
 body {
-  font-family: var(--font-body, 'EB Garamond', 'Cormorant Garamond', Georgia, serif);
+  font-family: var(--font-body, 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif);
   color: var(--color-charcoal, #2C2523);
   background-color: var(--color-ivory, #FDFBF7);
   -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading, 'Cormorant Garamond', 'EB Garamond', Georgia, serif);
+  font-family: var(--font-heading, 'Marcellus', Georgia, serif);
   letter-spacing: 0.02em;
 }
 

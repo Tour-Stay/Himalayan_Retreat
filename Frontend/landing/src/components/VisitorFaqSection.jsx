@@ -16,10 +16,6 @@ const VisitorFaqSection = () => {
       <Container size="md">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 relative z-10 space-y-4">
-          <p className="editorial-eyebrow">
-            Traveler Guidance &bull; Essential Information
-          </p>
-
           <h2 className="font-heading text-2xl sm:text-4xl lg:text-5xl text-white font-semibold tracking-normal leading-tight sm:leading-snug">
             Frequently Asked Questions
           </h2>

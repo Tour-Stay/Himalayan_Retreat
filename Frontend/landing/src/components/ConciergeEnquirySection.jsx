@@ -126,9 +126,6 @@ const ConciergeEnquirySection = () => {
             <span>Direct reply within 15 minutes by on-site Himalayan Concierge</span>
           </div>
 
-          <span className="text-[#EAA722] text-xs sm:text-sm font-semibold tracking-widest uppercase mb-2 block">
-            {header.badge}
-          </span>
           <h2 className="font-heading text-2xl sm:text-4xl lg:text-5xl text-white font-semibold mb-4 leading-tight sm:leading-snug">
             {header.title}
           </h2>

@@ -152,56 +152,74 @@ const ThingsToDoSection = () => {
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[850px] h-[850px] rounded-full bg-gradient-to-br from-[#EAA722]/20 via-[#7A1F0D]/30 to-transparent blur-3xl" />
       </div>
 
-      <Container size="xl" className="relative z-10 max-w-[1520px]">
-        {/* SECTION HEADER: Balanced & Elegant */}
-        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12 relative z-10 space-y-2.5">
-          <p className="editorial-eyebrow flex items-center justify-center gap-2 text-xs tracking-[0.2em]">
-            <span className="text-[#EAA722]">✦</span>
-            <span>MANDIR MALA 2026 • KUMAON EXPEDITION CIRCUIT</span>
-            <span className="text-[#EAA722]">✦</span>
-          </p>
-
-          <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-white font-normal leading-tight tracking-normal">
-            Haldwani to Adi Kailash via Kasar Retreat
+      <Container size="xl" className="relative z-10 max-w-[1380px] px-4 sm:px-6 lg:px-8">
+        {/* SECTION HEADER: Things To Do */}
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12 relative z-10">
+          <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl text-white font-medium tracking-normal leading-tight">
+            Things To Do
           </h2>
 
-          <div className="w-20 h-0.5 bg-gradient-to-r from-transparent via-[#EAA722] to-transparent mx-auto my-2" />
+          <div className="flex items-center justify-center gap-3 my-3">
+            <div className="w-16 h-px bg-gradient-to-r from-transparent to-[#EAA722]/60" />
+            <span className="text-[#EAA722] text-xs">✦</span>
+            <div className="w-16 h-px bg-gradient-to-l from-transparent to-[#EAA722]/60" />
+          </div>
 
-          <p className="font-serif text-sm sm:text-base text-[#FAF5EC]/85 leading-relaxed font-normal max-w-2xl mx-auto">
+          <p className="font-sans text-sm sm:text-base text-[#FAF5EC]/85 leading-relaxed font-normal max-w-2xl mx-auto">
             Explore the sacred 7-stop Himalayan pilgrimage ordered by distance from Haldwani (pickup) to the crown snow peak of Adi Kailash, with our luxury retreat at Kasar Devi as your central base.
           </p>
         </div>
 
         {/* MAIN BALANCED 2-COLUMN STAGE: 7 cols Map, 5 cols Detail with EQUAL HEIGHT */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch max-w-[1400px] mx-auto mb-6 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch mx-auto mb-6 relative z-10">
 
           {/* ==========================================================
               LEFT: ILLUSTRATED MANDIR MALA EXPEDITION MAP (7 Cols)
               ========================================================== */}
-          <div className="lg:col-span-7 flex flex-col justify-start items-center">
+          <div className="lg:col-span-7 flex flex-col justify-start">
+            <div className="w-full max-w-full lg:max-w-[590px] mx-auto flex flex-col h-full">
+              {/* Column Heading: Mandir Mala */}
+              <div className="w-full mb-3.5 flex items-center justify-between border-b border-[#EAA722]/25 pb-3">
+                <div className="flex items-center gap-2.5">
+                  <span className="text-[#EAA722] text-base">✦</span>
+                  <h3 className="font-heading text-2xl sm:text-3xl text-[#EAA722] font-medium tracking-wide">
+                    Mandir Mala
+                  </h3>
+                </div>
+                <span className="px-3 py-1 rounded-full bg-[#2A0803] border border-[#EAA722]/30 text-[11px] sm:text-xs uppercase tracking-widest text-[#FAF5EC]/75 font-sans font-medium">
+                  Sacred 7-Stop Circuit
+                </span>
+              </div>
 
-            {/* The 2D Interactive Illustrated Map */}
-            <MandirMalaMap2D
-              activeIdx={activeIdx}
-              onSelectStop={setActiveIdx}
-              waypoints={WAYPOINTS}
-            />
+              {/* The 2D Interactive Illustrated Map */}
+              <MandirMalaMap2D
+                activeIdx={activeIdx}
+                onSelectStop={setActiveIdx}
+                waypoints={WAYPOINTS}
+              />
+            </div>
           </div>
 
           {/* ==========================================================
               RIGHT: DYNAMIC WAYPOINT DETAIL DRAWER (5 Cols)
               ========================================================== */}
-          <div className="lg:col-span-5 flex flex-col h-full">
+          <div className="lg:col-span-5 flex flex-col h-full justify-start">
+            {/* Column Heading: Safe Nature Journey */}
+            <div className="w-full mb-3.5 flex items-center justify-between border-b border-[#EAA722]/25 pb-3 flex-shrink-0">
+              <div className="flex items-center gap-2.5">
+                <span className="text-[#EAA722] text-base">✦</span>
+                <h3 className="font-heading text-2xl sm:text-3xl text-[#EAA722] font-medium tracking-wide">
+                  Safe Nature Journey
+                </h3>
+              </div>
+              <span className="px-3 py-1 rounded-full bg-[#2A0803] border border-[#EAA722]/30 text-[11px] sm:text-xs uppercase tracking-widest text-[#FAF5EC]/75 font-sans font-medium">
+                Stop {activeStop.num} of 07
+              </span>
+            </div>
 
             {/* Horizontal Scrollable Stop Selector Tabs */}
-            <div className="w-full flex-shrink-0 mb-3">
-              <div className="text-xs sm:text-sm text-[#EAA722] uppercase tracking-wider font-semibold mb-2.5 flex items-center justify-between font-serif">
-                <span>Select Expedition Waypoint</span>
-                <span className="text-white/60 text-xs font-mono">Stop {activeIdx + 1} of 7</span>
-              </div>
-
-              {/* Scrollable Tab Pills */}
-              <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-[#EAA722]/30 w-full">
+            <div className="w-full flex-shrink-0 mb-3.5">
+              <div className="flex items-center gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden w-full">
                 {WAYPOINTS.map((wp, idx) => {
                   const isActive = activeIdx === idx;
                   return (
@@ -209,65 +227,101 @@ const ThingsToDoSection = () => {
                       key={wp.id}
                       type="button"
                       onClick={() => setActiveIdx(idx)}
-                      className={`px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 border cursor-pointer flex items-center gap-1.5 ${isActive
-                        ? 'bg-[#EAA722] text-[#3D0F06] font-bold border-[#EAA722] shadow-[0_0_15px_rgba(234,167,34,0.4)] scale-102'
-                        : 'bg-[#3D0F06]/85 text-[#FAF5EC]/85 border-[#EAA722]/30 hover:border-[#EAA722] hover:text-white'
-                        }`}
+                      className={`px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm whitespace-nowrap transition-all duration-200 border cursor-pointer flex items-center gap-2 flex-shrink-0 ${
+                        isActive
+                          ? 'bg-gradient-to-r from-[#EAA722] via-[#F5CA68] to-[#D4931A] text-[#240702] font-bold border-[#FFE394] shadow-[0_4px_16px_rgba(234,167,34,0.35)] scale-[1.02]'
+                          : 'bg-[#2B0A04]/90 text-[#FAF5EC]/80 border-[#EAA722]/25 hover:border-[#EAA722]/70 hover:text-white hover:bg-[#3D0F06]'
+                      }`}
                     >
-                      <span className="font-serif font-bold text-xs opacity-75">{wp.num}</span>
-                      <span>{wp.shortName}</span>
+                      <span
+                        className={`w-5 h-5 rounded-full flex items-center justify-center font-heading text-xs font-bold ${
+                          isActive ? 'bg-[#240702]/25 text-[#240702]' : 'bg-[#EAA722]/15 text-[#EAA722]'
+                        }`}
+                      >
+                        {wp.num}
+                      </span>
+                      <span className="font-sans font-medium">{wp.shortName}</span>
                     </button>
                   );
                 })}
               </div>
             </div>
 
-            {/* ACTIVE WAYPOINT MASTER CARD: flex-1 to match left height perfectly */}
-            <div className="bg-gradient-to-br from-[#541508] via-[#3D0F06] to-[#240702] rounded-2xl p-6 sm:p-7 lg:p-8 border border-[#EAA722]/35 luxury-card shadow-xl relative overflow-hidden flex-1 flex flex-col justify-between">
+            {/* ACTIVE WAYPOINT MASTER CARD */}
+            <div className="bg-gradient-to-b from-[#340C04]/95 via-[#230602]/98 to-[#160301] rounded-3xl p-5 sm:p-7 border border-[#EAA722]/35 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(234,167,34,0.2)] relative overflow-hidden flex-1 flex flex-col justify-between">
 
               {/* Waypoint Content */}
               <div className="flex-1 flex flex-col justify-start">
-                {/* Header Meta Badges */}
-                <div className="flex flex-wrap items-center gap-2 mb-3.5">
-                  <span className="px-3.5 py-1.5 rounded-full bg-[#EAA722] text-[#3D0F06] font-serif font-bold text-xs sm:text-sm shadow-md">
-                    STOP {activeStop.num}
-                  </span>
-                  <span className="px-3.5 py-1.5 rounded-full bg-[#240702] text-[#EAA722] border border-[#EAA722]/30 text-xs sm:text-sm font-medium">
-                    📍 {activeStop.distance}
-                  </span>
-                  <span className="px-3.5 py-1.5 rounded-full bg-[#240702] text-[#FAF5EC]/90 border border-[#EAA722]/20 text-xs sm:text-sm font-medium">
-                    🏔️ {activeStop.altitude}
-                  </span>
-                  {activeStop.fromHotel && (
-                    <span className="px-3.5 py-1.5 rounded-full bg-[#EAA722]/15 text-[#EAA722] border border-[#EAA722]/35 text-xs sm:text-sm font-medium">
-                      🏨 {activeStop.fromHotel}
+
+                {/* Structured Specs Grid Strip */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4 pb-4 border-b border-[#EAA722]/20">
+                  <div className="bg-[#1C0401]/85 border border-[#EAA722]/20 rounded-xl p-2 text-center flex flex-col justify-center">
+                    <span className="text-[10px] uppercase tracking-wider text-[#FAF5EC]/55 font-sans font-medium mb-0.5">
+                      Waypoint
                     </span>
-                  )}
+                    <span className="text-xs sm:text-sm font-bold text-[#EAA722] font-sans">
+                      Stop {activeStop.num} / 07
+                    </span>
+                  </div>
+
+                  <div className="bg-[#1C0401]/85 border border-[#EAA722]/20 rounded-xl p-2 text-center flex flex-col justify-center">
+                    <span className="text-[10px] uppercase tracking-wider text-[#FAF5EC]/55 font-sans font-medium mb-0.5">
+                      Altitude
+                    </span>
+                    <span className="text-xs sm:text-sm font-bold text-[#FAF5EC] font-sans truncate">
+                      {activeStop.altitude}
+                    </span>
+                  </div>
+
+                  <div className="bg-[#1C0401]/85 border border-[#EAA722]/20 rounded-xl p-2 text-center flex flex-col justify-center">
+                    <span className="text-[10px] uppercase tracking-wider text-[#FAF5EC]/55 font-sans font-medium mb-0.5">
+                      From Gateway
+                    </span>
+                    <span className="text-xs sm:text-sm font-bold text-[#FAF5EC] font-sans truncate">
+                      {activeStop.distance.split('•')[0].trim()}
+                    </span>
+                  </div>
+
+                  <div className="bg-[#1C0401]/85 border border-[#EAA722]/20 rounded-xl p-2 text-center flex flex-col justify-center">
+                    <span className="text-[10px] uppercase tracking-wider text-[#FAF5EC]/55 font-sans font-medium mb-0.5">
+                      From Kasar
+                    </span>
+                    <span className="text-xs sm:text-sm font-bold text-[#EAA722] font-sans truncate">
+                      {activeStop.fromHotel.replace('★ Your Retreat Base ★', 'Central Base')}
+                    </span>
+                  </div>
                 </div>
 
-                {/* Title & Tag */}
-                <h3 className="font-serif text-2xl sm:text-3xl font-medium text-white mb-1.5 leading-snug">
-                  {activeStop.name}
-                </h3>
-                <p className="text-xs sm:text-sm text-[#EAA722] font-serif tracking-widest uppercase mb-3.5 font-semibold">
-                  {activeStop.artworkLabel}
-                </p>
+                {/* Title & Artwork Subtitle */}
+                <div className="mb-3">
+                  <h3 className="font-heading text-2xl sm:text-3xl font-medium text-white mb-1.5 leading-snug">
+                    {activeStop.name}
+                  </h3>
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <p className="text-xs text-[#EAA722] font-sans tracking-[0.16em] uppercase font-semibold">
+                      {activeStop.artworkLabel}
+                    </p>
+                    <span className="px-2.5 py-0.5 rounded-full bg-[#EAA722]/10 border border-[#EAA722]/25 text-[11px] sm:text-xs text-[#FAF5EC]/85 font-serif">
+                      {activeStop.shrineBlessing}
+                    </span>
+                  </div>
+                </div>
 
                 {/* Narrative Summary */}
-                <p className="font-serif text-base sm:text-[17px] text-[#FAF5EC]/95 leading-[1.8] font-normal mb-5">
+                <p className="font-sans text-sm sm:text-[15px] text-[#FAF5EC]/90 leading-relaxed font-normal mb-4">
                   {activeStop.desc}
                 </p>
 
                 {/* Curated Highlights */}
-                <div className="space-y-3 pt-4 border-t border-[#EAA722]/20 mb-4 flex-1">
-                  <h4 className="text-xs sm:text-sm uppercase tracking-wider font-bold text-[#EAA722] flex items-center gap-2 font-serif mb-2.5">
+                <div className="space-y-2.5 pt-3.5 border-t border-[#EAA722]/15 mb-4 flex-1">
+                  <h4 className="text-xs sm:text-sm uppercase tracking-wider font-semibold text-[#EAA722] flex items-center gap-2 font-heading mb-2">
                     <span>✦</span>
-                    <span>Curated Highlights &amp; Sacred Experiences</span>
+                    <span>Curated Experiences &amp; Sacred Darshan</span>
                   </h4>
-                  <ul className="space-y-2.5 text-sm sm:text-base text-[#FAF5EC]/90 leading-relaxed font-serif">
+                  <ul className="space-y-2 text-xs sm:text-sm text-[#FAF5EC]/90 leading-relaxed font-sans">
                     {activeStop.highlights.map((item, hIdx) => (
-                      <li key={hIdx} className="flex items-start gap-2.5">
-                        <span className="text-[#EAA722] font-bold text-sm mt-0.5 flex-shrink-0">✦</span>
+                      <li key={hIdx} className="flex items-start gap-2">
+                        <span className="text-[#EAA722] font-bold text-xs mt-0.5 flex-shrink-0">◆</span>
                         <span>{item}</span>
                       </li>
                     ))}
@@ -276,28 +330,28 @@ const ThingsToDoSection = () => {
               </div>
 
               {/* Bottom Actions and Safety Tip */}
-              <div className="space-y-4 pt-3 mt-auto flex-shrink-0 border-t border-[#EAA722]/15">
+              <div className="space-y-3.5 pt-3 mt-auto flex-shrink-0 border-t border-[#EAA722]/15">
                 {/* Safe Nature Journey Tip Box */}
-                <div className="p-3.5 sm:p-4 rounded-xl bg-[#240702]/85 border border-[#EAA722]/30 flex items-start gap-3 shadow-inner">
-                  <span className="text-xl sm:text-2xl flex-shrink-0 text-[#EAA722]">🛡️</span>
+                <div className="p-3 sm:p-3.5 rounded-xl bg-[#1C0401]/90 border border-[#EAA722]/25 flex items-start gap-3 shadow-inner">
+                  <span className="text-lg sm:text-xl flex-shrink-0 text-[#EAA722] mt-0.5">🛡️</span>
                   <div>
-                    <h5 className="text-xs sm:text-sm font-bold text-[#EAA722] uppercase tracking-wider mb-1 font-serif">
-                      Mountain Guidance &amp; Safety Note
+                    <h5 className="text-xs sm:text-sm font-semibold text-[#EAA722] uppercase tracking-wider mb-0.5 font-heading">
+                      Mountain Concierge Advisory
                     </h5>
-                    <p className="text-xs sm:text-sm text-[#FAF5EC]/90 leading-relaxed font-serif">
+                    <p className="text-xs text-[#FAF5EC]/85 leading-relaxed font-sans">
                       {activeStop.safetyTip}
                     </p>
                   </div>
                 </div>
 
-                {/* Vehicle Booking Option: ONLY on Pickup Point (Stop 01) */}
+                {/* Vehicle Booking Option: Stop 01 */}
                 {activeStop.id === 'base-camp' && (
-                  <div className="pt-1">
+                  <div>
                     <a
                       href={APP_URLS.travel}
                       target="_blank"
                       rel="noreferrer"
-                      className="w-full btn-nkb-gold btn-shimmer py-3 px-4 rounded-xl text-center text-xs sm:text-sm font-bold tracking-wider uppercase shadow-md hover:shadow-lg transition-all cursor-pointer inline-flex items-center justify-center gap-2 whitespace-nowrap sm:whitespace-normal"
+                      className="w-full btn-nkb-gold btn-shimmer py-3 px-4 rounded-xl text-center text-xs sm:text-sm font-bold tracking-wider uppercase shadow-md hover:shadow-lg transition-all cursor-pointer inline-flex items-center justify-center gap-2"
                     >
                       <span>Book Chauffeured 4x4 Fleet</span>
                       <span className="text-base leading-none">↗</span>
@@ -305,16 +359,31 @@ const ThingsToDoSection = () => {
                   </div>
                 )}
 
-                {/* Hotel Retreat Stay Option: ONLY on Retreat Hotel Point (Stop 03) */}
+                {/* Hotel Retreat Stay Option: Stop 03 */}
                 {activeStop.id === 'kasar-devi' && (
-                  <div className="pt-1">
+                  <div>
                     <a
                       href={APP_URLS.hotel}
                       target="_blank"
                       rel="noreferrer"
-                      className="w-full py-3 px-4 rounded-xl border border-[#EAA722]/70 text-[#EAA722] hover:bg-[#EAA722] hover:text-[#3D0F06] text-center text-xs sm:text-sm font-bold tracking-wider uppercase transition-colors cursor-pointer inline-flex items-center justify-center gap-2 whitespace-nowrap sm:whitespace-normal"
+                      className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#EAA722] to-[#D4931A] text-[#240702] hover:brightness-110 text-center text-xs sm:text-sm font-bold tracking-wider uppercase shadow-md hover:shadow-lg transition-all cursor-pointer inline-flex items-center justify-center gap-2"
                     >
-                      <span>Stay at Kasar Retreat</span>
+                      <span>Reserve Kasar Sanctuary Suite</span>
+                      <span className="text-base leading-none">↗</span>
+                    </a>
+                  </div>
+                )}
+
+                {/* Excursion Booking Option: All other Stops (02, 04, 05, 06, 07) */}
+                {activeStop.id !== 'base-camp' && activeStop.id !== 'kasar-devi' && (
+                  <div>
+                    <a
+                      href={APP_URLS.travel}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="w-full py-3 px-4 rounded-xl border border-[#EAA722]/70 text-[#EAA722] hover:bg-[#EAA722] hover:text-[#240702] text-center text-xs sm:text-sm font-bold tracking-wider uppercase transition-colors cursor-pointer inline-flex items-center justify-center gap-2"
+                    >
+                      <span>Book Chauffeured Excursion to {activeStop.shortName}</span>
                       <span className="text-base leading-none">↗</span>
                     </a>
                   </div>
@@ -323,12 +392,6 @@ const ThingsToDoSection = () => {
 
             </div>
           </div>
-        </div>
-
-        {/* Quick hint centered below both columns */}
-        <div className="flex items-center justify-center gap-2 text-xs sm:text-sm text-[#FAF5EC]/75 font-serif text-center">
-          <span className="text-[#EAA722]">💡</span>
-          <span>Click any sanctuary on the map or use tabs &amp; Prev/Next to explore stops.</span>
         </div>
       </Container>
     </section>

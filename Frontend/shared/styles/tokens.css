@@ -41,14 +41,14 @@
   --color-text-dark: #2C2523;
   --color-text-light: #6B615E;
 
-  /* Typography (Authentic Neem Karoli Baba Ashram: Cormorant Garamond + EB Garamond) */
-  --font-serif: 'Cormorant Garamond', 'EB Garamond', Georgia, serif;
-  --font-cinzel: 'Cormorant Garamond', 'EB Garamond', serif;
-  --font-devanagari: 'EB Garamond', 'Cormorant Garamond', serif;
-  --font-sans: 'EB Garamond', 'Cormorant Garamond', system-ui, -apple-system, sans-serif;
-  --font-mono: 'EB Garamond', 'Cormorant Garamond', system-ui, -apple-system, sans-serif;
-  --font-heading: 'Cormorant Garamond', 'EB Garamond', Georgia, serif;
-  --font-body: 'EB Garamond', 'Cormorant Garamond', system-ui, -apple-system, sans-serif;
+  /* Typography: Marcellus (Serif Headings) & Plus Jakarta Sans (Modern Geometric Sans) */
+  --font-serif: 'Marcellus', Georgia, serif;
+  --font-cinzel: 'Marcellus', Georgia, serif;
+  --font-devanagari: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Marcellus', Georgia, serif;
+  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
 }
 
 @font-face {

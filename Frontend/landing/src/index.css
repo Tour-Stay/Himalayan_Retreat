@@ -4,24 +4,24 @@
 @source "../../shared/**/*.{js,jsx,ts,tsx}";
 
 @theme {
-  --font-serif: "Cormorant Garamond", "EB Garamond", Georgia, serif;
-  --font-heading: "Cormorant Garamond", "EB Garamond", Georgia, serif;
-  --font-body: "EB Garamond", "Cormorant Garamond", Georgia, serif;
-  --font-sans: "EB Garamond", "Cormorant Garamond", Georgia, serif;
-  --font-mono: "EB Garamond", "Cormorant Garamond", Georgia, serif;
+  --font-serif: "Marcellus", Georgia, serif;
+  --font-heading: "Marcellus", Georgia, serif;
+  --font-body: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-mono: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
 }
 
 /* ================================================================
-   THE KASAR HIMALAYAN HEIGHTS & EXPEDITIONS — DEVOTIONAL ASHRAM AESTHETIC
-   Authentic nkbashram.org Typography: Cormorant Garamond & EB Garamond
-   Traditional Devotional Temple Vibe • Generous Font Sizes • Sacred Aesthetic
+   THE KASAR HIMALAYAN HEIGHTS & EXPEDITIONS — TYPOGRAPHY SYSTEM
+   1. Marcellus (Serif) — All Headings & Titles (h1-h6, .font-heading, .font-serif)
+   2. Plus Jakarta Sans (Sans-Serif) — Body, Paragraphs, Buttons, Badges, Numerals
    ================================================================ */
 
 :root {
-  --font-serif: 'Cormorant Garamond', 'EB Garamond', Georgia, serif;
-  --font-heading: 'Cormorant Garamond', 'EB Garamond', Georgia, serif;
-  --font-body: 'EB Garamond', 'Cormorant Garamond', Georgia, serif;
-  --font-sans: 'EB Garamond', 'Cormorant Garamond', Georgia, serif;
+  --font-serif: 'Marcellus', Georgia, serif;
+  --font-heading: 'Marcellus', Georgia, serif;
+  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --nkb-green: #0D332D;
   --nkb-green-dark: #081E1A;
   --nkb-maroon: #541508;
@@ -34,9 +34,9 @@
 
 body,
 html {
-  font-family: 'EB Garamond', 'Cormorant Garamond', Georgia, serif;
-  font-size: 18px;
-  line-height: 1.7;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
   color: #FFFFFF;
   background-color: #081E1A;
   -webkit-font-smoothing: antialiased;
@@ -47,11 +47,11 @@ html {
 .btn-nkb-gold {
   background-color: #EAA722;
   color: #0D332D;
-  font-family: 'Cormorant Garamond', 'EB Garamond', Georgia, serif;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  font-size: 0.88rem;
   border-radius: 9999px;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 4px 16px rgba(234, 167, 34, 0.35);
@@ -77,11 +77,11 @@ html {
   border: 2px solid #EAA722;
   color: #EAA722;
   background: transparent;
-  font-family: 'Cormorant Garamond', 'EB Garamond', Georgia, serif;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  font-size: 0.88rem;
   border-radius: 9999px;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: inline-flex;
@@ -176,10 +176,10 @@ html {
 
 /* Editorial Metadata Eyebrow */
 .editorial-eyebrow {
-  font-family: 'Cormorant Garamond', 'EB Garamond', Georgia, serif;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   text-transform: uppercase;
-  letter-spacing: 0.22em;
-  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+  font-size: 0.78rem;
   font-weight: 700;
   color: #EAA722;
 }
@@ -207,33 +207,33 @@ html {
   transform: translateX(3px);
 }
 
-/* Authentic nkbashram.org Sacred Headings (Cormorant Garamond) */
+/* Classical Roman Architectural Headings (Marcellus) */
 .font-serif,
 .font-heading,
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Cormorant Garamond', 'EB Garamond', Georgia, serif !important;
-  letter-spacing: 0.025em;
+  font-family: 'Marcellus', Georgia, serif !important;
+  letter-spacing: 0.02em;
   line-height: 1.25;
 }
 
 /* Refined Sacred Inscriptions & Monograms */
 .font-cinzel {
-  font-family: 'Cormorant Garamond', 'EB Garamond', Georgia, serif !important;
-  letter-spacing: 0.08em;
+  font-family: 'Marcellus', Georgia, serif !important;
+  letter-spacing: 0.06em;
 }
 
-/* Authentic nkbashram.org Body & UI Typography (EB Garamond) */
+/* Modern Geometric UI & Reading Typography (Plus Jakarta Sans) */
 .font-sans,
 .font-body,
 p, span, a, li, input, textarea, button, label, select {
-  font-family: 'EB Garamond', 'Cormorant Garamond', Georgia, serif;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
 }
 
 /* Clean Lining Numerals */
 .font-numeral,
 .numeral,
 .font-mono {
-  font-family: 'EB Garamond', 'Cormorant Garamond', Georgia, serif;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   font-variant-numeric: lining-nums proportional-nums;
   -webkit-font-feature-settings: "lnum" 1, "pnum" 1;
   font-feature-settings: "lnum" 1, "pnum" 1;

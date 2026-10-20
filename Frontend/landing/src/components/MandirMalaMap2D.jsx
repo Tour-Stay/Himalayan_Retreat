@@ -9,7 +9,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 const W = 617;
 const H = 822;
 const ZOOM = 1.85;
-const SERIF = "'Cormorant Garamond', 'EB Garamond', Georgia, serif";
+const SERIF = "'Marcellus', Georgia, serif";
+const SANS = "'Plus Jakarta Sans', system-ui, -apple-system, sans-serif";
 
 /* ----------------------------- the road ------------------------------ */
 // Progressive ascending road from Haldwani (bottom) -> Kasar Hotel -> Adi Kailash (top)
@@ -125,10 +126,10 @@ const Plaque = ({ lines, num }) => {
             x="0"
             y={cy - (r.sub ? 3 : 3.5)}
             textAnchor="middle"
-            fontFamily={SERIF}
+            fontFamily={r.sub ? SANS : SERIF}
             fontWeight={r.sub ? 500 : 700}
-            fontStyle={r.sub ? 'italic' : 'normal'}
-            fontSize={r.sub ? 8.5 : 11}
+            fontStyle="normal"
+            fontSize={r.sub ? 8 : 11}
             letterSpacing={r.sub ? 0.2 : 0.6}
             fill="#f6e6bd"
           >
@@ -138,7 +139,7 @@ const Plaque = ({ lines, num }) => {
       })}
       <g transform={`translate(${-w / 2} ${-h / 2})`}>
         <circle className="mm-badge" r="8.5" strokeWidth="1.4" />
-        <text textAnchor="middle" y="3.2" fontFamily={SERIF} fontWeight="700" fontSize="8.5" fill="#081E1A">{num}</text>
+        <text textAnchor="middle" y="3.2" fontFamily={SANS} fontWeight="700" fontSize="8.5" fill="#081E1A">{num}</text>
       </g>
     </g>
   );
@@ -735,33 +736,33 @@ const MandirMalaMap2D = ({ activeIdx, onSelectStop, waypoints }) => {
         </svg>
       </div>
 
-      {/* ============== game-style step controls ============== */}
-      <div className="mt-3 flex items-center justify-between gap-3 rounded-2xl border border-[#EAA722]/35 bg-[#3D0F06]/95 px-4 py-2 text-xs sm:text-sm text-[#FAF5EC] shadow-md flex-shrink-0">
+      {/* ============== step controls ============== */}
+      <div className="mt-3 flex items-center justify-between gap-3 rounded-2xl border border-[#EAA722]/30 bg-[#280803]/95 px-4 py-2.5 text-xs sm:text-sm text-[#FAF5EC] shadow-lg flex-shrink-0">
         <button
           type="button"
           onClick={() => select(Math.max(0, activeIdx - 1))}
           disabled={activeIdx === 0}
-          className="rounded-full border border-[#EAA722]/60 px-4 py-1.5 font-bold text-[#EAA722] transition-colors hover:bg-[#EAA722] hover:text-[#3D0F06] disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:bg-transparent disabled:hover:text-[#EAA722] cursor-pointer text-xs sm:text-sm"
+          className="rounded-xl border border-[#EAA722]/40 px-3.5 py-1.5 font-sans font-semibold text-xs sm:text-sm text-[#EAA722] transition-all hover:bg-[#EAA722] hover:text-[#240702] disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-[#EAA722] cursor-pointer"
         >
           ‹ Prev
         </button>
         <div className="flex min-w-0 flex-col items-center text-center">
-          <span className="truncate font-serif font-bold text-xs sm:text-sm text-white">
-            {String(activeIdx + 1).padStart(2, '0')} · {nameOf(cur)}
+          <span className="truncate font-heading font-medium text-xs sm:text-sm text-white tracking-wide">
+            Stop {String(activeIdx + 1).padStart(2, '0')} · {nameOf(cur)}
           </span>
           <button
             type="button"
             onClick={() => setZoomed((z) => !z)}
-            className="text-[11px] sm:text-xs text-[#EAA722] font-serif underline-offset-2 hover:underline cursor-pointer"
+            className="text-[11px] sm:text-xs text-[#EAA722]/85 font-sans hover:text-[#FFE394] transition-colors cursor-pointer"
           >
-            {zoomed ? 'Show full map' : 'Zoom to stop'}
+            {zoomed ? '⤢ Show full map' : '⤡ Zoom to stop'}
           </button>
         </div>
         <button
           type="button"
           onClick={() => select(Math.min(STOPS.length - 1, activeIdx + 1))}
           disabled={activeIdx === STOPS.length - 1}
-          className="rounded-full border border-[#EAA722]/60 px-4 py-1.5 font-bold text-[#EAA722] transition-colors hover:bg-[#EAA722] hover:text-[#3D0F06] disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:bg-transparent disabled:hover:text-[#EAA722] cursor-pointer text-xs sm:text-sm"
+          className="rounded-xl border border-[#EAA722]/40 px-3.5 py-1.5 font-sans font-semibold text-xs sm:text-sm text-[#EAA722] transition-all hover:bg-[#EAA722] hover:text-[#240702] disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-[#EAA722] cursor-pointer"
         >
           Next ›
         </button>

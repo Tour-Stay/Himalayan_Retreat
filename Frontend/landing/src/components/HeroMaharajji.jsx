@@ -137,11 +137,6 @@ const HeroMaharajji = () => {
           {/* CHAPTER 1: SCRIPTURES & HERITAGE (Image Left, Story Right) */}
           {/* Mobile-Only Heading for Chapter 1 */}
           <div className="lg:hidden space-y-3 mb-6 text-left">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#3D0F06] text-[#EAA722] text-xs uppercase tracking-widest border border-[#EAA722]/30 font-medium">
-              <span>Sacred Heritage</span>
-              <span>•</span>
-              <span>Puranic History</span>
-            </div>
             <h3 className="font-heading text-xl sm:text-3xl text-[#EAA722] font-semibold leading-snug">
               The Ancient Sanctuary of Maa Katyayani
             </h3>
@@ -170,11 +165,6 @@ const HeroMaharajji = () => {
             {/* Story Right */}
             <div className="lg:col-span-6 space-y-6 text-left">
               <div className="hidden lg:block space-y-3">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#3D0F06] text-[#EAA722] text-xs uppercase tracking-widest border border-[#EAA722]/30 font-medium">
-                  <span>Sacred Heritage</span>
-                  <span>•</span>
-                  <span>Puranic History</span>
-                </div>
                 <h3 className="font-heading text-xl sm:text-3xl lg:text-4xl text-[#EAA722] font-semibold leading-snug">
                   The Ancient Sanctuary of Maa Katyayani
                 </h3>
@@ -199,12 +189,6 @@ const HeroMaharajji = () => {
         <div className="max-w-[1440px] mx-auto">
           {/* Mobile-Only Heading: appears above image on mobile, hidden on desktop */}
           <div className="lg:hidden space-y-3 mb-6 text-left">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#061814] text-[#EAA722] text-xs uppercase tracking-widest border border-[#EAA722]/30 font-medium">
-              <span>Geomagnetism &amp; Science</span>
-              <span>•</span>
-              <span>Crank’s Ridge Legacy</span>
-            </div>
-
             <h3 className="font-heading text-xl sm:text-3xl text-[#EAA722] font-semibold leading-snug">
               The Van Allen Belt &amp; The Silence of Crank’s Ridge
             </h3>
@@ -234,12 +218,6 @@ const HeroMaharajji = () => {
             <div className="lg:col-span-6 space-y-6 text-left lg:order-1">
               {/* Desktop-Only Heading: shown on desktop, hidden on mobile */}
               <div className="hidden lg:block space-y-3">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#061814] text-[#EAA722] text-xs uppercase tracking-widest border border-[#EAA722]/30 font-medium">
-                  <span>Geomagnetism &amp; Science</span>
-                  <span>•</span>
-                  <span>Crank’s Ridge Legacy</span>
-                </div>
-
                 <h3 className="font-heading text-xl sm:text-3xl lg:text-4xl text-[#EAA722] font-semibold leading-snug">
                   The Van Allen Belt &amp; The Silence of Crank’s Ridge
                 </h3>
