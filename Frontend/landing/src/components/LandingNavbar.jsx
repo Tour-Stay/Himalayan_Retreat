@@ -12,20 +12,20 @@ const LandingNavbar = () => {
     <header className="w-full relative z-40">
       {/* 1. TOP MAROON DEVOTIONAL UTILITY BAR (Exact like nkbashram.org) */}
       <div className="w-full bg-[#541508] text-white border-b border-[#3D0F06]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-2 py-2 sm:py-0 min-h-[44px] text-xs font-serif tracking-widest uppercase">
+        <div className="max-w-[1440px] mx-auto px-3 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-2 py-2 sm:py-0 min-h-[46px] text-xs sm:text-sm font-serif tracking-widest uppercase">
           {/* Company Name */}
-          <div className="flex items-center gap-2">
-            <span className="font-serif tracking-widest text-[#EAA722] font-bold text-sm sm:text-base uppercase">
+          <div className="flex items-center gap-2.5">
+            <span className="font-serif tracking-widest text-[#EAA722] font-bold text-base sm:text-lg uppercase">
               The Kasar Himalayan Heights
             </span>
-            <span className="hidden lg:inline text-white/30 text-xs">•</span>
-            <span className="hidden lg:inline text-[#FAF5EC]/80 text-sm normal-case tracking-normal">
-              Kasar Devi, Almora (6,942 FT)
+            <span className="hidden lg:inline text-white/30 text-sm">•</span>
+            <span className="hidden lg:inline text-[#FAF5EC]/85 text-sm sm:text-[15px] normal-case tracking-normal">
+              Trishul &amp; Nanda Devi Vistas • 6,942 FT Ridge • Kasar Devi
             </span>
           </div>
 
-          {/* Quick Guidance Tabs */}
-          <div className="flex items-center gap-1 sm:gap-2 text-xs sm:text-[13px]">
+          {/* Quick Guidance Tabs (Desktop/Tablet) */}
+          <div className="hidden sm:flex items-center gap-1.5 sm:gap-2.5 text-xs sm:text-sm">
             <a
               href="#about-retreat"
               className="px-3.5 py-1 font-bold text-[#EAA722] border-2 border-[#EAA722] bg-[#3D0F06]/50 transition-colors tracking-wider"
@@ -52,47 +52,47 @@ const LandingNavbar = () => {
         </div>
       </div>
 
-      {/* 2. MAIN DEEP TEAL-GREEN NAV BAR (Exact like nkbashram.org) */}
-      <div className="w-full bg-[#12433B] border-b border-[#0D332D] py-3.5 sm:py-4 px-4 sm:px-6 lg:px-8 shadow-lg">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+      {/* 2. MAIN DEEP GREEN NAV BAR (New Rich Dark Green) */}
+      <div className="w-full bg-gradient-to-r from-[#081E1A] via-[#0D332D] to-[#081E1A] border-b border-[#051713] py-3 sm:py-4 px-3 sm:px-6 lg:px-8 shadow-lg">
+        <div className="max-w-[1440px] mx-auto flex items-center justify-between gap-4 sm:gap-6">
 
           {/* Left: Authentic NKB Ashram Logo & Arch */}
           <a href="#maharajji" className="flex items-center gap-3 flex-shrink-0 group">
             <img
               src={LOGO_SVG}
-              alt="Neem Karoli Baba Ashram & Taos Hanuman Temple"
+              alt="The Kasar Himalayan Heights & Expeditions"
               className="h-16 sm:h-20 w-auto object-contain filter drop-shadow brightness-110 group-hover:scale-105 transition-transform"
             />
           </a>
 
-          {/* Center: Two-Tier Golden Serif Navigation Links */}
+          {/* Center: Modern Luxury Navigation Links */}
           <nav className="hidden lg:flex flex-col items-center justify-center gap-2 flex-1 px-4">
-            {/* Top Tier: Sacred Journey & Shrines (Larger Font) */}
-            <div className="flex items-center gap-6 xl:gap-8 text-lg xl:text-xl font-serif text-[#EAA722] tracking-wide">
-              <a href="#maharajji" className="hover:text-white transition-colors underline-offset-4 hover:underline font-medium">
+            {/* Top Tier: Main Sections */}
+            <div className="flex items-center gap-6 xl:gap-9 text-base xl:text-lg font-heading text-[#FAF5EC] tracking-normal">
+              <a href="#maharajji" className="hover:text-[#EAA722] transition-colors font-medium">
                 Home
               </a>
-              <a href="#kasar-devi" className="hover:text-white transition-colors underline-offset-4 hover:underline font-medium">
-                About Maa Kasar Devi
+              <a href="#kasar-devi" className="hover:text-[#EAA722] transition-colors font-medium">
+                About Kasar Devi
               </a>
-              <a href="#uttarakhand" className="hover:text-white transition-colors underline-offset-4 hover:underline font-medium">
-                Holy Shrines
+              <a href="#uttarakhand" className="hover:text-[#EAA722] transition-colors font-medium">
+                Sacred Shrines
               </a>
-              <a href="#about-retreat" className="hover:text-white transition-colors underline-offset-4 hover:underline font-medium">
-                The Retreat &amp; Cabs
+              <a href="#about-retreat" className="hover:text-[#EAA722] transition-colors font-medium">
+                Sanctuary &amp; Cabs
               </a>
             </div>
 
-            {/* Bottom Tier: Pilgrimage Circuit, Guidance & Contact (Larger Font) */}
-            <div className="flex items-center gap-6 xl:gap-8 text-[15px] xl:text-base font-serif text-[#EAA722]/90 tracking-wide font-normal">
-              <a href="#itinerary" className="hover:text-white transition-colors">
-                3-Day Pilgrimage Circuit
+            {/* Bottom Tier: Guidance & Contact */}
+            <div className="flex items-center gap-6 xl:gap-9 text-xs sm:text-[13px] xl:text-[15px] text-[#FAF5EC]/85 tracking-wider uppercase font-medium">
+              <a href="#things-to-do" className="hover:text-[#EAA722] transition-colors">
+                Things to Do &amp; Circuit
               </a>
-              <a href="#faq" className="hover:text-white transition-colors">
+              <a href="#faq" className="hover:text-[#EAA722] transition-colors">
                 Visitor FAQs
               </a>
-              <a href="#enquiry" className="hover:text-white transition-colors">
-                Contact &amp; Sewa Desk
+              <a href="#enquiry" className="hover:text-[#EAA722] transition-colors">
+                Concierge &amp; Booking
               </a>
             </div>
           </nav>
@@ -132,69 +132,118 @@ const LandingNavbar = () => {
               href={APP_URLS.hotel}
               target="_blank"
               rel="noreferrer"
-              className="btn-nkb-gold px-8 py-2.5 text-sm sm:text-base font-bold tracking-widest whitespace-nowrap cursor-pointer shadow-md hover:shadow-xl transition-all"
+              className="btn-nkb-gold btn-shimmer px-8 py-2.5 text-sm sm:text-base font-bold tracking-widest whitespace-nowrap cursor-pointer shadow-md hover:shadow-xl transition-all"
             >
               BOOK STAY
             </a>
           </div>
 
-          {/* Mobile Hamburger Button */}
-          <div className="lg:hidden flex items-center gap-2">
+          {/* Mobile Actions: Direct Stay Button + Hamburger */}
+          <div className="lg:hidden flex items-center gap-2.5">
             <a
               href={APP_URLS.hotel}
               target="_blank"
               rel="noreferrer"
-              className="btn-nkb-gold px-4 py-1.5 text-xs font-bold tracking-wider"
+              className="btn-nkb-gold px-3.5 py-1.5 text-xs font-bold tracking-wider shadow-md"
             >
-              STAY
+              BOOK STAY
             </a>
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-[#EAA722] hover:text-white cursor-pointer"
+              className="p-2 rounded-xl bg-[#061814] text-[#EAA722] hover:text-white border border-[#EAA722]/30 hover:border-[#EAA722] transition-colors cursor-pointer"
               aria-label="Toggle menu"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {mobileMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
                 ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 6h16M4 12h16M4 18h16" />
                 )}
               </svg>
             </button>
           </div>
         </div>
 
-        {/* Mobile Dropdown Menu */}
+        {/* Mobile Dropdown Drawer (Glassmorphic & Fully Responsive) */}
         {mobileMenuOpen && (
-          <div className="lg:hidden mt-4 pt-4 border-t border-[#0D332D] space-y-3 pb-2 text-center font-serif text-[#EAA722]">
-            <a href="#maharajji" onClick={() => setMobileMenuOpen(false)} className="block py-1 text-base hover:text-white">
-              Home
-            </a>
-            <a href="#kasar-devi" onClick={() => setMobileMenuOpen(false)} className="block py-1 text-base hover:text-white">
-              About Maa Kasar Devi
-            </a>
-            <a href="#uttarakhand" onClick={() => setMobileMenuOpen(false)} className="block py-1 text-base hover:text-white">
-              Holy Shrines of Kumaon
-            </a>
-            <a href="#about-retreat" onClick={() => setMobileMenuOpen(false)} className="block py-1 text-base hover:text-white">
-              The Retreat &amp; Cabs
-            </a>
-            <a href="#itinerary" onClick={() => setMobileMenuOpen(false)} className="block py-1 text-base hover:text-white">
-              3-Day Pilgrimage Circuit
-            </a>
-            <a href="#faq" onClick={() => setMobileMenuOpen(false)} className="block py-1 text-base hover:text-white">
-              Visitor FAQs
-            </a>
-            <a href="#enquiry" onClick={() => setMobileMenuOpen(false)} className="block py-1 text-base hover:text-white">
-              Contact &amp; Sewa Desk
-            </a>
-            <div className="pt-2 border-t border-[#0D332D] flex items-center justify-center gap-4">
-              <a href={APP_URLS.hotel} target="_blank" rel="noreferrer" className="text-white text-sm underline">
-                Rooms Portal ↗
+          <div className="lg:hidden mt-3 p-4 sm:p-6 rounded-2xl bg-[#061814]/98 backdrop-blur-xl border border-[#EAA722]/30 shadow-2xl animate-dropdown text-left font-sans">
+            <div className="space-y-1 pb-3 border-b border-[#EAA722]/20">
+              <a
+                href="#maharajji"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-between px-3 py-2.5 rounded-xl text-white hover:text-[#EAA722] hover:bg-[#081E1A] text-base font-medium transition-colors"
+              >
+                <span>Home</span>
+                <span className="text-[#EAA722] text-xs">➔</span>
               </a>
-              <a href={APP_URLS.travel} target="_blank" rel="noreferrer" className="text-white text-sm underline">
-                Cabs Portal ↗
+              <a
+                href="#kasar-devi"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-between px-3 py-2.5 rounded-xl text-white hover:text-[#EAA722] hover:bg-[#081E1A] text-base font-medium transition-colors"
+              >
+                <span>About Kasar Devi Ridge</span>
+                <span className="text-[#EAA722] text-xs">➔</span>
+              </a>
+              <a
+                href="#uttarakhand"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-between px-3 py-2.5 rounded-xl text-white hover:text-[#EAA722] hover:bg-[#081E1A] text-base font-medium transition-colors"
+              >
+                <span>Holy Shrines of Kumaon</span>
+                <span className="text-[#EAA722] text-xs">➔</span>
+              </a>
+              <a
+                href="#about-retreat"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-between px-3 py-2.5 rounded-xl text-white hover:text-[#EAA722] hover:bg-[#081E1A] text-base font-medium transition-colors"
+              >
+                <span>The Retreat &amp; Travel Fleet</span>
+                <span className="text-[#EAA722] text-xs">➔</span>
+              </a>
+              <a
+                href="#things-to-do"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-between px-3 py-2.5 rounded-xl text-white hover:text-[#EAA722] hover:bg-[#081E1A] text-base font-medium transition-colors"
+              >
+                <span>Things to Do &amp; Circuit</span>
+                <span className="text-[#EAA722] text-xs">➔</span>
+              </a>
+              <a
+                href="#faq"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-between px-3 py-2.5 rounded-xl text-white hover:text-[#EAA722] hover:bg-[#081E1A] text-base font-medium transition-colors"
+              >
+                <span>Visitor FAQs</span>
+                <span className="text-[#EAA722] text-xs">➔</span>
+              </a>
+              <a
+                href="#enquiry"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-between px-3 py-2.5 rounded-xl text-white hover:text-[#EAA722] hover:bg-[#081E1A] text-base font-medium transition-colors"
+              >
+                <span>Concierge &amp; Booking</span>
+                <span className="text-[#EAA722] text-xs">➔</span>
+              </a>
+            </div>
+
+            {/* Direct Booking Dual Buttons in Mobile Drawer */}
+            <div className="pt-4 grid grid-cols-2 gap-3">
+              <a
+                href={APP_URLS.hotel}
+                target="_blank"
+                rel="noreferrer"
+                className="btn-nkb-gold py-2.5 text-xs text-center font-bold tracking-wider block"
+              >
+                HOTEL SUITES ↗
+              </a>
+              <a
+                href={APP_URLS.travel}
+                target="_blank"
+                rel="noreferrer"
+                className="btn-outline-gold py-2.5 text-xs text-center font-bold tracking-wider block"
+              >
+                YATRA CABS ↗
               </a>
             </div>
           </div>

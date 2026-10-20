@@ -28,34 +28,34 @@ const ConciergeEnquirySection = () => {
   const getHeaderContent = () => {
     if (formData.serviceType === 'hotel') {
       return {
-        badge: '🪔 Heated Chalet Booking',
+        badge: 'Heated Chalet Suites',
         title: 'Book Your Heated Chalet Suite',
         subtitle:
           'Tell us your travel dates and room preference. Our Almora team will message you on WhatsApp with real room photos and current availability.',
         buttonText: 'Check Room Availability on WhatsApp ↗',
         notesPlaceholder:
-          'e.g. Extra heater/wood for fireplace, upper floor attic with sunrise peak view, quiet corner suite...',
+          'e.g. Upper floor attic with sunrise peak view, private balcony, extra heater...',
       };
     }
     if (formData.serviceType === 'travel') {
       return {
-        badge: '🪔 Devotional Cab & Yatra Booking',
-        title: 'Book Your Private Mountain Cab',
+        badge: 'Chauffeured Mountain Fleet',
+        title: 'Book Your Mountain Cab',
         subtitle:
           'Tell us your pickup location and route. Our team in Almora will message you directly on WhatsApp with route guidance and available vehicle options.',
         buttonText: 'Inquire for Mountain Cab on WhatsApp ↗',
         notesPlaceholder:
-          'e.g. Early morning 5 AM pickup from Kathgodam, Kainchi Dham evening aarti halt, luggage space for 4 bags...',
+          'e.g. Morning pickup from Kathgodam, Kainchi Dham halt, luggage space for 4 bags...',
       };
     }
     return {
-      badge: '🪔 पावन यात्रा • Easy WhatsApp Booking',
-      title: 'Plan Your Stay & Mountain Travel',
+      badge: 'Boutique Stay & Chauffeured Travel',
+      title: 'Plan Your Stay and Mountain Travel',
       subtitle:
-        'Tell us your travel dates and requirements. Our team in Almora will message you directly on WhatsApp with available rooms and complete yatra guidance.',
-      buttonText: 'Inquire for Stay & Cab Package on WhatsApp ↗',
+        'Tell us your travel dates and requirements. Our team in Almora will message you directly on WhatsApp with available rooms and itinerary options.',
+      buttonText: 'Inquire for Stay & Cab on WhatsApp ↗',
       notesPlaceholder:
-        'e.g. Senior citizen travel, Kainchi Dham aarti darshan, extra fireplace wood, quiet attic room...',
+        'e.g. Family travel, Kainchi Dham & Jageshwar visits, quiet chalet suite...',
     };
   };
 
@@ -68,8 +68,7 @@ const ConciergeEnquirySection = () => {
 
     if (formData.serviceType === 'hotel') {
       message = encodeURIComponent(
-        `*॥ ॐ नमः शिवाय • जय श्री नीब करौरी महाराज ॥*\n` +
-        `*Room Inquiry — The Kasar Himalayan Heights*\n` +
+        `*The Kasar Himalayan Heights — Room Inquiry*\n` +
         `----------------------------------------\n` +
         `*Name:* ${formData.name}\n` +
         `*Phone:* ${formData.phone}\n` +
@@ -84,8 +83,7 @@ const ConciergeEnquirySection = () => {
       );
     } else if (formData.serviceType === 'travel') {
       message = encodeURIComponent(
-        `*॥ ॐ नमः शिवाय • जय श्री नीब करौरी महाराज ॥*\n` +
-        `*Cab Inquiry — Mountain Expeditions*\n` +
+        `*Mountain Expeditions — Cab & Travel Inquiry*\n` +
         `----------------------------------------\n` +
         `*Name:* ${formData.name}\n` +
         `*Phone:* ${formData.phone}\n` +
@@ -100,8 +98,7 @@ const ConciergeEnquirySection = () => {
       );
     } else {
       message = encodeURIComponent(
-        `*॥ ॐ नमः शिवाय • जय श्री नीब करौरी महाराज ॥*\n` +
-        `*Stay & Cab Package Inquiry — The Kasar Himalayan Heights*\n` +
+        `*The Kasar Himalayan Heights — Stay & Cab Package Inquiry*\n` +
         `----------------------------------------\n` +
         `*Name:* ${formData.name}\n` +
         `*Phone:* ${formData.phone}\n` +
@@ -120,27 +117,30 @@ const ConciergeEnquirySection = () => {
   };
 
   return (
-    <section id="enquiry" className="py-20 sm:py-28 px-4 bg-[#12433B] border-b border-[#0D332D] text-white relative overflow-hidden">
+    <section id="enquiry" className="py-20 sm:py-28 px-3 sm:px-6 bg-[#541508] border-b border-[#3D0F06] text-white relative overflow-hidden ambient-glow-gold">
       <Container size="md">
-        <div className="bg-[#0D332D] p-5 sm:p-10 md:p-12 rounded-2xl sm:rounded-3xl border-2 border-[#EAA722]/30 shadow-2xl text-center relative z-10">
-          <span className="text-[#EAA722] text-sm font-devanagari font-bold tracking-widest uppercase block mb-2">
-            ॥ ॐ नमः शिवाय • जय श्री नीब करौरी महाराज ॥
-          </span>
-          <span className="text-[#FAF5EC]/80 text-xs font-serif tracking-widest uppercase mb-2 block">
+        <div className="bg-[#3D0F06] p-6 sm:p-10 md:p-14 rounded-3xl border-2 border-[#EAA722]/35 shadow-2xl text-center relative z-10 luxury-card">
+          {/* VIP Concierge Trust Note */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#2D0B04] border border-[#EAA722]/35 text-[#EAA722] text-xs font-sans font-medium mb-3">
+            <span>✦</span>
+            <span>Direct reply within 15 minutes by on-site Himalayan Concierge</span>
+          </div>
+
+          <span className="text-[#EAA722] text-xs sm:text-sm font-semibold tracking-widest uppercase mb-2 block">
             {header.badge}
           </span>
-          <h2 className="font-serif text-3xl sm:text-5xl text-white font-normal mb-3">
+          <h2 className="font-heading text-2xl sm:text-4xl lg:text-5xl text-white font-semibold mb-4 leading-tight sm:leading-snug">
             {header.title}
           </h2>
-          <p className="text-[#FAF5EC]/90 text-base sm:text-lg max-w-xl mx-auto mb-8 font-serif font-normal">
+          <p className="text-[#FAF5EC]/90 text-base sm:text-lg max-w-xl mx-auto mb-9 font-normal leading-[1.8]">
             {header.subtitle}
           </p>
 
-          <form onSubmit={handleEnquirySubmit} className="space-y-5 text-left max-w-xl mx-auto font-serif">
+          <form onSubmit={handleEnquirySubmit} className="space-y-5 text-left max-w-xl mx-auto font-sans">
             {/* Row 1: Common Contact Information */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="enquiry-name" className="block text-xs uppercase tracking-wider font-semibold text-[#EAA722] mb-1">
+                <label htmlFor="enquiry-name" className="block text-xs uppercase tracking-wider font-semibold text-[#EAA722] mb-1.5">
                   Your Full Name *
                 </label>
                 <input
@@ -150,11 +150,11 @@ const ConciergeEnquirySection = () => {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="e.g. Rahul Sharma"
-                  className="w-full px-4 py-3 bg-[#12433B] rounded-xl border border-[#EAA722]/30 text-white placeholder-white/40 text-base focus:outline-none focus:border-[#EAA722]"
+                  className="w-full px-4 sm:px-5 py-3.5 sm:py-4 bg-[#2D0B04] rounded-2xl border border-[#EAA722]/35 text-white placeholder-white/40 text-base focus:outline-none focus:border-[#EAA722] focus:ring-2 focus:ring-[#EAA722]/40 transition-all"
                 />
               </div>
               <div>
-                <label htmlFor="enquiry-phone" className="block text-xs uppercase tracking-wider font-semibold text-[#EAA722] mb-1">
+                <label htmlFor="enquiry-phone" className="block text-xs uppercase tracking-wider font-semibold text-[#EAA722] mb-1.5">
                   WhatsApp / Phone Number *
                 </label>
                 <input
@@ -164,31 +164,31 @@ const ConciergeEnquirySection = () => {
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   placeholder="+91 98765 43210"
-                  className="w-full px-4 py-3 bg-[#12433B] rounded-xl border border-[#EAA722]/30 text-white placeholder-white/40 text-base focus:outline-none focus:border-[#EAA722]"
+                  className="w-full px-4 sm:px-5 py-3.5 sm:py-4 bg-[#2D0B04] rounded-2xl border border-[#EAA722]/35 text-white placeholder-white/40 text-base focus:outline-none focus:border-[#EAA722] focus:ring-2 focus:ring-[#EAA722]/40 transition-all"
                 />
               </div>
             </div>
 
             {/* Row 2: Service Selection */}
             <div>
-              <label htmlFor="enquiry-service" className="block text-xs uppercase tracking-wider font-semibold text-[#EAA722] mb-1">
+              <label htmlFor="enquiry-service" className="block text-xs uppercase tracking-wider font-semibold text-[#EAA722] mb-1.5">
                 What are you looking for? *
               </label>
               <select
                 id="enquiry-service"
                 value={formData.serviceType}
                 onChange={(e) => setFormData({ ...formData, serviceType: e.target.value })}
-                className="w-full px-4 py-3 bg-[#12433B] rounded-xl border border-[#EAA722]/40 text-white text-base focus:outline-none focus:border-[#EAA722] cursor-pointer"
+                className="w-full px-4 sm:px-5 py-3.5 sm:py-4 bg-[#2D0B04] rounded-2xl border border-[#EAA722]/40 text-white text-base focus:outline-none focus:border-[#EAA722] focus:ring-2 focus:ring-[#EAA722]/40 transition-all cursor-pointer"
               >
-                <option value="both" className="bg-[#12433B]">Both Room Stay &amp; Mountain Cab</option>
-                <option value="hotel" className="bg-[#12433B]">Room Stay Only</option>
-                <option value="travel" className="bg-[#12433B]">Cab / Travel Only</option>
+                <option value="both" className="bg-[#2D0B04]">Both Room Stay &amp; Mountain Cab</option>
+                <option value="hotel" className="bg-[#2D0B04]">Room Stay Only</option>
+                <option value="travel" className="bg-[#2D0B04]">Cab / Travel Only</option>
               </select>
             </div>
 
             {/* Special Requests */}
             <div>
-              <label htmlFor="enquiry-notes" className="block text-xs uppercase tracking-wider font-semibold text-[#EAA722] mb-1">
+              <label htmlFor="enquiry-notes" className="block text-xs uppercase tracking-wider font-semibold text-[#EAA722] mb-1.5">
                 Any Special Request (Optional)
               </label>
               <textarea
@@ -197,18 +197,18 @@ const ConciergeEnquirySection = () => {
                 value={formData.notes}
                 onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                 placeholder={header.notesPlaceholder}
-                className="w-full px-4 py-3 bg-[#12433B] rounded-xl border border-[#EAA722]/30 text-white placeholder-white/40 text-base focus:outline-none focus:border-[#EAA722] resize-none"
+                className="w-full px-4 sm:px-5 py-3.5 bg-[#2D0B04] rounded-2xl border border-[#EAA722]/35 text-white placeholder-white/40 text-base focus:outline-none focus:border-[#EAA722] focus:ring-2 focus:ring-[#EAA722]/40 transition-all resize-none"
               />
             </div>
 
             <button
               type="submit"
-              className="btn-nkb-gold w-full py-4 text-xs sm:text-sm font-bold tracking-widest uppercase cursor-pointer mt-4 text-center"
+              className="btn-nkb-gold btn-shimmer w-full py-4 sm:py-4.5 text-xs sm:text-sm font-bold tracking-widest uppercase cursor-pointer mt-4 text-center shadow-xl hover:shadow-2xl"
             >
               {header.buttonText}
             </button>
 
-            <p className="text-sm text-center text-[#FAF5EC]/80 pt-2 font-serif">
+            <p className="text-sm sm:text-base text-center text-[#FAF5EC]/85 pt-3 font-serif">
               Or speak with our Almora Sewa desk directly: <strong className="text-[#EAA722] font-sans font-bold tracking-wide">{company.conciergePhone}</strong>
             </p>
           </form>

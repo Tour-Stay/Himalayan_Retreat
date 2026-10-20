@@ -6,7 +6,6 @@ import goluDevtaImg from '@shared/assets/images/Chitai_Golu_devta_Temple.jpg';
 import jageshwarImg from '@shared/assets/images/Jageshwar-Mahamrityunjaya-Dham.jpg';
 import kainchiImg from '@shared/assets/images/kainchi-dham.jpg';
 import vivekanandaCaveImg from '@shared/assets/images/vivekananda-cave.jpg';
-import kasarTempleTrailImg from '@shared/assets/images/kasar-temple-trail.jpg';
 
 const carouselSlides = [
   {
@@ -14,7 +13,6 @@ const carouselSlides = [
     image: kasarTempleImg,
     alt: 'Kasar Devi Temple and Peaceful Meditation Ridge',
     caption: 'Kasar Devi & Crank’s Ridge',
-    subtitle: 'Swami Vivekananda Meditation Caves & Divine Himalayan Silence',
     position: 'object-center',
   },
   {
@@ -22,7 +20,6 @@ const carouselSlides = [
     image: goluDevtaImg,
     alt: 'Chitai Golu Devta Temple Almora',
     caption: 'Chitai Golu Devta Temple',
-    subtitle: 'Revered God of Justice • Sacred Temple of Bells & Divine Blessings',
     position: 'object-center',
   },
   {
@@ -30,7 +27,6 @@ const carouselSlides = [
     image: jageshwarImg,
     alt: 'Jageshwar Mahamrityunjaya Dham Ancient Stone Temples',
     caption: 'Jageshwar Mahamrityunjaya Dham',
-    subtitle: '124 Ancient Shiva Stone Shrines in Deodar Cedar Valley',
     position: 'object-center',
   },
   {
@@ -38,7 +34,6 @@ const carouselSlides = [
     image: kainchiImg,
     alt: 'Kainchi Dham Ashram and Hanuman Temple',
     caption: 'Kainchi Dham Ashram & Mandir',
-    subtitle: 'Sacred Forest River Valley • Established 1962',
     position: 'object-center',
   },
 ];
@@ -65,7 +60,7 @@ const HeroMaharajji = () => {
   return (
     <section id="maharajji" className="w-full">
       {/* 1. HERO SLIDESHOW / CAROUSEL (Full Width & Sacred) */}
-      <div className="relative w-full h-[420px] sm:h-[540px] lg:h-[640px] bg-[#0D332D] overflow-hidden group">
+      <div className="relative w-full h-[380px] sm:h-[480px] md:h-[540px] lg:h-[620px] bg-[#0D332D] overflow-hidden group">
         {carouselSlides.map((slide, idx) => (
           <div
             key={slide.id}
@@ -75,19 +70,16 @@ const HeroMaharajji = () => {
             <img
               src={slide.image}
               alt={slide.alt}
-              className={`w-full h-full object-cover ${slide.position || 'object-center'} filter brightness-[0.93]`}
+              className={`w-full h-full object-cover ${slide.position || 'object-center'} filter brightness-[0.93] transition-transform duration-[8000ms] ease-out ${currentSlide === idx ? 'scale-105' : 'scale-100'}`}
             />
             {/* Subtle Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-black/30"></div>
 
-            {/* Slide Title & Subtitle */}
-            <div className="absolute bottom-10 left-6 sm:left-12 lg:left-20 max-w-2xl text-left z-20">
-              <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-white font-normal drop-shadow-md">
+            {/* Slide Title */}
+            <div className="absolute bottom-8 sm:bottom-12 left-4 sm:left-10 lg:left-16 right-4 max-w-3xl text-left z-20">
+              <h2 className="font-heading text-2xl sm:text-4xl lg:text-5xl text-white font-semibold drop-shadow-lg leading-tight sm:leading-snug">
                 {slide.caption}
               </h2>
-              <p className="font-serif text-base sm:text-lg text-[#FAF5EC]/90 mt-1.5 drop-shadow">
-                {slide.subtitle}
-              </p>
             </div>
           </div>
         ))}
@@ -97,30 +89,30 @@ const HeroMaharajji = () => {
           type="button"
           onClick={goToPrev}
           aria-label="Previous Slide"
-          className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#12433B]/70 hover:bg-[#EAA722] text-white hover:text-[#12433B] flex items-center justify-center transition-all cursor-pointer backdrop-blur-xs shadow-lg border border-white/20"
+          className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-[#081E1A]/75 hover:bg-[#EAA722] text-[#EAA722] hover:text-[#0D332D] flex items-center justify-center transition-all duration-300 cursor-pointer backdrop-blur-md shadow-xl border border-[#EAA722]/30 hover:scale-105"
         >
-          <span className="text-xl sm:text-2xl font-serif leading-none">&#8249;</span>
+          <span className="text-2xl sm:text-3xl font-serif leading-none">&#8249;</span>
         </button>
 
         <button
           type="button"
           onClick={goToNext}
           aria-label="Next Slide"
-          className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#12433B]/70 hover:bg-[#EAA722] text-white hover:text-[#12433B] flex items-center justify-center transition-all cursor-pointer backdrop-blur-xs shadow-lg border border-white/20"
+          className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-[#081E1A]/75 hover:bg-[#EAA722] text-[#EAA722] hover:text-[#0D332D] flex items-center justify-center transition-all duration-300 cursor-pointer backdrop-blur-md shadow-xl border border-[#EAA722]/30 hover:scale-105"
         >
-          <span className="text-xl sm:text-2xl font-serif leading-none">&#8250;</span>
+          <span className="text-2xl sm:text-3xl font-serif leading-none">&#8250;</span>
         </button>
 
         {/* Carousel Dot Indicators */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2.5">
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 sm:gap-3 bg-black/30 px-3 py-1.5 rounded-full backdrop-blur-xs border border-white/10">
           {carouselSlides.map((_, dotIdx) => (
             <button
               key={dotIdx}
               type="button"
               onClick={() => setCurrentSlide(dotIdx)}
               className={`transition-all duration-300 rounded-full cursor-pointer ${currentSlide === dotIdx
-                ? 'w-8 h-2.5 bg-[#EAA722]'
-                : 'w-2.5 h-2.5 bg-white/50 hover:bg-white'
+                ? 'w-8 h-2 sm:h-2.5 bg-[#EAA722]'
+                : 'w-2 h-2 sm:w-2.5 sm:h-2.5 bg-white/50 hover:bg-white'
                 }`}
               aria-label={`Go to slide ${dotIdx + 1}`}
             />
@@ -128,79 +120,73 @@ const HeroMaharajji = () => {
         </div>
       </div>
 
-      {/* 2. SACRED DEVOTIONAL RIBBON — MAA KASAR DEVI SHAKTI */}
-      <div className="w-full bg-[#3D0F06] py-4 sm:py-5 border-y border-[#270904] text-center">
-        <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-white font-normal tracking-wide">
-          ॥ ॐ ह्रीं श्रीं क्लीं माँ कासार देव्यै नमः • जय माँ कात्यायनी शक्तिपीठ ॥
-        </h2>
-      </div>
+      {/* 2. EDITORIAL ZIG-ZAG STORYTELLING — DISTINCT UNEVEN BACKGROUNDS */}
 
-      {/* 3. EDITORIAL ZIG-ZAG STORYTELLING — DISTINCT UNEVEN BACKGROUNDS */}
-
-      {/* CHAPTER 1 & GRAND HEADER: REGAL SACRED RED-BROWN (#541508) */}
-      <div id="kasar-devi" className="w-full bg-[#541508] py-16 sm:py-22 px-4 sm:px-6 lg:px-8 border-b border-[#3D0F06] text-white relative">
-        <div className="max-w-7xl mx-auto space-y-14 sm:space-y-18">
+      {/* CHAPTER 1: REGAL SACRED RED-BROWN (#541508) */}
+      <div id="kasar-devi" className="w-full bg-[#541508] py-16 sm:py-24 px-3 sm:px-6 lg:px-8 border-b border-[#3D0F06] text-white relative overflow-hidden">
+        <div className="max-w-[1440px] mx-auto space-y-12 sm:space-y-16">
 
           {/* Section Header */}
-          <div className="text-center max-w-4xl mx-auto space-y-4">
-            <span className="inline-block px-4 py-1 rounded-full text-xs sm:text-sm font-serif font-medium bg-[#3D0F06] text-[#EAA722] border border-[#EAA722]/40 tracking-wider">
-              ॥ स्कन्दपुराण मानसखण्ड • श्रीदुर्गासप्तशती ॥
-            </span>
-            <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl text-white font-normal tracking-tight leading-tight">
-              Maa Kasar Devi &amp; The Sacred Kashyap Parvat
+          <div className="text-center max-w-4xl mx-auto space-y-3 sm:space-y-4">
+            <h2 className="font-heading text-2xl sm:text-4xl lg:text-5xl text-white font-semibold tracking-normal leading-tight sm:leading-snug">
+              Kasar Devi &amp; The Sacred Kashyap Ridge
             </h2>
-            <div className="w-24 h-0.5 bg-[#EAA722] mx-auto my-3"></div>
-            <p className="font-serif text-lg sm:text-xl text-[#FAF5EC]/90 leading-relaxed font-normal">
-              6,942 Feet &bull; Crank’s Ridge, Almora &bull; Sacred Seat of Navadurga Katyayani &bull; Est. 2nd Century CE
-            </p>
-            <p className="font-serif text-lg sm:text-xl text-[#EAA722] tracking-wide italic font-normal pt-1">
-              ॥ चन्द्रहासोज्ज्वलकरा शार्दूलवरवाहना । कात्यायनी शुभं दद्याद् देवी दानवघातिनी ॥
-            </p>
+            <div className="w-20 h-0.5 bg-[#EAA722] mx-auto my-3"></div>
           </div>
 
-          {/* CHAPTER 1: PURANIC SCRIPTURES (Image Left, Story Right) */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+          {/* CHAPTER 1: SCRIPTURES & HERITAGE (Image Left, Story Right) */}
+          {/* Mobile-Only Heading for Chapter 1 */}
+          <div className="lg:hidden space-y-3 mb-6 text-left">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#3D0F06] text-[#EAA722] text-xs uppercase tracking-widest border border-[#EAA722]/30 font-medium">
+              <span>Sacred Heritage</span>
+              <span>•</span>
+              <span>Puranic History</span>
+            </div>
+            <h3 className="font-heading text-xl sm:text-3xl text-[#EAA722] font-semibold leading-snug">
+              The Ancient Sanctuary of Maa Katyayani
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
             {/* Image Left */}
-            <div className="lg:col-span-6">
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl border-2 border-[#EAA722]/40 bg-[#3D0F06] group">
-                <img
-                  src={kasarTempleImg}
-                  alt="Maa Kasar Devi Temple Ancient Sanctum"
-                  className="w-full h-80 sm:h-96 lg:h-[440px] object-cover group-hover:scale-104 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"></div>
-                <div className="absolute bottom-5 left-5 right-5 text-left">
-                  <span className="font-serif text-xs sm:text-sm font-medium bg-[#3D0F06]/95 text-[#F3D8B0] px-3.5 py-1.5 rounded-full border border-[#EAA722]/40 backdrop-blur-xs">
-                    Ancient Rock-Cut Sanctum &bull; 2nd Century CE Inscriptions
+            <div className="lg:col-span-6 ambient-glow-gold">
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl border-2 border-[#EAA722]/40 bg-[#3D0F06] luxury-card group">
+                <div className="overflow-hidden">
+                  <img
+                    src={kasarTempleImg}
+                    alt="Maa Kasar Devi Temple Ancient Sanctum"
+                    className="w-full h-80 sm:h-96 lg:h-[460px] object-cover group-hover:scale-106 transition-transform duration-700 ease-out"
+                  />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent pointer-events-none"></div>
+                <div className="absolute bottom-4 left-5 right-5 text-left pointer-events-none">
+                  <span className="text-xs sm:text-sm font-serif text-[#FAF5EC] glass-frosted px-3.5 py-1.5 rounded-full border border-[#EAA722]/40 shadow-lg">
+                    2nd Century CE Stone Sanctum • Kasar Devi Ridge
                   </span>
-                  <p className="font-serif text-sm text-[#FAF5EC]/80 mt-2 italic">
-                    Perched atop Kashyap Parvat framing the 180° Greater Himalayan snow range
-                  </p>
                 </div>
               </div>
             </div>
 
             {/* Story Right */}
-            <div className="lg:col-span-6 space-y-5 text-left">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#3D0F06] text-[#EAA722] text-xs font-serif uppercase tracking-widest border border-[#EAA722]/30">
-                <span>अध्याय १</span>
-                <span>•</span>
-                <span>Puranic Scripture</span>
+            <div className="lg:col-span-6 space-y-6 text-left">
+              <div className="hidden lg:block space-y-3">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#3D0F06] text-[#EAA722] text-xs uppercase tracking-widest border border-[#EAA722]/30 font-medium">
+                  <span>Sacred Heritage</span>
+                  <span>•</span>
+                  <span>Puranic History</span>
+                </div>
+                <h3 className="font-heading text-xl sm:text-3xl lg:text-4xl text-[#EAA722] font-semibold leading-snug">
+                  The Ancient Sanctuary of Maa Katyayani
+                </h3>
               </div>
-              <h3 className="font-serif text-2xl sm:text-4xl text-[#EAA722] font-normal leading-snug">
-                The Divine Manifestation of Maa Katyayani
-              </h3>
-              <p className="font-serif text-base sm:text-lg text-[#FAF5EC]/90 leading-relaxed font-normal">
-                In the sacred pages of the <em>Skanda Purana (Manaskhanda)</em>, this lofty pine ridge is glorified as <strong>Kashyap Parvat</strong>, named in honor of Maharishi Kashyapa, who performed supreme tapasya here. The scriptures declare that merely walking this hill bestows purification and spiritual merit.
+              <p className="text-base sm:text-lg lg:text-[19px] text-[#FAF5EC]/90 leading-[1.8] sm:leading-[1.85] font-normal">
+                In the classical scriptures of the <em>Skanda Purana</em>, this high pine ridge is celebrated as <strong>Kashyap Parvat</strong>, named in honor of Maharishi Kashyapa who performed deep meditation here. For centuries, travelers have experienced this ridge as a place of spontaneous stillness and mental clarity.
               </p>
-              <p className="font-serif text-base sm:text-lg text-[#FAF5EC]/90 leading-relaxed font-normal">
-                According to the <em>Durga Saptashati</em> (Devi Mahatmya), when the cosmos trembled before the demon kings Shumbha and Nishumbha, Goddess Durga manifested Her ferocious yet protective sixth avatar &mdash; <strong>Maa Katyayani (Kaushiki)</strong> &mdash; right upon this mountain peak to vanquish evil and re-establish universal Dharma.
+              <p className="text-base sm:text-lg lg:text-[19px] text-[#FAF5EC]/90 leading-[1.8] sm:leading-[1.85] font-normal">
+                According to the <em>Devi Mahatmya</em>, Goddess Durga manifested Her protective sixth form &mdash; <strong>Maa Katyayani</strong> &mdash; upon this mountain peak to overcome turmoil and re-establish universal harmony.
               </p>
-              <div className="p-4 sm:p-5 rounded-2xl bg-[#3D0F06] border border-[#EAA722]/30 text-[#F3D8B0] font-serif text-sm sm:text-base italic leading-relaxed">
-                &ldquo;सर्वमङ्गलमाङ्गल्ये शिवे सर्वार्थसाधिके । शरण्ये त्र्यम्बके गौरि नारायणि नमोऽस्तु ते ॥&rdquo;
-                <span className="block text-xs font-sans not-italic text-[#FAF5EC]/70 mt-1">
-                  Daily Chandi Path invocation chanted at Maa Kasar Devi Sanctum
-                </span>
+              <div className="p-5 sm:p-6 rounded-2xl bg-[#3D0F06]/85 border border-[#EAA722]/35 text-[#FAF5EC] text-sm sm:text-base lg:text-[17px] leading-[1.75] shadow-lg">
+                Perched atop Kashyap Parvat framing an uninterrupted 180° panorama of the Greater Himalayan snow peaks, the 2nd-century stone shrine continues to inspire quiet contemplation and peace.
               </div>
             </div>
           </div>
@@ -208,124 +194,90 @@ const HeroMaharajji = () => {
         </div>
       </div>
 
-      {/* CHAPTER 2: DEEP COSMIC MIDNIGHT PINE GRADIENT (#081E1A to #0D332D) */}
-      <div className="w-full bg-gradient-to-b from-[#081E1A] via-[#0D332D] to-[#081E1A] py-16 sm:py-22 px-4 sm:px-6 lg:px-8 border-b border-[#051713] text-white relative">
-        <div className="max-w-7xl mx-auto">
-          {/* Story Left, Image Right — Zig-Zag! */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-            {/* Story Left */}
-            <div className="lg:col-span-6 space-y-5 text-left order-2 lg:order-1">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#061814] text-[#EAA722] text-xs font-serif uppercase tracking-widest border border-[#EAA722]/30">
-                <span>अध्याय २</span>
-                <span>•</span>
-                <span>Cosmic Energy &amp; Science</span>
-              </div>
-              <h3 className="font-serif text-2xl sm:text-4xl text-[#EAA722] font-normal leading-snug">
-                The Van Allen Geomagnetic Belt
-              </h3>
-              <p className="font-serif text-base sm:text-lg text-[#FAF5EC]/90 leading-relaxed font-normal">
-                Beyond its ancient Puranic fame, Kasar Devi holds a documented position in modern geomagnetism. Scientific research and NASA studies established that this ridge sits directly beneath an extraordinary planetary electromagnetic belt.
-              </p>
-              <p className="font-serif text-base sm:text-lg text-[#FAF5EC]/90 leading-relaxed font-normal">
-                Remarkably, the earth possesses only <strong>three major locations</strong> with this unique natural geomagnetic pull: <strong>Stonehenge</strong> in the United Kingdom, <strong>Machu Picchu</strong> in Peru, and <strong>Kasar Devi</strong> in Almora.
-              </p>
-              <p className="font-serif text-base sm:text-lg text-[#FAF5EC]/85 leading-relaxed font-normal">
-                This electromagnetic phenomenon stimulates restorative alpha brainwaves, soothing the nervous system and enabling even first-time visitors to slip effortlessly into deep mental silence and stillness.
-              </p>
-
-              {/* Stat Highlights */}
-              <div className="grid grid-cols-3 gap-3 pt-2">
-                <div className="bg-[#061814] p-3 rounded-xl border border-[#EAA722]/25 text-center">
-                  <span className="block font-serif text-xl sm:text-2xl text-[#EAA722] font-medium">3</span>
-                  <span className="text-[11px] sm:text-xs text-[#FAF5EC]/75 font-serif">Global Sites</span>
-                </div>
-                <div className="bg-[#061814] p-3 rounded-xl border border-[#EAA722]/25 text-center">
-                  <span className="block font-serif text-xl sm:text-2xl text-[#EAA722] font-medium">6,942′</span>
-                  <span className="text-[11px] sm:text-xs text-[#FAF5EC]/75 font-serif">High Ridge</span>
-                </div>
-                <div className="bg-[#061814] p-3 rounded-xl border border-[#EAA722]/25 text-center">
-                  <span className="block font-serif text-xl sm:text-2xl text-[#EAA722] font-medium">NASA</span>
-                  <span className="text-[11px] sm:text-xs text-[#FAF5EC]/75 font-serif">Magnetic Belt</span>
-                </div>
-              </div>
+      {/* CHAPTER 2: GEOMAGNETISM & CRANK'S RIDGE LEGACY (Dark Green) */}
+      <div className="w-full bg-gradient-to-b from-[#081E1A] via-[#0D332D] to-[#081E1A] py-16 sm:py-24 px-3 sm:px-6 lg:px-8 border-b border-[#051713] text-white relative overflow-hidden">
+        <div className="max-w-[1440px] mx-auto">
+          {/* Mobile-Only Heading: appears above image on mobile, hidden on desktop */}
+          <div className="lg:hidden space-y-3 mb-6 text-left">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#061814] text-[#EAA722] text-xs uppercase tracking-widest border border-[#EAA722]/30 font-medium">
+              <span>Geomagnetism &amp; Science</span>
+              <span>•</span>
+              <span>Crank’s Ridge Legacy</span>
             </div>
 
-            {/* Image Right */}
-            <div className="lg:col-span-6 order-1 lg:order-2">
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl border-2 border-[#EAA722]/40 bg-[#061814] group">
-                <img
-                  src={kasarTempleTrailImg}
-                  alt="Kasar Devi Ridge Cosmic Energy Trail"
-                  className="w-full h-80 sm:h-96 lg:h-[440px] object-cover group-hover:scale-104 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"></div>
-                <div className="absolute bottom-5 left-5 right-5 text-left">
-                  <span className="font-serif text-xs sm:text-sm font-medium bg-[#061814]/95 text-[#F3D8B0] px-3.5 py-1.5 rounded-full border border-[#EAA722]/40 backdrop-blur-xs">
-                    Stonehenge &bull; Machu Picchu &bull; Kasar Devi
-                  </span>
-                  <p className="font-serif text-sm text-[#FAF5EC]/80 mt-2 italic">
-                    Pine-scented ridge trails where visitors experience spontaneous mental calm
-                  </p>
-                </div>
-              </div>
-            </div>
+            <h3 className="font-heading text-xl sm:text-3xl text-[#EAA722] font-semibold leading-snug">
+              The Van Allen Belt &amp; The Silence of Crank’s Ridge
+            </h3>
           </div>
-        </div>
-      </div>
 
-      {/* CHAPTER 3: WARM ANCIENT EARTHY MAHOGANY (#481207) */}
-      <div className="w-full bg-[#481207] py-16 sm:py-22 px-4 sm:px-6 lg:px-8 border-b border-[#340D05] text-white relative">
-        <div className="max-w-7xl mx-auto">
-          {/* Image Left, Story Right — Zig-Zag! */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-            {/* Image Left */}
-            <div className="lg:col-span-6">
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl border-2 border-[#EAA722]/40 bg-[#340D05] group">
-                <img
-                  src={vivekanandaCaveImg}
-                  alt="Swami Vivekananda Meditation Cave at Kasar Devi"
-                  className="w-full h-80 sm:h-96 lg:h-[440px] object-cover group-hover:scale-104 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"></div>
-                <div className="absolute bottom-5 left-5 right-5 text-left">
-                  <span className="font-serif text-xs sm:text-sm font-medium bg-[#340D05]/95 text-[#F3D8B0] px-3.5 py-1.5 rounded-full border border-[#EAA722]/40 backdrop-blur-xs">
-                    Swami Vivekananda Rock Cave &bull; August 1890
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
+            {/* Image Container: on mobile comes right after heading; on desktop appears on right (order-2) */}
+            <div className="lg:col-span-6 lg:order-2 ambient-glow-gold">
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl border-2 border-[#EAA722]/40 bg-[#061814] luxury-card group">
+                <div className="overflow-hidden">
+                  <img
+                    src={vivekanandaCaveImg}
+                    alt="Swami Vivekananda Meditation Cave and Kasar Devi Ridge"
+                    className="w-full h-80 sm:h-96 lg:h-[460px] object-cover group-hover:scale-106 transition-transform duration-700 ease-out"
+                  />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent pointer-events-none"></div>
+                <div className="absolute bottom-4 left-5 right-5 text-left pointer-events-none">
+                  <span className="text-xs sm:text-sm font-serif text-[#FAF5EC] glass-frosted px-3.5 py-1.5 rounded-full border border-[#EAA722]/40 shadow-lg">
+                    Swami Vivekananda Rock Cave • August 1890
                   </span>
-                  <p className="font-serif text-sm text-[#FAF5EC]/80 mt-2 italic">
-                    The natural rock cavern beneath Kasar deodars where Swamiji attained deep dhyana
-                  </p>
                 </div>
               </div>
             </div>
 
-            {/* Story Right */}
-            <div className="lg:col-span-6 space-y-5 text-left">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#340D05] text-[#EAA722] text-xs font-serif uppercase tracking-widest border border-[#EAA722]/30">
-                <span>अध्याय ३</span>
-                <span>•</span>
-                <span>The Enlightened Cave</span>
+            {/* Story Left: on desktop appears on left (order-1); on mobile comes after image */}
+            <div className="lg:col-span-6 space-y-6 text-left lg:order-1">
+              {/* Desktop-Only Heading: shown on desktop, hidden on mobile */}
+              <div className="hidden lg:block space-y-3">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#061814] text-[#EAA722] text-xs uppercase tracking-widest border border-[#EAA722]/30 font-medium">
+                  <span>Geomagnetism &amp; Science</span>
+                  <span>•</span>
+                  <span>Crank’s Ridge Legacy</span>
+                </div>
+
+                <h3 className="font-heading text-xl sm:text-3xl lg:text-4xl text-[#EAA722] font-semibold leading-snug">
+                  The Van Allen Belt &amp; The Silence of Crank’s Ridge
+                </h3>
               </div>
-              <h3 className="font-serif text-2xl sm:text-4xl text-[#EAA722] font-normal leading-snug">
-                Where The Universe Revealed Itself in an Atom
-              </h3>
-              <p className="font-serif text-base sm:text-lg text-[#FAF5EC]/90 leading-relaxed font-normal">
-                In August 1890, <strong>Swami Vivekananda</strong> walked up to Kasar Devi from Almora and entered this natural rock cave for solitary dhyana. It was here that he experienced profound spiritual oneness, noting in his diary:
+
+              <p className="text-base sm:text-lg lg:text-[19px] text-[#FAF5EC]/90 leading-[1.8] sm:leading-[1.85] font-normal">
+                Kasar Devi holds a unique position on the planet: it is one of only <strong>three major locations</strong> on Earth &mdash; along with <strong>Stonehenge</strong> in the UK and <strong>Machu Picchu</strong> in Peru &mdash; situated under a documented planetary geomagnetic belt that stimulates calming alpha brainwaves.
               </p>
-              <blockquote className="border-l-4 border-[#EAA722] pl-5 italic text-[#F3D8B0] text-lg sm:text-xl my-3 bg-[#340D05] py-3 pr-4 rounded-r-xl border border-[#EAA722]/20">
-                &ldquo;Here under the silent Himalayas, in the cosmic stillness of Kasar Devi, the universe revealed itself in an atom &mdash; the microcosm and the macrocosm are one.&rdquo;
-                <span className="block text-xs font-sans not-italic text-[#FAF5EC]/75 mt-1.5">
-                  &mdash; Swami Vivekananda, Diary Note (August 1890)
-                </span>
-              </blockquote>
-              <p className="font-serif text-base sm:text-lg text-[#FAF5EC]/90 leading-relaxed font-normal">
-                Over the following decades, this magnetic ridge &mdash; celebrated globally as <em>Crank&rsquo;s Ridge</em> &mdash; became a sanctuary for Buddhist scholar Lama Anagarika Govinda, Walter Evans-Wentz, poets, and seekers longing for authentic peace and transcendence.
-              </p>
-              <div className="pt-2">
+
+              <div className="border-l-2 border-[#EAA722]/60 pl-4 py-1 italic">
+                <p className="text-base sm:text-lg lg:text-[19px] text-[#FAF5EC]/95 leading-[1.8] font-normal">
+                  Drawn by this extraordinary silence, <strong>Swami Vivekananda</strong> meditated in Kasar&rsquo;s natural rock cave in August 1890, experiencing profound cosmic oneness. Over the following decades, Crank&rsquo;s Ridge became a celebrated sanctuary for seekers, scholars, and thinkers from around the globe.
+                </p>
+              </div>
+
+              {/* Stat Highlights with Luxury Card Hover Lift */}
+              <div className="grid grid-cols-3 gap-3.5 pt-2">
+                <div className="bg-[#061814] p-4 rounded-2xl border border-[#EAA722]/25 text-center luxury-card shadow-lg">
+                  <span className="block font-serif text-2xl sm:text-3xl text-[#EAA722] font-medium">3</span>
+                  <span className="text-xs sm:text-sm text-[#FAF5EC]/80 font-medium mt-1 block">Global Sites</span>
+                </div>
+                <div className="bg-[#061814] p-4 rounded-2xl border border-[#EAA722]/25 text-center luxury-card shadow-lg">
+                  <span className="block font-serif text-xl sm:text-2xl text-[#EAA722] font-medium leading-snug">Van Allen</span>
+                  <span className="text-xs sm:text-sm text-[#FAF5EC]/80 font-medium mt-1 block">Magnetic Belt</span>
+                </div>
+                <div className="bg-[#061814] p-4 rounded-2xl border border-[#EAA722]/25 text-center luxury-card shadow-lg">
+                  <span className="block font-serif text-2xl sm:text-3xl text-[#EAA722] font-medium">1890</span>
+                  <span className="text-xs sm:text-sm text-[#FAF5EC]/80 font-medium mt-1 block">Vivekananda Cave</span>
+                </div>
+              </div>
+
+              <div className="pt-3">
                 <a
                   href="#enquiry"
-                  className="btn-nkb-gold px-8 py-3.5 text-xs sm:text-sm font-bold tracking-widest uppercase inline-block shadow-md hover:shadow-xl transition-all"
+                  className="btn-nkb-gold btn-shimmer px-8 py-4 text-xs sm:text-sm font-bold tracking-widest uppercase inline-flex items-center gap-2 group shadow-lg"
                 >
-                  PLAN YOUR VISIT TO KASAR DEVI ↗
+                  <span>PLAN YOUR VISIT TO KASAR DEVI</span>
+                  <span className="transition-transform duration-300 group-hover:translate-x-1">↗</span>
                 </a>
               </div>
             </div>

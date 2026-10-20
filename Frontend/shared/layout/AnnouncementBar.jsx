@@ -35,11 +35,13 @@ const AnnouncementBar = ({
 
   const resolvedHref = getResolvedHref(linkHref);
 
+  const cleanMessage = (message || '').replace(/॥.*?॥\s*/g, '');
+
   return (
-    <div className={`text-[#FDFBF7] text-xs py-2 px-4 border-b border-[#C5A059]/40 relative z-50 ${className || 'bg-[#5C151A]'}`}>
-      <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+    <div className={`text-[#FDFBF7] text-xs py-2 px-3 sm:px-6 lg:px-8 border-b border-[#C5A059]/40 relative z-50 ${className || 'bg-[#5C151A]'}`}>
+      <div className="max-w-[1440px] mx-auto flex items-center justify-between gap-4">
         <div className="flex-1 text-center font-sans tracking-wide">
-          <span className="font-light">{message}</span>{' '}
+          <span className="font-light">{cleanMessage}</span>{' '}
           {resolvedHref && linkText && (
             <a
               href={resolvedHref}

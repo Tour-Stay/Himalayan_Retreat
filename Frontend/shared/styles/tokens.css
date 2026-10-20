@@ -41,19 +41,19 @@
   --color-text-dark: #2C2523;
   --color-text-light: #6B615E;
 
-  /* Typography (Aligned with Luxury Reference Sites) */
-  --font-serif: 'CleanAmp', 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
-  --font-cinzel: 'CleanAmp', 'Cinzel', Georgia, serif;
-  --font-devanagari: 'Rozha One', 'Tiro Devanagari Hindi', 'Playfair Display', Georgia, serif;
-  --font-sans: 'Raleway', 'Inter', system-ui, sans-serif;
-  --font-mono: 'Raleway', 'Inter', system-ui, sans-serif;
-  --font-heading: 'CleanAmp', 'Playfair Display', 'Cinzel', 'Cormorant Garamond', serif;
-  --font-body: 'Raleway', 'Inter', system-ui, sans-serif;
+  /* Typography (Authentic Neem Karoli Baba Ashram: Cormorant Garamond + EB Garamond) */
+  --font-serif: 'Cormorant Garamond', 'EB Garamond', Georgia, serif;
+  --font-cinzel: 'Cormorant Garamond', 'EB Garamond', serif;
+  --font-devanagari: 'EB Garamond', 'Cormorant Garamond', serif;
+  --font-sans: 'EB Garamond', 'Cormorant Garamond', system-ui, -apple-system, sans-serif;
+  --font-mono: 'EB Garamond', 'Cormorant Garamond', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Cormorant Garamond', 'EB Garamond', Georgia, serif;
+  --font-body: 'EB Garamond', 'Cormorant Garamond', system-ui, -apple-system, sans-serif;
 }
 
 @font-face {
   font-family: 'CleanAmp';
-  src: local('Raleway'), local('Inter'), local('Segoe UI'), local('Roboto'), local('Arial'), local('Helvetica Neue');
+  src: local('Marcellus'), local('Plus Jakarta Sans'), local('Inter'), local('Segoe UI'), local('Roboto'), local('Arial'), local('Helvetica Neue');
   unicode-range: U+0026;
   font-style: normal;
 }
