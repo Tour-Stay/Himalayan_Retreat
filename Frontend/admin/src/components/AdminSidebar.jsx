@@ -1,8 +1,26 @@
-import { Link } from 'react-router-dom';
-import { SITE_CONFIG } from '@shared';
+import { useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { APP_URLS, AuthContext } from '@shared';
 import { ADMIN_ROUTES } from '../constants/adminRoutes';
 
-export const AdminSidebar = ({ activeTab, onSelectTab, stats }) => {
+export const AdminSidebar = ({
+  activeTab,
+  onSelectTab,
+  stats = {},
+  isMobileDrawerOpen,
+  onCloseMobileDrawer,
+  onOpenMobileDrawer,
+  isDesktopSidebarCollapsed,
+  onToggleDesktopSidebar,
+}) => {
+  const { logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
   const sections = [
     {
       title: 'Hotel & Stays',
@@ -123,11 +141,11 @@ export const AdminSidebar = ({ activeTab, onSelectTab, stats }) => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
             </svg>
           ),
-          badgeText: 'Hero & FAQs',
+          badgeText: 'Quote & FAQ',
         },
         {
           id: 'company',
-          label: 'Phone & WhatsApp',
+          label: 'Contact & UPI Info',
           icon: (
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
@@ -160,108 +178,391 @@ export const AdminSidebar = ({ activeTab, onSelectTab, stats }) => {
     },
   ];
 
+  const handleMobileNavSelect = (tabId) => {
+    if (onSelectTab) onSelectTab(tabId);
+    if (onCloseMobileDrawer) onCloseMobileDrawer();
+  };
+
   return (
-    <aside className="w-full lg:w-64 xl:w-72 shrink-0 bg-[#FAF7F2] border-b lg:border-b-0 lg:border-r border-[#EAA722]/30 p-3 lg:p-4 flex flex-col justify-between h-full overflow-y-auto z-20">
-      <div className="space-y-5">
-        {sections.map((section, sIdx) => (
-          <div key={sIdx} className="space-y-1">
-            {/* Section Header */}
-            <div className="flex items-center justify-between px-3 py-1 text-xs font-cinzel font-bold text-[#073125] uppercase tracking-wider border-b border-[#EAA722]/20">
-              <span>{section.title}</span>
-              <span className="text-[10px] text-[#8C7A6B] font-sans font-medium">
-                {section.badge}
+    <>
+      {/* ── 1. Desktop Sidebar (#AEAC78) - Supports Expanded & Minimized Mode ── */}
+      <aside
+        className={`hidden lg:flex shrink-0 bg-[#AEAC78] border-r border-[#8F8D5D] flex-col justify-between h-full overflow-y-auto z-20 text-[#1B1E0C] transition-all duration-200 ${
+          isDesktopSidebarCollapsed ? 'w-16 xl:w-18 p-2' : 'w-64 xl:w-72 p-4'
+        }`}
+      >
+        <div className="space-y-4">
+          {/* Top Collapse/Expand Toggle Header on Desktop */}
+          <div className="flex items-center justify-between pb-2.5 border-b border-[#1B1E0C]/15">
+            {!isDesktopSidebarCollapsed ? (
+              <>
+                <span className="text-[10px] font-cinzel uppercase tracking-widest text-[#1B1E0C] font-bold">
+                  Operations Desk
+                </span>
+                <button
+                  type="button"
+                  onClick={onToggleDesktopSidebar}
+                  className="flex items-center gap-1 px-2 py-1 bg-white/70 hover:bg-white text-[#1B1E0C] text-[10px] font-cinzel font-bold border border-[#1B1E0C]/20 transition cursor-pointer shadow-2xs"
+                  title="Minimize Sidebar to icons (Widescreen Mode)"
+                >
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+                  </svg>
+                  <span>Collapse</span>
+                </button>
+              </>
+            ) : (
+              <button
+                type="button"
+                onClick={onToggleDesktopSidebar}
+                className="w-full flex items-center justify-center p-2 bg-white/80 hover:bg-white text-[#1B1E0C] border border-[#1B1E0C]/20 transition cursor-pointer shadow-2xs"
+                title="Expand Sidebar (Show full titles)"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                </svg>
+              </button>
+            )}
+          </div>
+
+          {/* Section Groups */}
+          {sections.map((section, sIdx) => (
+            <div key={sIdx} className="space-y-1">
+              {/* Section Header (Hidden when collapsed) */}
+              {!isDesktopSidebarCollapsed && (
+                <div className="flex items-center justify-between px-2.5 py-1 text-[11px] font-cinzel font-bold text-[#1B1E0C] uppercase tracking-wider border-b border-[#1B1E0C]/15">
+                  <span>{section.title}</span>
+                  <span className="text-[10px] opacity-70 font-sans font-medium">
+                    {section.badge}
+                  </span>
+                </div>
+              )}
+
+              {/* Navigation Links */}
+              <nav className="flex flex-col gap-1">
+                {section.items.map((item) => {
+                  const isActive = activeTab === item.id;
+                  const targetRoute = ADMIN_ROUTES[item.id] || `/${item.id}`;
+
+                  if (isDesktopSidebarCollapsed) {
+                    // Minimized Icon-Only View
+                    return (
+                      <Link
+                        key={item.id}
+                        to={targetRoute}
+                        onClick={() => onSelectTab && onSelectTab(item.id)}
+                        className={`p-2.5 flex items-center justify-center transition cursor-pointer relative group ${
+                          isActive
+                            ? 'bg-white text-[#1B1E0C] font-bold shadow-xs border border-[#1B1E0C]/20'
+                            : 'text-[#1B1E0C] hover:bg-white/40'
+                        }`}
+                        title={`${item.label} (${section.title})`}
+                      >
+                        <span className={isActive ? 'text-black' : 'text-[#1B1E0C]'}>
+                          {item.icon}
+                        </span>
+
+                        {item.alertCount > 0 && (
+                          <span className="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-rose-600 animate-pulse" />
+                        )}
+                      </Link>
+                    );
+                  }
+
+                  // Normal Expanded View
+                  return (
+                    <Link
+                      key={item.id}
+                      to={targetRoute}
+                      onClick={() => onSelectTab && onSelectTab(item.id)}
+                      className={`flex items-center justify-between gap-3 px-3 py-2 text-xs transition cursor-pointer ${
+                        isActive
+                          ? 'bg-white text-[#1B1E0C] font-bold shadow-xs border border-white'
+                          : 'text-[#1B1E0C] hover:bg-white/40'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <span className={isActive ? 'text-black' : 'text-[#1B1E0C]'}>
+                          {item.icon}
+                        </span>
+                        <span className="font-medium tracking-wide">{item.label}</span>
+                      </div>
+
+                      <div className="flex items-center gap-1.5 ml-2">
+                        {item.alertCount > 0 && (
+                          <span
+                            className={`px-1.5 py-0.5 text-[10px] font-bold ${
+                              isActive
+                                ? 'bg-amber-100 text-amber-900 border border-amber-300'
+                                : 'bg-rose-100 text-rose-800 border border-rose-300 animate-pulse'
+                            }`}
+                            title={`${item.alertCount} action items`}
+                          >
+                            {item.alertCount} New
+                          </span>
+                        )}
+
+                        {item.count !== undefined && (
+                          <span
+                            className={`px-2 py-0.5 text-[11px] font-mono font-semibold ${
+                              isActive
+                                ? 'bg-[#FAF8F5] text-[#1B1E0C] border border-slate-300'
+                                : 'bg-white/60 text-[#1B1E0C] border border-[#1B1E0C]/20'
+                            }`}
+                          >
+                            {item.count}
+                          </span>
+                        )}
+
+                        {item.badgeText && item.count === undefined && (
+                          <span
+                            className={`px-1.5 py-0.5 text-[9px] uppercase font-bold tracking-wider ${
+                              isActive
+                                ? 'bg-[#FAF8F5] text-[#1B1E0C]'
+                                : 'bg-white/50 text-[#1B1E0C]'
+                            }`}
+                          >
+                            {item.badgeText}
+                          </span>
+                        )}
+                      </div>
+                    </Link>
+                  );
+                })}
+              </nav>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop Property Info Box */}
+        {!isDesktopSidebarCollapsed && (
+          <div className="mt-6 pt-4 border-t border-[#1B1E0C]/15">
+            <div className="p-3 bg-white/70 border border-[#1B1E0C]/20 text-xs">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-[11px] font-cinzel font-bold text-[#1B1E0C] flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+                  Hotel Operations Desk
+                </span>
+                <span className="text-[10px] text-emerald-800 font-semibold font-mono">Live</span>
+              </div>
+              <p className="text-[10px] text-slate-700 mt-0.5 font-sans">
+                Kasar Devi, Almora • 2,116m Elevation
+              </p>
+            </div>
+          </div>
+        )}
+      </aside>
+
+      {/* ── 2. Mobile Fixed Bottom Navigation Bar (#AEAC78) ── */}
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#AEAC78] border-t border-[#8F8D5D] h-16 flex items-center justify-around px-2 shadow-lg">
+        
+        {/* Tab 1: Bookings */}
+        <button
+          type="button"
+          onClick={() => handleMobileNavSelect('hotel-bookings')}
+          className={`flex-1 py-1 flex flex-col items-center justify-center transition relative ${
+            activeTab === 'hotel-bookings' ? 'text-white font-bold bg-[#828052]/70' : 'text-[#1B1E0C] hover:text-black'
+          }`}
+        >
+          <div className="relative">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            {stats.pendingHotelBookings > 0 && (
+              <span className="absolute -top-1 -right-2 w-4 h-4 rounded-full bg-rose-600 text-white text-[9px] font-bold flex items-center justify-center animate-pulse">
+                {stats.pendingHotelBookings}
               </span>
+            )}
+          </div>
+          <span className="text-[10px] font-cinzel tracking-wider mt-1">Bookings</span>
+        </button>
+
+        {/* Tab 2: Rooms */}
+        <button
+          type="button"
+          onClick={() => handleMobileNavSelect('rooms')}
+          className={`flex-1 py-1 flex flex-col items-center justify-center transition relative ${
+            activeTab === 'rooms' ? 'text-white font-bold bg-[#828052]/70' : 'text-[#1B1E0C] hover:text-black'
+          }`}
+        >
+          <div className="relative">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+            {stats.availableRooms !== undefined && (
+              <span className="absolute -top-1 -right-2 px-1 bg-white border border-slate-400 text-[#1B1E0C] text-[8px] font-mono font-bold">
+                {stats.availableRooms}
+              </span>
+            )}
+          </div>
+          <span className="text-[10px] font-cinzel tracking-wider mt-1">Rooms</span>
+        </button>
+
+        {/* Tab 3: Cabs */}
+        <button
+          type="button"
+          onClick={() => handleMobileNavSelect('travel-bookings')}
+          className={`flex-1 py-1 flex flex-col items-center justify-center transition relative ${
+            activeTab === 'travel-bookings' ? 'text-white font-bold bg-[#828052]/70' : 'text-[#1B1E0C] hover:text-black'
+          }`}
+        >
+          <div className="relative">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
+            </svg>
+            {stats.pendingTravelBookings > 0 && (
+              <span className="absolute -top-1 -right-2 w-4 h-4 rounded-full bg-rose-600 text-white text-[9px] font-bold flex items-center justify-center">
+                {stats.pendingTravelBookings}
+              </span>
+            )}
+          </div>
+          <span className="text-[10px] font-cinzel tracking-wider mt-1">Cabs</span>
+        </button>
+
+        {/* Tab 4: More / Management Drawer (Fixed Menu Button) */}
+        <button
+          type="button"
+          onClick={() => {
+            if (isMobileDrawerOpen) {
+              if (onCloseMobileDrawer) onCloseMobileDrawer();
+            } else {
+              if (onOpenMobileDrawer) onOpenMobileDrawer();
+            }
+          }}
+          className={`flex-1 py-1 flex flex-col items-center justify-center transition relative ${
+            isMobileDrawerOpen ? 'text-white font-bold bg-[#828052]/70' : 'text-[#1B1E0C] hover:text-black'
+          }`}
+          title="Open complete navigation menu"
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <span className="text-[10px] font-cinzel tracking-wider mt-1">Menu</span>
+        </button>
+      </nav>
+
+      {/* ── 3. Mobile Slide-Out Management Drawer (#AEAC78) ── */}
+      {isMobileDrawerOpen && (
+        <div className="lg:hidden fixed inset-0 z-50 flex justify-end">
+          
+          {/* Backdrop */}
+          <div
+            onClick={onCloseMobileDrawer}
+            className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
+          />
+
+          {/* Drawer Body */}
+          <div className="relative w-4/5 max-w-sm bg-[#AEAC78] border-l border-[#8F8D5D] h-full flex flex-col justify-between p-5 z-10 text-[#1B1E0C] shadow-2xl overflow-y-auto">
+            
+            <div className="space-y-6">
+              {/* Drawer Top Header */}
+              <div className="flex items-center justify-between pb-4 border-b border-[#1B1E0C]/20">
+                <div>
+                  <span className="text-[10px] font-cinzel uppercase tracking-[0.2em] text-[#1B1E0C] font-bold block">
+                    Management Desk
+                  </span>
+                  <h3 className="font-serif text-lg font-bold text-[#1B1E0C]">All Hotel Modules</h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={onCloseMobileDrawer}
+                  className="w-8 h-8 bg-white/80 border border-[#1B1E0C]/20 text-[#1B1E0C] hover:bg-white flex items-center justify-center font-bold text-sm cursor-pointer"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Module Groups */}
+              {sections.map((section, sIdx) => (
+                <div key={sIdx} className="space-y-1.5">
+                  <div className="text-[10px] font-cinzel uppercase tracking-widest text-[#1B1E0C] font-bold border-b border-[#1B1E0C]/15 pb-1">
+                    {section.title}
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    {section.items.map((item) => {
+                      const isActive = activeTab === item.id;
+                      const targetRoute = ADMIN_ROUTES[item.id] || `/${item.id}`;
+
+                      return (
+                        <Link
+                          key={item.id}
+                          to={targetRoute}
+                          onClick={() => handleMobileNavSelect(item.id)}
+                          className={`flex items-center justify-between px-3 py-2.5 text-xs transition ${
+                            isActive
+                              ? 'bg-white text-[#1B1E0C] font-bold shadow-xs'
+                              : 'text-[#1B1E0C] hover:bg-white/40'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5">
+                            <span className={isActive ? 'text-black' : 'text-[#1B1E0C]'}>
+                              {item.icon}
+                            </span>
+                            <span>{item.label}</span>
+                          </div>
+                          {item.count !== undefined && (
+                            <span className="text-[11px] font-mono opacity-80">{item.count}</span>
+                          )}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+
+              {/* Live Website Links */}
+              <div className="space-y-2 pt-2 border-t border-[#1B1E0C]/20">
+                <span className="text-[10px] font-cinzel uppercase tracking-widest text-[#1B1E0C] font-bold block">
+                  Public Websites
+                </span>
+                <div className="grid grid-cols-3 gap-1.5 text-center text-xs">
+                  <a
+                    href={APP_URLS.landing}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="p-2 bg-white/70 border border-[#1B1E0C]/20 text-[#1B1E0C] hover:bg-white font-medium"
+                  >
+                    Main ↗
+                  </a>
+                  <a
+                    href={APP_URLS.hotel}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="p-2 bg-white/70 border border-[#1B1E0C]/20 text-[#1B1E0C] hover:bg-white font-medium"
+                  >
+                    Hotel ↗
+                  </a>
+                  <a
+                    href={APP_URLS.travel}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="p-2 bg-white/70 border border-[#1B1E0C]/20 text-[#1B1E0C] hover:bg-white font-medium"
+                  >
+                    Cabs ↗
+                  </a>
+                </div>
+              </div>
             </div>
 
-            {/* Navigation Links */}
-            <nav className="flex lg:flex-col gap-1 overflow-x-auto lg:overflow-visible pb-1 lg:pb-0 scrollbar-none">
-              {section.items.map((item) => {
-                const isActive = activeTab === item.id;
-                const targetRoute = ADMIN_ROUTES[item.id] || `/${item.id}`;
+            {/* Logout Row in Mobile Drawer */}
+            <div className="pt-6 border-t border-[#1B1E0C]/20 mt-6">
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="w-full py-2.5 bg-rose-900 hover:bg-rose-800 text-white text-xs font-cinzel font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-xs"
+              >
+                <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                <span>Logout from Admin</span>
+              </button>
+            </div>
 
-                return (
-                  <Link
-                    key={item.id}
-                    to={targetRoute}
-                    onClick={() => onSelectTab && onSelectTab(item.id)}
-                    className={`flex items-center justify-between gap-3 px-3 py-2 rounded-xl text-xs transition cursor-pointer whitespace-nowrap shrink-0 lg:shrink ${
-                      isActive
-                        ? 'bg-[#073125] text-white font-bold border border-[#EAA722]/40 shadow-sm'
-                        : 'text-[#2C2523] hover:text-[#073125] hover:bg-[#FAF5EC] border border-transparent'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <span className={isActive ? 'text-[#EAA722]' : 'text-[#073125]'}>
-                        {item.icon}
-                      </span>
-                      <span className="font-medium tracking-wide">{item.label}</span>
-                    </div>
-
-                    <div className="flex items-center gap-1.5 ml-2">
-                      {item.alertCount > 0 && (
-                        <span
-                          className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                            isActive
-                              ? 'bg-amber-400 text-[#073125]'
-                              : 'bg-amber-100 text-amber-900 border border-amber-300 animate-pulse'
-                          }`}
-                          title={`${item.alertCount} new action needed`}
-                        >
-                          {item.alertCount} New
-                        </span>
-                      )}
-
-                      {item.count !== undefined && (
-                        <span
-                          className={`px-2 py-0.5 rounded-full text-[11px] font-mono font-semibold ${
-                            isActive
-                              ? 'bg-[#0C2B22] text-[#EAA722] border border-[#EAA722]/30'
-                              : 'bg-[#FAF5EC] text-[#2C2523] border border-[#EAA722]/30'
-                          }`}
-                        >
-                          {item.count}
-                        </span>
-                      )}
-
-                      {item.badgeText && item.count === undefined && (
-                        <span
-                          className={`px-1.5 py-0.5 rounded text-[9px] uppercase font-bold tracking-wider ${
-                            isActive
-                              ? 'bg-[#0C2B22] text-[#EAA722] border border-[#EAA722]/30'
-                              : 'bg-[#FAF5EC] text-[#073125] border border-[#EAA722]/30'
-                          }`}
-                        >
-                          {item.badgeText}
-                        </span>
-                      )}
-                    </div>
-                  </Link>
-                );
-              })}
-            </nav>
           </div>
-        ))}
-      </div>
-
-      {/* Front Desk Support Quick Info Box (Desktop) */}
-      <div className="hidden lg:block mt-6 pt-4 border-t border-[#EAA722]/20">
-        <div className="p-3 bg-[#FAF5EC] rounded-2xl border border-[#EAA722]/30 text-xs">
-          <div className="flex items-center justify-between mb-1.5">
-            <span className="text-[11px] font-cinzel font-bold text-[#073125] flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              Front Desk Helpline
-            </span>
-            <span className="text-[10px] text-emerald-800 font-semibold font-mono">Online</span>
-          </div>
-          <p className="text-[11px] text-[#5C5350]">
-            Phone: <strong className="text-[#073125] font-mono">{SITE_CONFIG.conciergePhone}</strong>
-          </p>
-          <p className="text-[10px] text-[#8C7A6B] mt-0.5">
-            Kasar Devi, Almora (6,942 ft)
-          </p>
         </div>
-      </div>
-    </aside>
+      )}
+    </>
   );
 };
 

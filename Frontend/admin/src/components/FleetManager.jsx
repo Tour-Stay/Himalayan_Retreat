@@ -6,7 +6,7 @@ import { useToast } from './Toast';
 export const FleetManager = () => {
   const navigate = useNavigate();
   const { settings, refreshSettings } = useSiteSettings();
-  const { showToast } = useToast();
+  const { addToast } = useToast();
 
   const [fleet, setFleet] = useState([]);
   const [driverAllowance, setDriverAllowance] = useState(500);
@@ -47,11 +47,11 @@ export const FleetManager = () => {
         ...currentPolicies,
         driverAllowancePerDay: isNaN(numericAllowance) ? 0 : numericAllowance,
       });
-      showToast('Cab fleet pricing & Driver Hill Allowance updated across Travel site!', 'success');
+      addToast('Cab fleet pricing & Driver Hill Allowance updated across Travel site!', 'success');
       await refreshSettings();
     } catch (err) {
       console.error('Error saving fleet tariffs:', err);
-      showToast(err.response?.data?.message || 'Failed to update fleet tariffs', 'error');
+      addToast(err.response?.data?.message || 'Failed to update fleet tariffs', 'error');
     } finally {
       setIsSaving(false);
     }
@@ -59,16 +59,16 @@ export const FleetManager = () => {
 
   return (
     <div className="space-y-6">
-      <div className="bg-[#FDFBF7] p-5 sm:p-6 rounded-2xl border border-[#C5A059]/30 shadow-xs">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 mb-6 border-b border-[#C5A059]/20">
+      <div className="bg-white p-4 sm:p-6 border border-[#C5A059]/30 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 mb-5 border-b border-slate-200">
           <div>
-            <span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-cinzel font-semibold block">
+            <span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-cinzel font-bold block">
               Travel Logistics & Rental Matrix
             </span>
-            <h3 className="font-serif text-xl sm:text-2xl font-medium text-[#2C2523]">
+            <h3 className="font-serif text-lg sm:text-2xl font-bold text-[#0F172A]">
               Cab Fleet Tariffs & Per-KM Rates
             </h3>
-            <p className="text-xs text-[#5C5350] mt-1">
+            <p className="text-xs text-slate-500 mt-1">
               Adjust vehicle rental prices, per-kilometer mountain rates, and fixed railway station transfer fares.
             </p>
           </div>
@@ -76,11 +76,11 @@ export const FleetManager = () => {
           <button
             onClick={handleSave}
             disabled={isSaving}
-            className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-[#7C1D23] hover:bg-[#5C151A] text-[#FDFBF7] text-xs font-semibold uppercase tracking-wider rounded-xl transition cursor-pointer disabled:opacity-50 shadow-xs"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-[#C5A059] hover:bg-[#D4AF37] text-[#0B1118] text-xs font-cinzel font-bold uppercase tracking-wider transition cursor-pointer disabled:opacity-50 shadow-sm border border-[#D4AF37] whitespace-nowrap"
           >
             {isSaving ? (
               <>
-                <span className="w-3.5 h-3.5 border-2 border-[#FDFBF7] border-t-transparent rounded-full animate-spin" />
+                <span className="w-3.5 h-3.5 border-2 border-[#0B1118]/30 border-t-[#0B1118] rounded-full animate-spin" />
                 <span>Saving Tariffs...</span>
               </>
             ) : (
@@ -95,61 +95,61 @@ export const FleetManager = () => {
         </div>
 
         {/* Global Driver Allowance Configuration Card */}
-        <div className="mb-6 p-4.5 bg-[#FAF5EC] rounded-2xl border border-[#C5A059]/40 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xs">
+        <div className="mb-6 p-4 bg-[#FAF8F5] border border-[#C5A059]/40 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xs">
           <div className="flex-1">
             <div className="flex items-center gap-2">
               <span className="text-lg">⛰️</span>
-              <h4 className="font-serif text-base font-bold text-[#2C2523]">
+              <h4 className="font-serif text-base font-bold text-[#0F172A]">
                 Daily Driver Hill Allowance / Batta
               </h4>
             </div>
-            <p className="text-xs text-[#5C5350] mt-1 max-w-2xl leading-relaxed">
-              Standard mountain allowance covering the local driver's food &amp; lodging during high-altitude trips. Set to <code className="text-[#7C1D23] font-bold font-mono">0</code> to completely waive or disable driver allowance in the live Fare Calculator.
+            <p className="text-xs text-slate-600 mt-1 max-w-2xl leading-relaxed">
+              Standard mountain allowance covering the local driver's food &amp; lodging during high-altitude trips. Set to <code className="text-[#0B1118] font-bold font-mono bg-white px-1 border border-slate-200">0</code> to completely waive or disable driver allowance in the live Fare Calculator.
             </p>
             <div className="mt-2">
               <button
                 type="button"
                 onClick={() => navigate('/settings/drivers')}
-                className="text-[11px] font-semibold text-[#7C1D23] hover:text-[#5C151A] hover:underline inline-flex items-center gap-1 cursor-pointer"
+                className="text-[11px] font-semibold text-[#0B1118] hover:text-[#C5A059] hover:underline inline-flex items-center gap-1 cursor-pointer"
               >
                 <span>👨‍✈️ Manage Plain vs Mountain Rates &amp; Chauffeur Roster in Drivers &amp; Batta Tab ↗</span>
               </button>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 self-start md:self-center bg-white px-3.5 py-2 rounded-xl border border-[#C5A059]/40 shadow-xs">
-            <span className="text-xs font-semibold text-[#541508] font-mono">₹</span>
+          <div className="flex items-center gap-2 self-start md:self-center bg-white px-3.5 py-2 border border-slate-300 shadow-xs">
+            <span className="text-xs font-semibold text-[#0B1118] font-mono">₹</span>
             <input
               type="number"
               min="0"
               step="50"
               value={driverAllowance}
               onChange={(e) => setDriverAllowance(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))}
-              className="w-24 bg-transparent text-sm font-bold font-mono text-[#541508] focus:outline-none"
+              className="w-24 bg-transparent text-sm font-bold font-mono text-[#0F172A] focus:outline-none"
               placeholder="500"
             />
-            <span className="text-xs font-medium text-[#5C5350]">/ day</span>
+            <span className="text-xs font-medium text-slate-500">/ day</span>
           </div>
         </div>
 
         {/* Vehicles Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           {fleet.map((vehicle, idx) => (
             <div
               key={vehicle.id || idx}
-              className={`p-5 rounded-2xl border transition ${
+              className={`p-4 sm:p-5 border transition ${
                 vehicle.isActive
                   ? 'bg-white border-[#C5A059]/40 shadow-xs'
-                  : 'bg-stone-50 border-stone-200 opacity-60'
+                  : 'bg-slate-50 border-slate-200 opacity-60'
               }`}
             >
               {/* Header with Active Toggle */}
-              <div className="flex items-center justify-between gap-2 pb-3 mb-4 border-b border-[#C5A059]/20">
+              <div className="flex items-center justify-between gap-2 pb-3 mb-4 border-b border-slate-200">
                 <div>
-                  <span className="text-[10px] font-mono uppercase text-[#7C1D23] font-bold">
+                  <span className="text-[10px] font-mono uppercase text-[#C5A059] font-bold">
                     Vehicle Type {idx + 1}
                   </span>
-                  <h4 className="font-serif text-lg font-medium text-[#2C2523]">
+                  <h4 className="font-serif text-base sm:text-lg font-bold text-[#0F172A]">
                     {vehicle.title}
                   </h4>
                 </div>
@@ -157,10 +157,10 @@ export const FleetManager = () => {
                 <button
                   type="button"
                   onClick={() => handleToggleActive(idx)}
-                  className={`px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider rounded-full transition cursor-pointer ${
+                  className={`px-2.5 py-1 text-[10px] font-cinzel font-bold uppercase tracking-wider border transition cursor-pointer ${
                     vehicle.isActive
-                      ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                      : 'bg-stone-200 text-stone-700'
+                      ? 'bg-emerald-50 text-emerald-800 border-emerald-400'
+                      : 'bg-slate-100 text-slate-600 border-slate-300'
                   }`}
                 >
                   {vehicle.isActive ? 'Active' : 'Disabled'}
@@ -168,74 +168,74 @@ export const FleetManager = () => {
               </div>
 
               {/* Form Fields */}
-              <div className="space-y-3.5 text-xs">
+              <div className="space-y-3 text-xs font-sans">
                 <div>
-                  <label className="block text-[11px] font-medium text-[#5C5350] mb-1">
+                  <label className="block text-[11px] font-semibold text-slate-700 mb-1">
                     Display Name
                   </label>
                   <input
                     type="text"
                     value={vehicle.title}
                     onChange={(e) => handleFieldChange(idx, 'title', e.target.value)}
-                    className="w-full px-3 py-1.5 bg-stone-50 rounded-lg border border-[#C5A059]/30 text-[#2C2523] focus:outline-hidden focus:border-[#7C1D23]"
+                    className="w-full px-3 py-1.5 bg-[#FAF8F5] border border-slate-300 text-[#0F172A] focus:outline-none focus:border-[#C5A059] focus:bg-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-medium text-[#5C5350] mb-1">
+                  <label className="block text-[11px] font-semibold text-slate-700 mb-1">
                     Car Models / Make
                   </label>
                   <input
                     type="text"
                     value={vehicle.model}
                     onChange={(e) => handleFieldChange(idx, 'model', e.target.value)}
-                    className="w-full px-3 py-1.5 bg-stone-50 rounded-lg border border-[#C5A059]/30 text-[#2C2523] focus:outline-hidden focus:border-[#7C1D23]"
+                    className="w-full px-3 py-1.5 bg-[#FAF8F5] border border-slate-300 text-[#0F172A] focus:outline-none focus:border-[#C5A059] focus:bg-white"
                   />
                 </div>
 
                 {/* Rates Row */}
-                <div className="grid grid-cols-2 gap-3 pt-2">
-                  <div className="p-3 bg-[#FAF7F2] rounded-xl border border-[#C5A059]/20">
-                    <label className="block text-[10px] font-cinzel uppercase tracking-wider text-[#7C1D23] font-bold mb-1">
+                <div className="grid grid-cols-2 gap-2.5 pt-1">
+                  <div className="p-2.5 bg-[#FAF8F5] border border-slate-200">
+                    <label className="block text-[10px] font-cinzel uppercase tracking-wider text-[#0B1118] font-bold mb-1">
                       Per-KM Rate
                     </label>
                     <div className="flex items-center gap-1">
-                      <span className="font-bold text-sm text-[#2C2523]">₹</span>
+                      <span className="font-bold text-sm text-[#0F172A]">₹</span>
                       <input
                         type="number"
                         value={vehicle.perKmRate}
                         onChange={(e) =>
                           handleFieldChange(idx, 'perKmRate', Number(e.target.value))
                         }
-                        className="w-full px-2 py-1 text-sm font-bold font-mono bg-white rounded border border-[#C5A059]/40 text-[#2C2523]"
+                        className="w-full px-2 py-1 text-sm font-bold font-mono bg-white border border-slate-300 text-[#0F172A] focus:outline-none focus:border-[#C5A059]"
                       />
-                      <span className="text-[10px] text-[#5C5350]">/km</span>
+                      <span className="text-[10px] text-slate-500">/km</span>
                     </div>
                   </div>
 
-                  <div className="p-3 bg-[#FAF7F2] rounded-xl border border-[#C5A059]/20">
-                    <label className="block text-[10px] font-cinzel uppercase tracking-wider text-[#7C1D23] font-bold mb-1">
+                  <div className="p-2.5 bg-[#FAF8F5] border border-slate-200">
+                    <label className="block text-[10px] font-cinzel uppercase tracking-wider text-[#0B1118] font-bold mb-1">
                       Daily Rental
                     </label>
                     <div className="flex items-center gap-1">
-                      <span className="font-bold text-sm text-[#2C2523]">₹</span>
+                      <span className="font-bold text-sm text-[#0F172A]">₹</span>
                       <input
                         type="number"
                         value={vehicle.dailyRate}
                         onChange={(e) =>
                           handleFieldChange(idx, 'dailyRate', Number(e.target.value))
                         }
-                        className="w-full px-2 py-1 text-sm font-bold font-mono bg-white rounded border border-[#C5A059]/40 text-[#2C2523]"
+                        className="w-full px-2 py-1 text-sm font-bold font-mono bg-white border border-slate-300 text-[#0F172A] focus:outline-none focus:border-[#C5A059]"
                       />
-                      <span className="text-[10px] text-[#5C5350]">/day</span>
+                      <span className="text-[10px] text-slate-500">/day</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Fixed Route Transfer Fares */}
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-2.5">
                   <div>
-                    <label className="block text-[11px] font-medium text-[#5C5350] mb-1">
+                    <label className="block text-[11px] font-semibold text-slate-700 mb-1">
                       Kathgodam Transfer
                     </label>
                     <input
@@ -243,12 +243,12 @@ export const FleetManager = () => {
                       value={vehicle.rateKathgodam}
                       onChange={(e) => handleFieldChange(idx, 'rateKathgodam', e.target.value)}
                       placeholder="e.g. ₹2,499"
-                      className="w-full px-3 py-1.5 bg-stone-50 rounded-lg border border-[#C5A059]/30 text-[#2C2523] font-mono focus:outline-hidden focus:border-[#7C1D23]"
+                      className="w-full px-3 py-1.5 bg-[#FAF8F5] border border-slate-300 text-[#0F172A] font-mono focus:outline-none focus:border-[#C5A059] focus:bg-white"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-medium text-[#5C5350] mb-1">
+                    <label className="block text-[11px] font-semibold text-slate-700 mb-1">
                       Delhi Transfer
                     </label>
                     <input
@@ -256,34 +256,34 @@ export const FleetManager = () => {
                       value={vehicle.rateDelhi}
                       onChange={(e) => handleFieldChange(idx, 'rateDelhi', e.target.value)}
                       placeholder="e.g. ₹7,499"
-                      className="w-full px-3 py-1.5 bg-stone-50 rounded-lg border border-[#C5A059]/30 text-[#2C2523] font-mono focus:outline-hidden focus:border-[#7C1D23]"
+                      className="w-full px-3 py-1.5 bg-[#FAF8F5] border border-slate-300 text-[#0F172A] font-mono focus:outline-none focus:border-[#C5A059] focus:bg-white"
                     />
                   </div>
                 </div>
 
                 {/* Capacity Row */}
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-2.5">
                   <div>
-                    <label className="block text-[11px] font-medium text-[#5C5350] mb-1">
+                    <label className="block text-[11px] font-semibold text-slate-700 mb-1">
                       Passenger Seats
                     </label>
                     <input
                       type="number"
                       value={vehicle.seats}
                       onChange={(e) => handleFieldChange(idx, 'seats', Number(e.target.value))}
-                      className="w-full px-3 py-1.5 bg-stone-50 rounded-lg border border-[#C5A059]/30 text-[#2C2523] font-mono"
+                      className="w-full px-3 py-1.5 bg-[#FAF8F5] border border-slate-300 text-[#0F172A] font-mono focus:outline-none focus:border-[#C5A059] focus:bg-white"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-medium text-[#5C5350] mb-1">
+                    <label className="block text-[11px] font-semibold text-slate-700 mb-1">
                       Luggage Capacity
                     </label>
                     <input
                       type="text"
                       value={vehicle.luggage}
                       onChange={(e) => handleFieldChange(idx, 'luggage', e.target.value)}
-                      className="w-full px-3 py-1.5 bg-stone-50 rounded-lg border border-[#C5A059]/30 text-[#2C2523]"
+                      className="w-full px-3 py-1.5 bg-[#FAF8F5] border border-slate-300 text-[#0F172A] focus:outline-none focus:border-[#C5A059] focus:bg-white"
                     />
                   </div>
                 </div>

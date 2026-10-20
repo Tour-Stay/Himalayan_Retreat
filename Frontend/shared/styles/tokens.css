@@ -41,6 +41,37 @@
   --color-text-dark: #2C2523;
   --color-text-light: #6B615E;
 
+  /* ===============================================================
+     GRAND HERITAGE OBSIDIAN & ROYAL CHAMPAGNE GOLD (ADMIN EXECUTIVE)
+     =============================================================== */
+  --color-obsidian: #0B1118;
+  --color-obsidian-surface: #111827;
+  --color-obsidian-elevated: #16202E;
+  --color-obsidian-card: #0F172A;
+  --color-obsidian-border: rgba(197, 160, 89, 0.25);
+
+  --color-gold-royal: #D4AF37;
+  --color-gold-champagne: #C5A059;
+  --color-gold-light: #DFCA9B;
+  --color-gold-hairline: rgba(197, 160, 89, 0.28);
+  --color-gold-dim: rgba(197, 160, 89, 0.12);
+
+  --color-admin-canvas: #F8FAFC;
+  --color-admin-card: #FFFFFF;
+  --color-admin-border: #E2E8F0;
+  --color-admin-border-gold: rgba(197, 160, 89, 0.35);
+  --color-admin-text: #0F172A;
+  --color-admin-muted: #64748B;
+
+  --color-status-emerald: #059669;
+  --color-status-emerald-bg: #ECFDF5;
+  --color-status-amber: #D97706;
+  --color-status-amber-bg: #FFFBEB;
+  --color-status-crimson: #DC2626;
+  --color-status-crimson-bg: #FEF2F2;
+  --color-status-sapphire: #2563EB;
+  --color-status-sapphire-bg: #EFF6FF;
+
   /* Typography (Aligned with Luxury Reference Sites) */
   --font-serif: 'CleanAmp', 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
   --font-cinzel: 'CleanAmp', 'Cinzel', Georgia, serif;

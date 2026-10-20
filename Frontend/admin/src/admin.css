@@ -1,6 +1,159 @@
-/* Custom Office Admin Styling & Print Support */
+/* ===============================================================
+   THE KASAR HIMALAYAN HEIGHTS — EXECUTIVE ADMIN COMMAND PORTAL
+   THEME: GRAND HERITAGE OBSIDIAN & ROYAL CHAMPAGNE GOLD
+   STYLE: SHARP ARCHITECTURAL (ZERO-RADIUS ON ALL BLOCKS & DIVS)
+   =============================================================== */
+
+/* ── Strict Zero Border-Radius on all structural divs, blocks, cards, and inputs ── */
+/* All layout containers, divs, cards, sections, inputs, tables, and buttons have 0 radius.
+   ONLY elements that inherently require curvature (like toggle switch pills and circular spinners) are spared. */
+div:not([class*="rounded-full"]):not([class*="toggle"]),
+section,
+article,
+aside,
+header,
+nav,
+main,
+table,
+th,
+td,
+input:not([type="checkbox"]):not([type="radio"]),
+select,
+textarea,
+dialog,
+.admin-card,
+.printable-slip {
+  border-radius: 0 !important;
+}
+
+/* Explicitly protect circular spinners, toggle pills, and status pulse dots */
+.animate-spin,
+[class*="rounded-full"],
+.rounded-full {
+  border-radius: 9999px !important;
+}
+
+/* ── Core Executive CSS Variables ── */
+:root {
+  --admin-login-bg: #AEC4D4;
+  --admin-sidebar-bg: #AEAC78;
+  --admin-navbar-bg: #ACC5A6;
+  --admin-canvas-bg: #97D7FF;
+  --admin-card: #FFFFFF;
+  --admin-text-main: #0F172A;
+  --admin-text-muted: #475569;
+  --admin-border-subtle: #E2E8F0;
+}
+
+/* ── Custom Hairline Borders & Dividers ── */
+.border-gold-hairline {
+  border: 1px solid rgba(197, 160, 89, 0.28);
+}
+
+.border-b-gold-hairline {
+  border-bottom: 1px solid rgba(197, 160, 89, 0.28);
+}
+
+.border-t-gold-hairline {
+  border-top: 1px solid rgba(197, 160, 89, 0.28);
+}
+
+.border-l-gold-hairline {
+  border-left: 1px solid rgba(197, 160, 89, 0.28);
+}
+
+.border-r-gold-hairline {
+  border-right: 1px solid rgba(197, 160, 89, 0.28);
+}
+
+/* ── Luxury Executive Buttons (Zero Radius) ── */
+.btn-gold-sharp {
+  background: #C5A059;
+  color: #0B1118;
+  font-family: var(--font-cinzel, 'Cinzel', serif);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  border: 1px solid #D4AF37;
+  border-radius: 0 !important;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+.btn-gold-sharp:hover {
+  background: #D4AF37;
+  color: #0B1118;
+  box-shadow: 0 0 14px rgba(212, 175, 55, 0.3);
+}
+
+.btn-obsidian-sharp {
+  background: #111827;
+  color: #F8FAFC;
+  font-family: var(--font-cinzel, 'Cinzel', serif);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border: 1px solid rgba(197, 160, 89, 0.35);
+  border-radius: 0 !important;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+.btn-obsidian-sharp:hover {
+  background: #16202E;
+  border-color: #D4AF37;
+  color: #D4AF37;
+}
+
+/* ── Sharp Status Badges ── */
+.badge-sharp {
+  border-radius: 0 !important;
+  font-family: var(--font-cinzel, 'Cinzel', serif);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 2px 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid currentColor;
+}
+
+/* ── Executive Minimal Scrollbars ── */
+.admin-table-container::-webkit-scrollbar,
+aside::-webkit-scrollbar,
+main::-webkit-scrollbar,
+div::-webkit-scrollbar {
+  height: 5px;
+  width: 5px;
+}
+
+.admin-table-container::-webkit-scrollbar-track,
+aside::-webkit-scrollbar-track,
+main::-webkit-scrollbar-track,
+div::-webkit-scrollbar-track {
+  background: #F1F5F9;
+  border-radius: 0 !important;
+}
+
+.admin-table-container::-webkit-scrollbar-thumb,
+aside::-webkit-scrollbar-thumb,
+main::-webkit-scrollbar-thumb,
+div::-webkit-scrollbar-thumb {
+  background: #AEAC78;
+  border-radius: 0 !important;
+}
+
+.admin-table-container::-webkit-scrollbar-thumb:hover,
+aside::-webkit-scrollbar-thumb:hover,
+main::-webkit-scrollbar-thumb:hover,
+div::-webkit-scrollbar-thumb:hover {
+  background: #8F8D5D;
+}
+
+/* ── Custom Office Admin Styling & Print Support ── */
 @media print {
-  /* Hide everything except the printable slip */
   body * {
     visibility: hidden !important;
   }
@@ -20,9 +173,9 @@
     margin: 0 !important;
     padding: 30px !important;
     background: #ffffff !important;
-    color: #111827 !important;
-    border: 2px solid #374151 !important;
-    border-radius: 12px !important;
+    color: #0F172A !important;
+    border: 1px solid #C5A059 !important;
+    border-radius: 0 !important;
     box-shadow: none !important;
     z-index: 999999 !important;
   }
@@ -30,40 +183,4 @@
   .no-print {
     display: none !important;
   }
-}
-
-/* Custom scrollbar for middle page and wide data tables */
-.admin-table-container::-webkit-scrollbar,
-aside::-webkit-scrollbar {
-  height: 6px;
-  width: 6px;
-}
-
-.admin-table-container::-webkit-scrollbar-track,
-aside::-webkit-scrollbar-track {
-  background: #FAF5EC;
-  border-radius: 4px;
-}
-
-.admin-table-container::-webkit-scrollbar-thumb,
-aside::-webkit-scrollbar-thumb {
-  background: rgba(234, 167, 34, 0.5);
-  border-radius: 4px;
-}
-
-.admin-table-container::-webkit-scrollbar-thumb:hover,
-aside::-webkit-scrollbar-thumb:hover {
-  background: #073125;
-}
-
-/* Login page animations */
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-3px); }
-  20%, 40%, 60%, 80% { transform: translateX(3px); }
-}
-
-@keyframes float-slow {
-  0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.15; }
-  50% { transform: translateY(-10px) rotate(2deg); opacity: 0.25; }
 }

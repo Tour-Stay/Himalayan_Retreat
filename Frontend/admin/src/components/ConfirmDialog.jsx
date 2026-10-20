@@ -12,11 +12,11 @@ export const ConfirmDialog = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-2xs animate-fade-in">
-      <div className="w-full max-w-md bg-[#FDFBF7] border border-[#C5A059]/40 rounded-3xl shadow-2xl p-6 text-[#2C2523] animate-scale-up">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-fade-in">
+      <div className="w-full max-w-md bg-white border border-[#C5A059]/40 shadow-2xl p-6 text-[#0F172A] animate-scale-up">
         <div className="flex items-center gap-3 mb-3">
           <div
-            className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${
+            className={`w-10 h-10 flex items-center justify-center shrink-0 border ${
               isDestructive
                 ? 'bg-rose-50 text-rose-700 border-rose-300'
                 : 'bg-amber-50 text-amber-700 border-amber-300'
@@ -32,19 +32,19 @@ export const ConfirmDialog = ({
               </svg>
             )}
           </div>
-          <h3 className="font-cinzel text-lg font-bold text-[#2C2523]">{title}</h3>
+          <h3 className="font-cinzel text-base sm:text-lg font-bold text-[#0F172A]">{title}</h3>
         </div>
 
-        <p className="text-[#5C5350] text-sm mb-6 leading-relaxed">
+        <p className="text-slate-600 text-xs sm:text-sm mb-6 leading-relaxed">
           {message}
         </p>
 
-        <div className="flex items-center justify-end gap-3">
+        <div className="flex items-center justify-end gap-2.5">
           <button
             type="button"
             onClick={onCancel}
             disabled={isLoading}
-            className="px-4 py-2 rounded-full text-xs font-cinzel font-semibold text-[#5C5350] hover:text-[#2C2523] hover:bg-[#FAF6EF] border border-[#C5A059]/40 transition cursor-pointer"
+            className="px-4 py-2 text-xs font-cinzel font-semibold text-slate-700 hover:text-[#0F172A] bg-[#FAF8F5] hover:bg-slate-200 border border-slate-300 transition cursor-pointer"
           >
             {cancelText}
           </button>
@@ -52,10 +52,10 @@ export const ConfirmDialog = ({
             type="button"
             onClick={onConfirm}
             disabled={isLoading}
-            className={`px-4 py-2 rounded-full text-xs font-cinzel font-semibold text-[#FDFBF7] transition cursor-pointer flex items-center gap-2 shadow-xs ${
+            className={`px-4 py-2 text-xs font-cinzel font-semibold text-white transition cursor-pointer flex items-center gap-2 shadow-xs ${
               isDestructive
-                ? 'bg-[#7C1D23] hover:bg-[#5C151A] border border-[#C5A059]/40'
-                : 'bg-[#C5A059] hover:bg-[#B89047] border border-[#C5A059]'
+                ? 'bg-rose-700 hover:bg-rose-800 border border-rose-600'
+                : 'bg-[#C5A059] hover:bg-[#D4AF37] text-[#0B1118] border border-[#D4AF37]'
             } disabled:opacity-50`}
           >
             {isLoading && (

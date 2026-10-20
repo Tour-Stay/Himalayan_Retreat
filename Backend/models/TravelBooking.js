@@ -58,9 +58,7 @@ const travelBookingSchema = new mongoose.Schema({
     type: String
   },
   razorpayPaymentId: {
-    type: String,
-    unique: true,
-    sparse: true,
+    type: String
   },
   razorpaySignature: {
     type: String

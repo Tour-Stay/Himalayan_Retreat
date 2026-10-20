@@ -12,31 +12,29 @@ connectDB();
 const app = express();
 
 // ========================
-// SECURITY MIDDLEWARE
+// SECURITY & CORS MIDDLEWARE
 // ========================
 
-// Helmet: Sets secure HTTP headers (prevents XSS, clickjacking, etc.)
-app.use(helmet());
+// 1. CORS: Must be the VERY FIRST middleware so every request (and preflight) receives CORS headers
+const defaultOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "http://localhost:5175",
+  "http://localhost:5176",
+  "http://127.0.0.1:5173",
+  "http://127.0.0.1:5174",
+  "http://127.0.0.1:5175",
+  "http://127.0.0.1:5176",
+];
 
-// Rate Limiter: Prevents brute-force attacks on login
-const loginLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 10, // Max 10 login attempts per 15 minutes per IP
-  message: {
-    message: "Too many login attempts. Please try again after 15 minutes.",
-  },
-});
-app.use("/api/auth/login", loginLimiter);
-
-// CORS: Explicitly whitelist all 4 frontend monorepo ports (5173, 5174, 5175, 5176)
 const allowedOrigins = process.env.ALLOWED_ORIGINS
-  ? process.env.ALLOWED_ORIGINS.split(",").map((o) => o.trim())
-  : [
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "http://localhost:5175",
-      "http://localhost:5176",
-    ];
+  ? [
+      ...new Set([
+        ...process.env.ALLOWED_ORIGINS.split(",").map((o) => o.trim()),
+        ...defaultOrigins,
+      ]),
+    ]
+  : defaultOrigins;
 
 app.use(
   cors({
@@ -44,11 +42,33 @@ app.use(
       if (!origin || allowedOrigins.includes(origin)) {
         return callback(null, true);
       }
-      return callback(new Error("Not allowed by CORS"));
+      return callback(null, false);
     },
     credentials: true,
-  }),
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  })
 );
+
+// 2. Helmet: Secure HTTP headers
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+  })
+);
+
+// 3. Rate Limiter: Skips OPTIONS preflights
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100,
+  skip: (req) => req.method === "OPTIONS",
+  message: {
+    message: "Too many login attempts. Please try again after 15 minutes.",
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use("/api/auth/login", loginLimiter);
 
 // Body Parser (with 1MB limit and raw body capture for webhook signature verification)
 app.use(

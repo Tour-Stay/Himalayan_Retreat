@@ -1,13 +1,14 @@
-export const KpiCards = ({ stats, onSelectTab }) => {
+export const KpiCards = ({ stats = {}, onSelectTab }) => {
   const cards = [
     {
       tabId: 'hotel-bookings',
       category: 'Hotel',
       title: 'Room Bookings',
       value: stats.hotelBookingsCount || 0,
-      subtext: stats.pendingHotelBookings > 0
-        ? `${stats.pendingHotelBookings} Awaiting Confirmation`
-        : 'All Confirmed',
+      subtext:
+        stats.pendingHotelBookings > 0
+          ? `${stats.pendingHotelBookings} Awaiting Confirmation`
+          : 'All Confirmed',
       alert: stats.pendingHotelBookings > 0,
       icon: (
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -20,7 +21,7 @@ export const KpiCards = ({ stats, onSelectTab }) => {
       category: 'Hotel',
       title: 'Rooms & Pricing',
       value: stats.totalRooms || 0,
-      subtext: `${stats.availableRooms || 0} Open for Booking • ${stats.disabledRooms || 0} Unavailable / Due Date Set`,
+      subtext: `${stats.availableRooms || 0} Open • ${stats.disabledRooms || 0} Blocked`,
       alert: stats.disabledRooms > 0,
       icon: (
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -33,9 +34,10 @@ export const KpiCards = ({ stats, onSelectTab }) => {
       category: 'Cabs',
       title: 'Cab Bookings',
       value: stats.travelBookingsCount || 0,
-      subtext: stats.pendingTravelBookings > 0
-        ? `${stats.pendingTravelBookings} Driver Dispatch Needed`
-        : 'All Cabs Assigned',
+      subtext:
+        stats.pendingTravelBookings > 0
+          ? `${stats.pendingTravelBookings} Dispatch Needed`
+          : 'All Dispatched',
       alert: stats.pendingTravelBookings > 0,
       icon: (
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -46,10 +48,10 @@ export const KpiCards = ({ stats, onSelectTab }) => {
     },
     {
       tabId: 'tours',
-      category: 'Cabs',
+      category: 'Tours',
       title: 'Tour Packages',
       value: stats.toursCount || 0,
-      subtext: 'Kumaon & Temple Circuits',
+      subtext: 'Temple Circuits Active',
       alert: false,
       icon: (
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -60,11 +62,12 @@ export const KpiCards = ({ stats, onSelectTab }) => {
     {
       tabId: 'reviews',
       category: 'Reviews',
-      title: 'Customer Reviews',
+      title: 'Guest Reviews',
       value: stats.reviewsCount || 0,
-      subtext: stats.pendingReviewsCount > 0
-        ? `${stats.pendingReviewsCount} Awaiting Approval`
-        : 'All Reviews Approved',
+      subtext:
+        stats.pendingReviewsCount > 0
+          ? `${stats.pendingReviewsCount} Awaiting Approval`
+          : 'All Approved',
       alert: stats.pendingReviewsCount > 0,
       icon: (
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -75,32 +78,32 @@ export const KpiCards = ({ stats, onSelectTab }) => {
   ];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3 mb-6">
+    <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-2.5 sm:gap-3.5 mb-6">
       {cards.map((card) => {
         const isAlert = Boolean(card.alert);
         return (
           <div
             key={card.tabId}
             onClick={() => onSelectTab && onSelectTab(card.tabId)}
-            className={`p-4 rounded-2xl border transition-all duration-200 cursor-pointer group shadow-2xs ${
+            className={`p-3.5 sm:p-4 border transition-all duration-150 cursor-pointer group shadow-2xs ${
               isAlert
-                ? 'border-amber-400 bg-amber-50/70 hover:border-[#073125]'
-                : 'border-[#EAA722]/30 bg-[#FAF5EC] hover:bg-white hover:border-[#073125]'
+                ? 'border-amber-400 bg-amber-50/70 hover:border-slate-800'
+                : 'border-slate-300/80 bg-white hover:border-slate-800 hover:shadow-xs'
             }`}
           >
-            <div className="flex items-center justify-between mb-1.5">
-              <span className="text-[10px] font-cinzel font-bold text-[#073125] flex items-center gap-1.5 group-hover:text-amber-800 transition-colors line-clamp-1">
-                <span className="px-1.5 py-0.5 rounded bg-white/60 border border-[#EAA722]/30 text-[9px] uppercase tracking-wider text-[#8C7A6B]">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[10px] font-cinzel font-bold text-[#0F172A] flex items-center gap-1.5 truncate">
+                <span className="px-1.5 py-0.5 bg-[#AEAC78]/20 border border-[#AEAC78]/40 text-[9px] uppercase tracking-wider text-[#242A10] font-bold">
                   {card.category}
                 </span>
-                <span className="uppercase tracking-wider">{card.title}</span>
+                <span className="uppercase tracking-wider hidden sm:inline text-slate-700">{card.title}</span>
               </span>
 
               <span
-                className={`p-1 rounded-lg border transition-all shrink-0 ${
+                className={`p-1 border transition-colors shrink-0 ${
                   isAlert
                     ? 'bg-amber-100 border-amber-300 text-amber-900'
-                    : 'bg-white border-[#EAA722]/30 text-[#073125] group-hover:bg-[#073125] group-hover:text-[#EAA722]'
+                    : 'bg-slate-100 border-slate-200 text-slate-700 group-hover:bg-[#0F172A] group-hover:text-white group-hover:border-[#0F172A]'
                 }`}
               >
                 {card.icon}
@@ -108,18 +111,19 @@ export const KpiCards = ({ stats, onSelectTab }) => {
             </div>
 
             <div className="flex items-baseline gap-2 my-1">
-              <span className="text-2xl sm:text-3xl font-bold font-serif tracking-tight text-[#073125]">
+              <span className="text-2xl sm:text-3xl font-bold font-serif tracking-tight text-[#0F172A]">
                 {card.value}
               </span>
               {card.alert && (
-                <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-bold font-cinzel uppercase bg-amber-200 text-amber-900 border border-amber-400 animate-pulse">
+                <span className="inline-flex items-center px-1.5 py-0.5 text-[9px] font-bold font-cinzel uppercase bg-amber-200 text-amber-900 border border-amber-400">
                   Action
                 </span>
               )}
             </div>
 
-            <p className="text-[11px] text-[#5C5350] font-medium line-clamp-1">
-              {card.subtext}
+            <p className="text-[10px] sm:text-[11px] text-slate-600 font-medium truncate flex items-center gap-1">
+              {!isAlert && <span className="w-1.5 h-1.5 bg-emerald-600 inline-block shrink-0" />}
+              <span>{card.subtext}</span>
             </p>
           </div>
         );
