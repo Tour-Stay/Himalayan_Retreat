@@ -17,6 +17,7 @@ const getAllReviews = async (req, res) => {
       filter.category = category;
     }
     const reviews = await TravelReview.find(filter)
+      .select('-email')
       .sort({ createdAt: -1 });
     res.status(200).json(reviews);
   } catch (error) {
@@ -92,25 +93,23 @@ const createReview = async (req, res) => {
   }
 };
 
-// @desc    Update an existing review (only if email matches the original author)
+// @desc    Update an existing review (Admin protected or author verified)
 // @route   PUT /api/travel/reviews/:id
-// @access  Public (email-verified)
+// @access  Protected (Admin)
 const updateReview = async (req, res) => {
   try {
-    const { email, name, location, tripType, rating, review } = req.body;
-
-    if (!email) {
-      return res.status(400).json({ message: 'Email is required to verify ownership.' });
-    }
+    const { email, name, location, tripType, rating, review, isApproved } = req.body;
 
     const existingReview = await TravelReview.findById(req.params.id);
     if (!existingReview) {
       return res.status(404).json({ message: 'Review not found.' });
     }
 
-    // Verify ownership via email match
-    if (existingReview.email.toLowerCase() !== email.toLowerCase()) {
-      return res.status(403).json({ message: 'You can only edit your own reviews. Email does not match.' });
+    // If caller is not an authenticated admin, enforce author email verification
+    if (!req.admin) {
+      if (!email || existingReview.email.toLowerCase() !== email.toLowerCase()) {
+        return res.status(403).json({ message: 'You can only edit your own reviews. Email does not match.' });
+      }
     }
 
     // Upload new photos if provided
@@ -136,9 +135,16 @@ const updateReview = async (req, res) => {
     existingReview.review = review || existingReview.review;
     existingReview.photos = photos;
 
+    // Golden Rule of Moderation: Reset approval status so edited content must be re-vetted before going live
+    if (req.admin && isApproved !== undefined) {
+      existingReview.isApproved = Boolean(isApproved);
+    } else {
+      existingReview.isApproved = false;
+    }
+
     await existingReview.save();
 
-    res.status(200).json({ message: 'Review updated successfully.', review: existingReview });
+    res.status(200).json({ message: 'Review updated successfully and pending moderation.', review: existingReview });
   } catch (error) {
     console.error('Update Review Error:', error);
     res.status(500).json({ message: 'Server error.', error: error.message });
