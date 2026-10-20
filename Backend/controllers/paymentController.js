@@ -7,6 +7,38 @@ const Room = require('../models/Room');
 const TourPackage = require('../models/TourPackage');
 const { sendHotelBookingEmail, sendAdminNewHotelBookingEmail, sendTravelBookingEmail, sendAdminNewTravelBookingEmail } = require('../config/emailService');
 
+// Centralized, idempotent email dispatchers for hotel and travel confirmations
+const dispatchConfirmationEmails = async (booking, bookingType) => {
+  if (bookingType === 'hotel') {
+    try {
+      const roomData = await Room.findById(booking.room);
+      if (roomData) {
+        await sendHotelBookingEmail(booking, roomData);
+        await sendAdminNewHotelBookingEmail(booking, roomData);
+        console.log(`📧 [Email Service] Hotel booking confirmation emails dispatched for ${booking._id}`);
+      }
+    } catch (emailError) {
+      console.error('❌ [Email Service] Hotel email sending failed:', emailError.message);
+    }
+  } else {
+    try {
+      let tourPackage = {};
+      if (booking.packageId) {
+        try {
+          tourPackage = (await TourPackage.findById(booking.packageId)) || {};
+        } catch (pkgErr) {
+          tourPackage = {};
+        }
+      }
+      await sendTravelBookingEmail(booking, tourPackage);
+      await sendAdminNewTravelBookingEmail(booking, tourPackage);
+      console.log(`📧 [Email Service] Travel booking confirmation emails dispatched for ${booking._id}`);
+    } catch (emailError) {
+      console.error('❌ [Email Service] Travel email sending failed:', emailError.message);
+    }
+  }
+};
+
 // Get Razorpay Key ID for Frontend
 const getKey = (req, res) => {
   res.status(200).json({ key: process.env.RAZORPAY_KEY_ID });
@@ -50,10 +82,19 @@ const createOrder = async (req, res) => {
       });
     }
 
-    if (booking.status === 'cancelled') {
+    // Enforce 15-minute reservation hold timeout
+    const holdDurationMs = 15 * 60 * 1000;
+    const bookingAgeMs = Date.now() - new Date(booking.createdAt).getTime();
+
+    if (booking.status === 'cancelled' || (booking.status === 'pending' && bookingAgeMs > holdDurationMs)) {
+      if (booking.status === 'pending') {
+        booking.status = 'cancelled';
+        booking.specialNotes = 'Auto-cancelled due to payment timeout (15 mins)';
+        await booking.save();
+      }
       return res.status(400).json({
         success: false,
-        message: 'Cannot create payment order for a cancelled booking',
+        message: 'The 15-minute reservation hold has expired. Please select your room and dates again.',
       });
     }
 
@@ -70,7 +111,7 @@ const createOrder = async (req, res) => {
 
     const options = {
       amount: amountInPaise,
-      currency,
+      currency: 'INR',
       receipt: `${bookingType.slice(0, 5)}_${booking._id.toString()}`.slice(-40),
       notes: {
         bookingId: booking._id.toString(),
@@ -91,9 +132,12 @@ const createOrder = async (req, res) => {
     booking.razorpayOrderId = order.id;
     await booking.save();
 
+    const holdExpiresAt = new Date(new Date(booking.createdAt).getTime() + holdDurationMs).toISOString();
+
     res.status(200).json({
       success: true,
       order,
+      holdExpiresAt,
     });
   } catch (error) {
     console.error('Error creating Razorpay order:', error);
@@ -220,7 +264,17 @@ const verifyPayment = async (req, res) => {
       });
     }
 
-    // Verify order amount matches MongoDB booking total amount
+    // Verify order currency & amount match MongoDB booking total amount
+    if (razorpayOrder.currency !== 'INR') {
+      console.error(
+        `🚨 Security Alert: Currency tampering detected! Order currency: ${razorpayOrder.currency}, expected: INR`
+      );
+      return res.status(400).json({
+        success: false,
+        message: 'Payment verification failed: Invalid currency detected',
+      });
+    }
+
     if (razorpayOrder.amount !== expectedAmountInPaise) {
       console.error(
         `🚨 Security Alert: Price tampering detected! Order amount: ${razorpayOrder.amount} paise, MongoDB booking expected: ${expectedAmountInPaise} paise`
@@ -231,72 +285,162 @@ const verifyPayment = async (req, res) => {
       });
     }
 
-    // Verify payment details if payment can be fetched
+    // 3.2 Authoritative Gateway Verification: Query payment entity directly from Razorpay (Fail-Closed)
+    let payment;
     try {
-      const payment = await razorpayInstance.payments.fetch(razorpay_payment_id);
-      if (payment) {
-        if (payment.order_id && payment.order_id !== razorpay_order_id) {
-          console.error(`🚨 Security Alert: Payment order_id mismatch! Payment order: ${payment.order_id}, Request order: ${razorpay_order_id}`);
-          return res.status(400).json({
-            success: false,
-            message: 'Payment verification failed: Payment order ID mismatch',
-          });
-        }
-        if (payment.amount !== expectedAmountInPaise) {
-          console.error(`🚨 Security Alert: Paid amount tampering! Paid: ${payment.amount}, Expected: ${expectedAmountInPaise}`);
-          return res.status(400).json({
-            success: false,
-            message: 'Payment verification failed: Paid amount mismatch',
-          });
-        }
-      }
+      payment = await razorpayInstance.payments.fetch(razorpay_payment_id);
     } catch (paymentFetchErr) {
-      console.warn('Note: Direct payment fetch bypassed; verified order amount successfully:', paymentFetchErr.message);
+      console.error('🚨 [Payment Verify] Error fetching payment from gateway:', paymentFetchErr.message || paymentFetchErr);
+      return res.status(502).json({
+        success: false,
+        message: 'Payment verification is taking longer than expected with the payment gateway. Please check back shortly.',
+      });
     }
 
-    const wasAlreadyConfirmed = booking.paymentStatus === 'Paid' && booking.status === 'confirmed';
-
-    // 4. Update the database record
-    booking.status = 'confirmed';
-    booking.paymentStatus = 'Paid';
-    booking.razorpayOrderId = razorpay_order_id;
-    booking.razorpayPaymentId = razorpay_payment_id;
-    booking.razorpaySignature = razorpay_signature;
-
-    if (bookingType === 'hotel') {
-      booking.advancePaid = booking.totalAmount;
-      booking.balanceDue = 0;
-      booking.paymentMode = 'Online (Razorpay)';
+    if (!payment) {
+      return res.status(400).json({
+        success: false,
+        message: 'Payment record could not be retrieved from payment gateway',
+      });
     }
 
-    await booking.save();
+    if (payment.order_id && payment.order_id !== razorpay_order_id) {
+      console.error(`🚨 Security Alert: Payment order_id mismatch! Payment order: ${payment.order_id}, Request order: ${razorpay_order_id}`);
+      return res.status(400).json({
+        success: false,
+        message: 'Payment verification failed: Payment order ID mismatch',
+      });
+    }
 
-    // 5. Send confirmation emails only if not already confirmed by webhook (avoids duplicates)
-    if (!wasAlreadyConfirmed) {
+    if (payment.currency && payment.currency !== 'INR') {
+      console.error(`🚨 Security Alert: Paid currency tampering! Paid: ${payment.currency}, Expected: INR`);
+      return res.status(400).json({
+        success: false,
+        message: 'Payment verification failed: Paid currency mismatch',
+      });
+    }
+
+    if (payment.amount !== expectedAmountInPaise) {
+      console.error(`🚨 Security Alert: Paid amount tampering! Paid: ${payment.amount}, Expected: ${expectedAmountInPaise}`);
+      return res.status(400).json({
+        success: false,
+        message: 'Payment verification failed: Paid amount mismatch',
+      });
+    }
+
+    // Require that the payment has officially been captured by the gateway
+    if (payment.status !== 'captured') {
+      console.warn(`⚠️ [Payment Verify] Payment ${razorpay_payment_id} is not captured. Current status: ${payment.status}`);
+      return res.status(400).json({
+        success: false,
+        message: `Payment verification failed: Payment status is '${payment.status}', not captured.`,
+      });
+    }
+
+    // 3.3 Late Payment on Cancelled/Expired Hold: Enforce Strict Zero Overbooking Policy
+    if (booking.status === 'cancelled') {
       if (bookingType === 'hotel') {
+        const Room = require('../models/Room');
         const roomData = await Room.findById(booking.room);
-        try {
-          await sendHotelBookingEmail(booking, roomData);
-          await sendAdminNewHotelBookingEmail(booking, roomData);
-        } catch (emailError) {
-          console.error('Email sending failed after payment verification:', emailError.message);
-        }
-      } else {
-        let tourPackage = {};
-        if (booking.packageId) {
+        const totalInventory = Number(roomData?.totalRooms) || 1;
+        const requestedRooms = Math.max(1, parseInt(booking.roomsBooked || 1, 10));
+
+        const checkInDateStr = new Date(booking.checkInDate).toISOString().split('T')[0];
+        const checkOutDateStr = new Date(booking.checkOutDate).toISOString().split('T')[0];
+        const bCheckInStart = new Date(`${checkInDateStr}T23:59:59.999Z`);
+        const bCheckOutEnd = new Date(`${checkOutDateStr}T00:00:00.000Z`);
+
+        const conflictingBookings = await Booking.find({
+          _id: { $ne: booking._id },
+          room: booking.room,
+          status: { $ne: 'cancelled' },
+          checkInDate: { $lt: bCheckOutEnd },
+          checkOutDate: { $gt: bCheckInStart },
+        }).select('roomsBooked');
+
+        const currentlyBooked = conflictingBookings.reduce(
+          (sum, b) => sum + (Number(b.roomsBooked) || 1),
+          0
+        );
+        const availableInventory = Math.max(0, totalInventory - currentlyBooked);
+
+        if (requestedRooms > availableInventory) {
+          console.warn(`⚠️ [Late Payment] Booking ${booking._id} paid after hold expired and room is taken. Initiating auto-refund.`);
+          let autoRefundSuccess = false;
+          let refundId = null;
           try {
-            tourPackage = (await TourPackage.findById(booking.packageId)) || {};
-          } catch (pkgErr) {
-            tourPackage = {};
+            const refund = await razorpayInstance.payments.refund(razorpay_payment_id, {
+              amount: payment.amount,
+              notes: {
+                reason: 'Auto-refund: Reservation hold expired and room was booked by another guest.',
+                bookingId: booking._id.toString(),
+              },
+            });
+            if (refund && refund.id) {
+              autoRefundSuccess = true;
+              refundId = refund.id;
+              console.log(`✅ [Auto-Refund] Successfully refunded payment ${razorpay_payment_id} for booking ${booking._id}. Refund ID: ${refundId}`);
+            }
+          } catch (refundErr) {
+            console.error('❌ [Auto-Refund] Gateway refund failed:', refundErr.message || refundErr);
           }
+
+          booking.status = 'cancelled';
+          booking.paymentStatus = autoRefundSuccess ? 'Refunded' : 'Paid';
+          booking.razorpayPaymentId = razorpay_payment_id;
+          booking.razorpayOrderId = razorpay_order_id;
+          booking.specialNotes = autoRefundSuccess
+            ? `Auto-refunded via Razorpay (${refundId}): Paid after 15-min hold expired; room was already taken by another guest.`
+            : 'ACTION REQUIRED: Paid after 15-min hold expired; room taken. Auto-refund failed. Issue manual refund.';
+          await booking.save();
+
+          return res.status(409).json({
+            success: false,
+            autoRefunded: autoRefundSuccess,
+            message: autoRefundSuccess
+              ? 'Your payment was received, but the 15-minute reservation hold had expired and the room was booked by another guest. Your payment has been automatically refunded to your original payment method. Please select new dates.'
+              : 'Your payment was received, but the 15-minute reservation hold had expired and the room was taken. Our team has been notified to immediately assist with a full refund.',
+          });
         }
-        try {
-          await sendTravelBookingEmail(booking, tourPackage);
-          await sendAdminNewTravelBookingEmail(booking, tourPackage);
-        } catch (emailError) {
-          console.error('Travel email sending failed after payment verification:', emailError.message);
-        }
+
+        // Inventory is still available! Resurrect the booking
+        booking.specialNotes = 'Resurrected after late payment: inventory was still available.';
+        await booking.save();
       }
+    }
+
+    // 4. Atomic conditional update to eliminate race condition with webhook
+    // Only the single execution thread that successfully transitions paymentStatus from Pending -> Paid wins the right to send emails
+    const updatedBooking = await Model.findOneAndUpdate(
+      {
+        _id: targetBookingId,
+        paymentStatus: { $ne: 'Paid' },
+      },
+      {
+        $set: {
+          status: 'confirmed',
+          paymentStatus: 'Paid',
+          razorpayOrderId: razorpay_order_id,
+          razorpayPaymentId: razorpay_payment_id,
+          razorpaySignature: razorpay_signature,
+          ...(bookingType === 'hotel'
+            ? {
+              advancePaid: booking.totalAmount,
+              balanceDue: 0,
+              paymentMode: 'Online (Razorpay)',
+            }
+            : {}),
+        },
+      },
+      { new: true }
+    );
+
+    // 5. Send confirmation emails ONLY if this thread won the atomic transition
+    if (updatedBooking) {
+      console.log(`✅ [verifyPayment] Atomic lock acquired for booking ${targetBookingId}. Dispatching confirmation emails.`);
+      await dispatchConfirmationEmails(updatedBooking, bookingType);
+    } else {
+      console.log(`ℹ️ [verifyPayment] Booking ${targetBookingId} was already marked Paid by concurrent webhook. Idempotent email skip.`);
     }
 
     res.status(200).json({
@@ -433,7 +577,15 @@ const handleWebhook = async (req, res) => {
         }
       }
 
-      // 3. Security cross-verification: Ensure paid amount matches expected database amount
+      // 3. Security cross-verification: Ensure paid currency is INR and amount matches expected database amount
+      const currency = paymentEntity?.currency || orderEntity?.currency;
+      if (currency && currency !== 'INR') {
+        console.error(
+          `🚨 [Razorpay Webhook] Security Alert: Currency mismatch detected! Received: ${currency}, Expected: INR`
+        );
+        return res.status(400).json({ status: 'error', message: 'Invalid currency detected' });
+      }
+
       const expectedAmountInPaise = Math.round(Number(booking.totalAmount) * 100);
       if (paidAmountInPaise && paidAmountInPaise < expectedAmountInPaise) {
         console.error(
@@ -442,65 +594,140 @@ const handleWebhook = async (req, res) => {
         return res.status(400).json({ status: 'error', message: 'Underpayment detected' });
       }
 
-      // 4. Update booking to confirmed and Paid (recovers interrupted/dropped transactions)
-      booking.status = 'confirmed';
-      booking.paymentStatus = 'Paid';
-      if (orderId) booking.razorpayOrderId = orderId;
-      if (paymentId) booking.razorpayPaymentId = paymentId;
-      booking.razorpaySignature = signature;
+      // 3.1 Strict Zero Overbooking Policy on Late Webhook: Check if room was taken
+      if (booking.status === 'cancelled') {
+        if (actualType === 'hotel') {
+          const Room = require('../models/Room');
+          const roomData = await Room.findById(booking.room);
+          const totalInventory = Number(roomData?.totalRooms) || 1;
+          const requestedRooms = Math.max(1, parseInt(booking.roomsBooked || 1, 10));
 
-      if (actualType === 'hotel') {
-        booking.advancePaid = booking.totalAmount;
-        booking.balanceDue = 0;
-        booking.paymentMode = 'Online (Razorpay Webhook)';
+          const checkInDateStr = new Date(booking.checkInDate).toISOString().split('T')[0];
+          const checkOutDateStr = new Date(booking.checkOutDate).toISOString().split('T')[0];
+          const bCheckInStart = new Date(`${checkInDateStr}T23:59:59.999Z`);
+          const bCheckOutEnd = new Date(`${checkOutDateStr}T00:00:00.000Z`);
+
+          const conflictingBookings = await Booking.find({
+            _id: { $ne: booking._id },
+            room: booking.room,
+            status: { $ne: 'cancelled' },
+            checkInDate: { $lt: bCheckOutEnd },
+            checkOutDate: { $gt: bCheckInStart },
+          }).select('roomsBooked');
+
+          const currentlyBooked = conflictingBookings.reduce(
+            (sum, b) => sum + (Number(b.roomsBooked) || 1),
+            0
+          );
+          const availableInventory = Math.max(0, totalInventory - currentlyBooked);
+
+          if (requestedRooms > availableInventory) {
+            console.warn(`⚠️ [Razorpay Webhook] Booking ${booking._id} paid after hold expired and room is taken. Initiating auto-refund.`);
+            let autoRefundSuccess = false;
+            let refundId = null;
+            if (paymentId) {
+              try {
+                const refund = await razorpayInstance.payments.refund(paymentId, {
+                  amount: paidAmountInPaise,
+                  notes: {
+                    reason: 'Auto-refund: Reservation hold expired and room was booked by another guest.',
+                    bookingId: booking._id.toString(),
+                  },
+                });
+                if (refund && refund.id) {
+                  autoRefundSuccess = true;
+                  refundId = refund.id;
+                  console.log(`✅ [Razorpay Webhook] Auto-refund successful for payment ${paymentId}. Refund ID: ${refundId}`);
+                }
+              } catch (refundErr) {
+                console.error('❌ [Razorpay Webhook] Auto-refund failed:', refundErr.message || refundErr);
+              }
+            }
+
+            booking.status = 'cancelled';
+            booking.paymentStatus = autoRefundSuccess ? 'Refunded' : 'Paid';
+            if (paymentId) booking.razorpayPaymentId = paymentId;
+            if (orderId) booking.razorpayOrderId = orderId;
+            booking.specialNotes = autoRefundSuccess
+              ? `Auto-refunded via Razorpay (${refundId}): Paid after 15-min hold expired; room was already taken.`
+              : 'ACTION REQUIRED: Paid after 15-min hold expired; room taken. Auto-refund failed. Issue manual refund.';
+            await booking.save();
+
+            return res.status(200).json({ status: 'ok', message: 'Late payment auto-refunded due to zero overbooking policy' });
+          }
+
+          // Inventory is still available! Resurrect
+          booking.specialNotes = 'Resurrected after late payment: inventory was still available.';
+          await booking.save();
+        }
       }
 
-      await booking.save();
-      console.log(`✅ [Razorpay Webhook] Booking ${booking._id} marked as Paid & confirmed via webhook!`);
+      // 4. Atomic conditional update to eliminate race condition with browser verifyPayment
+      const TargetModel = actualType === 'hotel' ? Booking : TravelBooking;
+      const updatedBooking = await TargetModel.findOneAndUpdate(
+        {
+          _id: booking._id,
+          paymentStatus: { $ne: 'Paid' },
+        },
+        {
+          $set: {
+            status: 'confirmed',
+            paymentStatus: 'Paid',
+            ...(orderId ? { razorpayOrderId: orderId } : {}),
+            ...(paymentId ? { razorpayPaymentId: paymentId } : {}),
+            razorpaySignature: signature,
+            ...(actualType === 'hotel'
+              ? {
+                advancePaid: booking.totalAmount,
+                balanceDue: 0,
+                paymentMode: 'Online (Razorpay Webhook)',
+              }
+              : {}),
+          },
+        },
+        { new: true }
+      );
 
-      // 5. Dispatch confirmation emails directly from server
-      if (actualType === 'hotel') {
-        const roomData = await Room.findById(booking.room);
-        try {
-          await sendHotelBookingEmail(booking, roomData);
-          await sendAdminNewHotelBookingEmail(booking, roomData);
-          console.log(`📧 [Razorpay Webhook] Confirmation emails dispatched for hotel booking ${booking._id}`);
-        } catch (emailError) {
-          console.error('[Razorpay Webhook] Hotel email sending failed:', emailError.message);
-        }
+      // 5. Dispatch confirmation emails ONLY if this webhook won the atomic transition
+      if (updatedBooking) {
+        console.log(`✅ [Razorpay Webhook] Atomic lock acquired for booking ${booking._id}. Dispatching confirmation emails via webhook.`);
+        await dispatchConfirmationEmails(updatedBooking, actualType);
       } else {
-        let tourPackage = {};
-        if (booking.packageId) {
-          try {
-            tourPackage = (await TourPackage.findById(booking.packageId)) || {};
-          } catch (pkgErr) {
-            tourPackage = {};
-          }
-        }
-        try {
-          await sendTravelBookingEmail(booking, tourPackage);
-          await sendAdminNewTravelBookingEmail(booking, tourPackage);
-          console.log(`📧 [Razorpay Webhook] Confirmation emails dispatched for travel booking ${booking._id}`);
-        } catch (emailError) {
-          console.error('[Razorpay Webhook] Travel email sending failed:', emailError.message);
-        }
+        console.log(`ℹ️ [Razorpay Webhook] Booking ${booking._id} was already finalized as Paid by browser verifier. Skipping duplicate email dispatch.`);
       }
     } else if (event === 'payment.failed') {
       const paymentEntity = req.body.payload?.payment?.entity;
       const orderId = paymentEntity?.order_id;
       const notes = paymentEntity?.notes || {};
       const bookingId = notes.bookingId;
+      const bookingType = notes.bookingType;
+      const failureReason = paymentEntity?.error_description || paymentEntity?.error_reason || 'Payment failed at gateway';
 
-      console.warn(`⚠️ [Razorpay Webhook] Payment failed event received for order: ${orderId}`);
+      console.warn(`⚠️ [Razorpay Webhook] Payment failed event received for order: ${orderId}. Reason: ${failureReason}`);
       if (bookingId && mongoose.Types.ObjectId.isValid(bookingId)) {
-        await Booking.updateOne(
-          { _id: bookingId, paymentStatus: 'Pending' },
-          { $set: { paymentStatus: 'Failed' } }
-        );
-        await TravelBooking.updateOne(
-          { _id: bookingId, paymentStatus: 'Pending' },
-          { $set: { paymentStatus: 'Failed' } }
-        );
+        if (bookingType === 'hotel') {
+          await Booking.updateOne(
+            { _id: bookingId, paymentStatus: 'Pending' },
+            { $set: { paymentStatus: 'Failed' } }
+          );
+        } else if (bookingType === 'travel') {
+          await TravelBooking.updateOne(
+            { _id: bookingId, paymentStatus: 'Pending' },
+            { $set: { paymentStatus: 'Failed' } }
+          );
+        } else {
+          // Fallback if bookingType was omitted in notes: update only the matched collection
+          const hotelUpdated = await Booking.updateOne(
+            { _id: bookingId, paymentStatus: 'Pending' },
+            { $set: { paymentStatus: 'Failed' } }
+          );
+          if (hotelUpdated.matchedCount === 0) {
+            await TravelBooking.updateOne(
+              { _id: bookingId, paymentStatus: 'Pending' },
+              { $set: { paymentStatus: 'Failed' } }
+            );
+          }
+        }
       }
     }
 

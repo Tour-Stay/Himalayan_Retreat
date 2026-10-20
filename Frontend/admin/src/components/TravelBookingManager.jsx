@@ -430,6 +430,13 @@ export const TravelBookingManager = ({ bookings, setBookings, onRefresh }) => {
                           <span>{b.vehicleType || 'Chauffeur Cab'}</span>
                         </span>
                         <span>• {b.travelers || 2} Pax</span>
+                        {b.tripType && (
+                          <span className={`px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase ${
+                            b.tripType === 'round-trip' ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'bg-stone-100 text-stone-700 border border-stone-200'
+                          }`}>
+                            {b.tripType === 'round-trip' ? 'Round-Trip' : 'One-Way'}
+                          </span>
+                        )}
                       </div>
                       {b.dispatchDetails?.driverName && (
                         <div className="mt-1">

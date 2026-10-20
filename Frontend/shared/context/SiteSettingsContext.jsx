@@ -436,23 +436,22 @@ export const SiteSettingsProvider = ({ children }) => {
     const hasCachedData = !!getCachedSettings();
     fetchSettings(hasCachedData);
 
-    // 2. Real-time broadcast sync (triggers instantly when Admin saves settings)
+    // 2. Real-time broadcast sync with 60-second cross-portal polling fallback
+    //    (Bypasses browser cross-origin/port sandboxing between Admin and public portals)
     const unsubscribe = subscribeToUpdates('settings', () => {
       fetchSettings(true);
-    });
+    }, 60 * 1000);
 
-    // 3. Tab visibility revalidation (with 5-minute cooldown to prevent excessive API calls)
+    // 3. Tab visibility revalidation (refreshes if inactive for >60s)
     const handleVisibility = () => {
       if (document.visibilityState === 'visible') {
         const timeSinceLastFetch = Date.now() - lastFetchRef.current;
-        if (timeSinceLastFetch > STALE_TIME_MS) {
+        if (timeSinceLastFetch > 60 * 1000) {
           fetchSettings(true);
         }
       }
     };
     document.addEventListener('visibilitychange', handleVisibility);
-
-    // No 45-second polling — BroadcastChannel handles instant admin sync
 
     return () => {
       unsubscribe();

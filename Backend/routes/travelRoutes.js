@@ -38,7 +38,7 @@ router.get('/reviews', getAllReviews);                                         /
 router.get('/reviews/admin', authMiddleware, getAdminReviews); // Fetch ALL reviews (approved & pending)
 router.post('/reviews', upload.array('photos', 5), createReview);             // Submit a new review (up to 5 photos)
 router.put('/reviews/:id/approve', authMiddleware, toggleReviewApproval); // Toggle approval status
-router.put('/reviews/:id', upload.array('photos', 5), updateReview);          // Edit own review (email-verified)
+router.put('/reviews/:id', authMiddleware, upload.array('photos', 5), updateReview); // Edit review (Admin only)
 router.delete('/reviews/:id', authMiddleware, deleteReview);  // Admin delete review
 
 // ============================

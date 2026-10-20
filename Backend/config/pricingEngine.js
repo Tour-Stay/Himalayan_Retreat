@@ -115,7 +115,10 @@ function calculateCabFare({ vehicleType = '6-seater', circuit = '', tripDays = 1
   }
 
   // Billable km logic
-  const isRoundTrip = days > 1 || circuit.toLowerCase().includes('round');
+  const isRoundTrip =
+    bookingDetails.tripType === 'round-trip' ||
+    days > 1 ||
+    circuit.toLowerCase().includes('round');
   let billableDistance = 0;
 
   if (isRoundTrip) {

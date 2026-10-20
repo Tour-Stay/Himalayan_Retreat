@@ -45,12 +45,13 @@ export const broadcastUpdate = (type, payload = {}) => {
 };
 
 /**
- * Subscribe to cross-app update events
+ * Subscribe to cross-app update events with optional polling fallback for cross-origin portals
  * @param {string | string[]} typeOrTypes - Event type(s) to listen for
  * @param {function} callback - Callback invoked on event
+ * @param {number} [pollIntervalMs=0] - Optional background poll interval in ms (e.g. 60000)
  * @returns {function} Unsubscribe cleanup function
  */
-export const subscribeToUpdates = (typeOrTypes, callback) => {
+export const subscribeToUpdates = (typeOrTypes, callback, pollIntervalMs = 0) => {
   if (typeof window === 'undefined') return () => {};
 
   const types = Array.isArray(typeOrTypes) ? typeOrTypes : [typeOrTypes];
@@ -62,7 +63,7 @@ export const subscribeToUpdates = (typeOrTypes, callback) => {
     }
   };
 
-  // 1. BroadcastChannel listener
+  // 1. BroadcastChannel listener (same origin / port tabs)
   const bcHandler = (e) => {
     if (e?.data) handleMessage(e.data);
   };
@@ -71,7 +72,7 @@ export const subscribeToUpdates = (typeOrTypes, callback) => {
     channel.addEventListener('message', bcHandler);
   }
 
-  // 2. Window storage listener
+  // 2. Window storage listener (same origin tabs)
   const storageHandler = (e) => {
     if (e.key === 'kasar_sync_event' && e.newValue) {
       try {
@@ -84,10 +85,24 @@ export const subscribeToUpdates = (typeOrTypes, callback) => {
   };
   window.addEventListener('storage', storageHandler);
 
+  // 3. Cross-origin gentle polling fallback (bridges sandboxed ports/subdomains)
+  let pollTimer = null;
+  if (pollIntervalMs > 0) {
+    pollTimer = setInterval(() => {
+      // Only fire when tab is actively visible to conserve client battery & bandwidth
+      if (typeof document !== 'undefined' && document.visibilityState === 'visible') {
+        callback({ type: 'poll_sync', timestamp: Date.now() });
+      }
+    }, pollIntervalMs);
+  }
+
   return () => {
     if (channel) {
       channel.removeEventListener('message', bcHandler);
     }
     window.removeEventListener('storage', storageHandler);
+    if (pollTimer) {
+      clearInterval(pollTimer);
+    }
   };
 };

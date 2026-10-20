@@ -9,6 +9,7 @@ export const QuickBookingModal = ({ isOpen, onClose, onBookingCreated, rooms = [
   const [checkIn, setCheckIn] = useState(today);
   const [checkOut, setCheckOut] = useState(tomorrow);
   const [selectedRoomId, setSelectedRoomId] = useState('');
+  const [roomsBooked, setRoomsBooked] = useState(1);
   const [source, setSource] = useState('Phone Inquiry');
   const [guestName, setGuestName] = useState('');
   const [guestPhone, setGuestPhone] = useState('');
@@ -22,6 +23,7 @@ export const QuickBookingModal = ({ isOpen, onClose, onBookingCreated, rooms = [
   const [loading, setLoading] = useState(false);
   const [checkingAvailability, setCheckingAvailability] = useState(false);
   const [occupiedRoomIds, setOccupiedRoomIds] = useState([]);
+  const [availableRoomsMap, setAvailableRoomsMap] = useState({});
   const [confirmedBooking, setConfirmedBooking] = useState(null);
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -43,11 +45,19 @@ export const QuickBookingModal = ({ isOpen, onClose, onBookingCreated, rooms = [
           const res = await apiClient.get('/hotel/rooms/check-availability', {
             params: { checkIn, checkOut },
           });
-          if (isMounted && res.data && Array.isArray(res.data.occupiedRoomIds)) {
-            setOccupiedRoomIds(res.data.occupiedRoomIds);
+          if (isMounted && res.data) {
+            if (Array.isArray(res.data.occupiedRoomIds)) {
+              setOccupiedRoomIds(res.data.occupiedRoomIds);
+            }
+            if (res.data.availableRoomsByRoomId) {
+              setAvailableRoomsMap(res.data.availableRoomsByRoomId);
+            }
           }
         } catch (err) {
-          if (isMounted) setOccupiedRoomIds([]);
+          if (isMounted) {
+            setOccupiedRoomIds([]);
+            setAvailableRoomsMap({});
+          }
         } finally {
           if (isMounted) setCheckingAvailability(false);
         }
@@ -60,6 +70,9 @@ export const QuickBookingModal = ({ isOpen, onClose, onBookingCreated, rooms = [
   // Selected room calculation
   const selectedRoom = rooms.find((r) => r._id === selectedRoomId) || rooms[0];
   const isSelectedRoomOccupied = occupiedRoomIds.includes(selectedRoomId);
+  const maxAvailable = availableRoomsMap[selectedRoomId] !== undefined
+    ? availableRoomsMap[selectedRoomId]
+    : (Number(selectedRoom?.totalRooms) || 1);
 
   // Dynamic pricing calculation
   const pricingResult = useMemo(() => {
@@ -72,7 +85,8 @@ export const QuickBookingModal = ({ isOpen, onClose, onBookingCreated, rooms = [
   }, [selectedRoom, checkIn, checkOut, settings?.pricingRules]);
 
   const nights = pricingResult.nights || 1;
-  const standardTotal = pricingResult.totalAmount || (nights * (selectedRoom?.pricePerNight || 0));
+  const pricePerRoom = pricingResult.totalAmount || (nights * (selectedRoom?.pricePerNight || 0));
+  const standardTotal = pricePerRoom * (Number(roomsBooked) || 1);
   const finalTotal = customTariff !== '' ? Number(customTariff) : standardTotal;
   const numAdvance = Number(advancePaid) || 0;
   const balanceDue = Math.max(0, finalTotal - numAdvance);
@@ -94,6 +108,7 @@ export const QuickBookingModal = ({ isOpen, onClose, onBookingCreated, rooms = [
 
     const payload = {
       room: selectedRoomId,
+      roomsBooked: Number(roomsBooked) || 1,
       roomName: selectedRoom?.name || 'Resort Suite',
       guestDetails: {
         name: guestName,
@@ -303,39 +318,61 @@ export const QuickBookingModal = ({ isOpen, onClose, onBookingCreated, rooms = [
               </div>
             </div>
 
-            {/* Room Selector with Live Conflict Warning */}
-            <div>
-              <label className="block text-[11px] font-cinzel uppercase font-bold text-[#66605B] mb-1.5 flex items-center justify-between">
-                <span>Select Suite</span>
-                {checkingAvailability && (
-                  <span className="text-[10px] text-amber-600 animate-pulse font-sans">Checking dates...</span>
+            {/* Room Selector with Live Conflict Warning & Rooms Count */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="sm:col-span-2">
+                <label className="block text-[11px] font-cinzel uppercase font-bold text-[#66605B] mb-1.5 flex items-center justify-between">
+                  <span>Select Suite</span>
+                  {checkingAvailability && (
+                    <span className="text-[10px] text-amber-600 animate-pulse font-sans">Checking dates...</span>
+                  )}
+                </label>
+                <select
+                  value={selectedRoomId}
+                  onChange={(e) => setSelectedRoomId(e.target.value)}
+                  required
+                  className={`w-full px-3.5 py-2.5 rounded-xl border text-xs sm:text-sm font-semibold transition cursor-pointer ${
+                    isSelectedRoomOccupied
+                      ? 'border-red-400 bg-red-50/60 text-red-900 ring-1 ring-red-400'
+                      : 'border-[#C5A059]/40 bg-white text-[#2C2523]'
+                  }`}
+                >
+                  {rooms.map((r) => {
+                    const isOccupied = occupiedRoomIds.includes(r._id);
+                    const avail = availableRoomsMap[r._id];
+                    return (
+                      <option key={r._id} value={r._id}>
+                        {r.name} — ₹{r.pricePerNight?.toLocaleString()}/nt {isOccupied ? '[OCCUPIED]' : (avail !== undefined ? `✓ [${avail} Available]` : '✓ [Available]')}
+                      </option>
+                    );
+                  })}
+                </select>
+                {isSelectedRoomOccupied && (
+                  <p className="mt-1 text-xs text-red-600 font-semibold flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                    <span>This room already has an active reservation for these dates. Please choose another suite.</span>
+                  </p>
                 )}
-              </label>
-              <select
-                value={selectedRoomId}
-                onChange={(e) => setSelectedRoomId(e.target.value)}
-                required
-                className={`w-full px-3.5 py-2.5 rounded-xl border text-xs sm:text-sm font-semibold transition cursor-pointer ${
-                  isSelectedRoomOccupied
-                    ? 'border-red-400 bg-red-50/60 text-red-900 ring-1 ring-red-400'
-                    : 'border-[#C5A059]/40 bg-white text-[#2C2523]'
-                }`}
-              >
-                {rooms.map((r) => {
-                  const isOccupied = occupiedRoomIds.includes(r._id);
-                  return (
-                    <option key={r._id} value={r._id}>
-                      {r.name} — ₹{r.pricePerNight?.toLocaleString()}/nt {isOccupied ? '[OCCUPIED ON SELECTED DATES]' : '✓ [Available]'}
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-cinzel uppercase font-bold text-[#66605B] mb-1.5 flex items-center justify-between">
+                  <span>Rooms Count</span>
+                  <span className="text-[10px] text-[#66605B] font-mono">{maxAvailable > 0 ? `${maxAvailable} avail` : '0 left'}</span>
+                </label>
+                <select
+                  value={roomsBooked}
+                  onChange={(e) => setRoomsBooked(Number(e.target.value))}
+                  disabled={maxAvailable <= 0}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#C5A059]/40 bg-white text-xs sm:text-sm font-semibold text-[#2C2523] text-center"
+                >
+                  {Array.from({ length: Math.max(1, maxAvailable || 1) }, (_, i) => i + 1).map((n) => (
+                    <option key={n} value={n}>
+                      {n} {n === 1 ? 'Room' : 'Rooms'}
                     </option>
-                  );
-                })}
-              </select>
-              {isSelectedRoomOccupied && (
-                <p className="mt-1 text-xs text-red-600 font-semibold flex items-center gap-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                  <span>This room already has an active reservation for these dates. Please choose another suite.</span>
-                </p>
-              )}
+                  ))}
+                </select>
+              </div>
             </div>
 
             {/* Guest Details */}
