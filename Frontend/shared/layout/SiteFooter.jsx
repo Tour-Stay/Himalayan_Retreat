@@ -33,36 +33,33 @@ const SiteFooter = () => {
   };
 
   return (
-    <footer className="bg-[#541508] text-white border-t border-[#3D0F06] font-serif">
+    <footer className="bg-[#081E1A] text-white border-t border-[#051713] font-sans">
       {/* 1. TOP CONCIERGE CALLOUT STRIP */}
-      <div className="bg-[#3D0F06] border-b border-[#EAA722]/20 py-6 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-6">
-          <div className="text-center lg:text-left max-w-2xl">
-            <span className="text-xs uppercase tracking-widest text-[#EAA722] font-serif font-semibold block mb-1.5">
-              Himalayan Reverence &amp; Solitude • 6,942 FT Elevation
-            </span>
-            <h3 className="font-serif text-2xl sm:text-3xl text-white font-normal tracking-tight leading-snug">
-              Where silence is not emptiness, but divine presence.
+      <div className="bg-[#061814] border-b border-[#EAA722]/20 py-8 sm:py-10 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1440px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-6">
+          <div className="text-center lg:text-left max-w-2xl space-y-2">
+            <h3 className="font-heading text-xl sm:text-2xl lg:text-3xl text-white font-semibold leading-snug">
+              Where the Himalayas Meet Stillness
             </h3>
-            <p className="text-sm sm:text-base text-[#FAF5EC]/85 mt-1.5 font-normal leading-relaxed">
-              Perched on the ancient pine crest of Crank&apos;s Ridge. Our Almora Sewa desk is at your service 24/7 to reserve heated chalets, arrange Kathgodam railhead pickups, and guide your journey to Kainchi Dham &amp; Jageshwar.
+            <p className="text-base sm:text-lg text-[#FAF5EC]/90 font-normal leading-[1.8]">
+              Perched on the ancient pine crest of Crank&apos;s Ridge. Our Almora Concierge desk is at your service 24/7 to reserve heated chalets, arrange Kathgodam railhead pickups, and guide your journey across Kumaon.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-3 flex-shrink-0">
+          <div className="flex flex-wrap items-center justify-center gap-3.5 flex-shrink-0">
             <button
               type="button"
               onClick={handleWhatsAppClick}
-              className="btn-nkb-gold px-6 py-3 text-xs sm:text-sm font-bold tracking-widest uppercase flex items-center gap-2 cursor-pointer"
-              title="Chat with Sewa Desk on WhatsApp"
+              className="btn-nkb-gold px-7 py-3.5 text-xs sm:text-sm font-bold tracking-widest uppercase flex items-center gap-2.5 cursor-pointer shadow-lg hover:shadow-xl"
+              title="Chat with Concierge Desk on WhatsApp"
             >
               <WhatsAppIcon className="w-4 h-4 text-[#12433B]" />
-              <span>WhatsApp Sewa Desk</span>
+              <span>WhatsApp Concierge</span>
             </button>
 
             <a
               href={`tel:${company.conciergePhone}`}
-              className="px-6 py-3 rounded-full text-xs sm:text-sm uppercase tracking-widest font-bold border-2 border-[#EAA722] text-[#EAA722] hover:bg-[#EAA722] hover:text-[#541508] transition-all flex items-center gap-2 cursor-pointer"
+              className="btn-outline-gold px-7 py-3.5 text-xs sm:text-sm font-bold tracking-widest uppercase flex items-center gap-2.5 cursor-pointer shadow-md"
               title="Call Almora Desk"
             >
               <PhoneIcon className="w-4 h-4 text-[#EAA722]" />
@@ -73,63 +70,63 @@ const SiteFooter = () => {
       </div>
 
       {/* 2. MAIN EDITORIAL FOOTER GRID */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-6">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 pb-10 sm:pb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8">
 
           {/* Col 1: Brand & Philosophy (Span 4) */}
-          <div className="lg:col-span-4 space-y-4">
+          <div className="lg:col-span-4 space-y-5">
             <a href={APP_URLS.landing} className="flex items-center gap-3 group inline-flex">
-              <Logo size={46} />
+              <Logo size={50} />
               <div className="flex flex-col">
-                <span className="font-serif text-lg sm:text-xl font-bold text-white tracking-tight group-hover:text-[#EAA722] transition-colors">
+                <span className="font-serif text-xl sm:text-2xl font-bold text-white tracking-tight group-hover:text-[#EAA722] transition-colors leading-tight">
                   The Kasar Himalayan Heights
                 </span>
-                <span className="text-[11px] tracking-[0.16em] uppercase text-[#EAA722] font-bold font-serif">
-                  पावन कैंची धाम • कसार देवी, अल्मोड़ा • 6,942 FT
+                <span className="text-xs tracking-[0.18em] uppercase text-[#EAA722] font-bold font-serif mt-0.5">
+                  Kasar Devi, Almora • 6,942 FT
                 </span>
               </div>
             </a>
 
-            <p className="text-sm sm:text-base text-[#FAF5EC]/90 leading-relaxed font-normal">
+            <p className="text-base sm:text-lg text-[#FAF5EC]/90 leading-[1.8] font-normal">
               An authentic high-altitude boutique retreat and chauffeured mountain travel service nestled along the quiet pine ridges of Crank’s Ridge in Kumaon, Uttarakhand.
             </p>
 
-            {/* Feature Pills */}
-            <div className="flex flex-wrap gap-2 pt-0.5">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#3D0F06] border border-[#EAA722]/50 text-xs font-serif text-[#FAF5EC] shadow-xs">
-                <MountainIcon className="w-3.5 h-3.5 text-[#EAA722]" />
+            {/* Feature Pills with Subtle Hover Lift */}
+            <div className="flex flex-wrap gap-2.5 pt-1">
+              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#061814] border border-[#EAA722]/40 text-xs sm:text-sm font-serif text-[#FAF5EC] hover:border-[#EAA722] transition-all shadow-xs cursor-default">
+                <MountainIcon className="w-4 h-4 text-[#EAA722]" />
                 <span className="font-semibold tracking-wide">6,942 FT Altitude</span>
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#3D0F06] border border-[#EAA722]/50 text-xs font-serif text-[#FAF5EC] shadow-xs">
-                <SparklesIcon className="w-3.5 h-3.5 text-[#EAA722]" />
+              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#061814] border border-[#EAA722]/40 text-xs sm:text-sm font-serif text-[#FAF5EC] hover:border-[#EAA722] transition-all shadow-xs cursor-default">
+                <SparklesIcon className="w-4 h-4 text-[#EAA722]" />
                 <span className="font-semibold tracking-wide">180° Snow Peaks</span>
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#3D0F06] border border-[#EAA722]/50 text-xs font-serif text-[#FAF5EC] shadow-xs">
-                <BedIcon className="w-3.5 h-3.5 text-[#EAA722]" />
+              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#061814] border border-[#EAA722]/40 text-xs sm:text-sm font-serif text-[#FAF5EC] hover:border-[#EAA722] transition-all shadow-xs cursor-default">
+                <BedIcon className="w-4 h-4 text-[#EAA722]" />
                 <span className="font-semibold tracking-wide">Heated Chalets</span>
               </span>
             </div>
 
-            <div className="text-xs sm:text-sm text-[#EAA722] font-serif italic font-semibold tracking-wide">
-              ॥ प्रेम, सेवा और शांति का हिमालयी धाम ॥
+            <div className="text-xs sm:text-sm text-[#EAA722] tracking-wider uppercase font-medium">
+              Peace, Hospitality &amp; Quiet Solitude
             </div>
           </div>
 
           {/* Col 2: Resort & Rooms (Span 2) */}
-          <div className="lg:col-span-2 space-y-3">
-            <h4 className="font-serif text-sm font-bold uppercase tracking-widest text-[#EAA722] border-b border-[#EAA722]/30 pb-1.5">
+          <div className="lg:col-span-2 space-y-4">
+            <h4 className="font-serif text-sm sm:text-base font-bold uppercase tracking-widest text-[#EAA722] border-b border-[#EAA722]/30 pb-2">
               Resort &amp; Stay
             </h4>
-            <ul className="space-y-2.5 text-sm sm:text-[15px] font-normal text-[#FAF5EC]/85">
+            <ul className="space-y-3 text-sm sm:text-base font-normal text-[#FAF5EC]/85">
               <li>
                 <a
                   href={`${APP_URLS.hotel}/rooms`}
                   target="_blank"
                   rel="noreferrer"
-                  className="hover:text-white hover:translate-x-1 transition-all flex items-start gap-1.5 group"
+                  className="hover:text-white hover:translate-x-1.5 transition-all flex items-start gap-2 group"
                 >
-                  <span className="text-[#EAA722] text-xs font-bold flex-shrink-0 mt-0.5">›</span>
-                  <span className="leading-snug">Heated Chalet Suites</span>
+                  <span className="text-[#EAA722] text-xs font-bold flex-shrink-0 mt-1">›</span>
+                  <span className="leading-snug group-hover:text-[#EAA722] transition-colors">Heated Chalet Suites</span>
                 </a>
               </li>
               <li>
@@ -137,10 +134,10 @@ const SiteFooter = () => {
                   href={`${APP_URLS.hotel}/rooms`}
                   target="_blank"
                   rel="noreferrer"
-                  className="hover:text-white hover:translate-x-1 transition-all flex items-start gap-1.5 group"
+                  className="hover:text-white hover:translate-x-1.5 transition-all flex items-start gap-2 group"
                 >
-                  <span className="text-[#EAA722] text-xs font-bold flex-shrink-0 mt-0.5">›</span>
-                  <span className="leading-snug">Nanda Devi Suite</span>
+                  <span className="text-[#EAA722] text-xs font-bold flex-shrink-0 mt-1">›</span>
+                  <span className="leading-snug group-hover:text-[#EAA722] transition-colors">Nanda Devi Suite</span>
                 </a>
               </li>
               <li>
@@ -148,10 +145,10 @@ const SiteFooter = () => {
                   href={`${APP_URLS.hotel}/#dining`}
                   target="_blank"
                   rel="noreferrer"
-                  className="hover:text-white hover:translate-x-1 transition-all flex items-start gap-1.5 group"
+                  className="hover:text-white hover:translate-x-1.5 transition-all flex items-start gap-2 group"
                 >
-                  <span className="text-[#EAA722] text-xs font-bold flex-shrink-0 mt-0.5">›</span>
-                  <span className="leading-snug">Satvik Mountain Dining</span>
+                  <span className="text-[#EAA722] text-xs font-bold flex-shrink-0 mt-1">›</span>
+                  <span className="leading-snug group-hover:text-[#EAA722] transition-colors">Satvik Mountain Dining</span>
                 </a>
               </li>
               <li>
@@ -159,30 +156,30 @@ const SiteFooter = () => {
                   href={`${APP_URLS.hotel}/book`}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-[#EAA722] hover:text-white hover:translate-x-1 transition-all flex items-start gap-1.5 group font-semibold"
+                  className="text-[#EAA722] hover:text-white hover:translate-x-1.5 transition-all flex items-start gap-2 group font-semibold"
                 >
-                  <span className="text-[#EAA722] text-xs font-bold flex-shrink-0 mt-0.5">›</span>
-                  <span className="leading-snug">Check Availability ↗</span>
+                  <span className="text-[#EAA722] text-xs font-bold flex-shrink-0 mt-1">›</span>
+                  <span className="leading-snug underline-offset-4 group-hover:underline">Check Availability ↗</span>
                 </a>
               </li>
             </ul>
           </div>
 
           {/* Col 3: Mountain Cabs & Tours (Span 3) */}
-          <div className="lg:col-span-3 space-y-3">
-            <h4 className="font-serif text-sm font-bold uppercase tracking-widest text-[#EAA722] border-b border-[#EAA722]/30 pb-1.5">
+          <div className="lg:col-span-3 space-y-4">
+            <h4 className="font-serif text-sm sm:text-base font-bold uppercase tracking-widest text-[#EAA722] border-b border-[#EAA722]/30 pb-2">
               Cabs &amp; Tours
             </h4>
-            <ul className="space-y-2.5 text-sm sm:text-[15px] font-normal text-[#FAF5EC]/85">
+            <ul className="space-y-3 text-sm sm:text-base font-normal text-[#FAF5EC]/85">
               <li>
                 <a
                   href={`${APP_URLS.travel}#circuits`}
                   target="_blank"
                   rel="noreferrer"
-                  className="hover:text-white hover:translate-x-1 transition-all flex items-start gap-1.5 group"
+                  className="hover:text-white hover:translate-x-1.5 transition-all flex items-start gap-2 group"
                 >
-                  <span className="text-[#EAA722] text-xs font-bold flex-shrink-0 mt-0.5">›</span>
-                  <span className="leading-snug">Kainchi Dham Tour (45 km)</span>
+                  <span className="text-[#EAA722] text-xs font-bold flex-shrink-0 mt-1">›</span>
+                  <span className="leading-snug group-hover:text-[#EAA722] transition-colors">Kainchi Dham Tour (45 km)</span>
                 </a>
               </li>
               <li>
@@ -190,10 +187,10 @@ const SiteFooter = () => {
                   href={`${APP_URLS.travel}#circuits`}
                   target="_blank"
                   rel="noreferrer"
-                  className="hover:text-white hover:translate-x-1 transition-all flex items-start gap-1.5 group"
+                  className="hover:text-white hover:translate-x-1.5 transition-all flex items-start gap-2 group"
                 >
-                  <span className="text-[#EAA722] text-xs font-bold flex-shrink-0 mt-0.5">›</span>
-                  <span className="leading-snug">Jageshwar Dham (35 km)</span>
+                  <span className="text-[#EAA722] text-xs font-bold flex-shrink-0 mt-1">›</span>
+                  <span className="leading-snug group-hover:text-[#EAA722] transition-colors">Jageshwar Dham (35 km)</span>
                 </a>
               </li>
               <li>
@@ -201,10 +198,10 @@ const SiteFooter = () => {
                   href={APP_URLS.travel}
                   target="_blank"
                   rel="noreferrer"
-                  className="hover:text-white hover:translate-x-1 transition-all flex items-start gap-1.5 group"
+                  className="hover:text-white hover:translate-x-1.5 transition-all flex items-start gap-2 group"
                 >
-                  <span className="text-[#EAA722] text-xs font-bold flex-shrink-0 mt-0.5">›</span>
-                  <span className="leading-snug">Kathgodam Station Pickup</span>
+                  <span className="text-[#EAA722] text-xs font-bold flex-shrink-0 mt-1">›</span>
+                  <span className="leading-snug group-hover:text-[#EAA722] transition-colors">Kathgodam Station Pickup</span>
                 </a>
               </li>
               <li>
@@ -212,24 +209,24 @@ const SiteFooter = () => {
                   href={`${APP_URLS.travel}#circuits`}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-[#EAA722] hover:text-white hover:translate-x-1 transition-all flex items-start gap-1.5 group font-semibold"
+                  className="text-[#EAA722] hover:text-white hover:translate-x-1.5 transition-all flex items-start gap-2 group font-semibold"
                 >
-                  <span className="text-[#EAA722] text-xs font-bold flex-shrink-0 mt-0.5">›</span>
-                  <span className="leading-snug">Mountain Cab Circuits ↗</span>
+                  <span className="text-[#EAA722] text-xs font-bold flex-shrink-0 mt-1">›</span>
+                  <span className="leading-snug underline-offset-4 group-hover:underline">Mountain Cab Circuits ↗</span>
                 </a>
               </li>
             </ul>
           </div>
 
           {/* Col 4: Location & Direct Contact (Span 3) */}
-          <div className="lg:col-span-3 space-y-2.5">
-            <h4 className="font-serif text-sm font-bold uppercase tracking-widest text-[#EAA722] border-b border-[#EAA722]/30 pb-1.5">
+          <div className="lg:col-span-3 space-y-3.5">
+            <h4 className="font-serif text-sm sm:text-base font-bold uppercase tracking-widest text-[#EAA722] border-b border-[#EAA722]/30 pb-2">
               Concierge &amp; Location
             </h4>
 
             {/* Address */}
-            <div className="flex items-start gap-2 text-xs sm:text-sm text-[#FAF5EC]/90 font-normal">
-              <MapPinIcon className="w-4 h-4 text-[#EAA722] flex-shrink-0 mt-0.5" />
+            <div className="flex items-start gap-2.5 text-sm sm:text-base text-[#FAF5EC]/90 font-normal leading-relaxed">
+              <MapPinIcon className="w-4 h-4 text-[#EAA722] flex-shrink-0 mt-1" />
               <span className="leading-snug">
                 {company.hotelAddress || "Crank's Ridge, Kasar Devi, Almora, Uttarakhand 263601"}
               </span>
@@ -240,34 +237,34 @@ const SiteFooter = () => {
               href={company.mapsUrl || "https://maps.google.com/?q=The+Kasar+Himalayan+Heights,+Kasar+Devi,+Almora,+Uttarakhand"}
               target="_blank"
               rel="noreferrer"
-              className="group relative block w-full h-24 rounded-lg overflow-hidden border border-[#EAA722]/30 hover:border-[#EAA722] shadow-sm transition-all duration-300 cursor-pointer bg-[#3D0F06]"
+              className="group relative block w-full h-28 rounded-xl overflow-hidden border border-[#EAA722]/35 hover:border-[#EAA722] shadow-md transition-all duration-300 cursor-pointer bg-[#3D0F06]"
               title="Click to open location in Google Maps"
             >
               <iframe
                 title="The Kasar Himalayan Heights Location Map"
                 src="https://maps.google.com/maps?q=The+Kasar+Himalayan+Heights+Kasar+Devi+Almora&t=&z=14&ie=UTF8&iwloc=&output=embed"
-                className="w-full h-full border-0 pointer-events-none filter contrast-105 opacity-85 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300"
+                className="w-full h-full border-0 pointer-events-none filter contrast-105 opacity-85 group-hover:opacity-100 group-hover:scale-106 transition-all duration-500"
                 loading="lazy"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent flex items-end justify-between p-2">
-                <span className="inline-flex items-center gap-1 text-[11px] font-serif font-semibold text-[#FAF5EC] bg-[#541508]/90 group-hover:bg-[#EAA722] group-hover:text-[#541508] px-2 py-0.5 rounded border border-[#EAA722]/40 transition-colors">
-                  <MapPinIcon className="w-3 h-3 text-[#EAA722] group-hover:text-[#541508]" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent flex items-end justify-between p-2.5">
+                <span className="inline-flex items-center gap-1.5 text-xs font-serif font-semibold text-[#FAF5EC] bg-[#541508]/90 group-hover:bg-[#EAA722] group-hover:text-[#541508] px-2.5 py-1 rounded-md border border-[#EAA722]/40 transition-colors">
+                  <MapPinIcon className="w-3.5 h-3.5 text-[#EAA722] group-hover:text-[#541508]" />
                   <span>Open in Google Maps ↗</span>
                 </span>
-                <span className="text-[10px] font-sans font-medium text-[#FAF5EC]/70">
+                <span className="text-xs font-sans font-medium text-[#FAF5EC]/80">
                   Kasar Devi
                 </span>
               </div>
             </a>
 
             {/* Direct Contact Row */}
-            <div className="pt-2 border-t border-[#EAA722]/20 flex flex-wrap items-center gap-3 text-xs sm:text-sm">
+            <div className="pt-2 border-t border-[#EAA722]/20 flex flex-wrap items-center gap-3.5 text-sm sm:text-base">
               <a
                 href={`tel:${company.conciergePhone}`}
                 className="inline-flex items-center gap-1.5 text-white hover:text-[#EAA722] font-sans font-bold transition-colors"
                 title="Call Almora Concierge"
               >
-                <PhoneIcon className="w-3.5 h-3.5 text-[#EAA722]" />
+                <PhoneIcon className="w-4 h-4 text-[#EAA722]" />
                 <span>{company.conciergePhone}</span>
               </a>
 
@@ -280,13 +277,13 @@ const SiteFooter = () => {
                 className="inline-flex items-center gap-1.5 text-[#FAF5EC]/90 hover:text-white transition-colors"
                 title="WhatsApp Concierge"
               >
-                <WhatsAppIcon className="w-3.5 h-3.5 text-[#25D366]" />
+                <WhatsAppIcon className="w-4 h-4 text-[#25D366]" />
                 <span>WhatsApp</span>
               </a>
             </div>
 
-            {/* Social Icons on Next Line with Increased Size */}
-            <div className="flex items-center gap-3 text-[#EAA722] pt-0.5">
+            {/* Social Icons */}
+            <div className="flex items-center gap-3.5 text-[#EAA722] pt-1">
               <span className="text-xs uppercase font-serif tracking-wider text-[#FAF5EC]/70 font-semibold">Social:</span>
               <a
                 href={company.socials?.facebook || 'https://www.facebook.com/61555816868523/'}
@@ -319,37 +316,37 @@ const SiteFooter = () => {
         </div>
 
         {/* 3. REVERENT HIMALAYAN PEAKS STRIP */}
-        <div className="mt-8 pt-4 border-t border-[#EAA722]/20 flex flex-wrap items-center justify-between gap-3 text-xs sm:text-sm text-[#FAF5EC]/80 font-normal">
-          <div className="flex items-center gap-2">
-            <span className="text-[#EAA722] font-serif font-semibold tracking-wider uppercase text-xs">
-              Sacred Peaks Viewed from Kasar:
+        <div className="mt-10 pt-5 border-t border-[#EAA722]/20 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm lg:text-[15px] text-[#FAF5EC]/85 font-normal text-center sm:text-left">
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+            <span className="text-[#EAA722] font-serif font-semibold tracking-wider uppercase text-xs sm:text-sm">
+              Peaks Viewed from Kasar:
             </span>
             <span className="text-white">
               Trishul (7,120m) • Nanda Devi (7,816m) • Panchachuli • Chaukhamba
             </span>
           </div>
-          <div className="text-[#EAA722] font-serif font-bold tracking-widest uppercase text-xs">
+          <div className="text-[#EAA722] font-serif font-bold tracking-widest uppercase text-xs sm:text-sm flex-shrink-0">
             Dev Bhoomi Uttarakhand
           </div>
         </div>
 
         {/* 4. BOTTOM COPYRIGHT & LEGAL BAR */}
-        <div className="mt-4 pt-4 border-t border-[#EAA722]/15 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#FAF5EC]/70 font-normal">
+        <div className="mt-5 pt-5 border-t border-[#EAA722]/15 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm text-[#FAF5EC]/75 font-normal text-center sm:text-left">
           <p>
             &copy; {currentYear} The Kasar Himalayan Heights. All rights reserved.
           </p>
 
-          <p className="font-serif italic text-[#EAA722] text-center text-sm font-semibold">
-            ॥ ॐ श्री नीब करौरी महाराजाय नमः ॥
+          <p className="text-[#EAA722] text-xs sm:text-sm tracking-wider uppercase font-medium">
+            Kasar Devi &bull; Almora &bull; 6,942 FT
           </p>
 
-          <div className="flex items-center gap-4 text-xs font-serif">
+          <div className="flex items-center justify-center gap-4 text-xs sm:text-sm font-sans">
             <a href="#faq" className="hover:text-white transition-colors">
               Visitor FAQs
             </a>
             <span className="text-[#EAA722]/40">•</span>
             <a href="#enquiry" className="hover:text-white transition-colors">
-              Sewa Desk
+              Concierge Desk
             </a>
             <span className="text-[#EAA722]/40">•</span>
             <a

@@ -12,6 +12,7 @@ export const useRazorpay = () => {
     bookingType = 'travel',
     prefill = { name: '', email: '', contact: '' },
     notes = {},
+    onOrderCreated,
     onSuccess,
     onFailure,
   }) => {
@@ -43,6 +44,9 @@ export const useRazorpay = () => {
       }
 
       const order = orderRes.data.order;
+      if (onOrderCreated) {
+        onOrderCreated({ order, holdExpiresAt: orderRes.data.holdExpiresAt });
+      }
 
       // 4. Configure Razorpay Options
       const options = {
@@ -82,6 +86,11 @@ export const useRazorpay = () => {
         },
         theme: {
           color: '#073125', // Kasar's brand dark green
+        },
+        modal: {
+          ondismiss: function () {
+            if (onFailure) onFailure(new Error('Payment window closed by user'));
+          },
         },
       };
 

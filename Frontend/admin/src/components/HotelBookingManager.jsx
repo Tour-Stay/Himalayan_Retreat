@@ -410,13 +410,16 @@ export const HotelBookingManager = ({ bookings, setBookings, onRefresh }) => {
                       </div>
                     </td>
 
-                    {/* Suite Name & View */}
+                    {/* Suite Name & View & Rooms Booked Badge */}
                     <td className="py-3.5 px-4">
-                      <div className="font-semibold text-[#7C1D23] font-cinzel">
-                        {b.room?.name || 'Himalayan Suite'}
+                      <div className="font-semibold text-[#7C1D23] font-cinzel flex items-center gap-1.5 flex-wrap">
+                        <span>{b.room?.name || 'Himalayan Suite'}</span>
+                        <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[#FAF6EF] text-[#7C1D23] border border-[#C5A059]/40">
+                          {b.roomsBooked || 1} {(b.roomsBooked || 1) === 1 ? 'Room' : 'Rooms'}
+                        </span>
                       </div>
                       {b.room?.view && (
-                        <div className="text-[#66605B] text-[11px] line-clamp-1 max-w-[180px]">
+                        <div className="text-[#66605B] text-[11px] line-clamp-1 max-w-[180px] mt-0.5">
                           {b.room.view}
                         </div>
                       )}

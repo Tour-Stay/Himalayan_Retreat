@@ -75,15 +75,28 @@ const checkRoomAvailability = async (req, res) => {
       filter.room = roomId;
     }
 
-    const conflictingBookings = await Booking.find(filter).select('room checkInDate checkOutDate status');
-    const occupiedRoomIds = conflictingBookings.map((b) => b.room.toString());
+    const conflictingBookings = await Booking.find(filter).select('room roomsBooked checkInDate checkOutDate status');
 
     // Fetch all rooms (including their administrative availability status)
     const allRooms = await Room.find().sort({ pricePerNight: 1 });
     const now = new Date();
 
+    const occupiedRoomIds = [];
+    const availableRoomsByRoomId = {};
+
     const roomsWithAvailability = allRooms.map((room) => {
-      const isOccupied = occupiedRoomIds.includes(room._id.toString());
+      const roomTotal = Number(room.totalRooms) || 1;
+      const bookedCount = conflictingBookings
+        .filter((b) => b.room.toString() === room._id.toString())
+        .reduce((sum, b) => sum + (Number(b.roomsBooked) || 1), 0);
+
+      const availableCount = Math.max(0, roomTotal - bookedCount);
+      const isOccupied = availableCount <= 0;
+      if (isOccupied) {
+        occupiedRoomIds.push(room._id.toString());
+      }
+      availableRoomsByRoomId[room._id.toString()] = availableCount;
+
       const hasPassedDueDate = room.unavailableUntil && new Date(room.unavailableUntil) <= now;
       const isRoomAdminAvailable = hasPassedDueDate ? true : Boolean(room.isAvailable);
 
@@ -95,7 +108,9 @@ const checkRoomAvailability = async (req, res) => {
         ...room.toObject(),
         isAvailable: isRoomAdminAvailable,
         unavailableUntil: hasPassedDueDate ? null : room.unavailableUntil,
-        totalRooms: room.totalRooms ?? 1,
+        totalRooms: roomTotal,
+        bookedRoomsCount: bookedCount,
+        availableRoomsCount: availableCount,
         location: room.location || 'Kasar Devi, Almora',
         isAvailableForDates: !isOccupied && isRoomAdminAvailable && !isBlockedByDueDate,
       };
@@ -108,6 +123,7 @@ const checkRoomAvailability = async (req, res) => {
       occupiedCount: occupiedRoomIds.length,
       availableCount: allRooms.length - occupiedRoomIds.length,
       occupiedRoomIds,
+      availableRoomsByRoomId,
       rooms: roomsWithAvailability,
     });
   } catch (error) {
@@ -334,6 +350,7 @@ const toggleRoomAvailability = async (req, res) => {
 const createBooking = async (req, res) => {
   try {
     const { room, guestDetails, checkInDate, checkOutDate } = req.body;
+    const requestedRooms = Math.max(1, parseInt(req.body.roomsBooked || 1, 10));
 
     // 1. Strict Date Validation
     const checkIn = new Date(checkInDate);
@@ -353,26 +370,40 @@ const createBooking = async (req, res) => {
       return res.status(400).json({ message: 'Check-out date must be after check-in date.' });
     }
 
-    // Check for date conflicts — ensure the room is not already booked for those dates
-    // Using start and end of day to flawlessly handle same-day check-in/check-out overlap
-    const bCheckInStart = new Date(`${checkInDate}T23:59:59.999Z`);
-    const bCheckOutEnd = new Date(`${checkOutDate}T00:00:00.000Z`);
-
-    const conflictingBooking = await Booking.findOne({
-      room: room,
-      status: { $ne: 'cancelled' }, // Ignore cancelled bookings
-      checkInDate: { $lt: bCheckOutEnd },
-      checkOutDate: { $gt: bCheckInStart },
-    });
-
-    if (conflictingBooking) {
-      return res.status(409).json({ message: 'This room is already booked for the selected dates.' });
-    }
-
     // 2. Fetch room data
     const roomData = await Room.findById(room);
     if (!roomData) {
       return res.status(404).json({ message: 'Room not found.' });
+    }
+
+    // Check for inventory availability on selected dates
+    // Using start and end of day to flawlessly handle same-day check-in/check-out overlap
+    const bCheckInStart = new Date(`${checkInDate}T23:59:59.999Z`);
+    const bCheckOutEnd = new Date(`${checkOutDate}T00:00:00.000Z`);
+
+    const conflictingBookings = await Booking.find({
+      room: room,
+      status: { $ne: 'cancelled' }, // Ignore cancelled bookings
+      checkInDate: { $lt: bCheckOutEnd },
+      checkOutDate: { $gt: bCheckInStart },
+    }).select('roomsBooked');
+
+    const totalInventory = Number(roomData.totalRooms) || 1;
+    const currentlyBooked = conflictingBookings.reduce(
+      (sum, b) => sum + (Number(b.roomsBooked) || 1),
+      0
+    );
+    const availableInventory = Math.max(0, totalInventory - currentlyBooked);
+
+    if (requestedRooms > availableInventory) {
+      return res.status(409).json({
+        message:
+          availableInventory > 0
+            ? `Only ${availableInventory} room(s) available for the selected dates. You requested ${requestedRooms}.`
+            : 'This room is completely booked for the selected dates. Please choose another suite or alternative dates.',
+        availableRooms: availableInventory,
+        totalRooms: totalInventory,
+      });
     }
 
     // Check if room is administratively unavailable or within unavailableUntil window
@@ -403,7 +434,8 @@ const createBooking = async (req, res) => {
       checkOutDate,
       siteSettings?.pricingRules || {}
     );
-    const authoritativeTotal = tariffResult.totalAmount;
+    // Multiply authoritative nightly tariff by the number of rooms booked
+    const authoritativeTotal = tariffResult.totalAmount * requestedRooms;
 
     // Check if the request comes from an authenticated admin (e.g. Admin QuickBookingModal)
     let totalAmount = authoritativeTotal;
@@ -435,6 +467,7 @@ const createBooking = async (req, res) => {
     // Create the booking
     const booking = await Booking.create({
       room,
+      roomsBooked: requestedRooms,
       guestDetails,
       checkInDate: checkIn,
       checkOutDate: checkOut,

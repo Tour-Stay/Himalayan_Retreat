@@ -6,19 +6,19 @@ export const LANDING_CONTENT = {
   // Top Notice Bar (Dismissible)
   announcement: {
     enabled: true,
-    message: '॥ ॐ नमः शिवाय • जय श्री नीब करौरी महाराज ॥ Visiting Kainchi Dham or Kasar Devi? Sacred yatra support, heated chalet rooms & temple cabs are open for booking.',
-    linkText: 'Yatra Booking ↗',
+    message: 'Visiting Kainchi Dham, Jageshwar, or Kasar Devi? Heated chalet suites & chauffeured mountain cabs are open for booking.',
+    linkText: 'Book Stay & Travel ↗',
     linkHref: '#enquiry',
   },
 
   // Reverent Hero Section
   saintHero: {
-    devotionalGreeting: 'जय श्री बाबा नीम करोली महाराज की',
-    devotionalSubGreeting: 'Ram Ram • Jai Sri Hanuman',
-    teachingQuote: 'Love. Serve. Remember.',
-    quoteAttribution: 'Teachings of Sri Neem Karoli Baba Maharaj',
-    portraitAlt: 'Sri Neem Karoli Baba Maharaj',
-    welcomeStatement: 'Kasar Devi and the Kumaon Himalayas have welcomed spiritual seekers, mystics, and travelers for centuries. Surrounded by ancient deodar forests and the silent majesty of snow peaks, we welcome you with deep reverence and quiet hospitality.',
+    devotionalGreeting: 'The Kasar Himalayan Heights',
+    devotionalSubGreeting: 'Boutique Mountain Chalet & Chauffeured Expeditions',
+    teachingQuote: 'Where the Himalayas Meet Stillness',
+    quoteAttribution: 'Kasar Devi Ridge • Almora • 6,942 FT Elevation',
+    portraitAlt: 'Panoramic Himalayan Snow Peaks at Kasar Devi',
+    welcomeStatement: 'Perched amidst ancient deodar forests on Crank’s Ridge with 180° views of Mount Trishul and Nanda Devi, we welcome you to intimate chalet hospitality and dependable chauffeured mountain journeys across Uttarakhand.',
   },
 
   // About Uttarakhand ("Dev Bhoomi") — Appears first before commercial offerings

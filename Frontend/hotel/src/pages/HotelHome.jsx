@@ -298,6 +298,9 @@ export default function HotelHome() {
 
   // Today's date ISO
   const [minDate, setMinDate] = useState('');
+    const unsubscribe = subscribeToUpdates('rooms', () => {
+      fetchRooms();
+    }, 60 * 1000);
 
   useEffect(() => {
     const now = new Date();

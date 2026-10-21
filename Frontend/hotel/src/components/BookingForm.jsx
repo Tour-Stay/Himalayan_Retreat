@@ -24,6 +24,7 @@ const BookingForm = ({ preSelectedRoom = null, initialCheckIn = '', initialCheck
   const [rooms, setRooms] = useState(mockRooms);
   const [formData, setFormData] = useState({
     room: preSelectedRoom || mockRooms[0]._id,
+    roomsBooked: 1,
     name: '',
     email: '',
     phone: '',
@@ -34,10 +35,38 @@ const BookingForm = ({ preSelectedRoom = null, initialCheckIn = '', initialCheck
   });
   const [loading, setLoading] = useState(false);
   const [occupiedRoomIds, setOccupiedRoomIds] = useState([]);
+  const [availableRoomsMap, setAvailableRoomsMap] = useState({});
   const [isRoomUnavailable, setIsRoomUnavailable] = useState(false);
   const [paymentPending, setPaymentPending] = useState(false);
   const [pendingBookingPayload, setPendingBookingPayload] = useState(null);
   const [conflictError, setConflictError] = useState('');
+  const [holdExpiresAt, setHoldExpiresAt] = useState(null);
+  const [holdSecondsLeft, setHoldSecondsLeft] = useState(0);
+
+  // 15-minute countdown timer for temporary room hold
+  useEffect(() => {
+    if (!holdExpiresAt) {
+      setHoldSecondsLeft(0);
+      return;
+    }
+
+    const updateRemaining = () => {
+      const now = Date.now();
+      const expiry = new Date(holdExpiresAt).getTime();
+      const diffSec = Math.max(0, Math.floor((expiry - now) / 1000));
+      setHoldSecondsLeft(diffSec);
+    };
+
+    updateRemaining();
+    const interval = setInterval(updateRemaining, 1000);
+    return () => clearInterval(interval);
+  }, [holdExpiresAt]);
+
+  const formatTimer = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  };
 
   // Synchronize initial check-in & check-out dates from query parameters
   useEffect(() => {
@@ -62,21 +91,28 @@ const BookingForm = ({ preSelectedRoom = null, initialCheckIn = '', initialCheck
               checkOut: formData.checkOutDate,
             },
           });
-          if (isMounted && res.data && Array.isArray(res.data.occupiedRoomIds)) {
-            setOccupiedRoomIds(res.data.occupiedRoomIds);
-            const occupied = res.data.occupiedRoomIds.includes(formData.room);
-            setIsRoomUnavailable(occupied);
+          if (isMounted && res.data) {
+            if (Array.isArray(res.data.occupiedRoomIds)) {
+              setOccupiedRoomIds(res.data.occupiedRoomIds);
+              const occupied = res.data.occupiedRoomIds.includes(formData.room);
+              setIsRoomUnavailable(occupied);
+            }
+            if (res.data.availableRoomsByRoomId) {
+              setAvailableRoomsMap(res.data.availableRoomsByRoomId);
+            }
           }
         } catch (err) {
           // Graceful fallback: do not block if network check fails
           if (isMounted) {
             setOccupiedRoomIds([]);
+            setAvailableRoomsMap({});
             setIsRoomUnavailable(false);
           }
         }
       } else {
         if (isMounted) {
           setOccupiedRoomIds([]);
+          setAvailableRoomsMap({});
           setIsRoomUnavailable(false);
         }
       }
@@ -140,6 +176,21 @@ const BookingForm = ({ preSelectedRoom = null, initialCheckIn = '', initialCheck
   // Find selected room for pricing calculation
   const selectedRoomObj = rooms.find((r) => r._id === formData.room) || rooms[0];
 
+  // Calculate max available rooms for currently selected room and dates
+  const maxAvailableForRoom = useMemo(() => {
+    if (availableRoomsMap[formData.room] !== undefined) {
+      return availableRoomsMap[formData.room];
+    }
+    return Number(selectedRoomObj?.totalRooms) || 1;
+  }, [availableRoomsMap, formData.room, selectedRoomObj]);
+
+  // Clamp roomsBooked if inventory decreased or room changed
+  useEffect(() => {
+    if (maxAvailableForRoom > 0 && Number(formData.roomsBooked) > maxAvailableForRoom) {
+      setFormData((prev) => ({ ...prev, roomsBooked: maxAvailableForRoom }));
+    }
+  }, [maxAvailableForRoom, formData.roomsBooked]);
+
   // Dynamic yield & seasonal pricing calculation
   const pricingResult = useMemo(() => {
     if (!selectedRoomObj || !formData.checkInDate || !formData.checkOutDate) {
@@ -154,10 +205,18 @@ const BookingForm = ({ preSelectedRoom = null, initialCheckIn = '', initialCheck
   }, [selectedRoomObj, formData.checkInDate, formData.checkOutDate, settings?.pricingRules]);
 
   const nights = pricingResult.nights;
-  const totalPrice = pricingResult.totalAmount;
+  const pricePerRoom = pricingResult.totalAmount;
+  const totalPrice = pricePerRoom * (Number(formData.roomsBooked) || 1);
 
   const handleRetryPayment = async () => {
     if (!pendingBookingPayload) return;
+    if (holdSecondsLeft <= 0) {
+      setPaymentPending(false);
+      setPendingBookingPayload(null);
+      setHoldExpiresAt(null);
+      setConflictError('The 15-minute room hold has expired. Please select your room and dates again.');
+      return;
+    }
     setLoading(true);
     try {
       await initializePayment({
@@ -169,9 +228,15 @@ const BookingForm = ({ preSelectedRoom = null, initialCheckIn = '', initialCheck
           contact: pendingBookingPayload.guestDetails.phone,
           email: pendingBookingPayload.guestDetails.email,
         },
+        onOrderCreated: ({ holdExpiresAt: serverHoldExpires }) => {
+          if (serverHoldExpires) {
+            setHoldExpiresAt(serverHoldExpires);
+          }
+        },
         onSuccess: (paymentResponse) => {
           setLoading(false);
           setPaymentPending(false);
+          setHoldExpiresAt(null);
           navigate('/booking-confirmation', {
             state: {
               booking: { ...pendingBookingPayload, paymentId: paymentResponse.razorpay_payment_id },
@@ -180,11 +245,26 @@ const BookingForm = ({ preSelectedRoom = null, initialCheckIn = '', initialCheck
         },
         onFailure: (error) => {
           setLoading(false);
+          const msg = error?.response?.data?.message || error?.message || '';
+          if (msg.toLowerCase().includes('expired') || msg.toLowerCase().includes('timeout')) {
+            setPaymentPending(false);
+            setPendingBookingPayload(null);
+            setHoldExpiresAt(null);
+            setConflictError('The 15-minute reservation hold has expired. Please choose your dates again.');
+          }
         },
       });
     } catch (err) {
       setLoading(false);
-      alert('Failed to initialize payment. Please try again.');
+      const msg = err.response?.data?.message || err.message || '';
+      if (msg.toLowerCase().includes('expired') || msg.toLowerCase().includes('timeout')) {
+        setPaymentPending(false);
+        setPendingBookingPayload(null);
+        setHoldExpiresAt(null);
+        setConflictError('The 15-minute reservation hold has expired. Please choose your dates again.');
+      } else {
+        alert('Failed to initialize payment. Please try again.');
+      }
     }
   };
 
@@ -193,8 +273,10 @@ const BookingForm = ({ preSelectedRoom = null, initialCheckIn = '', initialCheck
     setConflictError('');
     setLoading(true);
 
+    const roomsCount = Math.max(1, Number(formData.roomsBooked) || 1);
     const bookingPayload = {
       room: formData.room,
+      roomsBooked: roomsCount,
       roomName: selectedRoomObj?.name || 'Himalayan Snow View Suite',
       guestDetails: {
         name: formData.name,
@@ -206,13 +288,15 @@ const BookingForm = ({ preSelectedRoom = null, initialCheckIn = '', initialCheck
       guests: formData.guests,
       specialRequest: formData.specialRequest,
       nights: nights || 1,
-      totalAmount: totalPrice || (selectedRoomObj?.pricePerNight || 6942),
+      totalAmount: totalPrice || ((selectedRoomObj?.pricePerNight || 6942) * roomsCount),
       bookingId: 'KHH-' + Math.floor(100000 + Math.random() * 900000),
     };
 
     try {
       const response = await apiClient.post('/hotel/bookings', bookingPayload);
       const dbBookingId = response.data?.booking?._id || bookingPayload.bookingId;
+      const initialHoldExpires = new Date(Date.now() + 15 * 60 * 1000).toISOString();
+      setHoldExpiresAt(initialHoldExpires);
 
       await initializePayment({
         bookingId: dbBookingId,
@@ -223,8 +307,14 @@ const BookingForm = ({ preSelectedRoom = null, initialCheckIn = '', initialCheck
           contact: bookingPayload.guestDetails.phone,
           email: bookingPayload.guestDetails.email,
         },
+        onOrderCreated: ({ holdExpiresAt: serverHoldExpires }) => {
+          if (serverHoldExpires) {
+            setHoldExpiresAt(serverHoldExpires);
+          }
+        },
         onSuccess: (paymentResponse) => {
           setLoading(false);
+          setHoldExpiresAt(null);
           navigate('/booking-confirmation', {
             state: {
               booking: { ...bookingPayload, paymentId: paymentResponse.razorpay_payment_id },
@@ -233,16 +323,24 @@ const BookingForm = ({ preSelectedRoom = null, initialCheckIn = '', initialCheck
         },
         onFailure: (error) => {
           setLoading(false);
-          setPaymentPending(true);
-          setPendingBookingPayload({ ...bookingPayload, dbBookingId });
+          const msg = error?.response?.data?.message || error?.message || '';
+          if (msg.toLowerCase().includes('expired') || msg.toLowerCase().includes('timeout')) {
+            setPaymentPending(false);
+            setPendingBookingPayload(null);
+            setHoldExpiresAt(null);
+            setConflictError('The 15-minute reservation hold has expired. Please choose your dates again.');
+          } else {
+            setPaymentPending(true);
+            setPendingBookingPayload({ ...bookingPayload, dbBookingId });
+          }
         },
       });
     } catch (err) {
       console.warn('Backend unavailable or error occurred.', err.message);
       setLoading(false);
-      const errorMsg = err.response?.data?.message?.toLowerCase() || '';
-      if (err.response?.status === 409 || errorMsg.includes('already reserved') || errorMsg.includes('already booked')) {
-        setConflictError("We're sorry, another guest just reserved this suite for these dates. Please select different dates.");
+      const errorMsg = err.response?.data?.message || '';
+      if (err.response?.status === 409 || errorMsg.toLowerCase().includes('already reserved') || errorMsg.toLowerCase().includes('already booked') || errorMsg.toLowerCase().includes('only')) {
+        setConflictError(errorMsg || "We're sorry, the requested number of suites is not available for these dates. Please choose different dates or fewer rooms.");
       } else {
         alert('Failed to connect to the booking server. Please try again.');
       }
@@ -251,28 +349,53 @@ const BookingForm = ({ preSelectedRoom = null, initialCheckIn = '', initialCheck
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 font-sans">
-      {/* Room Selector */}
-      <div>
-        <label className="block text-xs sm:text-sm font-semibold uppercase tracking-wider text-[#073125] mb-1.5 font-mono">
-          Select Room
-        </label>
-        <select
-          name="room"
-          value={formData.room}
-          onChange={handleChange}
-          required
-          className="w-full px-4 py-3 rounded-xl border border-[#073125]/20 bg-[#FBFDFB] text-[#073125] text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-[#073125]/30 transition cursor-pointer"
-        >
-          {rooms.map((room) => {
-            const isOccupied = occupiedRoomIds.includes(room._id);
-            return (
-              <option key={room._id} value={room._id}>
-                {room.name} — ₹{room.pricePerNight?.toLocaleString()}/night
-                {isOccupied ? ' [Reserved for Selected Dates]' : ''}
+      {/* Room Selector & Room Quantity */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="sm:col-span-2">
+          <label className="block text-xs sm:text-sm font-semibold uppercase tracking-wider text-[#073125] mb-1.5 font-mono">
+            Select Suite
+          </label>
+          <select
+            name="room"
+            value={formData.room}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-3 rounded-xl border border-[#073125]/20 bg-[#FBFDFB] text-[#073125] text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-[#073125]/30 transition cursor-pointer"
+          >
+            {rooms.map((room) => {
+              const isOccupied = occupiedRoomIds.includes(room._id);
+              const avail = availableRoomsMap[room._id];
+              return (
+                <option key={room._id} value={room._id} disabled={isOccupied}>
+                  {room.name} — ₹{room.pricePerNight?.toLocaleString()}/night
+                  {isOccupied ? ' [Sold Out for Selected Dates]' : (avail !== undefined ? ` (${avail} available)` : '')}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-xs sm:text-sm font-semibold uppercase tracking-wider text-[#073125] mb-1.5 font-mono flex items-center justify-between">
+            <span>Rooms</span>
+            <span className="text-[11px] text-[#073125]/70 font-sans font-normal">
+              {maxAvailableForRoom > 0 ? `${maxAvailableForRoom} left` : 'Sold out'}
+            </span>
+          </label>
+          <select
+            name="roomsBooked"
+            value={formData.roomsBooked}
+            onChange={handleChange}
+            disabled={maxAvailableForRoom <= 0}
+            className="w-full px-4 py-3 rounded-xl border border-[#073125]/20 bg-[#FBFDFB] text-[#073125] text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-[#073125]/30 transition cursor-pointer disabled:bg-gray-100 disabled:text-gray-400 font-semibold text-center"
+          >
+            {Array.from({ length: Math.max(1, maxAvailableForRoom || 1) }, (_, i) => i + 1).map((num) => (
+              <option key={num} value={num}>
+                {num} {num === 1 ? 'Room' : 'Rooms'}
               </option>
-            );
-          })}
-        </select>
+            ))}
+          </select>
+        </div>
       </div>
 
       {/* Date Conflict Warning Banner */}
@@ -353,9 +476,13 @@ const BookingForm = ({ preSelectedRoom = null, initialCheckIn = '', initialCheck
             className="w-full px-4 py-3 rounded-xl border border-[#073125]/20 bg-[#FBFDFB] text-[#073125] text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-[#073125]/30 transition cursor-pointer"
           >
             <option value="1">1 Adult</option>
-            <option value="2">2 Adults (1 Room)</option>
-            <option value="3">3 Adults (1 Room + Extra Bed)</option>
-            <option value="4">4 Adults (Family / Group)</option>
+            <option value="2">2 Adults</option>
+            <option value="3">3 Adults</option>
+            <option value="4">4 Adults</option>
+            <option value="5">5 Adults</option>
+            <option value="6">6 Adults</option>
+            <option value="8">8 Adults</option>
+            <option value="10+">10+ Adults (Group / Family)</option>
           </select>
         </div>
       </div>
@@ -398,8 +525,11 @@ const BookingForm = ({ preSelectedRoom = null, initialCheckIn = '', initialCheck
             <span className="font-semibold text-[#073125] block">
               {selectedRoomObj.name}
             </span>
-            <span className="text-xs sm:text-sm text-[#073125]/70">
+            <span className="text-xs sm:text-sm text-[#073125]/70 block mt-0.5">
               ₹{pricingResult.avgPricePerNight?.toLocaleString()} × {nights} {nights === 1 ? 'night' : 'nights'}
+              {Number(formData.roomsBooked) > 1 && (
+                <span className="font-semibold text-[#073125]"> × {formData.roomsBooked} rooms</span>
+              )}
             </span>
             {pricingResult.hasSurcharge && (
               <span className="inline-block mt-1 px-2.5 py-0.5 rounded-full bg-[#C9F24D]/30 text-[#073125] border border-[#073125]/20 text-xs font-semibold">
@@ -418,27 +548,67 @@ const BookingForm = ({ preSelectedRoom = null, initialCheckIn = '', initialCheck
 
       {/* Submit Button or Retry State */}
       {paymentPending ? (
-        <div className="p-6 bg-yellow-50 border border-yellow-200 rounded-xl text-center space-y-4">
-          <div className="text-yellow-600 text-4xl mb-2">⚠️</div>
-          <h3 className="text-xl font-serif text-[#073125] font-bold">Payment Pending</h3>
-          <p className="text-sm text-[#073125]/80">
-            Your booking is reserved, but the payment was not completed. Please complete the payment to confirm your stay.
-          </p>
-          <button
-            type="button"
-            onClick={handleRetryPayment}
-            disabled={loading}
-            className="w-full py-4 rounded-xl text-sm uppercase tracking-wider font-bold bg-[#C9F24D] text-[#073125] hover:bg-[#b8e23f] transition-all shadow-md cursor-pointer"
-          >
-            {loading ? 'Processing...' : 'Retry Payment'}
-          </button>
-          <button
-            type="button"
-            onClick={() => setPaymentPending(false)}
-            className="text-xs text-[#073125]/60 hover:underline pt-2 cursor-pointer"
-          >
-            Cancel and edit details
-          </button>
+        <div className="p-6 bg-yellow-50/80 border border-yellow-200/80 rounded-2xl text-center space-y-4 shadow-sm">
+          <div className="text-3xl mb-1">
+            {holdSecondsLeft > 0 ? '⏳' : '⏰'}
+          </div>
+          <h3 className="text-xl font-serif text-[#073125] font-bold">
+            {holdSecondsLeft > 0 ? 'Room Hold Active — Complete Payment' : 'Room Hold Expired'}
+          </h3>
+
+          {holdSecondsLeft > 0 ? (
+            <>
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 font-mono text-xs sm:text-sm font-bold">
+                <span>Hold expires in:</span>
+                <span className="text-base text-red-600 font-extrabold">{formatTimer(holdSecondsLeft)}</span>
+              </div>
+              <p className="text-xs sm:text-sm text-[#073125]/80 max-w-md mx-auto">
+                Your suite is temporarily held for <span className="font-semibold">{formatTimer(holdSecondsLeft)}</span>. Please complete payment before the timer expires to secure your reservation.
+              </p>
+              <button
+                type="button"
+                onClick={handleRetryPayment}
+                disabled={loading || holdSecondsLeft <= 0}
+                className="w-full py-4 rounded-xl text-xs sm:text-sm uppercase tracking-wider font-bold bg-[#C9F24D] text-[#073125] hover:bg-[#b8e23f] transition-all shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? 'Processing...' : `Pay ₹${totalPrice.toLocaleString()} Now (${formatTimer(holdSecondsLeft)})`}
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-100 text-red-800 border border-red-300 font-medium text-xs">
+                <span>Hold expired at 00:00</span>
+              </div>
+              <p className="text-xs sm:text-sm text-red-700 max-w-md mx-auto font-medium">
+                The 15-minute temporary hold on this suite has expired and the room has been released. Please re-select your dates to book.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setPaymentPending(false);
+                  setPendingBookingPayload(null);
+                  setHoldExpiresAt(null);
+                }}
+                className="w-full py-3.5 rounded-xl text-xs sm:text-sm uppercase tracking-wider font-bold bg-[#073125] text-white hover:bg-[#12433B] transition-all shadow-md cursor-pointer"
+              >
+                Select Dates & Re-Book
+              </button>
+            </>
+          )}
+
+          {holdSecondsLeft > 0 && (
+            <button
+              type="button"
+              onClick={() => {
+                setPaymentPending(false);
+                setPendingBookingPayload(null);
+                setHoldExpiresAt(null);
+              }}
+              className="text-xs text-[#073125]/60 hover:underline pt-2 cursor-pointer block mx-auto"
+            >
+              Cancel and edit details
+            </button>
+          )}
         </div>
       ) : (
         <div className="space-y-2.5 pt-2">
