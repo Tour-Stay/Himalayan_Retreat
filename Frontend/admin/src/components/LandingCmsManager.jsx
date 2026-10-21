@@ -4,7 +4,8 @@ import { useToast } from './Toast';
 
 export const LandingCmsManager = () => {
   const { settings, refreshSettings } = useSiteSettings();
-  const { showToast } = useToast();
+  const toastContext = useToast();
+  const showToast = toastContext.addToast || toastContext.showToast;
 
   const [activeSubTab, setActiveSubTab] = useState('hero'); // 'hero' | 'announcement' | 'itinerary' | 'faqs'
 
@@ -208,23 +209,23 @@ export const LandingCmsManager = () => {
   return (
     <div className="space-y-6">
       {/* Website Banner Header */}
-      <div className="bg-[#FAF5EC] border border-[#EAA722]/30 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs">
+      <div className="bg-white border border-[#C5A059]/30 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-[#073125] text-[#EAA722] flex items-center justify-center shadow-xs shrink-0">
-            <svg className="w-5 h-5 text-[#EAA722]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="w-11 h-11 bg-[#0B1118] text-[#C5A059] flex items-center justify-center border border-[#C5A059]/40 shadow-xs shrink-0">
+            <svg className="w-5 h-5 text-[#C5A059]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
             </svg>
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="font-serif text-lg sm:text-xl font-bold text-[#073125]">
+              <h3 className="font-serif text-lg sm:text-xl font-bold text-[#0F172A]">
                 Main Website Page Content
               </h3>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-cinzel font-bold bg-[#073125]/10 text-[#073125] border border-[#073125]/20">
+              <span className="px-2.5 py-0.5 text-[10px] font-cinzel font-bold bg-[#FAF8F5] text-[#C5A059] border border-[#C5A059]/40 tracking-wider">
                 Public Website
               </span>
             </div>
-            <p className="text-xs text-[#5C5350] mt-0.5">
+            <p className="text-xs text-slate-500 mt-0.5">
               Edit the Neem Karoli Baba devotional quote, top notice banner, 3-day pilgrimage itinerary, and visitor FAQs.
             </p>
           </div>
@@ -235,27 +236,27 @@ export const LandingCmsManager = () => {
             href={APP_URLS.landing}
             target="_blank"
             rel="noreferrer"
-            className="px-3.5 py-1.5 rounded-full text-xs font-cinzel font-semibold bg-white hover:bg-[#073125] hover:text-white text-[#073125] border border-[#073125]/30 transition shadow-2xs flex items-center gap-1.5"
+            className="px-3.5 py-1.5 text-xs font-cinzel font-semibold bg-[#FAF8F5] hover:bg-white text-[#0F172A] border border-slate-300 transition shadow-2xs flex items-center gap-1.5"
             title="Open Main Website in a new tab"
           >
             <span>Open Website</span>
-            <span className="text-amber-500 font-bold">↗</span>
+            <span className="text-[#C5A059] font-bold">↗</span>
           </a>
 
           <button
             onClick={handleSave}
             disabled={isSaving}
-            className="px-4 py-1.5 rounded-full text-xs font-cinzel font-bold bg-[#073125] hover:bg-[#0C2B22] text-[#EAA722] border border-[#EAA722]/40 transition shadow-sm flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
+            className="px-4 py-1.5 text-xs font-cinzel font-bold bg-[#0B1118] hover:bg-[#111827] text-white border border-[#C5A059]/40 transition shadow-xs flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
           >
             {isSaving ? (
               <>
-                <span className="w-3 h-3 rounded-full border-2 border-[#EAA722] border-t-transparent animate-spin" />
+                <span className="w-3.5 h-3.5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
                 <span>Publishing...</span>
               </>
             ) : (
               <>
                 <span>Publish Changes</span>
-                <span>✓</span>
+                <span className="text-[#C5A059]">✓</span>
               </>
             )}
           </button>
@@ -263,17 +264,17 @@ export const LandingCmsManager = () => {
       </div>
 
       {/* Sub-tab Navigation */}
-      <div className="flex items-center gap-2 border-b border-[#EAA722]/30 pb-2 overflow-x-auto">
+      <div className="flex items-center gap-2 border-b border-[#C5A059]/30 pb-2 overflow-x-auto">
         <button
           type="button"
           onClick={() => setActiveSubTab('hero')}
-          className={`px-4 py-2 rounded-xl text-xs font-cinzel font-semibold transition cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+          className={`px-4 py-2 text-xs font-cinzel font-semibold transition cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
             activeSubTab === 'hero'
-              ? 'bg-[#073125] text-[#EAA722] shadow-xs font-bold'
-              : 'text-[#2C2523] hover:bg-[#FAF5EC]'
+              ? 'bg-[#0B1118] text-white border border-[#C5A059]/50 shadow-xs font-bold'
+              : 'text-slate-600 hover:text-[#0F172A] hover:bg-[#FAF8F5] border border-transparent'
           }`}
         >
-          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-3.5 h-3.5 text-[#C5A059]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
           </svg>
           <span>1. Welcome & Baba Maharaj Quote</span>
@@ -282,13 +283,13 @@ export const LandingCmsManager = () => {
         <button
           type="button"
           onClick={() => setActiveSubTab('announcement')}
-          className={`px-4 py-2 rounded-xl text-xs font-cinzel font-semibold transition cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+          className={`px-4 py-2 text-xs font-cinzel font-semibold transition cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
             activeSubTab === 'announcement'
-              ? 'bg-[#073125] text-[#EAA722] shadow-xs font-bold'
-              : 'text-[#2C2523] hover:bg-[#FAF5EC]'
+              ? 'bg-[#0B1118] text-white border border-[#C5A059]/50 shadow-xs font-bold'
+              : 'text-slate-600 hover:text-[#0F172A] hover:bg-[#FAF8F5] border border-transparent'
           }`}
         >
-          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-3.5 h-3.5 text-[#C5A059]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
           </svg>
           <span>2. Top Notice Banner</span>
@@ -297,13 +298,13 @@ export const LandingCmsManager = () => {
         <button
           type="button"
           onClick={() => setActiveSubTab('itinerary')}
-          className={`px-4 py-2 rounded-xl text-xs font-cinzel font-semibold transition cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+          className={`px-4 py-2 text-xs font-cinzel font-semibold transition cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
             activeSubTab === 'itinerary'
-              ? 'bg-[#073125] text-[#EAA722] shadow-xs font-bold'
-              : 'text-[#2C2523] hover:bg-[#FAF5EC]'
+              ? 'bg-[#0B1118] text-white border border-[#C5A059]/50 shadow-xs font-bold'
+              : 'text-slate-600 hover:text-[#0F172A] hover:bg-[#FAF8F5] border border-transparent'
           }`}
         >
-          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-3.5 h-3.5 text-[#C5A059]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
           </svg>
           <span>3. 3-Day Pilgrimage Plan</span>
@@ -312,13 +313,13 @@ export const LandingCmsManager = () => {
         <button
           type="button"
           onClick={() => setActiveSubTab('faqs')}
-          className={`px-4 py-2 rounded-xl text-xs font-cinzel font-semibold transition cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+          className={`px-4 py-2 text-xs font-cinzel font-semibold transition cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
             activeSubTab === 'faqs'
-              ? 'bg-[#073125] text-[#EAA722] shadow-xs font-bold'
-              : 'text-[#2C2523] hover:bg-[#FAF5EC]'
+              ? 'bg-[#0B1118] text-white border border-[#C5A059]/50 shadow-xs font-bold'
+              : 'text-slate-600 hover:text-[#0F172A] hover:bg-[#FAF8F5] border border-transparent'
           }`}
         >
-          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-3.5 h-3.5 text-[#C5A059]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           <span>4. Visitor Questions ({faqs.length})</span>
@@ -328,19 +329,19 @@ export const LandingCmsManager = () => {
       {/* Tab 1: Devotional Hero & Ashram Tribute */}
       {activeSubTab === 'hero' && (
         <form onSubmit={handleSave} className="space-y-6">
-          <div className="bg-white p-6 rounded-2xl border border-[#EAA722]/30 shadow-xs space-y-5">
+          <div className="bg-white p-4 sm:p-6 border border-[#C5A059]/30 shadow-xs space-y-5">
             <div>
-              <h4 className="font-serif text-lg font-bold text-[#073125]">
+              <h4 className="font-serif text-lg font-bold text-[#0F172A]">
                 Neem Karoli Baba Maharaj Devotional Greetings
               </h4>
-              <p className="text-xs text-[#5C5350] mt-0.5">
+              <p className="text-xs text-slate-500 mt-0.5">
                 These sacred titles, quotes, and spiritual statements appear prominently on the Landing page hero and header.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-cinzel font-bold text-[#073125] mb-1">
+                <label className="block text-xs font-cinzel font-bold text-[#0F172A] mb-1">
                   Primary Devotional Greeting (Hindi / Sanskrit)
                 </label>
                 <input
@@ -350,12 +351,12 @@ export const LandingCmsManager = () => {
                     setLandingHero({ ...landingHero, devotionalGreeting: e.target.value })
                   }
                   placeholder="जय श्री बाबा नीम करोली महाराज की"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAA722]/40 bg-[#FAF7F2] text-sm focus:outline-none focus:border-[#073125] font-serif"
+                  className="w-full px-3.5 py-2.5 border border-slate-200 bg-[#FAF8F5] text-sm text-[#0F172A] focus:outline-none focus:border-[#C5A059] font-serif transition"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-cinzel font-bold text-[#073125] mb-1">
+                <label className="block text-xs font-cinzel font-bold text-[#0F172A] mb-1">
                   Sub-Greeting & Chants
                 </label>
                 <input
@@ -365,14 +366,14 @@ export const LandingCmsManager = () => {
                     setLandingHero({ ...landingHero, devotionalSubGreeting: e.target.value })
                   }
                   placeholder="Ram Ram • Jai Sri Hanuman"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAA722]/40 bg-[#FAF7F2] text-sm focus:outline-none focus:border-[#073125] font-serif"
+                  className="w-full px-3.5 py-2.5 border border-slate-200 bg-[#FAF8F5] text-sm text-[#0F172A] focus:outline-none focus:border-[#C5A059] font-serif transition"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-cinzel font-bold text-[#073125] mb-1">
+                <label className="block text-xs font-cinzel font-bold text-[#0F172A] mb-1">
                   Maharaj-ji Core Teaching Quote
                 </label>
                 <input
@@ -382,12 +383,12 @@ export const LandingCmsManager = () => {
                     setLandingHero({ ...landingHero, teachingQuote: e.target.value })
                   }
                   placeholder="Love. Serve. Remember."
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAA722]/40 bg-[#FAF7F2] text-sm focus:outline-none focus:border-[#073125] font-serif italic"
+                  className="w-full px-3.5 py-2.5 border border-slate-200 bg-[#FAF8F5] text-sm text-[#0F172A] focus:outline-none focus:border-[#C5A059] font-serif italic transition"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-cinzel font-bold text-[#073125] mb-1">
+                <label className="block text-xs font-cinzel font-bold text-[#0F172A] mb-1">
                   Quote Attribution
                 </label>
                 <input
@@ -397,13 +398,13 @@ export const LandingCmsManager = () => {
                     setLandingHero({ ...landingHero, quoteAttribution: e.target.value })
                   }
                   placeholder="Teachings of Sri Neem Karoli Baba Maharaj"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAA722]/40 bg-[#FAF7F2] text-sm focus:outline-none focus:border-[#073125]"
+                  className="w-full px-3.5 py-2.5 border border-slate-200 bg-[#FAF8F5] text-sm text-[#0F172A] focus:outline-none focus:border-[#C5A059] transition"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-cinzel font-bold text-[#073125] mb-1">
+              <label className="block text-xs font-cinzel font-bold text-[#0F172A] mb-1">
                 Kasar Devi Welcome Statement
               </label>
               <textarea
@@ -413,24 +414,24 @@ export const LandingCmsManager = () => {
                   setLandingHero({ ...landingHero, welcomeStatement: e.target.value })
                 }
                 placeholder="Kasar Devi and the Kumaon Himalayas have welcomed spiritual seekers..."
-                className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAA722]/40 bg-[#FAF7F2] text-sm focus:outline-none focus:border-[#073125] font-serif"
+                className="w-full px-3.5 py-2.5 border border-slate-200 bg-[#FAF8F5] text-sm text-[#0F172A] focus:outline-none focus:border-[#C5A059] font-serif transition"
               />
             </div>
 
             {/* Live Hero Preview Box */}
-            <div className="bg-[#073125] text-white p-5 rounded-2xl border border-[#EAA722]/40 relative overflow-hidden">
-              <span className="text-[10px] uppercase font-cinzel font-bold tracking-widest text-[#EAA722] block mb-2">
+            <div className="bg-[#0B1118] text-white p-5 border border-[#C5A059]/40 relative overflow-hidden shadow-xs">
+              <span className="text-[10px] uppercase font-cinzel font-bold tracking-widest text-[#C5A059] block mb-2">
                 Live Hero Card Preview
               </span>
-              <p className="font-serif text-lg sm:text-xl text-[#EAA722] font-semibold">
+              <p className="font-serif text-lg sm:text-xl text-[#C5A059] font-semibold">
                 {landingHero.devotionalGreeting || 'जय श्री बाबा नीम करोली महाराज की'}
               </p>
-              <p className="text-xs text-[#FAF5EC]/80 font-cinzel mt-0.5">
+              <p className="text-xs text-slate-300 font-cinzel mt-0.5">
                 {landingHero.devotionalSubGreeting || 'Ram Ram • Jai Sri Hanuman'}
               </p>
-              <blockquote className="my-3 pl-3 border-l-2 border-[#EAA722] text-sm italic text-[#FAF5EC]/90 font-serif">
+              <blockquote className="my-3 pl-3 border-l-2 border-[#C5A059] text-sm italic text-slate-200 font-serif">
                 "{landingHero.teachingQuote || 'Love. Serve. Remember.'}"
-                <cite className="block text-[11px] not-italic text-[#EAA722] mt-1 font-sans">
+                <cite className="block text-[11px] not-italic text-[#D4AF37] mt-1 font-sans">
                   — {landingHero.quoteAttribution || 'Sri Neem Karoli Baba'}
                 </cite>
               </blockquote>
@@ -440,7 +441,7 @@ export const LandingCmsManager = () => {
               <button
                 type="submit"
                 disabled={isSaving}
-                className="px-6 py-2.5 rounded-full text-xs font-cinzel font-bold bg-[#073125] hover:bg-[#0C2B22] text-[#EAA722] border border-[#EAA722]/40 shadow-sm cursor-pointer disabled:opacity-50"
+                className="px-6 py-2.5 text-xs font-cinzel font-bold bg-[#0B1118] hover:bg-[#111827] text-white border border-[#C5A059]/40 shadow-xs cursor-pointer disabled:opacity-50 transition"
               >
                 {isSaving ? 'Publishing...' : 'Save Devotional Hero'}
               </button>
@@ -452,34 +453,34 @@ export const LandingCmsManager = () => {
       {/* Tab 2: Universal Announcement Ribbon */}
       {activeSubTab === 'announcement' && (
         <form onSubmit={handleSave} className="space-y-6">
-          <div className="bg-white p-6 rounded-2xl border border-[#EAA722]/30 shadow-xs space-y-5">
-            <div className="flex items-center justify-between">
+          <div className="bg-white p-4 sm:p-6 border border-[#C5A059]/30 shadow-xs space-y-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
-                <h4 className="font-serif text-lg font-bold text-[#073125]">
+                <h4 className="font-serif text-lg font-bold text-[#0F172A]">
                   Cross-Site Notice Ribbon
                 </h4>
-                <p className="text-xs text-[#5C5350] mt-0.5">
+                <p className="text-xs text-slate-500 mt-0.5">
                   Appears at the very top of all 3 websites (Landing, Hotel, and Travel) for road updates, weather, and seasonal yatras.
                 </p>
               </div>
 
-              <label className="flex items-center gap-2 cursor-pointer bg-[#FAF7F2] px-3.5 py-1.5 rounded-full border border-[#EAA722]/40">
+              <label className="flex items-center gap-2 cursor-pointer bg-[#FAF8F5] px-3.5 py-1.5 border border-[#C5A059]/40 self-start sm:self-center">
                 <input
                   type="checkbox"
                   checked={announcement.enabled}
                   onChange={(e) =>
                     setAnnouncement({ ...announcement, enabled: e.target.checked })
                   }
-                  className="w-4 h-4 text-[#073125] rounded focus:ring-0 cursor-pointer accent-[#073125]"
+                  className="w-4 h-4 text-[#0B1118] focus:ring-0 cursor-pointer accent-[#0B1118]"
                 />
-                <span className="text-xs font-cinzel font-bold text-[#073125]">
+                <span className="text-xs font-cinzel font-bold text-[#0F172A]">
                   {announcement.enabled ? 'Ribbon Active' : 'Ribbon Hidden'}
                 </span>
               </label>
             </div>
 
             <div>
-              <label className="block text-xs font-cinzel font-bold text-[#073125] mb-1">
+              <label className="block text-xs font-cinzel font-bold text-[#0F172A] mb-1">
                 Announcement Message
               </label>
               <textarea
@@ -489,13 +490,13 @@ export const LandingCmsManager = () => {
                   setAnnouncement({ ...announcement, message: e.target.value })
                 }
                 placeholder="॥ ॐ नमः शिवाय • जय श्री नीब करौरी महाराज ॥ Visiting Kainchi Dham or Kasar Devi?..."
-                className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAA722]/40 bg-[#FAF7F2] text-sm focus:outline-none focus:border-[#073125] font-serif"
+                className="w-full px-3.5 py-2.5 border border-slate-200 bg-[#FAF8F5] text-sm text-[#0F172A] focus:outline-none focus:border-[#C5A059] font-serif transition"
               />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-cinzel font-bold text-[#073125] mb-1">
+                <label className="block text-xs font-cinzel font-bold text-[#0F172A] mb-1">
                   Action Link Text (Optional)
                 </label>
                 <input
@@ -505,12 +506,12 @@ export const LandingCmsManager = () => {
                     setAnnouncement({ ...announcement, linkText: e.target.value })
                   }
                   placeholder="Yatra Booking ↗"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAA722]/40 bg-[#FAF7F2] text-sm focus:outline-none focus:border-[#073125]"
+                  className="w-full px-3.5 py-2.5 border border-slate-200 bg-[#FAF8F5] text-sm text-[#0F172A] focus:outline-none focus:border-[#C5A059] transition"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-cinzel font-bold text-[#073125] mb-1">
+                <label className="block text-xs font-cinzel font-bold text-[#0F172A] mb-1">
                   Action Link Target / URL
                 </label>
                 <input
@@ -520,27 +521,27 @@ export const LandingCmsManager = () => {
                     setAnnouncement({ ...announcement, linkHref: e.target.value })
                   }
                   placeholder="#enquiry or https://..."
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAA722]/40 bg-[#FAF7F2] text-sm focus:outline-none focus:border-[#073125]"
+                  className="w-full px-3.5 py-2.5 border border-slate-200 bg-[#FAF8F5] text-sm text-[#0F172A] focus:outline-none focus:border-[#C5A059] transition"
                 />
               </div>
             </div>
 
             {/* Live Ribbon Preview */}
-            <div className="p-4 rounded-xl bg-[#FAF5EC] border border-[#EAA722]/30">
-              <span className="text-[10px] font-cinzel font-bold uppercase tracking-wider text-[#073125] block mb-2">
+            <div className="p-4 bg-[#FAF8F5] border border-[#C5A059]/30">
+              <span className="text-[10px] font-cinzel font-bold uppercase tracking-wider text-[#C5A059] block mb-2">
                 Live Ribbon Bar Preview
               </span>
               {announcement.enabled ? (
-                <div className="bg-[#541508] text-white py-2 px-4 rounded-xl text-xs flex flex-wrap items-center justify-between gap-3 shadow-xs">
+                <div className="bg-[#0B1118] text-white py-2 px-4 border border-[#C5A059]/40 text-xs flex flex-wrap items-center justify-between gap-3 shadow-xs">
                   <span className="font-serif tracking-wide">{announcement.message}</span>
                   {announcement.linkText && (
-                    <span className="text-[10px] font-bold text-[#EAA722] underline underline-offset-2">
+                    <span className="text-[10px] font-bold text-[#D4AF37] underline underline-offset-2">
                       {announcement.linkText}
                     </span>
                   )}
                 </div>
               ) : (
-                <div className="py-2.5 px-4 rounded-xl text-xs bg-stone-200 text-stone-600 italic">
+                <div className="py-2.5 px-4 text-xs bg-slate-100 text-slate-500 italic border border-slate-200">
                   Ribbon is currently disabled. It will not render on guest websites.
                 </div>
               )}
@@ -550,7 +551,7 @@ export const LandingCmsManager = () => {
               <button
                 type="submit"
                 disabled={isSaving}
-                className="px-6 py-2.5 rounded-full text-xs font-cinzel font-bold bg-[#073125] hover:bg-[#0C2B22] text-[#EAA722] border border-[#EAA722]/40 shadow-sm cursor-pointer disabled:opacity-50"
+                className="px-6 py-2.5 text-xs font-cinzel font-bold bg-[#0B1118] hover:bg-[#111827] text-white border border-[#C5A059]/40 shadow-xs cursor-pointer disabled:opacity-50 transition"
               >
                 {isSaving ? 'Publishing...' : 'Save Notice Ribbon'}
               </button>
@@ -562,18 +563,18 @@ export const LandingCmsManager = () => {
       {/* Tab 3: 3-Day Pilgrimage Itinerary */}
       {activeSubTab === 'itinerary' && (
         <form onSubmit={handleSave} className="space-y-6">
-          <div className="bg-white p-6 rounded-2xl border border-[#EAA722]/30 shadow-xs space-y-6">
+          <div className="bg-white p-4 sm:p-6 border border-[#C5A059]/30 shadow-xs space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h4 className="font-serif text-lg font-bold text-[#073125]">
+                <h4 className="font-serif text-lg font-bold text-[#0F172A]">
                   Curated 3-Day Pilgrimage Itinerary
                 </h4>
-                <p className="text-xs text-[#5C5350] mt-0.5">
+                <p className="text-xs text-slate-500 mt-0.5">
                   Displays on the Landing page under the "3-Day Sacred Pilgrimage" section.
                 </p>
               </div>
 
-              <span className="text-xs font-mono font-bold text-[#073125] bg-[#FAF5EC] px-3 py-1 rounded-full border border-[#EAA722]/30">
+              <span className="text-xs font-mono font-bold text-[#0F172A] bg-[#FAF8F5] px-3 py-1 border border-[#C5A059]/30">
                 {itinerary.length} Days Configured
               </span>
             </div>
@@ -582,14 +583,14 @@ export const LandingCmsManager = () => {
               {itinerary.map((day, dIdx) => (
                 <div
                   key={dIdx}
-                  className="bg-[#FAF7F2] p-5 rounded-2xl border border-[#EAA722]/30 space-y-4"
+                  className="bg-[#FAF8F5] p-4 sm:p-5 border border-slate-200 space-y-4"
                 >
-                  <div className="flex items-center justify-between gap-3 border-b border-[#EAA722]/20 pb-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-3">
                     <div className="flex items-center gap-2">
-                      <span className="w-8 h-8 rounded-lg bg-[#073125] text-[#EAA722] font-serif font-bold text-sm flex items-center justify-center">
+                      <span className="w-8 h-8 bg-[#0B1118] text-[#C5A059] font-serif font-bold text-sm flex items-center justify-center border border-[#C5A059]/30">
                         {day.num || `0${dIdx + 1}`}
                       </span>
-                      <span className="font-serif text-base font-bold text-[#073125]">
+                      <span className="font-serif text-base font-bold text-[#0F172A]">
                         Day {dIdx + 1} Circuit
                       </span>
                     </div>
@@ -599,12 +600,12 @@ export const LandingCmsManager = () => {
                       value={day.tag}
                       onChange={(e) => handleUpdateDay(dIdx, 'tag', e.target.value)}
                       placeholder="e.g. Day 1 • Arrival & Kainchi Darshan"
-                      className="px-3 py-1 rounded-lg border border-[#EAA722]/40 bg-white text-xs font-serif text-[#073125] max-w-xs focus:outline-none"
+                      className="px-3 py-1 border border-slate-200 bg-white text-xs font-serif text-[#0F172A] max-w-xs focus:outline-none focus:border-[#C5A059]"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-cinzel font-bold text-[#073125] mb-1">
+                    <label className="block text-[11px] font-cinzel font-bold text-[#0F172A] mb-1">
                       Day Title & Main Journey
                     </label>
                     <input
@@ -612,19 +613,19 @@ export const LandingCmsManager = () => {
                       value={day.title}
                       onChange={(e) => handleUpdateDay(dIdx, 'title', e.target.value)}
                       placeholder="Kathgodam to Kainchi Dham & Kasar Ridge"
-                      className="w-full px-3.5 py-2 rounded-xl border border-[#EAA722]/40 bg-white text-sm font-serif text-[#2C2523] focus:outline-none"
+                      className="w-full px-3.5 py-2 border border-slate-200 bg-white text-sm font-serif text-[#0F172A] focus:outline-none focus:border-[#C5A059]"
                     />
                   </div>
 
                   <div>
                     <div className="flex items-center justify-between mb-1.5">
-                      <label className="block text-[11px] font-cinzel font-bold text-[#073125]">
+                      <label className="block text-[11px] font-cinzel font-bold text-[#0F172A]">
                         Key Highlights & Stops
                       </label>
                       <button
                         type="button"
                         onClick={() => handleAddDayItem(dIdx)}
-                        className="text-[11px] font-cinzel font-bold text-[#073125] hover:text-amber-700 cursor-pointer"
+                        className="text-[11px] font-cinzel font-bold text-[#C5A059] hover:text-[#0B1118] cursor-pointer"
                       >
                         + Add Bullet Point
                       </button>
@@ -633,17 +634,17 @@ export const LandingCmsManager = () => {
                     <div className="space-y-2">
                       {day.items?.map((item, iIdx) => (
                         <div key={iIdx} className="flex items-center gap-2">
-                          <span className="text-[#EAA722] font-bold text-xs">•</span>
+                          <span className="text-[#C5A059] font-bold text-xs">•</span>
                           <input
                             type="text"
                             value={item}
                             onChange={(e) => handleUpdateDayItem(dIdx, iIdx, e.target.value)}
-                            className="flex-1 px-3 py-1.5 rounded-lg border border-[#EAA722]/30 bg-white text-xs text-[#2C2523] focus:outline-none"
+                            className="flex-1 px-3 py-1.5 border border-slate-200 bg-white text-xs text-[#0F172A] focus:outline-none focus:border-[#C5A059]"
                           />
                           <button
                             type="button"
                             onClick={() => handleRemoveDayItem(dIdx, iIdx)}
-                            className="text-stone-400 hover:text-red-600 text-xs px-2 py-1 cursor-pointer"
+                            className="text-slate-400 hover:text-rose-600 text-xs px-2 py-1 cursor-pointer border border-transparent hover:border-slate-200"
                             title="Remove bullet point"
                           >
                             ✕
@@ -654,7 +655,7 @@ export const LandingCmsManager = () => {
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-cinzel font-bold text-[#073125] mb-1">
+                    <label className="block text-[11px] font-cinzel font-bold text-[#0F172A] mb-1">
                       Footer Distance / Journey Note
                     </label>
                     <input
@@ -662,7 +663,7 @@ export const LandingCmsManager = () => {
                       value={day.note}
                       onChange={(e) => handleUpdateDay(dIdx, 'note', e.target.value)}
                       placeholder="e.g. 85 km • ~3 hrs scenic mountain drive"
-                      className="w-full px-3.5 py-1.5 rounded-xl border border-[#EAA722]/30 bg-white text-xs text-[#5C5350] focus:outline-none"
+                      className="w-full px-3.5 py-1.5 border border-slate-200 bg-white text-xs text-slate-600 focus:outline-none focus:border-[#C5A059]"
                     />
                   </div>
                 </div>
@@ -673,7 +674,7 @@ export const LandingCmsManager = () => {
               <button
                 type="submit"
                 disabled={isSaving}
-                className="px-6 py-2.5 rounded-full text-xs font-cinzel font-bold bg-[#073125] hover:bg-[#0C2B22] text-[#EAA722] border border-[#EAA722]/40 shadow-sm cursor-pointer disabled:opacity-50"
+                className="px-6 py-2.5 text-xs font-cinzel font-bold bg-[#0B1118] hover:bg-[#111827] text-white border border-[#C5A059]/40 shadow-xs cursor-pointer disabled:opacity-50 transition"
               >
                 {isSaving ? 'Publishing...' : 'Save 3-Day Itinerary'}
               </button>
@@ -685,12 +686,12 @@ export const LandingCmsManager = () => {
       {/* Tab 4: Authentic Visitor FAQs */}
       {activeSubTab === 'faqs' && (
         <form onSubmit={handleSave} className="space-y-6">
-          <div className="bg-white p-6 rounded-2xl border border-[#EAA722]/30 shadow-xs space-y-6">
+          <div className="bg-white p-4 sm:p-6 border border-[#C5A059]/30 shadow-xs space-y-6">
             <div>
-              <h4 className="font-serif text-lg font-bold text-[#073125]">
+              <h4 className="font-serif text-lg font-bold text-[#0F172A]">
                 Landing Page Frequently Asked Questions
               </h4>
-              <p className="text-xs text-[#5C5350] mt-0.5">
+              <p className="text-xs text-slate-500 mt-0.5">
                 Manage visitor guidance on Kainchi Dham, winter heating, satvik meals, and train transfers.
               </p>
             </div>
@@ -700,10 +701,10 @@ export const LandingCmsManager = () => {
               {faqs.map((faq, idx) => (
                 <div
                   key={idx}
-                  className="bg-[#FAF7F2] p-4 sm:p-5 rounded-2xl border border-[#EAA722]/30 space-y-3 relative group"
+                  className="bg-[#FAF8F5] p-4 sm:p-5 border border-slate-200 space-y-3 relative group"
                 >
                   <div className="flex items-start justify-between gap-3">
-                    <span className="w-6 h-6 rounded-full bg-[#073125] text-[#EAA722] text-xs font-bold flex items-center justify-center shrink-0">
+                    <span className="w-6 h-6 bg-[#0B1118] text-[#C5A059] text-xs font-bold flex items-center justify-center shrink-0 border border-[#C5A059]/30">
                       {idx + 1}
                     </span>
 
@@ -712,13 +713,13 @@ export const LandingCmsManager = () => {
                       value={faq.q}
                       onChange={(e) => handleUpdateFaq(idx, 'q', e.target.value)}
                       placeholder="Question..."
-                      className="flex-1 px-3 py-1.5 rounded-xl border border-[#EAA722]/40 bg-white text-sm font-serif font-bold text-[#073125] focus:outline-none"
+                      className="flex-1 px-3 py-1.5 border border-slate-200 bg-white text-sm font-serif font-bold text-[#0F172A] focus:outline-none focus:border-[#C5A059]"
                     />
 
                     <button
                       type="button"
                       onClick={() => handleRemoveFaq(idx)}
-                      className="text-stone-400 hover:text-red-600 text-xs px-2.5 py-1 rounded bg-white border border-stone-200 cursor-pointer shadow-2xs"
+                      className="text-slate-500 hover:text-rose-700 text-xs px-2.5 py-1 bg-white border border-slate-200 hover:border-rose-300 cursor-pointer shadow-2xs"
                       title="Delete FAQ"
                     >
                       Delete
@@ -730,15 +731,15 @@ export const LandingCmsManager = () => {
                     value={faq.a}
                     onChange={(e) => handleUpdateFaq(idx, 'a', e.target.value)}
                     placeholder="Helpful answer for pilgrims and guests..."
-                    className="w-full px-3.5 py-2 rounded-xl border border-[#EAA722]/30 bg-white text-xs sm:text-sm text-[#2C2523] leading-relaxed focus:outline-none font-serif"
+                    className="w-full px-3.5 py-2 border border-slate-200 bg-white text-xs sm:text-sm text-[#0F172A] leading-relaxed focus:outline-none focus:border-[#C5A059] font-serif"
                   />
                 </div>
               ))}
             </div>
 
             {/* Add New FAQ Card */}
-            <div className="p-4 sm:p-5 rounded-2xl bg-[#FAF5EC] border border-dashed border-[#EAA722]/50 space-y-3">
-              <span className="text-xs font-cinzel font-bold text-[#073125] block">
+            <div className="p-4 sm:p-5 bg-white border border-dashed border-[#C5A059]/50 space-y-3">
+              <span className="text-xs font-cinzel font-bold text-[#0F172A] block">
                 + Add New Visitor FAQ
               </span>
 
@@ -747,7 +748,7 @@ export const LandingCmsManager = () => {
                 value={newFaq.q}
                 onChange={(e) => setNewFaq({ ...newFaq, q: e.target.value })}
                 placeholder="Question (e.g. Is hot water available 24 hours in all suites?)"
-                className="w-full px-3.5 py-2 rounded-xl border border-[#EAA722]/40 bg-white text-sm font-serif text-[#073125] focus:outline-none"
+                className="w-full px-3.5 py-2 border border-slate-200 bg-[#FAF8F5] text-sm font-serif text-[#0F172A] focus:outline-none focus:border-[#C5A059]"
               />
 
               <textarea
@@ -755,7 +756,7 @@ export const LandingCmsManager = () => {
                 value={newFaq.a}
                 onChange={(e) => setNewFaq({ ...newFaq, a: e.target.value })}
                 placeholder="Detailed guidance answer..."
-                className="w-full px-3.5 py-2 rounded-xl border border-[#EAA722]/40 bg-white text-xs sm:text-sm text-[#2C2523] focus:outline-none font-serif"
+                className="w-full px-3.5 py-2 border border-slate-200 bg-[#FAF8F5] text-xs sm:text-sm text-[#0F172A] focus:outline-none focus:border-[#C5A059] font-serif"
               />
 
               <div className="flex justify-end">
@@ -763,7 +764,7 @@ export const LandingCmsManager = () => {
                   type="button"
                   onClick={handleAddFaq}
                   disabled={!newFaq.q.trim() || !newFaq.a.trim()}
-                  className="px-4 py-1.5 rounded-full text-xs font-cinzel font-bold bg-[#073125] hover:bg-[#0C2B22] text-[#EAA722] border border-[#EAA722]/40 shadow-2xs cursor-pointer disabled:opacity-40"
+                  className="px-4 py-1.5 text-xs font-cinzel font-bold bg-[#0B1118] hover:bg-[#111827] text-[#C5A059] border border-[#C5A059]/40 shadow-2xs cursor-pointer disabled:opacity-40 transition"
                 >
                   Add FAQ to List
                 </button>
@@ -774,7 +775,7 @@ export const LandingCmsManager = () => {
               <button
                 type="submit"
                 disabled={isSaving}
-                className="px-6 py-2.5 rounded-full text-xs font-cinzel font-bold bg-[#073125] hover:bg-[#0C2B22] text-[#EAA722] border border-[#EAA722]/40 shadow-sm cursor-pointer disabled:opacity-50"
+                className="px-6 py-2.5 text-xs font-cinzel font-bold bg-[#0B1118] hover:bg-[#111827] text-white border border-[#C5A059]/40 shadow-xs cursor-pointer disabled:opacity-50 transition"
               >
                 {isSaving ? 'Publishing...' : 'Save FAQs'}
               </button>

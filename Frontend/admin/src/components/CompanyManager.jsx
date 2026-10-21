@@ -4,7 +4,8 @@ import { useToast } from './Toast';
 
 export const CompanyManager = () => {
   const { settings, refreshSettings } = useSiteSettings();
-  const { showToast } = useToast();
+  const toastContext = useToast();
+  const addToast = toastContext.addToast || toastContext.showToast;
 
   const [formData, setFormData] = useState({
     brandName: '',
@@ -57,12 +58,12 @@ export const CompanyManager = () => {
     try {
       const res = await apiClient.patch('/settings/company', formData);
       if (res.data?.success) {
-        showToast('Company profile & contact details updated across all sites!', 'success');
+        addToast('Company profile & contact details updated across all sites!', 'success');
         await refreshSettings();
       }
     } catch (err) {
       console.error('Error saving company profile:', err);
-      showToast(err.response?.data?.message || 'Failed to update company details', 'error');
+      addToast(err.response?.data?.message || 'Failed to update company details', 'error');
     } finally {
       setIsSaving(false);
     }
@@ -70,16 +71,16 @@ export const CompanyManager = () => {
 
   return (
     <div className="space-y-6">
-      <div className="bg-[#FAF5EC] p-5 sm:p-6 rounded-2xl border border-[#EAA722]/30 shadow-xs">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 mb-6 border-b border-[#EAA722]/20">
+      <div className="bg-white p-4 sm:p-6 border border-[#C5A059]/30 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 mb-5 border-b border-slate-200">
           <div>
-            <span className="text-[10px] uppercase tracking-[0.2em] text-[#073125] font-cinzel font-bold block">
+            <span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A059] font-cinzel font-bold block">
               Universal Platform Identity
             </span>
-            <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#073125]">
-              Company & Contact Profile
+            <h3 className="font-serif text-lg sm:text-2xl font-bold text-[#0F172A]">
+              Company &amp; Contact Profile
             </h3>
-            <p className="text-xs text-[#5C5350] mt-1">
+            <p className="text-xs text-slate-500 mt-1">
               Changes made here update instantly across all 3 customer websites (Landing, Hotel, Travel) and booking vouchers.
             </p>
           </div>
@@ -88,16 +89,16 @@ export const CompanyManager = () => {
             type="submit"
             form="company-form"
             disabled={isSaving}
-            className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-[#073125] hover:bg-[#0C2B22] text-[#EAA722] border border-[#EAA722]/40 text-xs font-cinzel font-bold uppercase tracking-wider rounded-xl transition cursor-pointer disabled:opacity-50 shadow-sm"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-[#C5A059] hover:bg-[#D4AF37] text-[#0B1118] border border-[#D4AF37] text-xs font-cinzel font-bold uppercase tracking-wider transition cursor-pointer disabled:opacity-50 shadow-sm whitespace-nowrap"
           >
             {isSaving ? (
               <>
-                <span className="w-3.5 h-3.5 border-2 border-[#EAA722] border-t-transparent rounded-full animate-spin" />
+                <span className="w-3.5 h-3.5 border-2 border-[#0B1118]/30 border-t-[#0B1118] rounded-full animate-spin" />
                 <span>Saving Changes...</span>
               </>
             ) : (
               <>
-                <svg className="w-4 h-4 text-[#EAA722]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-4 h-4 text-[#0B1118]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
                 <span>Save Profile</span>
@@ -106,15 +107,15 @@ export const CompanyManager = () => {
           </button>
         </div>
 
-        <form id="company-form" onSubmit={handleSave} className="space-y-6">
+        <form id="company-form" onSubmit={handleSave} className="space-y-6 font-sans">
           {/* Brand Names Group */}
           <div>
-            <h4 className="text-xs font-cinzel uppercase tracking-wider text-[#073125] font-bold mb-3">
-              1. Brand Titles & Tagline
+            <h4 className="text-xs font-cinzel uppercase tracking-wider text-[#0B1118] font-bold mb-3">
+              1. Brand Titles &amp; Tagline
             </h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
               <div>
-                <label className="block text-xs font-medium text-[#2C2523] mb-1">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Master Umbrella Brand
                 </label>
                 <input
@@ -123,12 +124,12 @@ export const CompanyManager = () => {
                   value={formData.brandName}
                   onChange={handleChange}
                   required
-                  className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-[#C5A059]/40 text-[#2C2523] focus:outline-hidden focus:border-[#7C1D23]"
+                  className="w-full px-3.5 py-2 text-xs bg-[#FAF8F5] border border-slate-300 text-[#0F172A] focus:outline-none focus:border-[#C5A059] focus:bg-white"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-[#2C2523] mb-1">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Hotel Resort Brand
                 </label>
                 <input
@@ -137,13 +138,13 @@ export const CompanyManager = () => {
                   value={formData.hotelName}
                   onChange={handleChange}
                   required
-                  className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-[#C5A059]/40 text-[#2C2523] focus:outline-hidden focus:border-[#7C1D23]"
+                  className="w-full px-3.5 py-2 text-xs bg-[#FAF8F5] border border-slate-300 text-[#0F172A] focus:outline-none focus:border-[#C5A059] focus:bg-white"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-[#2C2523] mb-1">
-                  Travel & Fleet Brand
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Travel &amp; Fleet Brand
                 </label>
                 <input
                   type="text"
@@ -151,25 +152,25 @@ export const CompanyManager = () => {
                   value={formData.travelName}
                   onChange={handleChange}
                   required
-                  className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-[#C5A059]/40 text-[#2C2523] focus:outline-hidden focus:border-[#7C1D23]"
+                  className="w-full px-3.5 py-2 text-xs bg-[#FAF8F5] border border-slate-300 text-[#0F172A] focus:outline-none focus:border-[#C5A059] focus:bg-white"
                 />
               </div>
 
               <div className="sm:col-span-2">
-                <label className="block text-xs font-medium text-[#2C2523] mb-1">
-                  Tagline (Displayed in headers & footers)
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Tagline (Displayed in headers &amp; footers)
                 </label>
                 <input
                   type="text"
                   name="tagline"
                   value={formData.tagline}
                   onChange={handleChange}
-                  className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-[#C5A059]/40 text-[#2C2523] focus:outline-hidden focus:border-[#7C1D23]"
+                  className="w-full px-3.5 py-2 text-xs bg-[#FAF8F5] border border-slate-300 text-[#0F172A] focus:outline-none focus:border-[#C5A059] focus:bg-white"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-[#2C2523] mb-1">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Resort Altitude / Elevation
                 </label>
                 <input
@@ -178,20 +179,20 @@ export const CompanyManager = () => {
                   value={formData.elevation}
                   onChange={handleChange}
                   placeholder="e.g. 6,942 ft"
-                  className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-[#C5A059]/40 text-[#2C2523] focus:outline-hidden focus:border-[#7C1D23]"
+                  className="w-full px-3.5 py-2 text-xs bg-[#FAF8F5] border border-slate-300 text-[#0F172A] focus:outline-none focus:border-[#C5A059] focus:bg-white"
                 />
               </div>
             </div>
           </div>
 
           {/* Contact Numbers Group */}
-          <div className="pt-4 border-t border-[#EAA722]/20">
-            <h4 className="text-xs font-cinzel uppercase tracking-wider text-[#073125] font-bold mb-3">
-              2. Front Desk Telephony & WhatsApp
+          <div className="pt-4 border-t border-slate-200">
+            <h4 className="text-xs font-cinzel uppercase tracking-wider text-[#0B1118] font-bold mb-3">
+              2. Front Desk Telephony &amp; WhatsApp
             </h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
               <div>
-                <label className="block text-xs font-medium text-[#2C2523] mb-1">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Concierge Phone Number (Caller Link)
                 </label>
                 <input
@@ -201,13 +202,13 @@ export const CompanyManager = () => {
                   onChange={handleChange}
                   required
                   placeholder="+91 96906 21247"
-                  className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-[#EAA722]/40 text-[#2C2523] font-mono focus:outline-hidden focus:border-[#073125]"
+                  className="w-full px-3.5 py-2 text-xs bg-[#FAF8F5] border border-slate-300 text-[#0F172A] font-mono focus:outline-none focus:border-[#C5A059] focus:bg-white"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-[#2C2523] mb-1">
-                  WhatsApp Number (Numbers only, e.g. 919690621247)
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  WhatsApp Number (e.g. 919690621247)
                 </label>
                 <input
                   type="text"
@@ -215,12 +216,12 @@ export const CompanyManager = () => {
                   value={formData.whatsappNumber}
                   onChange={handleChange}
                   required
-                  className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-[#EAA722]/40 text-[#2C2523] font-mono focus:outline-hidden focus:border-[#073125]"
+                  className="w-full px-3.5 py-2 text-xs bg-[#FAF8F5] border border-slate-300 text-[#0F172A] font-mono focus:outline-none focus:border-[#C5A059] focus:bg-white"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-[#2C2523] mb-1">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
                   WhatsApp Display Text
                 </label>
                 <input
@@ -229,12 +230,12 @@ export const CompanyManager = () => {
                   value={formData.whatsappDisplay}
                   onChange={handleChange}
                   placeholder="+91 96906 21247"
-                  className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-[#EAA722]/40 text-[#2C2523] font-mono focus:outline-hidden focus:border-[#073125]"
+                  className="w-full px-3.5 py-2 text-xs bg-[#FAF8F5] border border-slate-300 text-[#0F172A] font-mono focus:outline-none focus:border-[#C5A059] focus:bg-white"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-[#2C2523] mb-1">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Official Email Address
                 </label>
                 <input
@@ -243,12 +244,12 @@ export const CompanyManager = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-[#EAA722]/40 text-[#2C2523] focus:outline-hidden focus:border-[#073125]"
+                  className="w-full px-3.5 py-2 text-xs bg-[#FAF8F5] border border-slate-300 text-[#0F172A] focus:outline-none focus:border-[#C5A059] focus:bg-white"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-[#2C2523] mb-1">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
                   UPI ID for Advance Bookings
                 </label>
                 <input
@@ -257,20 +258,20 @@ export const CompanyManager = () => {
                   value={formData.upiId}
                   onChange={handleChange}
                   placeholder="e.g. kasarhimalayan@upi"
-                  className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-[#EAA722]/40 text-[#2C2523] font-mono focus:outline-hidden focus:border-[#073125]"
+                  className="w-full px-3.5 py-2 text-xs bg-[#FAF8F5] border border-slate-300 text-[#0F172A] font-mono focus:outline-none focus:border-[#C5A059] focus:bg-white"
                 />
               </div>
             </div>
           </div>
 
           {/* Physical Location Group */}
-          <div className="pt-4 border-t border-[#EAA722]/20">
-            <h4 className="text-xs font-cinzel uppercase tracking-wider text-[#073125] font-bold mb-3">
-              3. Addresses & Social Media
+          <div className="pt-4 border-t border-slate-200">
+            <h4 className="text-xs font-cinzel uppercase tracking-wider text-[#0B1118] font-bold mb-3">
+              3. Addresses &amp; Social Media
             </h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
               <div>
-                <label className="block text-xs font-medium text-[#2C2523] mb-1">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Hotel Resort Physical Address
                 </label>
                 <input
@@ -278,12 +279,12 @@ export const CompanyManager = () => {
                   name="hotelAddress"
                   value={formData.hotelAddress}
                   onChange={handleChange}
-                  className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-[#C5A059]/40 text-[#2C2523] focus:outline-hidden focus:border-[#7C1D23]"
+                  className="w-full px-3.5 py-2 text-xs bg-[#FAF8F5] border border-slate-300 text-[#0F172A] focus:outline-none focus:border-[#C5A059] focus:bg-white"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-[#2C2523] mb-1">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Travel Base Hub Address
                 </label>
                 <input
@@ -291,12 +292,12 @@ export const CompanyManager = () => {
                   name="travelHubAddress"
                   value={formData.travelHubAddress}
                   onChange={handleChange}
-                  className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-[#C5A059]/40 text-[#2C2523] focus:outline-hidden focus:border-[#7C1D23]"
+                  className="w-full px-3.5 py-2 text-xs bg-[#FAF8F5] border border-slate-300 text-[#0F172A] focus:outline-none focus:border-[#C5A059] focus:bg-white"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-[#2C2523] mb-1">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Instagram Profile Link
                 </label>
                 <input
@@ -304,12 +305,12 @@ export const CompanyManager = () => {
                   name="instagramUrl"
                   value={formData.instagramUrl}
                   onChange={handleChange}
-                  className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-[#C5A059]/40 text-[#2C2523] focus:outline-hidden focus:border-[#7C1D23]"
+                  className="w-full px-3.5 py-2 text-xs bg-[#FAF8F5] border border-slate-300 text-[#0F172A] focus:outline-none focus:border-[#C5A059] focus:bg-white"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-[#2C2523] mb-1">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Facebook Page Link
                 </label>
                 <input
@@ -317,7 +318,7 @@ export const CompanyManager = () => {
                   name="facebookUrl"
                   value={formData.facebookUrl}
                   onChange={handleChange}
-                  className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-[#C5A059]/40 text-[#2C2523] focus:outline-hidden focus:border-[#7C1D23]"
+                  className="w-full px-3.5 py-2 text-xs bg-[#FAF8F5] border border-slate-300 text-[#0F172A] focus:outline-none focus:border-[#C5A059] focus:bg-white"
                 />
               </div>
             </div>

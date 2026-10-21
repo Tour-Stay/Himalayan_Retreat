@@ -1,14 +1,14 @@
 import { useState, useEffect, useContext, lazy, Suspense } from 'react';
-import { useNavigate, useLocation, useParams } from 'react-router-dom';
-import { AuthContext, Loader } from '@shared';
-import useAdminData from '../hooks/useAdminData';
-import AdminHeader from '../components/AdminHeader';
-import AdminSidebar from '../components/AdminSidebar';
-import KpiCards from '../components/KpiCards';
-import QuickBookingModal from '../components/QuickBookingModal';
-import { ADMIN_ROUTES, ADMIN_TAB_TITLES, resolveTabFromLocation } from '../constants/adminRoutes';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { AuthContext } from '@shared';
+import { useAdminData } from '../hooks/useAdminData';
+import { AdminHeader } from '../components/AdminHeader';
+import { AdminSidebar } from '../components/AdminSidebar';
+import { KpiCards } from '../components/KpiCards';
+import { QuickBookingModal } from '../components/QuickBookingModal';
+import { ADMIN_ROUTES, ADMIN_TAB_TITLES } from '../constants/adminRoutes';
 
-// Lazy-loaded tab panels — only downloaded when the admin navigates to that tab
+// Lazy-loaded management panels for instant code-splitting
 const RoomManager = lazy(() => import('../components/RoomManager'));
 const HotelBookingManager = lazy(() => import('../components/HotelBookingManager'));
 const TravelBookingManager = lazy(() => import('../components/TravelBookingManager'));
@@ -23,21 +23,28 @@ const LandingCmsManager = lazy(() => import('../components/LandingCmsManager'));
 const PolicyManager = lazy(() => import('../components/PolicyManager'));
 const YieldManager = lazy(() => import('../components/YieldManager'));
 
-const AdminDashboard = ({ tab }) => {
+const Loader = () => (
+  <div className="flex items-center justify-center p-8">
+    <div className="w-8 h-8 rounded-full border-2 border-[#0F172A]/30 border-t-[#0F172A] animate-spin" />
+  </div>
+);
+
+export const AdminDashboard = () => {
   const { isAdminLoggedIn } = useContext(AuthContext);
-  const navigate = useNavigate();
   const location = useLocation();
-  const { tabId } = useParams();
+  const navigate = useNavigate();
 
-  // Multi-Site Active Scope Filter ('all' | 'landing' | 'hotel' | 'travel')
-  const [siteScope, setSiteScope] = useState('all');
+  // Find active tab from current route path
+  const currentPath = location.pathname;
+  const activeTabEntry = Object.entries(ADMIN_ROUTES).find(
+    ([, route]) => route === currentPath
+  );
+  const activeTab = activeTabEntry ? activeTabEntry[0] : 'hotel-bookings';
 
-  // Resolve current active tab from prop, param, or URL location
-  const activeTab =
-    tab ||
-    (tabId ? resolveTabFromLocation(tabId) : resolveTabFromLocation(location.pathname, location.search));
-
+  const [siteScope, setSiteScope] = useState('all'); // 'all' | 'hotel' | 'travel'
   const [isQuickBookingOpen, setIsQuickBookingOpen] = useState(false);
+  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
+  const [isDesktopSidebarCollapsed, setIsDesktopSidebarCollapsed] = useState(false);
 
   const handleSelectTab = (newTabId) => {
     const target = ADMIN_ROUTES[newTabId] || `/${newTabId}`;
@@ -69,46 +76,48 @@ const AdminDashboard = ({ tab }) => {
     refreshData,
   } = useAdminData();
 
-  // Redirect if unauthorized
-  useEffect(() => {
-    if (!isAdminLoggedIn) {
-      navigate('/', { state: { from: location } });
-    }
-  }, [isAdminLoggedIn, navigate, location]);
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-[#FAF7F2] text-[#2C2523] flex flex-col font-sans selection:bg-[#EAA722]/30 selection:text-[#073125]">
-      {/* Strict Fixed Header */}
+    <div className="h-screen w-screen overflow-hidden bg-[#97D7FF] text-[#0F172A] flex flex-col font-sans selection:bg-[#0F172A]/20 selection:text-[#0F172A]">
+      {/* Top Navbar (#ACC5A6) */}
       <AdminHeader
         onRefresh={refreshData}
         isRefreshing={loading}
         onNewBooking={() => setIsQuickBookingOpen(true)}
         siteScope={siteScope}
         onSelectScope={setSiteScope}
+        onOpenMobileDrawer={() => setIsMobileDrawerOpen(true)}
+        isDesktopSidebarCollapsed={isDesktopSidebarCollapsed}
+        onToggleDesktopSidebar={() => setIsDesktopSidebarCollapsed((prev) => !prev)}
       />
 
-      {/* Strict Workspace: Fixed Sidebar + Scrollable Content Area */}
+      {/* Strict Workspace: Fixed Sidebar (#AEAC78) + Scrollable Content Area (#97D7FF) */}
       <div className="flex-1 w-full overflow-hidden flex flex-col lg:flex-row min-h-0">
-        {/* Strict Sticky Sidebar (No left gap) */}
+        {/* Desktop Sidebar & Mobile Bottom Navigation Bar / Management Drawer */}
         <AdminSidebar
           activeTab={activeTab}
           onSelectTab={handleSelectTab}
           stats={stats}
           siteScope={siteScope}
+          isMobileDrawerOpen={isMobileDrawerOpen}
+          onCloseMobileDrawer={() => setIsMobileDrawerOpen(false)}
+          onOpenMobileDrawer={() => setIsMobileDrawerOpen(true)}
+          isDesktopSidebarCollapsed={isDesktopSidebarCollapsed}
+          onToggleDesktopSidebar={() => setIsDesktopSidebarCollapsed((prev) => !prev)}
         />
 
-        {/* Scrollable Middle Content Page ONLY */}
-        <main className="flex-1 h-full overflow-y-auto overflow-x-hidden p-4 sm:p-6 lg:p-8 min-w-0 bg-[#FAF7F2] admin-table-container">
+        {/* Scrollable Middle Content Page ONLY (#97D7FF Background) */}
+        <main className="flex-1 h-full overflow-y-auto overflow-x-hidden p-3.5 sm:p-6 lg:p-8 min-w-0 bg-[#97D7FF] admin-table-container pb-24 lg:pb-8">
           {/* Top KPI Metrics Strip */}
           <KpiCards stats={stats} onSelectTab={handleSelectTab} />
 
-          {/* Tab Header Banner */}
-          <div className="flex items-center justify-between gap-4 mb-5 pb-3 border-b border-[#EAA722]/30">
+          {/* Tab Header Banner (Clean White Architectural Card on #97D7FF) */}
+          <div className="bg-white p-4 sm:p-5 border border-slate-300 shadow-sm mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <span className="text-[10px] uppercase tracking-[0.2em] text-[#073125] font-cinzel font-bold block mb-0.5">
-                The Kasar Himalayan Heights • Management Desk
+              <span className="text-[10px] uppercase tracking-[0.2em] text-[#242A10] font-cinzel font-bold inline-block px-2 py-0.5 bg-[#AEAC78]/25 border border-[#AEAC78]/50 mb-1">
+                The Kasar Himalayan Heights • Operations Desk
               </span>
-              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#073125] tracking-tight">
+              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#0F172A] tracking-tight">
                 {activeTab === 'hotel-bookings' && 'Hotel Room Reservations'}
                 {activeTab === 'rooms' && 'Rooms & Nightly Rates'}
                 {activeTab === 'yield' && 'Weekend & Seasonal Rates'}
@@ -123,7 +132,7 @@ const AdminDashboard = ({ tab }) => {
                 {activeTab === 'policies' && 'Hotel Rules, Timings & FAQs'}
                 {activeTab === 'reviews' && 'Guest Testimonials & Reviews'}
               </h2>
-              <p className="text-xs text-[#5C5350] mt-1">
+              <p className="text-xs text-slate-600 mt-1 max-w-3xl leading-relaxed">
                 {activeTab === 'hotel-bookings' && 'View new guest room bookings, confirm reservations, message guests on WhatsApp, and print bills.'}
                 {activeTab === 'rooms' && 'Change room prices, update photos or details, and turn rooms ON or OFF when booked.'}
                 {activeTab === 'yield' && 'Set extra charges for busy weekends (Friday & Saturday) or winter peak holiday dates.'}
@@ -141,8 +150,8 @@ const AdminDashboard = ({ tab }) => {
             </div>
 
             {loading && (
-              <div className="flex items-center gap-2 text-xs text-[#073125] font-cinzel font-bold animate-pulse">
-                <span className="w-2 h-2 rounded-full bg-[#EAA722]" />
+              <div className="flex items-center gap-2 text-xs text-[#0F172A] font-cinzel font-bold animate-pulse self-start sm:self-center bg-slate-100 px-3 py-1.5 border border-slate-300 shrink-0 shadow-2xs">
+                <span className="w-2 h-2 rounded-full bg-emerald-600" />
                 <span>Syncing Database...</span>
               </div>
             )}
@@ -150,18 +159,18 @@ const AdminDashboard = ({ tab }) => {
 
           {/* Active Tab Component */}
           {loading && rooms.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-24 text-[#5C5350]">
+            <div className="flex flex-col items-center justify-center py-24 text-slate-700 bg-white/70 border border-sky-300/60 p-8 shadow-xs">
               <Loader />
-              <p className="mt-4 text-xs font-cinzel uppercase tracking-wider text-[#C5A059] font-semibold">
+              <p className="mt-4 text-xs font-cinzel uppercase tracking-wider text-[#0F172A] font-semibold">
                 Connecting to MongoDB Atlas...
               </p>
             </div>
           ) : (
             <Suspense
               fallback={
-                <div className="flex flex-col items-center justify-center py-16 text-[#5C5350]">
+                <div className="flex flex-col items-center justify-center py-16 text-slate-700 bg-white/70 border border-sky-300/60 p-8 shadow-xs">
                   <Loader />
-                  <p className="mt-3 text-xs font-cinzel uppercase tracking-wider text-[#C5A059] font-semibold">
+                  <p className="mt-3 text-xs font-cinzel uppercase tracking-wider text-[#0F172A] font-semibold">
                     Loading Module...
                   </p>
                 </div>
