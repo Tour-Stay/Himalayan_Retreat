@@ -9,56 +9,68 @@
    ================================================================ */
 
 :root {
+  /* Kumaon Collective Theme Palette (kumaoncollective.com) */
+  --brand-teal: #073125;
+  --brand-deep: #052219;
+  --brand-soft: #DCE9E4;
+  --saffron: #C9F24D;
+  --saffron-hover: #BDE63D;
+  --accent-gold: #EAA722;
+  --red: #541508;
+  --paper: #F8FAF7;
+  --cream: #F4F7F3;
+  --mist: #EDF2EC;
+  --ink: #073125;
+  --muted: #4A635A;
+  --line: #D5E0D8;
+  --white: #FFFFFF;
+  --serif: 'Marcellus', Georgia, serif;
+  --sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --shadow: 0 24px 70px rgba(7, 49, 37, 0.12);
+
+  /* Legacy aliases for backwards compatibility with existing components */
   --color-pine-dark: #073125;
-  --color-pine-deep: #0B2B21;
-  --color-pine-mid: #12433B;
+  --color-pine-deep: #052219;
+  --color-pine-mid: #0B2B21;
   --color-pine-light: #2D604E;
   --color-sage-accent: #C9F24D;
   --color-sage-bg: #F4F7F3;
   --color-sage-card: #FAFBF9;
   --color-bg-base: #F8FAF7;
-  --color-gold-warm: #C5A059;
+  --color-gold-warm: #C9F24D;
 }
 
-/* Base HTML & Body — Increased font sizes for enhanced readability across the whole page */
+/* Base HTML & Body */
 html {
-  font-size: 17px;
+  font-size: 16px;
   scroll-behavior: smooth;
   scroll-padding-top: 85px;
 }
 
 @media (min-width: 768px) {
   html {
-    font-size: 17.5px;
+    font-size: 16.5px;
   }
 }
 
 body {
-  font-family: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-variant-numeric: lining-nums proportional-nums;
-  -webkit-font-feature-settings: "lnum" 1, "pnum" 1;
-  font-feature-settings: "lnum" 1, "pnum" 1;
-  color: #073125;
-  background-color: #F8FAF7;
+  font-family: var(--sans);
+  color: var(--ink);
+  background-color: var(--paper);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  line-height: 1.6;
+  line-height: 1.65;
 }
 
-/* Clean simple ampersand font fallback — targets only the '&' character (U+0026) */
-@font-face {
-  font-family: 'CleanAmp';
-  src: local('Raleway'), local('Inter'), local('Segoe UI'), local('Roboto'), local('Arial'), local('Helvetica Neue');
-  unicode-range: U+0026;
-  font-style: normal;
+/* Marcellus Serif Headings */
+h1, h2, h3, h4, .font-heading, .font-serif {
+  font-family: var(--serif);
+  letter-spacing: -0.01em;
 }
 
-/* Editorial Serif Headings (Cormorant Garamond / Playfair standard) */
-.font-serif {
-  font-family: 'CleanAmp', 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
-  font-variant-numeric: lining-nums proportional-nums;
-  -webkit-font-feature-settings: "lnum" 1, "pnum" 1;
-  font-feature-settings: "lnum" 1, "pnum" 1;
+/* Plus Jakarta Sans Body & Accents */
+.font-sans, .editorial-eyebrow {
+  font-family: var(--sans);
 }
 
 /* Clean ampersand override */
@@ -274,4 +286,207 @@ body {
 .card-luxury:hover {
   transform: translateY(-4px);
   box-shadow: 0 16px 40px rgba(44, 37, 35, 0.08), 0 4px 16px rgba(197, 160, 89, 0.12);
+}
+
+/* ================================================================
+   REFERENCE STYLES FROM CONCEPT (KASAR HIMALAYAN HEIGHTS)
+   ================================================================ */
+.topline {
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 1rem;
+  color: #FFFFFF;
+  background: var(--red);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--brand-teal);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.eyebrow:before {
+  content: "";
+  width: 24px;
+  height: 1.5px;
+  background: currentColor;
+}
+
+.btn-concept-saffron {
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 0.75rem 1.75rem;
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  color: var(--brand-teal);
+  background: var(--saffron);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(201, 242, 77, 0.3);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s, box-shadow 0.2s;
+}
+
+.btn-concept-saffron:hover {
+  transform: translateY(-2px) scale(1.02);
+  background: var(--saffron-hover);
+  box-shadow: 0 8px 22px rgba(201, 242, 77, 0.45);
+}
+
+.btn-concept-secondary {
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 0.75rem 1.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 9999px;
+  color: var(--white);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.btn-concept-secondary:hover {
+  color: var(--brand-teal);
+  background: var(--white);
+  border-color: var(--white);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.btn-concept-dark {
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 0.75rem 1.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  color: var(--white);
+  background: var(--brand-teal);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(7, 49, 37, 0.2);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s, box-shadow 0.2s;
+}
+
+.btn-concept-dark:hover {
+  background: var(--brand-deep);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(7, 49, 37, 0.35);
+}
+
+.story-stamp {
+  position: absolute;
+  right: -24px;
+  bottom: 24px;
+  width: 130px;
+  height: 130px;
+  display: grid;
+  place-content: center;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  color: var(--brand-deep);
+  background: var(--saffron);
+  text-align: center;
+  font: 1.3rem/1.08 var(--serif);
+  transform: rotate(4deg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.map-art {
+  min-height: 420px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #d0ddd4;
+  background: linear-gradient(25deg, transparent 48%, rgba(16, 76, 70, 0.16) 48.3%, rgba(16, 76, 70, 0.16) 48.7%, transparent 49%),
+              linear-gradient(155deg, transparent 40%, rgba(116, 39, 30, 0.12) 40.3%, rgba(116, 39, 30, 0.12) 40.7%, transparent 41%),
+              radial-gradient(ellipse at 20% 75%, transparent 35%, rgba(16, 76, 70, 0.17) 35.2%, transparent 35.7%),
+              radial-gradient(ellipse at 80% 20%, transparent 40%, rgba(16, 76, 70, 0.13) 40.2%, transparent 40.7%),
+              #e2ebe4;
+}
+
+.map-art:before,
+.map-art:after {
+  content: "";
+  position: absolute;
+  width: 90%;
+  height: 55%;
+  left: 5%;
+  top: 21%;
+  border: 1px solid rgba(16, 76, 70, 0.2);
+  border-radius: 45% 55% 40% 60% / 56% 44% 56% 44%;
+  transform: rotate(-19deg);
+}
+
+.map-art:after {
+  width: 68%;
+  height: 38%;
+  top: 31%;
+  left: 16%;
+  transform: rotate(13deg);
+}
+
+.map-pin {
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--brand-deep);
+  background: var(--saffron);
+  box-shadow: 0 6px 20px rgba(12, 47, 42, 0.19);
+}
+
+.map-label {
+  position: absolute;
+  left: 50%;
+  top: calc(48% + 44px);
+  z-index: 2;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(100% - 2rem);
+  padding: 0.5rem 0.75rem;
+  color: var(--white);
+  background: var(--brand-teal);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-align: center;
 }

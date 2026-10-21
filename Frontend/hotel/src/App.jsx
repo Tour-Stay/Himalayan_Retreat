@@ -26,20 +26,11 @@ function HotelAppContent() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#F8FAF7] text-[#073125] font-sans flex flex-col selection:bg-[#C9F24D]/30 selection:text-[#073125] text-base sm:text-lg">
+    <div className="min-h-screen bg-[#faf8f1] text-[#1d2c28] font-sans flex flex-col selection:bg-[#efb83f]/30 selection:text-[#0b3733]">
       {/* 0. Universal Scroll & Hash Navigation Manager */}
       <ScrollManager />
 
-      {/* 1. Top Announcement Bar */}
-      {announcement?.enabled !== false && (
-        <AnnouncementBar
-          message={announcement?.message || "Warm Heated Rooms at 6,942 Feet: 180° Snow Peak Views & Cozy Pine Chalets."}
-          linkText={announcement?.linkText || "View Chalets"}
-          linkHref={announcement?.linkHref || "/rooms"}
-        />
-      )}
-
-      {/* 2. Live Luxury Horizontal Hotel Navbar */}
+      {/* 1. Header with reference topline and navigation */}
       <HotelNavbar />
 
       <main className="flex-1">
