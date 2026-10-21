@@ -29,17 +29,17 @@ const RouteDistancePlanner = () => {
       <Container size="lg">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-14 relative z-10">
-          <p className="font-serif text-sm uppercase tracking-widest text-[#EAA722] font-semibold mb-3">
-            ॥ मार्ग एवं दूरियां • Pilgrim Route Guide ॥
+          <p className="text-xs sm:text-sm uppercase tracking-widest text-[#EAA722] font-semibold mb-3">
+            Mountain Route Guide &bull; Driving Times
           </p>
 
-          <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl text-white font-normal tracking-tight leading-tight mb-4">
+          <h2 className="font-heading text-2xl sm:text-4xl lg:text-5xl text-white font-semibold tracking-normal leading-snug sm:leading-tight mb-4">
             Distances &amp; Driving Times
           </h2>
 
           <div className="w-20 h-0.5 bg-[#EAA722] mx-auto my-4"></div>
 
-          <p className="font-serif text-lg sm:text-xl text-[#FAF5EC]/90 leading-relaxed font-normal">
+          <p className="text-base sm:text-lg text-[#FAF5EC]/90 leading-relaxed font-normal">
             Realistic road distances and scenic mountain driving times from our base at Crank’s Ridge, Kasar Devi, Almora.
           </p>
 

@@ -27,7 +27,7 @@ const fallbackSettings = {
   announcement: {
     enabled: true,
     message:
-      '॥ ॐ नमः शिवाय • जय श्री नीब करौरी महाराज ॥ Visiting Kainchi Dham or Kasar Devi? Sacred yatra support, heated chalet rooms & temple cabs are open for booking.',
+      'Visiting Kainchi Dham or Kasar Devi? Consecrated yatra assistance, heated chalet suites & temple cabs are open for booking.',
     linkText: 'Yatra Booking ↗',
     linkHref: '#enquiry',
   },

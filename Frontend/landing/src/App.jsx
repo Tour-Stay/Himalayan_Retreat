@@ -12,9 +12,10 @@ import LandingNavbar from './components/LandingNavbar';
 import HeroMaharajji from './components/HeroMaharajji';
 import DevBhoomiSection from './components/DevBhoomiSection';
 import ClientCompanySection from './components/ClientCompanySection';
-import PilgrimageItinerary from './components/PilgrimageItinerary';
+import ThingsToDoSection from './components/ThingsToDoSection';
 import VisitorFaqSection from './components/VisitorFaqSection';
 import ConciergeEnquirySection from './components/ConciergeEnquirySection';
+import MobileActionDock from './components/MobileActionDock';
 import { LANDING_CONTENT } from './content/landing.content';
 
 function LandingPageContent() {
@@ -34,7 +35,7 @@ function LandingPageContent() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#12433B] text-white font-serif flex flex-col selection:bg-[#EAA722] selection:text-[#12433B] text-lg sm:text-xl">
+    <div className="min-h-screen bg-[#12433B] text-white font-sans flex flex-col selection:bg-[#EAA722] selection:text-[#12433B] overflow-x-hidden w-full max-w-full">
       {/* 1. Optional Notice Bar (Dynamic from CMS) */}
       {announcement.enabled && (
         <AnnouncementBar
@@ -58,8 +59,8 @@ function LandingPageContent() {
         {/* 5. Client Company: The Kasar Himalayan Heights, What They Do & Hotel Showcase */}
         <ClientCompanySection />
 
-        {/* 6. Curated 3-Day Pilgrimage Itinerary */}
-        <PilgrimageItinerary />
+        {/* 6. Things to Do & Safe Mountain Expedition (Mandir Mala 3D Diorama) */}
+        <ThingsToDoSection />
 
         {/* 8. Authentic Visitor FAQ Accordion */}
         <VisitorFaqSection />
@@ -70,6 +71,7 @@ function LandingPageContent() {
 
       {/* 10. Reverent Site Footer & Back to Top */}
       <SiteFooter />
+      <MobileActionDock />
       <BackToTop />
     </div>
   );

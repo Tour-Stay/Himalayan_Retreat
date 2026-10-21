@@ -3,106 +3,240 @@
 @source "../index.html";
 @source "../../shared/**/*.{js,jsx,ts,tsx}";
 
-/* ================================================================
-   THE KASAR HIMALAYAN HEIGHTS & EXPEDITIONS — DEVOTIONAL ASHRAM AESTHETIC
-   Faithful to nkbashram.org (EB Garamond / Cormorant Garamond, Marcellus, Cinzel)
-   Traditional Devotional Temple Vibe • Reduced Content • Generous Font Sizes
-   ================================================================ */
-
-body,
-html {
-  font-family: 'EB Garamond', 'Cormorant Garamond', Georgia, serif;
-  font-size: 19px;
-  line-height: 1.7;
-  color: #FFFFFF;
-  background-color: #12433B;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@theme {
+  --font-serif: "Marcellus", Georgia, serif;
+  --font-heading: "Marcellus", Georgia, serif;
+  --font-body: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-mono: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
 }
 
-/* Exact Reference Colors from nkbashram.org */
+/* ================================================================
+   THE KASAR HIMALAYAN HEIGHTS & EXPEDITIONS — TYPOGRAPHY SYSTEM
+   1. Marcellus (Serif) — All Headings & Titles (h1-h6, .font-heading, .font-serif)
+   2. Plus Jakarta Sans (Sans-Serif) — Body, Paragraphs, Buttons, Badges, Numerals
+   ================================================================ */
+
 :root {
-  --nkb-green: #12433B;
-  --nkb-green-dark: #0D332D;
+  --font-serif: 'Marcellus', Georgia, serif;
+  --font-heading: 'Marcellus', Georgia, serif;
+  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --nkb-green: #0D332D;
+  --nkb-green-dark: #081E1A;
   --nkb-maroon: #541508;
-  --nkb-maroon-dark: #421006;
+  --nkb-maroon-dark: #3D0F06;
   --nkb-gold: #EAA722;
   --nkb-gold-hover: #D98E16;
   --nkb-sand: #E7D2B6;
   --nkb-cream: #FAF5EC;
 }
 
-/* Devotional Pill Button (from nkbashram.org) */
+body,
+html {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  color: #FFFFFF;
+  background-color: #081E1A;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Luxury Pill Button */
 .btn-nkb-gold {
   background-color: #EAA722;
-  color: #12433B;
-  font-family: 'Cinzel', 'EB Garamond', serif;
+  color: #0D332D;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  font-size: 0.88rem;
   border-radius: 9999px;
-  transition: all 0.25s ease;
-  box-shadow: 0 4px 14px rgba(234, 167, 34, 0.35);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 16px rgba(234, 167, 34, 0.35);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
 }
 
 .btn-nkb-gold:hover {
-  background-color: #D98E16;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(234, 167, 34, 0.5);
+  background-color: #F5B636;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(234, 167, 34, 0.55), 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
-/* Clean simple ampersand font fallback — targets only the '&' character (U+0026) */
-@font-face {
-  font-family: 'CleanAmp';
-  src: local('EB Garamond'), local('Raleway'), local('Inter'), local('Segoe UI'), local('Roboto'), local('Arial'), local('Helvetica Neue');
-  unicode-range: U+0026;
-  font-style: normal;
+.btn-nkb-gold:active {
+  transform: translateY(0) scale(0.98);
 }
 
-/* Traditional Devotional Serif Headings */
-.font-serif {
-  font-family: 'CleanAmp', 'Cormorant Garamond', 'EB Garamond', Georgia, serif;
-  letter-spacing: 0.01em;
-}
-
-/* Classical Inscriptions & Temple Monograms */
-.font-cinzel {
-  font-family: 'CleanAmp', 'Cinzel', 'Marcellus', Georgia, serif;
+/* Luxury Outline Button */
+.btn-outline-gold {
+  border: 2px solid #EAA722;
+  color: #EAA722;
+  background: transparent;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
   letter-spacing: 0.08em;
+  font-size: 0.88rem;
+  border-radius: 9999px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Clean ampersand override */
-.clean-amp,
-.font-serif .font-sans,
-.font-cinzel .font-sans {
-  font-family: 'EB Garamond', Georgia, serif !important;
-  font-style: normal !important;
-  font-weight: 400 !important;
+.btn-outline-gold:hover {
+  background-color: #EAA722;
+  color: #0D332D;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(234, 167, 34, 0.4);
 }
 
-/* Sacred Sanskrit / Hindi Scripture Text */
-.font-devanagari {
-  font-family: 'Tiro Devanagari Hindi', 'EB Garamond', Georgia, serif;
+.btn-outline-gold:active {
+  transform: translateY(0) scale(0.98);
 }
 
-/* Secondary Clean Reading Text */
-.font-sans {
-  font-family: 'EB Garamond', Georgia, serif;
+/* Button Shimmer Sheen Animation */
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shimmer::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 40%;
+  height: 200%;
+  background: linear-gradient(
+    60deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.25) 50%,
+    transparent 100%
+  );
+  transform: rotate(25deg);
+  transition: all 0.75s ease;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.btn-shimmer:hover::after {
+  left: 120%;
+  opacity: 1;
+}
+
+/* Ambient Radial Glows */
+.ambient-glow-gold {
+  position: relative;
+  overflow: hidden;
+}
+
+.ambient-glow-gold::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(234, 167, 34, 0.1) 0%, rgba(234, 167, 34, 0) 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ambient-glow-forest {
+  position: relative;
+  overflow: hidden;
+}
+
+.ambient-glow-forest::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 30%, rgba(13, 51, 45, 0.55) 0%, transparent 75%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Frosted Glass Badges & Panels */
+.glass-frosted {
+  background: rgba(6, 24, 20, 0.78);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(234, 167, 34, 0.35);
+}
+
+.glass-frosted-dark {
+  background: rgba(5, 18, 15, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(234, 167, 34, 0.3);
+}
+
+/* Editorial Metadata Eyebrow */
+.editorial-eyebrow {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #EAA722;
+}
+
+/* Luxury Interactive Card with Glow & Elevation */
+.luxury-card {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.4s ease, 
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.luxury-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(234, 167, 34, 0.65);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7), 0 0 25px rgba(234, 167, 34, 0.18);
+}
+
+/* Interactive Link Hover with Gold Indicator */
+.hover-gold-link {
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.hover-gold-link:hover {
+  color: #EAA722;
+  transform: translateX(3px);
+}
+
+/* Classical Roman Architectural Headings (Marcellus) */
+.font-serif,
+.font-heading,
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Marcellus', Georgia, serif !important;
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+}
+
+/* Refined Sacred Inscriptions & Monograms */
+.font-cinzel {
+  font-family: 'Marcellus', Georgia, serif !important;
+  letter-spacing: 0.06em;
+}
+
+/* Modern Geometric UI & Reading Typography (Plus Jakarta Sans) */
+.font-sans,
+.font-body,
+p, span, a, li, input, textarea, button, label, select {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
 }
 
 /* Clean Lining Numerals */
 .font-numeral,
-.numeral {
-  font-family: 'Raleway', sans-serif !important;
-  font-variant-numeric: lining-nums proportional-nums !important;
-  -webkit-font-feature-settings: "lnum" 1, "pnum" 1 !important;
-  font-feature-settings: "lnum" 1, "pnum" 1 !important;
-}
-
-/* Legacy font-mono redirect */
+.numeral,
 .font-mono {
-  font-family: 'Raleway', sans-serif !important;
-  font-variant-numeric: lining-nums proportional-nums !important;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  font-variant-numeric: lining-nums proportional-nums;
+  -webkit-font-feature-settings: "lnum" 1, "pnum" 1;
+  font-feature-settings: "lnum" 1, "pnum" 1;
 }
 
 /* Global lining numerals */
@@ -116,10 +250,15 @@ html {
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
+  max-width: 100%;
+  width: 100%;
 }
 
 body {
-  overflow-x: clip;
+  overflow-x: hidden;
+  max-width: 100%;
+  width: 100%;
   min-height: 100vh;
 }
 
@@ -312,6 +451,21 @@ body {
   pointer-events: auto;
 }
 
+@media (max-width: 767px) {
+  .back-to-top {
+    display: none !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .back-to-top {
+    bottom: 84px;
+    right: 20px;
+    width: 42px;
+    height: 42px;
+  }
+}
+
 .back-to-top:hover {
   background: #5C151A;
   border-color: #C5A059;
@@ -377,4 +531,40 @@ body {
 .temple-card-saffron:hover {
   border-color: rgba(200, 75, 15, 0.55);
   box-shadow: 0 12px 36px rgba(200, 75, 15, 0.12);
+}
+
+/* ================================================================
+   3D EXPEDITION MAP & MANDIR MALA ANIMATIONS
+   ================================================================ */
+
+@keyframes roadDashFlow {
+  from {
+    stroke-dashoffset: 40;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-road-flow {
+  animation: roadDashFlow 1.6s linear infinite;
+}
+
+@keyframes waypointBeacon {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(234, 167, 34, 0.75);
+  }
+  70% {
+    transform: scale(1.15);
+    box-shadow: 0 0 0 14px rgba(234, 167, 34, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(234, 167, 34, 0);
+  }
+}
+
+.animate-waypoint-beacon {
+  animation: waypointBeacon 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
