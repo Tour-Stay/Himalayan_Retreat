@@ -54,8 +54,8 @@ const HotelFooter = () => {
           <ul className="space-y-2 text-sm font-sans">
             <li>
               <a
-                href="#story"
-                onClick={(e) => scrollToSection(e, 'story')}
+                href="#spirit"
+                onClick={(e) => scrollToSection(e, 'spirit')}
                 className="text-white/80 hover:text-[#C9F24D] transition-colors"
               >
                 Our spirit
@@ -72,11 +72,11 @@ const HotelFooter = () => {
             </li>
             <li>
               <a
-                href="#experiences"
-                onClick={(e) => scrollToSection(e, 'experiences')}
+                href="#story"
+                onClick={(e) => scrollToSection(e, 'story')}
                 className="text-white/80 hover:text-[#C9F24D] transition-colors"
               >
-                Pahadi moments
+                Guest stories
               </a>
             </li>
             <li>

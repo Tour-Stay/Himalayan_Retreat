@@ -392,8 +392,8 @@ export const SiteSettingsContext = createContext({
   settings: fallbackSettings,
   loading: false,
   error: null,
-  refreshSettings: async () => {},
-  updateLocalSettings: () => {},
+  refreshSettings: async () => { },
+  updateLocalSettings: () => { },
 });
 
 export const SiteSettingsProvider = ({ children }) => {

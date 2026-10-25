@@ -221,31 +221,151 @@ export const fleetData = [
 ];
 
 // =========================================================================
-// REAL DATA: Authentic Visitor FAQs
+// REAL DATA: Authentic Visitor FAQs (Enriched Concierge Knowledge Base)
 // =========================================================================
 export const faqsData = [
   {
+    id: 'kainchi-dham',
+    category: 'kainchi',
+    categoryLabel: 'Kainchi Dham & Shrines',
+    icon: '🛕',
+    badge: '45 km • 1.5 hrs Scenic Drive',
     q: 'How do I arrange a darshan at Kainchi Dham Ashram from The Kasar Himalayan Heights?',
-    a: 'Kainchi Dham Ashram is located 45 km (~1.5 hrs scenic drive). Our private cabs depart early morning for tranquil aarti and darshan.',
+    a: 'Kainchi Dham Ashram (dedicated to Sri Neem Karoli Baba Maharaj) is located 45 km (~1.5 hours scenic drive) via NH 109 from our retreat. We arrange dedicated chauffeured mountain cabs that depart early morning (around 7:00 AM) so you reach comfortably for the tranquil morning aarti, avoid highway congestion, and offer sacred prashad. Your private cab waits on-site while you spend peaceful time in meditation before continuing back or touring Almora.',
+    highlights: [
+      'Scenic 45 km route along Almora - Khairna - Bhowali road (NH 109)',
+      'Recommended 7:00 AM early morning departure for serene darshan & aarti',
+      'Chauffeur waits on-site with luggage security throughout your visit',
+      'Return to heated suites with complimentary hot mountain tea'
+    ],
+    actionText: 'Book Kainchi Darshan Cab ↗',
+    actionHref: '#enquiry',
+    actionType: 'enquiry',
   },
   {
+    id: 'room-heating',
+    category: 'heating',
+    categoryLabel: 'Winter Heating & Suites',
+    icon: '🔥',
+    badge: 'Dual Heating + 24/7 Geysers',
     q: 'Are the suites properly heated during the winter months (November to February)?',
-    a: 'Yes. All rooms include dual-zone electric heating, radiators, 24/7 hot water, and select suites feature cozy wood-burning fireplaces.',
+    a: 'Yes, full winter warmth is guaranteed across all rooms. Kasar Devi sits at 6,942 FT where night temperatures can drop to 0°C - 4°C in peak winter. Every suite is equipped with dual-zone electric under-bed heating blankets (switched on in advance to keep your bed cozy), silent oil-filled radiators / room heaters, heavy Siberian down duvets, and 24/7 continuous high-pressure running hot water. Select signature chalets also feature authentic hand-chiseled stone fireplaces with fragrant deodar & pine firewood.',
+    highlights: [
+      'Dual-zone electric bed warmers pre-heated before sleep',
+      'Silent oil-filled radiators and blower heating in all suites',
+      'Continuous 24x7 high-pressure running geyser hot water',
+      'Traditional stone wood-burning fireplaces in luxury chalets'
+    ],
+    actionText: 'Explore Heated Suites ↗',
+    actionHref: 'http://localhost:5174/#rooms',
+    actionType: 'hotel',
   },
   {
-    q: 'Can your chauffeured cabs pick us up directly from Kathgodam Railway Station?',
-    a: 'Yes. Our hill chauffeurs provide direct platform pickup with luggage assistance for Kathgodam trains (85 km, ~3 hrs drive) and Pantnagar Airport.',
+    id: 'station-cabs',
+    category: 'cabs',
+    categoryLabel: 'Station Cabs & Transfers',
+    icon: '🚕',
+    badge: 'Kathgodam Platform Meet & Greet',
+    q: 'Can your chauffeured cabs pick us up directly from Kathgodam Railway Station or Airport?',
+    a: 'Yes. Our mountain expedition fleet provides guaranteed platform meet-and-greet at Kathgodam Railway Station (85 km, ~3 hours scenic mountain drive) and Pantnagar Domestic Airport (120 km, ~4 hours). Your hill-certified driver monitors your train schedule (Shatabdi Express, Ranikhet Express, Kathgodam Express) in real time, meets you with a personalized nameboard right at the station exit, assists with heavy luggage, and provides direct drop to the retreat.',
+    highlights: [
+      'Punctual platform reception with nameboard & luggage assistance',
+      'Choice of Innova Crysta, Swift Dzire, or 12-seater Urbania',
+      'Fixed transparent rates with no hill tolls or hidden charges',
+      'Experienced hill drivers with verified 10+ years mountain driving'
+    ],
+    actionText: 'Reserve Station Cab ↗',
+    actionHref: '#enquiry',
+    actionType: 'enquiry',
   },
   {
+    id: 'regional-dining',
+    category: 'dining',
+    categoryLabel: 'Regional & Satvik Dining',
+    icon: '🍲',
+    badge: 'Pure Satvik & Organic Kumaoni',
+    q: 'What kind of regional food is served? Is pure Satvik (no onion, no garlic) available?',
+    a: 'We serve wholesome, freshly cooked regional Kumaoni specialties alongside homestyle North Indian food. Our kitchen features authentic local recipes made from organic indigenous grains, including Mandua (finger millet) rotis, Bhatt ki Churkani (black soybean slow-cooked curry), Gahat (horse gram) dal, and refreshing Pahadi cucumber raita seasoned with bhang seeds and mustard. For pilgrims and fasting guests, 100% pure Satvik meals cooked strictly without onion and garlic are prepared in dedicated cookware upon request.',
+    highlights: [
+      'Authentic Kumaoni pahadi delicacies & traditional copper cookware',
+      '100% Pure Satvik (No Onion, No Garlic) prepared on advance request',
+      'Fresh organic ingredients sourced from local high-altitude farmsteads',
+      'Complimentary hot mountain breakfast included with direct stays'
+    ],
+    actionText: 'Inquire for Satvik Dining ↗',
+    actionHref: '#enquiry',
+    actionType: 'enquiry',
+  },
+  {
+    id: 'kasar-meditation',
+    category: 'kainchi',
+    categoryLabel: 'Kainchi Dham & Shrines',
+    icon: '✨',
+    badge: 'Van Allen Geomagnetic Belt',
     q: 'What makes Kasar Devi and Crank’s Ridge so special for peace and meditation?',
-    a: 'Kasar Devi is world-famous for its natural spiritual calm and deep silence, where Swami Vivekananda and seekers from across the world came to meditate facing the Himalayas.',
+    a: 'Kasar Devi is world-famous for its natural spiritual calm, deep silence, and unique geomagnetic field on the Van Allen radiation belt—a rare phenomenon shared globally only with Machu Picchu in Peru and Stonehenge in England. This electromagnetic stillness attracts meditators, seekers, and artists from across the world. The historic 2nd-century Kasar Devi Temple and Swami Vivekananda Rock Cave are an easy 800-meter pine forest walk (approx. 7 minutes) from our gates.',
+    highlights: [
+      '800 meters (7-min pine footpath walk) to ancient Kasar Devi Temple',
+      'One of three global locations positioned on the geomagnetic energy belt',
+      'Historic meditation grounds of Swami Vivekananda, Lama Govinda & Bob Dylan',
+      'Pure deodar & pine-filtered air at 6,942 ft elevation'
+    ],
+    actionText: 'View Temple Walk Route ↗',
+    actionHref: '#kasar-devi',
+    actionType: 'section',
   },
   {
-    q: 'What kind of food is served? Is pure Satvik and vegetarian food available?',
-    a: 'We serve freshly prepared North Indian and local Kumaoni dishes. Pure Satvik food (no onion, no garlic) and fasting meals are available upon request.',
+    id: 'snow-peaks',
+    category: 'peaks',
+    categoryLabel: 'Himalayan Vistas & Weather',
+    icon: '🏔️',
+    badge: '180° Trishul & Nanda Devi Panorama',
+    q: 'What is the best season to view the 180° snow peaks of Mount Trishul and Nanda Devi?',
+    a: 'The Great Himalayan snow peaks are directly visible from our private balconies, open-air sun deck, and rooftop. October through March provides the crispest, crystal-clear azure skies with breathtaking golden sunrises over Mount Trishul (7,120 m), Nanda Devi (7,816 m), and Panchachuli. During spring and early summer (April-June), mornings offer clear peak vistas accompanied by pleasant 18°C-24°C daytime temperatures.',
+    highlights: [
+      'Unobstructed 180° panoramic view of Mount Trishul, Nanda Devi & Maiktoli',
+      'Private sunrise viewing decks and floor-to-ceiling suite windows',
+      'Golden dawn alpenglow every clear morning between 6:00 AM - 6:45 AM',
+      'Telescope and binoculars available for mountain ridge viewing'
+    ],
+    actionText: 'Check Peak View Suites ↗',
+    actionHref: 'http://localhost:5174/#rooms',
+    actionType: 'hotel',
   },
   {
-    q: 'What is the best season to view the 180° snow peaks of Trishul and Nanda Devi?',
-    a: 'October to March offers crystal-clear panoramic views of Mount Trishul and Nanda Devi right across your private balcony.',
+    id: 'wifi-workation',
+    category: 'heating',
+    categoryLabel: 'Winter Heating & Suites',
+    icon: '💻',
+    badge: 'High-Speed Fiber & Power Backup',
+    q: 'Is high-speed internet available for remote work and quiet mountain workations?',
+    a: 'Yes. High-speed optical fiber Wi-Fi covers all suites, dining lounges, and panoramic garden decks. Inverter power backup is maintained on the property so your Zoom video calls and digital work proceed uninterrupted amidst pure pine air and mountain silence.',
+    highlights: [
+      'High-speed optical fiber Wi-Fi across suites and private balconies',
+      'Seamless power backup for uninterrupted connectivity',
+      'Ergonomic wooden work desks in Himalayan Attic Suites',
+      'Peaceful pine terraces for creative focus and writing'
+    ],
+    actionText: 'Inquire for Workation Stay ↗',
+    actionHref: '#enquiry',
+    actionType: 'enquiry',
+  },
+  {
+    id: 'parking-access',
+    category: 'cabs',
+    categoryLabel: 'Station Cabs & Transfers',
+    icon: '🚗',
+    badge: 'Direct Motorable Road & Free Parking',
+    q: 'Can we drive our personal vehicle to the property? Is safe on-site parking available?',
+    a: 'Yes. The Kasar Himalayan Heights is directly accessible via a wide, well-tarred motorable road on Crank’s Ridge above Almora. We provide free secure on-site private parking for guest cars, with overnight driver resting quarters and washrooms available upon advance notice.',
+    highlights: [
+      'Direct motorable tarmac road all the way to resort entrance',
+      'Complimentary secure on-site parking for cars and SUVs',
+      'Overnight driver dormitory accommodation available on request',
+      'EV charging assistance and vehicle washing support'
+    ],
+    actionText: 'Get Driving Directions ↗',
+    actionHref: 'https://www.google.com/maps/dir/?api=1&destination=29.641388,79.6635582',
+    actionType: 'external',
   },
 ];
