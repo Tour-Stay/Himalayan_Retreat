@@ -42,7 +42,7 @@ const AdminLogin = () => {
       navigate(destination, { replace: true });
     } catch (err) {
       if (!err.response) {
-        setError('Cannot connect to backend server (http://localhost:5000). Please check if backend is running.');
+        setError('Cannot connect to backend server. Please verify your connection or ensure backend service is running.');
       } else {
         setError(err.response?.data?.message || 'Invalid credentials. Please verify your email and password.');
       }

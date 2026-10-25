@@ -1,6 +1,8 @@
 // =========================================================================
 // REAL DATA: Transit Distances, Travel Times & Routes
 // =========================================================================
+import { APP_URLS } from '@shared';
+
 export const routeData = {
   dhams: [
     {
@@ -257,7 +259,7 @@ export const faqsData = [
       'Traditional stone wood-burning fireplaces in luxury chalets'
     ],
     actionText: 'Explore Heated Suites ↗',
-    actionHref: 'http://localhost:5174/#rooms',
+    actionHref: `${APP_URLS.hotel}/#rooms`,
     actionType: 'hotel',
   },
   {
@@ -329,7 +331,7 @@ export const faqsData = [
       'Telescope and binoculars available for mountain ridge viewing'
     ],
     actionText: 'Check Peak View Suites ↗',
-    actionHref: 'http://localhost:5174/#rooms',
+    actionHref: `${APP_URLS.hotel}/#rooms`,
     actionType: 'hotel',
   },
   {

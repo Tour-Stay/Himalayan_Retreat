@@ -3,11 +3,25 @@
 // ===============================================================
 
 // Dynamic Cross-App Local Port & Production URL Mappings
+const cleanUrl = (url, fallback) => (url || fallback).trim().replace(/\/+$/, '');
+
 export const APP_URLS = {
-  landing: import.meta.env.VITE_LANDING_URL || 'http://localhost:5173',
-  hotel: import.meta.env.VITE_HOTEL_URL || 'http://localhost:5174',
-  travel: import.meta.env.VITE_TRAVEL_URL || 'http://localhost:5175',
-  admin: import.meta.env.VITE_ADMIN_URL || 'http://localhost:5176',
+  landing: cleanUrl(
+    import.meta.env.VITE_LANDING_URL,
+    import.meta.env.PROD ? 'https://himalayanretreathotel.netlify.app' : 'http://localhost:5173'
+  ),
+  hotel: cleanUrl(
+    import.meta.env.VITE_HOTEL_URL,
+    import.meta.env.PROD ? 'https://hotlhimalayanretreat.netlify.app' : 'http://localhost:5174'
+  ),
+  travel: cleanUrl(
+    import.meta.env.VITE_TRAVEL_URL,
+    import.meta.env.PROD ? 'https://travelhimalayan.netlify.app' : 'http://localhost:5175'
+  ),
+  admin: cleanUrl(
+    import.meta.env.VITE_ADMIN_URL,
+    import.meta.env.PROD ? 'https://adminhimalayan.netlify.app' : 'http://localhost:5176'
+  ),
 };
 
 // Core Brand Metadata & Geolocation Details

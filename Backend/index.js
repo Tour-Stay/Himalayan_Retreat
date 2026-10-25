@@ -16,39 +16,78 @@ const app = express();
 // ========================
 
 // 1. CORS: Must be the VERY FIRST middleware so every request (and preflight) receives CORS headers
+const normalizeOrigin = (url) => (url || "").trim().toLowerCase().replace(/\/+$/, "");
+
 const defaultOrigins = [
-  "https://himalayanretreathotel.netlify.app/",
-  "https://hotlhimalayanretreat.netlify.app/",
-  "https://travelhimalayan.netlify.app/",
-  "https://adminhimalayan.netlify.app/",
+  "https://himalayanretreathotel.netlify.app",
+  "https://hotlhimalayanretreat.netlify.app",
+  "https://travelhimalayan.netlify.app",
+  "https://adminhimalayan.netlify.app",
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "http://localhost:5175",
+  "http://localhost:5176",
   "http://127.0.0.1:5173",
   "http://127.0.0.1:5174",
   "http://127.0.0.1:5175",
   "http://127.0.0.1:5176",
 ];
 
-const allowedOrigins = process.env.ALLOWED_ORIGINS
-  ? [
-    ...new Set([
-      ...process.env.ALLOWED_ORIGINS.split(",").map((o) => o.trim()),
-      ...defaultOrigins,
-    ]),
-  ]
-  : defaultOrigins;
+const parseOrigins = (raw) => {
+  if (!raw) return [];
+  return raw
+    .split(/[\s,]+/)
+    .map(normalizeOrigin)
+    .filter(Boolean)
+    .flatMap((item) => {
+      if (!item.startsWith("http://") && !item.startsWith("https://")) {
+        return [`https://${item}`, `http://${item}`, item];
+      }
+      return [item];
+    });
+};
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
+const configuredOrigins = new Set([
+  ...defaultOrigins.map(normalizeOrigin),
+  ...parseOrigins(process.env.ALLOWED_ORIGINS),
+]);
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow server-to-server, curl, Postman or health checks with no origin
+    if (!origin) {
+      return callback(null, true);
+    }
+    const cleanOrigin = normalizeOrigin(origin);
+
+    // Check exact configured matches
+    if (configuredOrigins.has(cleanOrigin)) {
+      return callback(null, true);
+    }
+
+    // Support any netlify subdomain for this project (e.g. deploy previews or netlify apps)
+    try {
+      const url = new URL(origin);
+      if (
+        url.hostname.endsWith(".netlify.app") ||
+        url.hostname === "localhost" ||
+        url.hostname === "127.0.0.1"
+      ) {
         return callback(null, true);
       }
-      return callback(null, false);
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
-  })
-);
+    } catch {
+      // invalid URL
+    }
+
+    return callback(new Error(`CORS error: Origin ${origin} not allowed`));
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 // 2. Helmet: Secure HTTP headers
 app.use(
