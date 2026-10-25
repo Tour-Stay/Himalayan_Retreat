@@ -456,7 +456,7 @@ const FareCalculator = ({
     ].filter(Boolean).join('\n');
 
     const text = encodeURIComponent(
-      `*॥ ॐ नमः शिवाय • जय श्री नीब करौरी महाराज ॥*\n` +
+
       `*Mountain Cab Booking Request*\n` +
       `----------------------------------------\n` +
       `*📍 Pickup Point:* ${pickupPoint}\n` +
@@ -490,7 +490,7 @@ const FareCalculator = ({
       {/* Header */}
       <div className="text-center max-w-4xl mx-auto mb-8 sm:mb-10">
         <span className="text-xs sm:text-sm font-sans text-[#541508] uppercase tracking-wider font-bold block mb-2 flex items-center justify-center gap-1.5 font-mono">
-          <span className="text-base">🪔</span> ॥ पावन यात्रा किराया ॥ • SIMPLE MOUNTAIN CAB FARE CALCULATOR
+          TRANSPARENT CAB FARE CALCULATOR • 6,942 FT
         </span>
         <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-[#541508] font-normal tracking-tight mb-2">
           Calculate Your Mountain Cab Fare
@@ -515,11 +515,10 @@ const FareCalculator = ({
                 key={idx}
                 type="button"
                 onClick={() => handleApplyPreset(preset)}
-                className={`text-xs sm:text-sm px-3.5 sm:px-4 py-2 rounded-full border transition-all cursor-pointer font-medium flex items-center gap-2 ${
-                  isActive
-                    ? 'bg-[#073125] text-white border-[#073125] shadow-sm'
-                    : 'bg-white text-[#2C2523] border-[#EAA722]/30 hover:border-[#EAA722] hover:bg-[#FAF5EC]'
-                }`}
+                className={`text-xs sm:text-sm px-3.5 sm:px-4 py-2 rounded-full border transition-all cursor-pointer font-medium flex items-center gap-2 ${isActive
+                  ? 'bg-[#073125] text-white border-[#073125] shadow-sm'
+                  : 'bg-white text-[#2C2523] border-[#EAA722]/30 hover:border-[#EAA722] hover:bg-[#FAF5EC]'
+                  }`}
               >
                 <span>{preset.label}</span>
                 <span className={`text-[11px] px-2 py-0.5 rounded-full ${isActive ? 'bg-white/20 text-white' : 'bg-[#FAF5EC] text-[#541508] font-semibold'}`}>

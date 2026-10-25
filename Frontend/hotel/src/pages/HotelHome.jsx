@@ -574,7 +574,7 @@ export default function HotelHome() {
       {/* 2. QUICK BOOKING BAR (Floating overlap with Mobile Responsive Stacking) */}
       <div className="relative z-30 w-[min(1120px,calc(100%-32px))] mx-auto -mt-10 sm:-mt-12">
         <form
-          className="p-5 sm:p-7 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 items-end gap-4 bg-white rounded-2xl sm:rounded-3xl shadow-[0_20px_50px_rgba(7,49,37,0.12)] border border-[#073125]/10"
+          className="p-5 sm:p-7 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 items-end gap-4 bg-[#E2E6E8] rounded-2xl sm:rounded-3xl shadow-[0_20px_50px_rgba(7,49,37,0.14)] border border-[#CBD2D7]"
           id="quick-booking"
           aria-label="Start a stay enquiry"
           onSubmit={handleQuickBookingSubmit}
@@ -582,7 +582,7 @@ export default function HotelHome() {
           <div className="grid gap-1.5">
             <label
               htmlFor="quick-arrival"
-              className="text-[#4A635A] text-[0.65rem] font-bold uppercase tracking-wider font-sans"
+              className="text-[#3B524A] text-[0.65rem] font-bold uppercase tracking-wider font-sans"
             >
               Arrive
             </label>
@@ -593,14 +593,14 @@ export default function HotelHome() {
               min={minDate}
               value={arrivalDate}
               onChange={(e) => handleArrivalChange(e.target.value)}
-              className="w-full min-h-[48px] px-3.5 py-2.5 text-[#073125] bg-[#F8FAF7] border border-[#D5E0D8] rounded-xl text-sm focus:outline-none focus:border-[#073125] font-sans"
+              className="w-full min-h-[48px] px-3.5 py-2.5 text-[#073125] bg-white border border-[#CBD5E1] rounded-xl text-sm focus:outline-none focus:border-[#073125] shadow-xs font-sans"
             />
           </div>
 
           <div className="grid gap-1.5">
             <label
               htmlFor="quick-departure"
-              className="text-[#4A635A] text-[0.65rem] font-bold uppercase tracking-wider font-sans"
+              className="text-[#3B524A] text-[0.65rem] font-bold uppercase tracking-wider font-sans"
             >
               Depart
             </label>
@@ -611,14 +611,14 @@ export default function HotelHome() {
               min={getDepartureMin()}
               value={departureDate}
               onChange={(e) => setDepartureDate(e.target.value)}
-              className="w-full min-h-[48px] px-3.5 py-2.5 text-[#073125] bg-[#F8FAF7] border border-[#D5E0D8] rounded-xl text-sm focus:outline-none focus:border-[#073125] font-sans"
+              className="w-full min-h-[48px] px-3.5 py-2.5 text-[#073125] bg-white border border-[#CBD5E1] rounded-xl text-sm focus:outline-none focus:border-[#073125] shadow-xs font-sans"
             />
           </div>
 
           <div className="grid gap-1.5">
             <label
               htmlFor="quick-guests"
-              className="text-[#4A635A] text-[0.65rem] font-bold uppercase tracking-wider font-sans"
+              className="text-[#3B524A] text-[0.65rem] font-bold uppercase tracking-wider font-sans"
             >
               Guests
             </label>
@@ -627,7 +627,7 @@ export default function HotelHome() {
               name="guests"
               value={guests}
               onChange={(e) => setGuests(e.target.value)}
-              className="w-full min-h-[48px] px-3.5 py-2.5 text-[#073125] bg-[#F8FAF7] border border-[#D5E0D8] rounded-xl text-sm focus:outline-none focus:border-[#073125] font-sans"
+              className="w-full min-h-[48px] px-3.5 py-2.5 text-[#073125] bg-white border border-[#CBD5E1] rounded-xl text-sm focus:outline-none focus:border-[#073125] shadow-xs font-sans"
             >
               <option value="1">1 guest</option>
               <option value="2">2 guests</option>
@@ -698,7 +698,12 @@ export default function HotelHome() {
               Google Maps Verified Photo
             </div>
             <div className="story-stamp shadow-2xl" aria-hidden="true">
-              Find your<br />own pace
+              <span className="font-serif text-[1.2rem] sm:text-[1.3rem] leading-tight text-[#073125] font-semibold">
+                Find your<br />own peace
+              </span>
+              <span className="text-[9px] uppercase tracking-[0.16em] font-sans font-bold text-[#073125]/75 mt-1 block">
+                Kasar Devi • 6,942 FT
+              </span>
             </div>
           </div>
 

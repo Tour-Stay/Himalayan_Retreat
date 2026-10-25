@@ -16,7 +16,6 @@ const TravelBookingConfirmation = () => {
 
   const handleWhatsAppShare = () => {
     const text = encodeURIComponent(
-      `*॥ ॐ नमः शिवाय • जय श्री नीब करौरी महाराज ॥*\n` +
       `*Confirmed Cab Booking Voucher*\n` +
       `----------------------------------------\n` +
       `*Booking ID:* ${booking.bookingId}\n` +
@@ -46,7 +45,7 @@ const TravelBookingConfirmation = () => {
           </div>
 
           <span className="inline-block px-3.5 py-1 rounded-full bg-[#EAA722] text-[#541508] text-[11px] font-mono font-bold tracking-widest uppercase mb-3 shadow-xs">
-            ॥ पावन यात्रा बुकिंग अनुरोध स्वीकृत • BOOKING CONFIRMED ॥
+            BOOKING CONFIRMED • SAFE MOUNTAIN TRAVEL
           </span>
 
           <h1 className="font-serif text-3xl sm:text-4xl text-[#541508] font-normal mb-3">

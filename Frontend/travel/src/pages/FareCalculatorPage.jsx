@@ -27,10 +27,8 @@ const FareCalculatorPage = () => {
       <section className="bg-[#541508] text-white pt-10 sm:pt-14 pb-8 sm:pb-10 px-4 sm:px-6 border-b border-[#3D0F06] relative overflow-hidden">
         <div className="w-full max-w-[1720px] mx-auto">
           <div className="text-center max-w-4xl mx-auto">
-            {/* Sacred Tag */}
             <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#EAA722] text-[#541508] text-xs font-mono font-bold tracking-widest uppercase mb-3 shadow-xs">
-              <span className="text-sm">🪔</span>
-              <span>॥ पावन तीर्थ यात्रा • FARE CALCULATOR &amp; INSTANT BOOKING ॥ • 6,942 FT</span>
+              <span>FARE CALCULATOR &amp; INSTANT BOOKING • 6,942 FT</span>
             </span>
 
             <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-normal tracking-tight mb-3 text-white">
@@ -102,7 +100,6 @@ const FareCalculatorPage = () => {
                 type="button"
                 onClick={() => {
                   const msg = encodeURIComponent(
-                    `*॥ ॐ नमः शिवाय • जय श्री नीब करौरी महाराज ॥*\n` +
                     `Hello! I need a custom quote for a mountain cab trip / temple yatra.`
                   );
                   window.open(`https://wa.me/${whatsappNumber}?text=${msg}`, '_blank');
