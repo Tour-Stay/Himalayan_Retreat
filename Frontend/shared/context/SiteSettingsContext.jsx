@@ -24,7 +24,13 @@ const fallbackSettings = {
     upiId: 'kasarhimalayan@upi',
     googleMapsEmbedUrl: '',
   },
-
+  announcement: {
+    enabled: false,
+    message:
+      'Visiting Kainchi Dham or Kasar Devi? Consecrated yatra assistance, heated chalet suites & temple cabs are open for booking.',
+    linkText: 'Yatra Booking ↗',
+    linkHref: '#enquiry',
+  },
   landingHero: {
     devotionalGreeting: 'जय श्री बाबा नीम करोली महाराज की',
     devotionalSubGreeting: 'Ram Ram • Jai Sri Hanuman',

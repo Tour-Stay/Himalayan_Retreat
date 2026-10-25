@@ -211,10 +211,10 @@ const HERO_SLIDES = [
     isVideo: true,
   },
   {
-    image: hotelInSnow,
-    tag: 'Winter Snowfall',
-    title: 'Winter Wonderland at Crank’s Ridge',
-    caption: 'Snow blanketed pines, warm room heaters, electric bed warmers, and cozy fireplaces',
+    image: diningHearthCafe,
+    tag: "Satya's Roof Top Cafe",
+    title: "Satya's Hearth & Rooftop Cafe",
+    caption: 'A cozy sanctuary for travelers to gather around warm beverages, share stories, and take in the panoramic Himalayan views.',
     isVideo: false,
   },
   {
@@ -236,8 +236,6 @@ export default function HotelHome() {
 
   // Background carousel state
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isCarouselHovered, setIsCarouselHovered] = useState(false);
-  const slideTimerRef = useRef(null);
 
   // The API returns only admin-published hotel reviews.
   const [publishedReviews, setPublishedReviews] = useState([]);
@@ -286,14 +284,14 @@ export default function HotelHome() {
   // Video Reel Modal state
   const [videoModalOpen, setVideoModalOpen] = useState(false);
 
-  // Auto-advance carousel every 6 seconds
+  // Auto-advance carousel every 3 seconds (resets timer on manual navigation)
   useEffect(() => {
-    if (isCarouselHovered || videoModalOpen) return;
-    slideTimerRef.current = setInterval(() => {
+    if (videoModalOpen) return;
+    const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
-    }, 6000);
-    return () => clearInterval(slideTimerRef.current);
-  }, [isCarouselHovered, videoModalOpen]);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, [videoModalOpen, currentSlide]);
 
   const handlePrevSlide = () => {
     setCurrentSlide((prev) => (prev === 0 ? HERO_SLIDES.length - 1 : prev - 1));
@@ -344,10 +342,22 @@ export default function HotelHome() {
   }, [lightboxIndex, filteredGallery.length]);
 
   // Today's date ISO
+<<<<<<< HEAD
+  const [minDate, setMinDate] = useState('');
+
+  useEffect(() => {
+    const now = new Date();
+    const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+      .toISOString()
+      .slice(0, 10);
+    setMinDate(today);
+  }, []);
+=======
   const now = new Date();
   const minDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
     .toISOString()
     .slice(0, 10);
+>>>>>>> 322a316534a6e06ddf8daabda404cfe34bef3474
 
   const getDepartureMin = () => {
     if (!arrivalDate) return minDate;
@@ -437,8 +447,6 @@ export default function HotelHome() {
         className="relative min-h-[640px] sm:min-h-[760px] h-[min(88vh,920px)] flex items-center overflow-hidden text-white bg-[#052219] select-none"
         id="top"
         aria-labelledby="hero-title"
-        onMouseEnter={() => setIsCarouselHovered(true)}
-        onMouseLeave={() => setIsCarouselHovered(false)}
       >
         {/* Carousel Slides */}
         {HERO_SLIDES.map((slide, idx) => (

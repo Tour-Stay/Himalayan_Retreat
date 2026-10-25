@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import {
-  AnnouncementBar,
   SiteFooter,
   BackToTop,
   initAutoScrollReveal,
@@ -16,11 +15,9 @@ import ThingsToDoSection from './components/ThingsToDoSection';
 import VisitorFaqSection from './components/VisitorFaqSection';
 import ConciergeEnquirySection from './components/ConciergeEnquirySection';
 import MobileActionDock from './components/MobileActionDock';
-import { LANDING_CONTENT } from './content/landing.content';
 
 function LandingPageContent() {
   const { settings } = useSiteSettings();
-  const announcement = settings?.announcement || LANDING_CONTENT?.announcement || { enabled: false };
 
   useEffect(() => {
     const cleanup = initAutoScrollReveal();
@@ -36,15 +33,6 @@ function LandingPageContent() {
 
   return (
     <div className="min-h-screen bg-[#12433B] text-white font-sans flex flex-col selection:bg-[#EAA722] selection:text-[#12433B] overflow-x-hidden w-full max-w-full">
-      {/* 1. Optional Notice Bar (Dynamic from CMS) */}
-      {announcement?.enabled && (
-        <AnnouncementBar
-          message={announcement.message || LANDING_CONTENT?.announcement?.message || ''}
-          linkText={announcement.linkText || LANDING_CONTENT?.announcement?.linkText || ''}
-          linkHref={announcement.linkHref || LANDING_CONTENT?.announcement?.linkHref || '#enquiry'}
-          className="bg-[#3D0F06] text-[#FAF5EC] border-b border-[#EAA722]/30 py-2 text-xs sm:text-sm"
-        />
-      )}
 
       {/* 2. Top Utility & Main Ashram Navigation */}
       <LandingNavbar />
