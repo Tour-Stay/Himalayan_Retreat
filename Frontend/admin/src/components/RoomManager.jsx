@@ -402,7 +402,7 @@ export const RoomManager = ({ rooms = [], setRooms, onRefresh }) => {
             <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
             </svg>
-            <span>+ Add Suite</span>
+            <span>Add Suite</span>
           </button>
         </div>
       </div>
