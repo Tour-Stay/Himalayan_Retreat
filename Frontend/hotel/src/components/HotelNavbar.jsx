@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const navLinks = [
-  { label: 'Our spirit', href: '#story' },
+  { label: 'Our spirit', href: '#spirit' },
   { label: 'The rooms', href: '#rooms' },
   { label: 'Pahadi moments', href: '#experiences' },
   { label: 'Find us', href: '#location' },
@@ -97,6 +97,12 @@ const HotelNavbar = () => {
                 {link.label}
               </a>
             ))}
+            <Link
+              to="/reviews"
+              className="text-white/85 hover:text-[#C9F24D] text-[0.78rem] font-semibold tracking-wider uppercase transition-colors no-underline"
+            >
+              Guest stories
+            </Link>
             <a
               href="#booking"
               onClick={(e) => handleNavClick(e, '#booking')}
@@ -142,6 +148,13 @@ const HotelNavbar = () => {
                 {link.label}
               </a>
             ))}
+            <Link
+              to="/reviews"
+              onClick={() => setMobileMenuOpen(false)}
+              className="py-2 text-[0.88rem] font-medium text-white/90 hover:text-[#C9F24D] transition-colors"
+            >
+              Guest stories
+            </Link>
           </div>
           <div className="pt-2">
             <a

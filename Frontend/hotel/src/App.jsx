@@ -1,25 +1,21 @@
 import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import {
-  AnnouncementBar,
   BackToTop,
   ScrollManager,
   initAutoScrollReveal,
   SiteSettingsProvider,
-  useSiteSettings,
 } from '@shared';
 import HotelNavbar from './components/HotelNavbar';
 import HotelFooter from './components/HotelFooter';
 import HotelHome from './pages/HotelHome';
+import HotelReviews from './pages/HotelReviews';
 import AllRooms from './pages/AllRooms';
 import RoomDetails from './pages/RoomDetails';
 import BookRoom from './pages/BookRoom';
 import BookingConfirmation from './pages/BookingConfirmation';
 
 function HotelAppContent() {
-  const { settings } = useSiteSettings();
-  const announcement = settings?.announcement;
-
   useEffect(() => {
     const cleanup = initAutoScrollReveal();
     return cleanup;
@@ -36,6 +32,7 @@ function HotelAppContent() {
       <main className="flex-1">
         <Routes>
           <Route path="/" element={<HotelHome />} />
+          <Route path="/reviews" element={<HotelReviews />} />
           <Route path="/rooms" element={<AllRooms />} />
           <Route path="/rooms/:id" element={<RoomDetails />} />
           <Route path="/room/:id" element={<RoomDetails />} />
