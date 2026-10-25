@@ -582,7 +582,7 @@ export const HotelBookingManager = ({ bookings = [], setBookings, onRefresh }) =
                       <td className="py-3.5 px-4">
                         <div className="font-semibold text-[#0F172A] font-serif flex items-center gap-1.5 flex-wrap">
                           <span>{b.room?.name || 'Himalayan Suite'}</span>
-                          <span className="px-1.5 py-0.5 text-[10px] font-mono font-bold bg-[#AEAC78]/20 text-[#242A10] border border-[#AEAC78]/40">
+                          <span className="px-1.5 py-0.5 text-[10px] font-mono font-bold bg-[#073125]/10 text-[#073125] border border-[#073125]/20">
                             {b.roomsBooked || 1} Room(s)
                           </span>
                         </div>

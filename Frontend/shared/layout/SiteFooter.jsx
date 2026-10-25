@@ -3,13 +3,7 @@ import { useSiteSettings } from '../context/SiteSettingsContext';
 import Logo from '../components/Logo';
 import {
   PhoneIcon,
-  MailIcon,
   WhatsAppIcon,
-  MapPinIcon,
-  MountainIcon,
-  BedIcon,
-  CarIcon,
-  SparklesIcon,
 } from '../components/Icons';
 
 const SiteFooter = () => {
@@ -71,10 +65,10 @@ const SiteFooter = () => {
 
       {/* 2. MAIN EDITORIAL FOOTER GRID */}
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 pb-10 sm:pb-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-12">
 
-          {/* Col 1: Brand & Philosophy (Span 4) */}
-          <div className="lg:col-span-4 space-y-5">
+          {/* Col 1: Brand & Philosophy (Span 6) */}
+          <div className="lg:col-span-6 space-y-5">
             <a href={APP_URLS.landing} className="flex items-center gap-3 group inline-flex">
               <Logo size={50} />
               <div className="flex flex-col">
@@ -87,33 +81,17 @@ const SiteFooter = () => {
               </div>
             </a>
 
-            <p className="text-base sm:text-lg text-[#FAF5EC]/90 leading-[1.8] font-normal">
+            <p className="text-base sm:text-lg text-[#FAF5EC]/90 leading-[1.8] font-normal max-w-xl">
               An authentic high-altitude boutique retreat and chauffeured mountain travel service nestled along the quiet pine ridges of Crank’s Ridge in Kumaon, Uttarakhand.
             </p>
 
-            {/* Feature Pills with Subtle Hover Lift */}
-            <div className="flex flex-wrap gap-2.5 pt-1">
-              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#061814] border border-[#EAA722]/40 text-xs sm:text-sm font-serif text-[#FAF5EC] hover:border-[#EAA722] transition-all shadow-xs cursor-default">
-                <MountainIcon className="w-4 h-4 text-[#EAA722]" />
-                <span className="font-semibold tracking-wide">6,942 FT Altitude</span>
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#061814] border border-[#EAA722]/40 text-xs sm:text-sm font-serif text-[#FAF5EC] hover:border-[#EAA722] transition-all shadow-xs cursor-default">
-                <SparklesIcon className="w-4 h-4 text-[#EAA722]" />
-                <span className="font-semibold tracking-wide">180° Snow Peaks</span>
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#061814] border border-[#EAA722]/40 text-xs sm:text-sm font-serif text-[#FAF5EC] hover:border-[#EAA722] transition-all shadow-xs cursor-default">
-                <BedIcon className="w-4 h-4 text-[#EAA722]" />
-                <span className="font-semibold tracking-wide">Heated Chalets</span>
-              </span>
-            </div>
-
-            <div className="text-xs sm:text-sm text-[#EAA722] tracking-wider uppercase font-medium">
+            <div className="text-xs sm:text-sm text-[#EAA722] tracking-wider uppercase font-medium pt-1">
               Peace, Hospitality &amp; Quiet Solitude
             </div>
           </div>
 
-          {/* Col 2: Resort & Rooms (Span 2) */}
-          <div className="lg:col-span-2 space-y-4">
+          {/* Col 2: Resort & Rooms (Span 3) */}
+          <div className="lg:col-span-3 space-y-4">
             <h4 className="font-serif text-sm sm:text-base font-bold uppercase tracking-widest text-[#EAA722] border-b border-[#EAA722]/30 pb-2">
               Resort &amp; Stay
             </h4>
@@ -218,100 +196,6 @@ const SiteFooter = () => {
             </ul>
           </div>
 
-          {/* Col 4: Location & Direct Contact (Span 3) */}
-          <div className="lg:col-span-3 space-y-3.5">
-            <h4 className="font-serif text-sm sm:text-base font-bold uppercase tracking-widest text-[#EAA722] border-b border-[#EAA722]/30 pb-2">
-              Concierge &amp; Location
-            </h4>
-
-            {/* Address */}
-            <div className="flex items-start gap-2.5 text-sm sm:text-base text-[#FAF5EC]/90 font-normal leading-relaxed">
-              <MapPinIcon className="w-4 h-4 text-[#EAA722] flex-shrink-0 mt-1" />
-              <span className="leading-snug">
-                {company.hotelAddress || "Crank's Ridge, Kasar Devi, Almora, Uttarakhand 263601"}
-              </span>
-            </div>
-
-            {/* Compact Map Preview Card */}
-            <a
-              href={company.mapsUrl || "https://maps.google.com/?q=The+Kasar+Himalayan+Heights,+Kasar+Devi,+Almora,+Uttarakhand"}
-              target="_blank"
-              rel="noreferrer"
-              className="group relative block w-full h-28 rounded-xl overflow-hidden border border-[#EAA722]/35 hover:border-[#EAA722] shadow-md transition-all duration-300 cursor-pointer bg-[#3D0F06]"
-              title="Click to open location in Google Maps"
-            >
-              <iframe
-                title="The Kasar Himalayan Heights Location Map"
-                src="https://maps.google.com/maps?q=The+Kasar+Himalayan+Heights+Kasar+Devi+Almora&t=&z=14&ie=UTF8&iwloc=&output=embed"
-                className="w-full h-full border-0 pointer-events-none filter contrast-105 opacity-85 group-hover:opacity-100 group-hover:scale-106 transition-all duration-500"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent flex items-end justify-between p-2.5">
-                <span className="inline-flex items-center gap-1.5 text-xs font-serif font-semibold text-[#FAF5EC] bg-[#541508]/90 group-hover:bg-[#EAA722] group-hover:text-[#541508] px-2.5 py-1 rounded-md border border-[#EAA722]/40 transition-colors">
-                  <MapPinIcon className="w-3.5 h-3.5 text-[#EAA722] group-hover:text-[#541508]" />
-                  <span>Open in Google Maps ↗</span>
-                </span>
-                <span className="text-xs font-sans font-medium text-[#FAF5EC]/80">
-                  Kasar Devi
-                </span>
-              </div>
-            </a>
-
-            {/* Direct Contact Row */}
-            <div className="pt-2 border-t border-[#EAA722]/20 flex flex-wrap items-center gap-3.5 text-sm sm:text-base">
-              <a
-                href={`tel:${company.conciergePhone}`}
-                className="inline-flex items-center gap-1.5 text-white hover:text-[#EAA722] font-sans font-bold transition-colors"
-                title="Call Almora Concierge"
-              >
-                <PhoneIcon className="w-4 h-4 text-[#EAA722]" />
-                <span>{company.conciergePhone}</span>
-              </a>
-
-              <span className="text-[#EAA722]/40">•</span>
-
-              <a
-                href={`https://wa.me/${company.whatsappNumber}`}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1.5 text-[#FAF5EC]/90 hover:text-white transition-colors"
-                title="WhatsApp Concierge"
-              >
-                <WhatsAppIcon className="w-4 h-4 text-[#25D366]" />
-                <span>WhatsApp</span>
-              </a>
-            </div>
-
-            {/* Social Icons */}
-            <div className="flex items-center gap-3.5 text-[#EAA722] pt-1">
-              <span className="text-xs uppercase font-serif tracking-wider text-[#FAF5EC]/70 font-semibold">Social:</span>
-              <a
-                href={company.socials?.facebook || 'https://www.facebook.com/61555816868523/'}
-                target="_blank"
-                rel="noreferrer"
-                className="hover:text-white hover:scale-115 transition-all p-1 text-[#EAA722]"
-                title="Facebook: The Kasar Himalayan Heights"
-                aria-label="Facebook"
-              >
-                <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                  <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
-                </svg>
-              </a>
-              <a
-                href={company.socials?.instagram || 'https://www.instagram.com/the_kasar_himalyan_heights/?hl=en'}
-                target="_blank"
-                rel="noreferrer"
-                className="hover:text-white hover:scale-115 transition-all p-1 text-[#EAA722]"
-                title="Instagram: @the_kasar_himalyan_heights"
-                aria-label="Instagram"
-              >
-                <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                </svg>
-              </a>
-            </div>
-
-          </div>
 
         </div>
 

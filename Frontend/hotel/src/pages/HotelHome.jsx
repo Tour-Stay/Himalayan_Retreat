@@ -209,10 +209,10 @@ const HERO_SLIDES = [
     isVideo: true,
   },
   {
-    image: hotelInSnow,
-    tag: 'Winter Snowfall',
-    title: 'Winter Wonderland at Crank’s Ridge',
-    caption: 'Snow blanketed pines, warm room heaters, electric bed warmers, and cozy fireplaces',
+    image: diningHearthCafe,
+    tag: "Satya's Roof Top Cafe",
+    title: "Satya's Hearth & Rooftop Cafe",
+    caption: 'A cozy sanctuary for travelers to gather around warm beverages, share stories, and take in the panoramic Himalayan views.',
     isVideo: false,
   },
   {
@@ -233,20 +233,18 @@ export default function HotelHome() {
 
   // Background carousel state
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isCarouselHovered, setIsCarouselHovered] = useState(false);
-  const slideTimerRef = useRef(null);
 
   // Video Reel Modal state
   const [videoModalOpen, setVideoModalOpen] = useState(false);
 
-  // Auto-advance carousel every 6 seconds
+  // Auto-advance carousel every 3 seconds (resets timer on manual navigation)
   useEffect(() => {
-    if (isCarouselHovered || videoModalOpen) return;
-    slideTimerRef.current = setInterval(() => {
+    if (videoModalOpen) return;
+    const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
-    }, 6000);
-    return () => clearInterval(slideTimerRef.current);
-  }, [isCarouselHovered, videoModalOpen]);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, [videoModalOpen, currentSlide]);
 
   const handlePrevSlide = () => {
     setCurrentSlide((prev) => (prev === 0 ? HERO_SLIDES.length - 1 : prev - 1));
@@ -298,9 +296,6 @@ export default function HotelHome() {
 
   // Today's date ISO
   const [minDate, setMinDate] = useState('');
-    const unsubscribe = subscribeToUpdates('rooms', () => {
-      fetchRooms();
-    }, 60 * 1000);
 
   useEffect(() => {
     const now = new Date();
@@ -398,8 +393,6 @@ export default function HotelHome() {
         className="relative min-h-[640px] sm:min-h-[760px] h-[min(88vh,920px)] flex items-center overflow-hidden text-white bg-[#052219] select-none"
         id="top"
         aria-labelledby="hero-title"
-        onMouseEnter={() => setIsCarouselHovered(true)}
-        onMouseLeave={() => setIsCarouselHovered(false)}
       >
         {/* Carousel Slides */}
         {HERO_SLIDES.map((slide, idx) => (

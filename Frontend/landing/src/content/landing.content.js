@@ -5,7 +5,7 @@
 export const LANDING_CONTENT = {
   // Top Notice Bar (Dismissible)
   announcement: {
-    enabled: true,
+    enabled: false,
     message: 'Visiting Kainchi Dham, Jageshwar, or Kasar Devi? Heated chalet suites & chauffeured mountain cabs are open for booking.',
     linkText: 'Book Stay & Travel ↗',
     linkHref: '#enquiry',

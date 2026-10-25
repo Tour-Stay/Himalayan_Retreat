@@ -25,7 +25,7 @@ const fallbackSettings = {
     googleMapsEmbedUrl: '',
   },
   announcement: {
-    enabled: true,
+    enabled: false,
     message:
       'Visiting Kainchi Dham or Kasar Devi? Consecrated yatra assistance, heated chalet suites & temple cabs are open for booking.',
     linkText: 'Yatra Booking ↗',

@@ -93,7 +93,7 @@ export const KpiCards = ({ stats = {}, onSelectTab }) => {
           >
             <div className="flex items-center justify-between mb-2">
               <span className="text-[10px] font-cinzel font-bold text-[#0F172A] flex items-center gap-1.5 truncate">
-                <span className="px-1.5 py-0.5 bg-[#AEAC78]/20 border border-[#AEAC78]/40 text-[9px] uppercase tracking-wider text-[#242A10] font-bold">
+                <span className="px-1.5 py-0.5 bg-[#073125]/10 border border-[#073125]/20 text-[9px] uppercase tracking-wider text-[#073125] font-bold">
                   {card.category}
                 </span>
                 <span className="uppercase tracking-wider hidden sm:inline text-slate-700">{card.title}</span>
