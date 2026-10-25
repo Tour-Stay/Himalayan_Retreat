@@ -17,10 +17,10 @@ const app = express();
 
 // 1. CORS: Must be the VERY FIRST middleware so every request (and preflight) receives CORS headers
 const defaultOrigins = [
-  "http://localhost:5173",
-  "http://localhost:5174",
-  "http://localhost:5175",
-  "http://localhost:5176",
+  "https://himalayanretreathotel.netlify.app/",
+  "https://hotlhimalayanretreat.netlify.app/",
+  "https://travelhimalayan.netlify.app/",
+  "https://adminhimalayan.netlify.app/",
   "http://127.0.0.1:5173",
   "http://127.0.0.1:5174",
   "http://127.0.0.1:5175",
@@ -29,11 +29,11 @@ const defaultOrigins = [
 
 const allowedOrigins = process.env.ALLOWED_ORIGINS
   ? [
-      ...new Set([
-        ...process.env.ALLOWED_ORIGINS.split(",").map((o) => o.trim()),
-        ...defaultOrigins,
-      ]),
-    ]
+    ...new Set([
+      ...process.env.ALLOWED_ORIGINS.split(",").map((o) => o.trim()),
+      ...defaultOrigins,
+    ]),
+  ]
   : defaultOrigins;
 
 app.use(
