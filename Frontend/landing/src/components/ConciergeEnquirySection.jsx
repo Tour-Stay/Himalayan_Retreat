@@ -121,10 +121,7 @@ const ConciergeEnquirySection = () => {
       <Container size="md">
         <div className="bg-[#3D0F06] p-6 sm:p-10 md:p-14 rounded-3xl border-2 border-[#EAA722]/35 shadow-2xl text-center relative z-10 luxury-card">
           {/* VIP Concierge Trust Note */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#2D0B04] border border-[#EAA722]/35 text-[#EAA722] text-xs font-sans font-medium mb-3">
-            <span>✦</span>
-            <span>Direct reply within 15 minutes by on-site Himalayan Concierge</span>
-          </div>
+
 
           <h2 className="font-heading text-2xl sm:text-4xl lg:text-5xl text-white font-semibold mb-4 leading-tight sm:leading-snug">
             {header.title}

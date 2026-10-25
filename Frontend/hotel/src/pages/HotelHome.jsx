@@ -1,14 +1,16 @@
-import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import GuestStoriesCarousel from '../components/GuestStoriesCarousel';
 import {
   useSiteSettings,
+  apiClient,
+  subscribeToUpdates,
   SITE_CONFIG,
   trishulPeaksImg,
   chaletFamilyLiving,
   chaletSuiteImg,
   chaletFamilyBedroom,
   hotelInSnow,
-  snowViewSuiteImg,
   atticSuiteImg,
   suiteNandaDeviBalcony,
   suiteNandaDeviBalcony2,
@@ -42,7 +44,7 @@ const GALLERY_ITEMS = [
     title: 'Morning Tea Facing Mount Nanda Devi',
     location: "Private Suite Balcony • Crank's Ridge",
     caption: 'Unrushed mornings wrapped in a warm shawl, sipping freshly brewed pahadi ginger tea while the first golden sunlight touches the Nanda Devi peak.',
-    source: 'The Kasar Himalayan Heights Archive',
+
   },
   {
     id: 'night-lights-deck',
@@ -52,7 +54,7 @@ const GALLERY_ITEMS = [
     title: 'Warm Fairy Lights on Mountain Terrace',
     location: 'Resort Terrace & Multi-tier Chalet',
     caption: 'As evening falls over Almora valley, warm fairy lights illuminate the hand-cut stone chalets under a crystal-clear Himalayan sky.',
-    source: 'Google Maps Verified Photo',
+
   },
   {
     id: 'trishul-snow-peaks',
@@ -62,7 +64,7 @@ const GALLERY_ITEMS = [
     title: 'Mount Trishul (7,120m) & Sacred Peaks',
     location: "Kasar Devi Viewpoint • Crank's Ridge",
     caption: 'An unobstructed 180-degree panorama of the Great Himalayan range—Mount Trishul, Nanda Devi, and Maiktoli standing sentinel above the clouds.',
-    source: 'Verified Property Ridge View',
+
   },
   {
     id: 'exterior-pines-woods',
@@ -72,7 +74,7 @@ const GALLERY_ITEMS = [
     title: 'Stone Chalets Nestled in Ancient Pines',
     location: 'Deodar Forest Trail, Kasar Devi',
     caption: 'The multi-tiered stone and cedar chalets gracefully hug the hill slopes, submerged in sweet-scented pine air and morning birdsong.',
-    source: 'Google Maps Verified Photo',
+
   },
   {
     id: 'stone-courtyard-terrace',
@@ -82,7 +84,7 @@ const GALLERY_ITEMS = [
     title: 'Slate Stone Courtyard & Outdoor Sit-Out',
     location: 'Property Ground Walkway',
     caption: 'Handcrafted wicker chairs, natural Himalayan slate paving, flowering wall vines, and quiet spots for evening conversations.',
-    source: 'Google Maps Verified Photo',
+
   },
   {
     id: 'suite-window-peaks',
@@ -92,7 +94,7 @@ const GALLERY_ITEMS = [
     title: 'Waking Up to Snow Peaks from Bed',
     location: 'Nanda Devi Snow View Suite',
     caption: 'Large picture windows frame the snow-clad peaks directly from your heated bed, complete with electric bed warmers and solid pine wood finishes.',
-    source: 'Google Maps Verified Photo',
+
   },
   {
     id: 'winter-wonderland',
@@ -102,7 +104,7 @@ const GALLERY_ITEMS = [
     title: 'Winter Snowfall at Crank’s Ridge',
     location: 'The Kasar Himalayan Heights in Snow',
     caption: 'When winter descends upon Kasar Devi, the resort transforms into a serene white wonderland with snow-laden deodar branches.',
-    source: 'Verified Property Winter Archive',
+
   },
   {
     id: 'sunrise-meditation-deck',
@@ -112,7 +114,7 @@ const GALLERY_ITEMS = [
     title: 'Sunrise Meditation & Yoga Deck',
     location: 'Open Mountain Yoga Deck',
     caption: 'Guests beginning the day with quiet meditation on Kasar Devi’s world-renowned geomagnetic energy ridge, bringing profound calm to the mind.',
-    source: 'The Kasar Himalayan Heights Archive',
+
   },
   {
     id: 'ancient-pine-trail',
@@ -122,7 +124,7 @@ const GALLERY_ITEMS = [
     title: 'Pine Needle Forest Trail to Kasar Devi',
     location: 'Historic Crank’s Ridge Path',
     caption: 'The fragrant pine needle trail leading from the retreat through deodar groves to the 2nd-century temple and Swami Vivekananda’s cave.',
-    source: 'Kasar Devi Heritage Trail',
+
   },
   {
     id: 'kasar-devi-mandir',
@@ -132,7 +134,7 @@ const GALLERY_ITEMS = [
     title: 'Historic 2nd-Century Kasar Devi Temple',
     location: 'Kalimath / Kasar Devi Ridge',
     caption: 'A 10-minute walk brings you to this ancient hill shrine, home to deep spiritual vibrations that drew Swami Vivekananda and global artists.',
-    source: 'Sacred Kumaon Heritage',
+
   },
   {
     id: 'dining-satvik-thali',
@@ -142,7 +144,7 @@ const GALLERY_ITEMS = [
     title: 'Fresh Traditional Kumaoni Thali',
     location: "Satya's Mountain Dining",
     caption: 'Savoring home-cooked regional dishes prepared with local mountain herbs, bhatt ki dal, madua rotis, and pure mountain ghee.',
-    source: "Satya's Kitchen & Dining",
+
   },
   {
     id: 'quiet-balcony-reading',
@@ -152,7 +154,7 @@ const GALLERY_ITEMS = [
     title: 'Quiet Hours on Private Balcony',
     location: 'Mountain View Balcony',
     caption: 'Leave time for a good book, sunlit afternoons, and the soothing whisper of wind through the Himalayan pine needles.',
-    source: 'The Kasar Himalayan Heights Archive',
+
   },
   {
     id: 'day-exterior-chalets',
@@ -162,7 +164,7 @@ const GALLERY_ITEMS = [
     title: 'Daylight Perspective of the Stone Retreat',
     location: "Crank's Ridge, Kasar Devi",
     caption: 'Traditional Pahadi stone masonry and wood architecture designed to blend seamlessly into the mountain landscape.',
-    source: 'Google Maps Verified Photo',
+
   },
   {
     id: 'dining-hearth-cafe',
@@ -172,7 +174,7 @@ const GALLERY_ITEMS = [
     title: "Satya's Hearth & Rooftop Cafe",
     location: "Satya's Roof Top Cafe",
     caption: 'A cozy sanctuary for travelers to gather around warm beverages, share stories, and take in the panoramic Himalayan views.',
-    source: "Official Satya's Cafe Highlight",
+
   },
 ];
 
@@ -225,6 +227,7 @@ const HERO_SLIDES = [
 ];
 
 export default function HotelHome() {
+  const navigate = useNavigate();
   const { settings } = useSiteSettings();
   const company = settings?.company;
   const whatsappNumber = company?.whatsappNumber || SITE_CONFIG.whatsappNumber;
@@ -235,6 +238,50 @@ export default function HotelHome() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isCarouselHovered, setIsCarouselHovered] = useState(false);
   const slideTimerRef = useRef(null);
+
+  // The API returns only admin-published hotel reviews.
+  const [publishedReviews, setPublishedReviews] = useState([]);
+  const [reviewsLoading, setReviewsLoading] = useState(true);
+  const [reviewsLoadError, setReviewsLoadError] = useState(false);
+
+  useEffect(() => {
+    let isActive = true;
+
+    const fetchPublishedReviews = async () => {
+      try {
+        const response = await apiClient.get('/hotel/reviews');
+        if (!isActive) return;
+        const reviews = Array.isArray(response.data) ? response.data : [];
+        setPublishedReviews(reviews.filter((review) => Number(review.rating) >= 3));
+        setReviewsLoadError(false);
+      } catch {
+        if (isActive) setReviewsLoadError(true);
+      } finally {
+        if (isActive) setReviewsLoading(false);
+      }
+    };
+
+    void fetchPublishedReviews();
+    const unsubscribe = subscribeToUpdates('reviews', fetchPublishedReviews, 60 * 1000);
+
+    return () => {
+      isActive = false;
+      unsubscribe?.();
+    };
+  }, []);
+
+  // Hash anchor scrolling listener (e.g. for #story, #rooms, #experiences)
+  useEffect(() => {
+    if (window.location.hash) {
+      const id = window.location.hash.replace('#', '');
+      const el = document.getElementById(id);
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }, 200);
+      }
+    }
+  }, []);
 
   // Video Reel Modal state
   const [videoModalOpen, setVideoModalOpen] = useState(false);
@@ -297,18 +344,10 @@ export default function HotelHome() {
   }, [lightboxIndex, filteredGallery.length]);
 
   // Today's date ISO
-  const [minDate, setMinDate] = useState('');
-    const unsubscribe = subscribeToUpdates('rooms', () => {
-      fetchRooms();
-    }, 60 * 1000);
-
-  useEffect(() => {
-    const now = new Date();
-    const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
-      .toISOString()
-      .slice(0, 10);
-    setMinDate(today);
-  }, []);
+  const now = new Date();
+  const minDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+    .toISOString()
+    .slice(0, 10);
 
   const getDepartureMin = () => {
     if (!arrivalDate) return minDate;
@@ -381,7 +420,7 @@ export default function HotelHome() {
       setCopyStatus('Enquiry copied to clipboard.');
       setCopyButtonText('Copied!');
       setTimeout(() => setCopyButtonText('Copy enquiry'), 3000);
-    } catch (err) {
+    } catch {
       setCopyStatus('Please select and copy the enquiry text above.');
     }
   };
@@ -405,9 +444,8 @@ export default function HotelHome() {
         {HERO_SLIDES.map((slide, idx) => (
           <div
             key={idx}
-            className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${
-              idx === currentSlide ? 'opacity-100 z-10' : 'opacity-0 pointer-events-none z-0'
-            }`}
+            className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${idx === currentSlide ? 'opacity-100 z-10' : 'opacity-0 pointer-events-none z-0'
+              }`}
           >
             {slide.isVideo ? (
               <video
@@ -441,10 +479,7 @@ export default function HotelHome() {
 
         {/* Hero Content */}
         <div className="relative z-20 w-[min(1240px,calc(100%-36px))] mx-auto py-16 sm:py-20 pb-28">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-black/40 border border-[#C9F24D]/40 text-[#C9F24D] text-[11px] sm:text-xs font-sans font-bold uppercase tracking-widest rounded-full mb-4 backdrop-blur-md shadow-md">
-            <span className="w-2 h-2 rounded-full bg-[#C9F24D] animate-ping" />
-            <span>Kasar Devi, Almora • 6,942 FT • Satya’s</span>
-          </div>
+
 
           <h1
             id="hero-title"
@@ -517,11 +552,10 @@ export default function HotelHome() {
                 type="button"
                 onClick={() => setCurrentSlide(idx)}
                 aria-label={`Go to slide ${idx + 1}`}
-                className={`transition-all rounded-full cursor-pointer ${
-                  idx === currentSlide
-                    ? 'w-7 h-2 bg-[#C9F24D]'
-                    : 'w-2 h-2 bg-white/40 hover:bg-white/80'
-                }`}
+                className={`transition-all rounded-full cursor-pointer ${idx === currentSlide
+                  ? 'w-7 h-2 bg-[#C9F24D]'
+                  : 'w-2 h-2 bg-white/40 hover:bg-white/80'
+                  }`}
               />
             ))}
           </div>
@@ -651,7 +685,8 @@ export default function HotelHome() {
       </div>
 
       {/* 4. OUR SPIRIT (STORY) SECTION WITH LATEST GOOGLE MAPS NIGHT EXTERIOR */}
-      <section className="py-16 sm:py-24" id="story">
+      <section className="py-16 sm:py-24 relative" id="spirit">
+        <span id="our-spirit" className="absolute -top-24 pointer-events-none" aria-hidden="true" />
         <div className="w-[min(1120px,calc(100%-36px))] mx-auto grid grid-cols-1 lg:grid-cols-2 items-center gap-10 lg:gap-20">
           <div className="relative min-h-[420px] sm:min-h-[540px] rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border border-[#073125]/10 group">
             <img
@@ -802,11 +837,11 @@ export default function HotelHome() {
               <div className="px-6 pb-6 pt-0">
                 <button
                   type="button"
-                  onClick={() => handleSelectRoom('Nanda Devi Snow View Suite')}
-                  className="w-full py-3 rounded-full bg-[#073125] hover:bg-[#052219] text-white text-[0.76rem] font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 shadow-sm active:scale-95 cursor-pointer font-sans"
+                  onClick={() => navigate('/book?room=nanda-devi')}
+                  className="w-full py-3 rounded-full bg-[#073125] hover:bg-[#052219] text-white text-[0.76rem] font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-sm active:scale-95 cursor-pointer font-sans group"
                 >
-                  <span>Ask about this suite</span>
-                  <span aria-hidden="true">&nbsp;→</span>
+                  <svg viewBox="0 0 20 20" className="w-4 h-4 group-hover:-translate-y-0.5 transition-transform" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 2v3m8-3v3M3 8h14M5 4h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  <span>Book</span>
                 </button>
               </div>
             </article>
@@ -843,11 +878,11 @@ export default function HotelHome() {
               <div className="px-6 pb-6 pt-0">
                 <button
                   type="button"
-                  onClick={() => handleSelectRoom('Cedar Family Mountain Chalet')}
-                  className="w-full py-3 rounded-full bg-[#073125] hover:bg-[#052219] text-white text-[0.76rem] font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 shadow-sm active:scale-95 cursor-pointer font-sans"
+                  onClick={() => navigate('/book?room=cedar-chalet')}
+                  className="w-full py-3 rounded-full bg-[#073125] hover:bg-[#052219] text-white text-[0.76rem] font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-sm active:scale-95 cursor-pointer font-sans group"
                 >
-                  <span>Ask about this suite</span>
-                  <span aria-hidden="true">&nbsp;→</span>
+                  <svg viewBox="0 0 20 20" className="w-4 h-4 group-hover:-translate-y-0.5 transition-transform" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 2v3m8-3v3M3 8h14M5 4h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  <span>Book</span>
                 </button>
               </div>
             </article>
@@ -884,11 +919,11 @@ export default function HotelHome() {
               <div className="px-6 pb-6 pt-0">
                 <button
                   type="button"
-                  onClick={() => handleSelectRoom("Crank's Ridge Attic Suite")}
-                  className="w-full py-3 rounded-full bg-[#073125] hover:bg-[#052219] text-white text-[0.76rem] font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 shadow-sm active:scale-95 cursor-pointer font-sans"
+                  onClick={() => navigate('/book?room=attic-suite')}
+                  className="w-full py-3 rounded-full bg-[#073125] hover:bg-[#052219] text-white text-[0.76rem] font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-sm active:scale-95 cursor-pointer font-sans group"
                 >
-                  <span>Ask about this suite</span>
-                  <span aria-hidden="true">&nbsp;→</span>
+                  <svg viewBox="0 0 20 20" className="w-4 h-4 group-hover:-translate-y-0.5 transition-transform" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 2v3m8-3v3M3 8h14M5 4h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  <span>Book</span>
                 </button>
               </div>
             </article>
@@ -896,19 +931,21 @@ export default function HotelHome() {
 
           <div className="mt-8 text-center">
             <Link
-              to="/rooms"
-              className="inline-flex items-center gap-2 text-[#073125] hover:text-[#C9F24D] text-xs font-bold uppercase tracking-wider underline transition-colors font-sans"
+              to="/book"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#EAA722] hover:bg-[#D98E16] text-[#073125] text-[0.76rem] font-black uppercase tracking-wider transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 font-sans"
             >
-              <span>Explore all property chalets &amp; live prices</span>
-              <span aria-hidden="true">&rarr;</span>
+              <svg viewBox="0 0 20 20" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 2v3m8-3v3M3 8h14M5 4h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              <span>Book a Room — Best Rates Direct</span>
+              <span aria-hidden="true">→</span>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* 7. PAHADI MOMENTS (EXPERIENCES) SECTION */}
-      <section className="relative overflow-hidden py-16 sm:py-24 text-white bg-[#073125]" id="experiences">
-        {/* Subtle decorative concentric rings background */}
+      {/* 7. PUBLISHED GUEST REVIEWS ("Let the place tell its story") */}
+      <section className="relative overflow-hidden py-16 sm:py-24 text-white bg-[#073125]" id="story">
+        <span id="experiences" className="absolute -top-24 pointer-events-none" aria-hidden="true" />
+        <span id="guest-stories" className="absolute -top-24 pointer-events-none" aria-hidden="true" />
         <div
           className="absolute -right-24 -top-36 w-[460px] h-[460px] rounded-full border border-white/10 pointer-events-none"
           style={{
@@ -919,57 +956,35 @@ export default function HotelHome() {
         />
 
         <div className="relative z-10 w-[min(1120px,calc(100%-36px))] mx-auto">
-          <div className="max-w-[720px] mb-12">
-            <span className="eyebrow text-[#C9F24D] before:bg-[#C9F24D] mb-3">
-              Pahadi moments
-            </span>
-            <h2 className="font-serif font-normal text-[clamp(2.3rem,4.5vw,4.2rem)] leading-[1.08] tracking-[-0.01em] text-white">
-              Let the place tell its story.
-            </h2>
-            <p className="mt-3 text-white/80 text-base font-sans">
-              Ground the guest experience in the region’s sacred hills and ancient traditions. Located right on Kasar Devi’s magnetic geomagnetic ridge.
-            </p>
+          <div className="mb-9 flex flex-col gap-5 sm:mb-12 sm:flex-row sm:items-end sm:justify-between">
+            <div className="max-w-[720px]">
+              <span className="eyebrow text-[#C9F24D] before:bg-[#C9F24D] mb-3">
+                Published guest stories
+              </span>
+              <h2 className="font-serif font-normal text-[clamp(2.3rem,4.5vw,4.2rem)] leading-[1.08] tracking-[-0.01em] text-white">
+                Let the place tell its story.
+              </h2>
+              <p className="mt-3 text-white/80 text-base font-sans">
+                Real words from guests who found their own quiet corner in Kasar Devi. Every story here has been approved by our team.
+              </p>
+            </div>
+            <Link
+              to="/reviews"
+              className="inline-flex shrink-0 items-center gap-2 self-start rounded-full border border-white/25 px-5 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-white no-underline transition hover:border-[#C9F24D]/70 hover:bg-white/5 sm:self-auto"
+            >
+              All guest reviews <span aria-hidden="true">&rarr;</span>
+            </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <article className="p-7 rounded-2xl border border-white/15 bg-white/[0.04] backdrop-blur-sm">
-              <span className="w-10 h-10 rounded-full border border-[#C9F24D]/60 text-[#C9F24D] font-serif text-[1rem] flex items-center justify-center font-bold">
-                01
-              </span>
-              <h3 className="my-4 font-serif font-medium text-[1.45rem] leading-[1.2] text-white">
-                Local roots
-              </h3>
-              <p className="m-0 text-white/80 text-[0.9rem] leading-relaxed font-sans">
-                Kasar Devi is world-renowned alongside Stonehenge and Machu Picchu for its geomagnetic energy field that naturally calms the mind.
-              </p>
-            </article>
-
-            <article className="p-7 rounded-2xl border border-white/15 bg-white/[0.04] backdrop-blur-sm">
-              <span className="w-10 h-10 rounded-full border border-[#C9F24D]/60 text-[#C9F24D] font-serif text-[1rem] flex items-center justify-center font-bold">
-                02
-              </span>
-              <h3 className="my-4 font-serif font-medium text-[1.45rem] leading-[1.2] text-white">
-                Around the hills
-              </h3>
-              <p className="m-0 text-white/80 text-[0.9rem] leading-relaxed font-sans">
-                A 10-minute walk brings you to the 2nd-century Kasar Devi Temple, Swami Vivekananda’s meditation cave, and sunset viewpoints.
-              </p>
-            </article>
-
-            <article className="p-7 rounded-2xl border border-white/15 bg-white/[0.04] backdrop-blur-sm">
-              <span className="w-10 h-10 rounded-full border border-[#C9F24D]/60 text-[#C9F24D] font-serif text-[1rem] flex items-center justify-center font-bold">
-                03
-              </span>
-              <h3 className="my-4 font-serif font-medium text-[1.45rem] leading-[1.2] text-white">
-                Time for meaning
-              </h3>
-              <p className="m-0 text-white/80 text-[0.9rem] leading-relaxed font-sans">
-                Spend unhurried hours in prayer, quiet contemplation, sacred Kumaon temple trails, or pilgrimage day-trips to Neem Karoli Baba’s Kainchi Dham.
-              </p>
-            </article>
-          </div>
+          <GuestStoriesCarousel
+            reviews={publishedReviews}
+            theme="dark"
+            loading={reviewsLoading}
+            error={reviewsLoadError}
+          />
         </div>
       </section>
+
 
       {/* 8. GALLERY SECTION WITH AUTHENTIC RESORT PHOTOGRAPHY & MOMENTS */}
       <section className="py-20 sm:py-28 bg-[#F8FAF7]" id="gallery">
@@ -1009,16 +1024,14 @@ export default function HotelHome() {
                     setActiveGalleryTab(cat.id);
                     setLightboxIndex(null);
                   }}
-                  className={`px-4 sm:px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 flex items-center gap-2 cursor-pointer ${
-                    isActive
-                      ? 'bg-[#073125] text-[#C9F24D] shadow-md scale-102 ring-2 ring-[#073125]/20'
-                      : 'bg-white text-[#4A635A] hover:text-[#073125] hover:bg-white/80 border border-[#D5E0D8]'
-                  }`}
+                  className={`px-4 sm:px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 flex items-center gap-2 cursor-pointer ${isActive
+                    ? 'bg-[#073125] text-[#C9F24D] shadow-md scale-102 ring-2 ring-[#073125]/20'
+                    : 'bg-white text-[#4A635A] hover:text-[#073125] hover:bg-white/80 border border-[#D5E0D8]'
+                    }`}
                 >
                   <span>{cat.label}</span>
-                  <span className={`text-[10px] px-2 py-0.5 rounded-full ${
-                    isActive ? 'bg-[#C9F24D]/25 text-[#C9F24D]' : 'bg-[#EDF2EC] text-[#4A635A]'
-                  }`}>
+                  <span className={`text-[10px] px-2 py-0.5 rounded-full ${isActive ? 'bg-[#C9F24D]/25 text-[#C9F24D]' : 'bg-[#EDF2EC] text-[#4A635A]'
+                    }`}>
                     {count}
                   </span>
                 </button>
@@ -1095,6 +1108,12 @@ export default function HotelHome() {
                 Are you staying with us? Share your moments with <strong className="text-[#073125]">#TheKasarHimalayanHeights</strong> or tag <a href="https://www.instagram.com/the_kasar_himalyan_heights/" target="_blank" rel="noopener noreferrer" className="text-[#073125] font-bold underline hover:text-[#C9F24D]">@the_kasar_himalyan_heights</a> to be featured.
               </p>
             </div>
+            <Link
+              to="/reviews"
+              className="btn-concept-secondary text-xs py-2.5 px-5 flex-shrink-0"
+            >
+              Read guest stories
+            </Link>
             <a
               href={GOOGLE_MAPS_URL}
               target="_blank"

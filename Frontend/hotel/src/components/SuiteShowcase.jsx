@@ -53,13 +53,13 @@ const SuiteShowcase = ({ onOpenQuickView, rooms }) => {
               Heated rooms with private balconies facing Trishul &amp; Nanda Devi peaks.
             </p>
             <Link
-              to="/rooms"
-              className="mt-2 inline-flex items-center gap-3 px-6 py-3 rounded-full bg-[#EAA722] hover:bg-[#D98E16] text-[#073125] font-mono text-xs sm:text-sm font-black uppercase tracking-wider shadow-xl shadow-[#EAA722]/35 hover:shadow-2xl hover:shadow-[#EAA722]/55 ring-4 ring-[#EAA722]/25 hover:ring-[#EAA722]/45 transition-all duration-300 transform hover:-translate-y-0.5 hover:scale-102 border-2 border-[#F3D8B0]/60 group cursor-pointer"
+              to="/book"
+              className="mt-2 inline-flex items-center gap-2.5 px-7 py-3 rounded-full bg-[#EAA722] hover:bg-[#D98E16] text-[#073125] font-mono text-xs sm:text-sm font-black uppercase tracking-wider shadow-xl shadow-[#EAA722]/35 hover:shadow-2xl hover:shadow-[#EAA722]/55 ring-4 ring-[#EAA722]/25 hover:ring-[#EAA722]/45 transition-all duration-300 transform hover:-translate-y-0.5 hover:scale-102 border-2 border-[#F3D8B0]/60 group cursor-pointer"
             >
-              <span className="font-extrabold tracking-wide text-[#073125]">Explore All Rooms &amp; Rates</span>
-              <span className="w-6 h-6 rounded-full bg-[#073125] text-[#EAA722] group-hover:bg-[#073125] group-hover:text-white flex items-center justify-center transition-all duration-300 group-hover:rotate-45 shadow-sm">
-                <ArrowUpRightIcon className="w-3.5 h-3.5" />
-              </span>
+              <svg viewBox="0 0 20 20" className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M6 2v3m8-3v3M3 8h14M5 4h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <span className="font-extrabold tracking-wide">Book</span>
             </Link>
           </div>
         </div>
