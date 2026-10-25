@@ -30,7 +30,7 @@ const AllCabs = () => {
       <section className="bg-[#541508] text-white pt-12 sm:pt-16 pb-10 sm:pb-12 px-4 border-b border-[#3D0F06]">
         <div className="max-w-4xl mx-auto text-center">
           <span className="inline-block px-4 py-1.5 rounded-full bg-[#EAA722] text-[#541508] text-xs font-mono font-bold tracking-widest uppercase mb-3 shadow-xs">
-            ॥ पावन तीर्थ यात्रा • MOUNTAIN FLEET &amp; TARIFFS • 6,942 FT ॥
+            MOUNTAIN FLEET &amp; TARIFFS • 6,942 FT
           </span>
           <h1 className="font-serif text-3xl sm:text-5xl font-normal tracking-tight mb-3 text-white">
             Our Mountain Cabs &amp; Tariffs

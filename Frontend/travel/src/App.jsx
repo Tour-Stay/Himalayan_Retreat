@@ -17,14 +17,7 @@ function TravelAppContent() {
       {/* 0. Universal Scroll & Hash Navigation Manager */}
       <ScrollManager />
 
-      {/* 1. Top Announcement Bar (like Hotel & Landing) */}
-      {announcement?.enabled !== false && (
-        <AnnouncementBar
-          message={announcement?.message || "Reliable Mountain Cabs at 6,942 Feet: Fixed Honest Fares & Local Pahadi Drivers."}
-          linkText={announcement?.linkText || "Check Cab Fares"}
-          linkHref={announcement?.linkHref || "/calculator"}
-        />
-      )}
+
 
       {/* 2. Navigation Bar matching Hotel style */}
       <TravelNavbar />

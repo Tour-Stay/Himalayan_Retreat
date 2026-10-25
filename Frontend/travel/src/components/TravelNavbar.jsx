@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { APP_URLS, SITE_CONFIG, PhoneIcon, ArrowUpRightIcon, CarIcon, BedIcon, useSiteSettings } from '@shared';
-import Logo from '@shared/components/Logo';
+import { useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { APP_URLS, SITE_CONFIG, useSiteSettings } from '@shared';
 
 const navLinks = [
   { label: 'Our Cabs', href: '/cabs' },
@@ -13,132 +12,125 @@ const navLinks = [
 
 const TravelNavbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { settings } = useSiteSettings();
   const company = settings?.company;
   const conciergePhone = company?.conciergePhone || SITE_CONFIG.conciergePhone;
-  const elevation = company?.elevation || '6,942 Ft';
 
-  const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 25);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const handleNavClick = (e, href) => {
+    if (mobileMenuOpen) setMobileMenuOpen(false);
+
+    if (href.startsWith('/#')) {
+      e.preventDefault();
+      const targetId = href.replace('/#', '');
+      if (location.pathname !== '/') {
+        navigate('/' + '#' + targetId);
+        setTimeout(() => {
+          const el = document.getElementById(targetId);
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+        return;
+      }
+      const el = document.getElementById(targetId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
 
   return (
-    <header className="sticky top-0 z-50 w-full font-sans transition-all duration-300">
-      {/* 1. TOP DEVOTIONAL UTILITY STRIP (Sacred Maroon #541508) */}
-      <div
-        className={`bg-[#541508] border-b border-[#3D0F06] px-4 text-xs text-[#FAF5EC] transition-all duration-300 overflow-hidden ${
-          isScrolled ? 'max-h-0 py-0 opacity-0 pointer-events-none border-b-0' : 'max-h-11 py-2 opacity-100'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto flex items-center justify-between text-xs sm:text-sm whitespace-nowrap">
-          <div className="flex items-center gap-2 flex-shrink-0">
-            <span className="text-[#EAA722] text-xs">🪔</span>
-            <span className="font-devanagari text-[#EAA722] font-semibold">॥ ॐ नमः शिवाय • जय श्री नीब करौरी महाराज ॥</span>
-            <span className="text-white/30 hidden sm:inline">•</span>
-            <span className="hidden sm:inline text-white/90">Kasar Devi ({elevation})</span>
-          </div>
-
-          <div className="flex items-center gap-3.5 flex-shrink-0">
-            <a
-              href={`tel:${conciergePhone}`}
-              className="hover:text-[#EAA722] font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap text-white/95"
-            >
-              <PhoneIcon className="w-3.5 h-3.5 text-[#EAA722]" />
-              <span>Call Yatra Desk: <strong className="text-white font-numeral">{conciergePhone}</strong></span>
-            </a>
-            <span className="text-white/30">|</span>
-            <a
-              href={APP_URLS.landing}
-              className="text-[#EAA722] hover:underline font-semibold whitespace-nowrap"
-            >
-              Dev Bhoomi Guide &rarr;
-            </a>
-          </div>
-        </div>
+    <header className="sticky top-0 z-50 w-full font-sans site-header">
+      {/* 1. TOPLINE BANNER — Matches Hotel Topline */}
+      <div className="topline">
+        Chauffeured Himalayan Fleet · Kasar Devi &amp; Almora · Kainchi Dham Yatra
       </div>
 
-      {/* 2. MAIN DEVOTIONAL TEAL NAVIGATION BAR (Gold Trim & Clean Links) */}
-      <div
-        className={`w-full transition-all duration-300 bg-[#12433B] text-white border-b border-[#EAA722]/30 shadow-lg ${
-          isScrolled ? 'py-2.5 backdrop-blur-md' : 'py-3.5'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-4">
+      {/* 2. MAIN HEADER NAVBAR — Matches Hotel Deep Teal #073125 Style */}
+      <div className="w-full bg-[#073125] text-white border-b border-white/10 shadow-md">
+        <div className="w-[min(1240px,calc(100%-36px))] min-h-[76px] sm:min-h-[82px] mx-auto flex items-center justify-between gap-6 py-2">
           {/* Brand Logo & Name */}
-          <Link to="/" className="flex items-center gap-3 group flex-shrink-0 whitespace-nowrap">
-            <Logo size={42} />
-            <div className="flex flex-col">
-              <span className="font-serif text-lg sm:text-xl lg:text-2xl font-bold text-white group-hover:text-[#EAA722] transition-colors leading-tight whitespace-nowrap">
-                The Kasar Himalayan Heights
+          <Link to="/" className="inline-flex items-center gap-3 text-inherit no-underline flex-shrink-0 group">
+            <img
+              src="/logo.svg"
+              alt="The Kasar Himalayan Expeditions"
+              className="h-12 sm:h-14 w-auto object-contain filter drop-shadow brightness-110 group-hover:scale-105 transition-transform"
+            />
+            <span className="flex flex-col leading-tight">
+              <strong className="font-serif text-[1.22rem] sm:text-[1.32rem] font-medium text-white tracking-wide">
+                The Kasar
+              </strong>
+              <span className="text-[#C9F24D] text-[0.62rem] tracking-[0.2em] uppercase font-sans font-semibold">
+                Himalayan Expeditions · Satya’s
               </span>
-              <span className="text-xs tracking-wider uppercase text-[#EAA722] font-semibold font-mono whitespace-nowrap">
-                पावन तीर्थ यात्रा • Almora Fleet • 6,942 FT
-              </span>
-            </div>
+            </span>
           </Link>
 
-          {/* Clean Desktop Menu Links (1 line always) */}
-          <nav className="nav-desktop-menu items-center gap-1.5 sm:gap-2.5 lg:gap-3.5 flex-nowrap whitespace-nowrap flex-shrink-0">
-            {navLinks.map((link, idx) => {
+          {/* Desktop Nav Links */}
+          <nav className="hidden md:flex items-center gap-5 lg:gap-7" aria-label="Main navigation">
+            {navLinks.map((link) => {
+              const isRoute = link.href.startsWith('/') && !link.href.startsWith('/#');
               const isActive = (link.href === '/cabs' && location.pathname === '/cabs') ||
-                               (link.href === '/calculator' && (location.pathname === '/calculator' || location.pathname === '/fare-calculator'));
-              return (
-                <a
-                  key={idx}
-                  href={link.href}
-                  className={`px-3.5 py-1.5 rounded-full text-[19px] sm:text-[20px] lg:text-[21px] font-serif font-medium transition-all whitespace-nowrap flex-shrink-0 tracking-wide ${
-                    isActive
-                      ? 'bg-white/15 text-[#EAA722] shadow-xs'
-                      : 'text-[#FAF5EC] hover:text-[#EAA722] hover:bg-white/10'
+                (link.href === '/calculator' && (location.pathname === '/calculator' || location.pathname === '/fare-calculator'));
+
+              return isRoute ? (
+                <Link
+                  key={link.label}
+                  to={link.href}
+                  className={`text-[0.78rem] font-semibold tracking-wider uppercase transition-colors no-underline ${
+                    isActive ? 'text-[#C9F24D]' : 'text-white/85 hover:text-[#C9F24D]'
                   }`}
+                >
+                  {link.label}
+                </Link>
+              ) : (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  onClick={(e) => handleNavClick(e, link.href)}
+                  className="text-white/85 hover:text-[#C9F24D] text-[0.78rem] font-semibold tracking-wider uppercase transition-colors no-underline"
                 >
                   {link.label}
                 </a>
               );
             })}
-          </nav>
 
-          {/* Right Action Buttons - Book Cab Primary (Gold), View Hotel Secondary (Glass) */}
-          <div className="nav-actions-desktop items-center gap-2 lg:gap-2.5 flex-nowrap whitespace-nowrap flex-shrink-0">
+            {/* Book Cab Pill CTA */}
             <Link
               to="/calculator"
-              className="px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider bg-[#EAA722] hover:bg-[#D98E16] text-[#541508] transition-all shadow-md flex items-center gap-1.5 hover:scale-102 whitespace-nowrap flex-shrink-0 cursor-pointer"
+              className="px-5 py-2.5 rounded-full bg-[#C9F24D] text-[#073125] hover:bg-[#bde63d] font-bold text-xs tracking-wider uppercase transition-all shadow-md flex items-center gap-1.5 no-underline hover:scale-102 flex-shrink-0"
             >
-              <CarIcon className="w-4 h-4 flex-shrink-0 text-[#541508]" />
-              <span className="whitespace-nowrap">Book Cab</span>
+              <span>Book Cab</span>
+              <span aria-hidden="true">&nbsp;↗</span>
             </Link>
 
+            {/* Hotel Stay Secondary Link */}
             <a
               href={APP_URLS.hotel}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-4 py-2.5 rounded-full text-xs sm:text-sm font-semibold uppercase tracking-wider border border-[#EAA722]/40 bg-white/10 text-white hover:bg-white/20 transition-all flex items-center gap-1.5 shadow-xs whitespace-nowrap flex-shrink-0 cursor-pointer"
+              className="px-4 py-2 rounded-full border border-white/25 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs tracking-wider uppercase transition-all flex items-center gap-1.5 no-underline flex-shrink-0"
             >
-              <BedIcon className="w-4 h-4 text-[#EAA722] flex-shrink-0" />
-              <span className="whitespace-nowrap">View Hotel</span>
+              <span>Hotel Stay</span>
+              <span aria-hidden="true">&nbsp;↗</span>
             </a>
-          </div>
+          </nav>
 
           {/* Mobile Menu Button */}
-          <div className="nav-mobile-btn items-center">
+          <div className="flex md:hidden items-center">
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-xl border border-[#EAA722]/30 bg-white/10 text-white hover:text-[#EAA722] transition-colors cursor-pointer"
-              aria-label="Toggle navigation menu"
+              className="w-10 h-10 rounded-full border border-white/20 bg-white/10 text-white flex items-center justify-center cursor-pointer active:scale-95"
+              aria-label={mobileMenuOpen ? 'Close navigation' : 'Open navigation'}
+              aria-expanded={mobileMenuOpen}
             >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
                 {mobileMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M6 18L18 6M6 6l12 12" />
+                  <path d="M6 18L18 6M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                 ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M4 6h16M4 12h16M4 18h16" />
+                  <path d="M3 6h18M3 12h18M3 18h18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                 )}
               </svg>
             </button>
@@ -146,57 +138,61 @@ const TravelNavbar = () => {
         </div>
       </div>
 
-      {/* 3. SIMPLE MOBILE MENU DRAWER */}
+      {/* 3. MOBILE MENU DRAWER — Deep Forest Green matches Hotel */}
       {mobileMenuOpen && (
-        <div className="nav-mobile-panel bg-[#541508] border-b border-[#3D0F06] px-6 py-5 space-y-3.5 shadow-xl text-white">
-          <div className="space-y-1.5 pb-3 border-b border-white/15">
-            {navLinks.map((link, idx) => (
-              <a
-                key={idx}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className="block py-2 text-[20px] font-serif font-medium text-white hover:text-[#EAA722] transition-colors"
-              >
-                {link.label}
-              </a>
-            ))}
-            <Link
-              to="/cabs"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block py-2 text-base font-semibold text-[#EAA722] hover:underline"
-            >
-              View All Cabs &amp; Rates &rarr;
-            </Link>
+        <div className="md:hidden bg-[#052219] border-b border-white/15 px-6 py-5 space-y-3.5 text-white animate-fade-up">
+          <div className="grid grid-cols-2 gap-3 pb-3 border-b border-white/10">
+            {navLinks.map((link) => {
+              const isRoute = link.href.startsWith('/') && !link.href.startsWith('/#');
+              return isRoute ? (
+                <Link
+                  key={link.label}
+                  to={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="py-2 text-[0.88rem] font-medium text-white/90 hover:text-[#C9F24D] transition-colors"
+                >
+                  {link.label}
+                </Link>
+              ) : (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  onClick={(e) => handleNavClick(e, link.href)}
+                  className="py-2 text-[0.88rem] font-medium text-white/90 hover:text-[#C9F24D] transition-colors"
+                >
+                  {link.label}
+                </a>
+              );
+            })}
           </div>
 
           <div className="pt-2 flex flex-col gap-2.5">
-            <div className="grid grid-cols-2 gap-2">
-              <Link
-                to="/calculator"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-3 rounded-full text-center text-xs uppercase tracking-wider font-bold bg-[#EAA722] text-[#541508] flex items-center justify-center gap-1.5 shadow-md"
-              >
-                <CarIcon className="w-4 h-4 text-[#541508]" />
-                <span>Book Cab</span>
-              </Link>
-
-              <a
-                href={APP_URLS.hotel}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-3 rounded-full text-center text-xs uppercase tracking-wider font-semibold border border-white/20 bg-white/10 text-white flex items-center justify-center gap-1.5"
-              >
-                <BedIcon className="w-4 h-4 text-[#EAA722]" />
-                <span>View Hotel</span>
-              </a>
-            </div>
-            <a
-              href={`tel:${conciergePhone}`}
-              className="text-center text-xs text-white/80 font-semibold py-1 block"
+            <Link
+              to="/calculator"
+              onClick={() => setMobileMenuOpen(false)}
+              className="w-full py-3 rounded-full bg-[#C9F24D] text-[#073125] font-bold text-xs tracking-wider uppercase text-center block shadow-md"
             >
-              Call Cab Desk: <span className="text-white font-numeral">{conciergePhone}</span>
+              Book Cab ↗
+            </Link>
+
+            <a
+              href={APP_URLS.hotel}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setMobileMenuOpen(false)}
+              className="w-full py-2.5 rounded-full border border-white/20 bg-white/10 text-white font-semibold text-xs tracking-wider uppercase text-center block"
+            >
+              Hotel Stay ↗
             </a>
+
+            {conciergePhone && (
+              <a
+                href={`tel:${conciergePhone}`}
+                className="text-center text-xs text-white/80 font-medium pt-1 block"
+              >
+                Call Cab Desk: <span className="text-[#C9F24D] font-bold">{conciergePhone}</span>
+              </a>
+            )}
           </div>
         </div>
       )}

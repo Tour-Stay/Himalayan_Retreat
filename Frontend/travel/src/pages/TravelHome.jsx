@@ -55,7 +55,7 @@ const TravelHome = () => {
   };
 
   return (
-    <div className="bg-[#F8FAF7] text-[#073125] font-sans selection:bg-[#EAA722] selection:text-[#073125]">
+    <div className="bg-[#F8FAF7] text-[#073125] font-sans selection:bg-[#C9F24D] selection:text-[#073125]">
       {/* 1. Hero: Majestic Mountain Highway & Local Drivers */}
       <section className="relative min-h-[85vh] flex items-center justify-center bg-black text-white overflow-hidden pt-20 pb-24">
         {/* Background Image — Clear, crisp visibility with natural colors */}
@@ -70,17 +70,11 @@ const TravelHome = () => {
         </div>
 
         <div className="relative z-20 max-w-4xl mx-auto px-4 text-center flex flex-col items-center">
-          {/* Sacred Kesariya Tag */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/40 border border-white/25 text-[#EAA722] text-xs sm:text-sm font-mono uppercase tracking-wider mb-5 backdrop-blur-md shadow-md">
-            <span className="text-amber-400 text-xs">🪔</span>
-            <span>॥ ॐ नमः शिवाय • जय श्री नीब करौरी महाराज ॥ • 6,942 FT</span>
-          </div>
-
           <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl font-normal tracking-tight leading-tight text-white max-w-4xl drop-shadow-[0_3px_10px_rgba(0,0,0,0.7)]">
             Himalayan Cabs &amp; Tours
           </h1>
 
-          <p className="mt-3 text-xl sm:text-3xl text-[#EAA722] font-light drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
+          <p className="mt-3 text-xl sm:text-3xl text-[#C9F24D] font-light drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
             Pahadi Drivers • Kainchi Dham Yatra • Fixed Fares
           </p>
 
@@ -92,14 +86,14 @@ const TravelHome = () => {
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5">
             <Link
               to="/calculator"
-              className="px-8 py-3.5 rounded-full text-xs sm:text-sm font-mono uppercase tracking-wider font-bold bg-[#EAA722] hover:bg-[#D98E16] text-[#541508] transition-all shadow-md hover:scale-102 flex items-center gap-2 cursor-pointer"
+              className="px-8 py-3.5 rounded-full text-xs sm:text-sm font-sans uppercase tracking-wider font-bold bg-[#C9F24D] hover:bg-[#bde63d] text-[#073125] transition-all shadow-md hover:scale-102 flex items-center gap-2 cursor-pointer"
             >
               <span>Calculate Trip Fare</span>
-              <ArrowUpRightIcon className="w-4 h-4 text-[#541508]" />
+              <ArrowUpRightIcon className="w-4 h-4 text-[#073125]" />
             </Link>
             <Link
               to="/cabs"
-              className="px-8 py-3.5 rounded-full text-xs sm:text-sm font-mono uppercase tracking-wider font-semibold border border-[#EAA722]/40 bg-white/10 hover:bg-white/20 text-[#FAF5EC] transition-all backdrop-blur-sm hover:scale-102"
+              className="px-8 py-3.5 rounded-full text-xs sm:text-sm font-sans uppercase tracking-wider font-semibold border border-white/30 bg-white/10 hover:bg-white/20 text-[#FAF5EC] transition-all backdrop-blur-sm hover:scale-102"
             >
               Explore Our Cabs
             </Link>
@@ -110,24 +104,24 @@ const TravelHome = () => {
       {/* 2. Hero Floating Quick Cab Search Bar */}
       <HeroCabBar onSearch={handleHeroSearch} />
 
-      {/* 3. Why Ride With Us (Warm Sandalwood 4-Card Bento Grid) */}
-      <section id="trust" className="pt-16 pb-16 sm:pt-20 sm:pb-20 px-4 bg-[#FAF5EC] border-b border-[#EAA722]/30">
+      {/* 3. Why Ride With Us (Warm Clean 4-Card Bento Grid) */}
+      <section id="trust" className="pt-16 pb-16 sm:pt-20 sm:pb-20 px-4 bg-[#F4F7F3] border-b border-[#D5E0D8]">
         <Container size="full" className="max-w-[1560px]">
           <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12 reveal">
-            <span className="inline-block px-3.5 py-1 rounded-full bg-[#EAA722] text-[#541508] text-xs font-mono font-bold tracking-widest uppercase mb-2.5 shadow-xs">
-              ॥ पावन तीर्थ सारथी सेवा ॥ • WHY PILGRIMS &amp; FAMILIES TRUST US
+            <span className="inline-block px-3.5 py-1 rounded-full bg-[#073125] text-[#C9F24D] text-xs font-sans font-bold tracking-widest uppercase mb-2.5 shadow-xs">
+              WHY TRAVELERS &amp; FAMILIES TRUST US
             </span>
-            <h2 className="font-serif text-3xl sm:text-5xl text-[#541508] font-normal">
-              Safe Mountain Travel &amp; Sacred Care
+            <h2 className="font-serif text-3xl sm:text-5xl text-[#073125] font-normal">
+              Safe Mountain Travel &amp; Dedicated Care
             </h2>
-            <p className="mt-2 text-[#541508]/85 text-base sm:text-lg font-light">
+            <p className="mt-2 text-[#4A635A] text-base sm:text-lg font-light">
               Respectful Pahadi drivers, clean heated cabs, and peaceful shrine journeys.
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6 reveal">
             {/* 1 */}
-            <div className="relative rounded-3xl overflow-hidden bg-slate-900 h-[360px] sm:h-[390px] lg:h-[410px] shadow-lg hover:shadow-xl hover:border-[#EAA722]/70 transition-all duration-300 border border-[#EAA722]/30 flex flex-col justify-end p-5 sm:p-6 group">
+            <div className="relative rounded-3xl overflow-hidden bg-slate-900 h-[360px] sm:h-[390px] lg:h-[410px] shadow-lg hover:shadow-xl hover:border-[#C9F24D] transition-all duration-300 border border-[#073125]/15 flex flex-col justify-end p-5 sm:p-6 group">
               <img
                 src={kausaniImg}
                 alt="Local Pahadi Drivers"
@@ -135,8 +129,8 @@ const TravelHome = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
               <div className="relative z-10">
-                <span className="text-[#EAA722] text-xs font-mono uppercase tracking-wider font-bold block mb-1">
-                  ॥ पहाड़ी सारथी सेवा ॥ • Born In The Hills
+                <span className="text-[#C9F24D] text-xs font-sans uppercase tracking-wider font-bold block mb-1">
+                  Born In The Hills • Local Drivers
                 </span>
                 <h3 className="font-serif text-xl sm:text-2xl text-white font-medium mb-1.5 leading-tight">
                   Local Pahadi Drivers
@@ -148,7 +142,7 @@ const TravelHome = () => {
             </div>
 
             {/* 2 */}
-            <div className="relative rounded-3xl overflow-hidden bg-slate-900 h-[360px] sm:h-[390px] lg:h-[410px] shadow-lg hover:shadow-xl hover:border-[#EAA722]/70 transition-all duration-300 border border-[#EAA722]/30 flex flex-col justify-end p-5 sm:p-6 group">
+            <div className="relative rounded-3xl overflow-hidden bg-slate-900 h-[360px] sm:h-[390px] lg:h-[410px] shadow-lg hover:shadow-xl hover:border-[#C9F24D] transition-all duration-300 border border-[#073125]/15 flex flex-col justify-end p-5 sm:p-6 group">
               <img
                 src={kainchiWebp}
                 alt="Sacred Kainchi Dham Yatra"
@@ -156,8 +150,8 @@ const TravelHome = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
               <div className="relative z-10">
-                <span className="text-[#EAA722] text-xs font-mono uppercase tracking-wider font-bold block mb-1">
-                  ॥ नीब करौरी बाबा कृपा ॥ • Sacred Yatra Care
+                <span className="text-[#C9F24D] text-xs font-sans uppercase tracking-wider font-bold block mb-1">
+                  Kainchi Dham &amp; Shrines
                 </span>
                 <h3 className="font-serif text-xl sm:text-2xl text-white font-medium mb-1.5 leading-tight">
                   Kainchi Dham &amp; Shrines
@@ -169,7 +163,7 @@ const TravelHome = () => {
             </div>
 
             {/* 3 */}
-            <div className="relative rounded-3xl overflow-hidden bg-slate-900 h-[360px] sm:h-[390px] lg:h-[410px] shadow-lg hover:shadow-xl hover:border-[#EAA722]/70 transition-all duration-300 border border-[#EAA722]/30 flex flex-col justify-end p-5 sm:p-6 group">
+            <div className="relative rounded-3xl overflow-hidden bg-slate-900 h-[360px] sm:h-[390px] lg:h-[410px] shadow-lg hover:shadow-xl hover:border-[#C9F24D] transition-all duration-300 border border-[#073125]/15 flex flex-col justify-end p-5 sm:p-6 group">
               <img
                 src={innovaImg}
                 alt="Fixed Upfront Fares"
@@ -177,8 +171,8 @@ const TravelHome = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
               <div className="relative z-10">
-                <span className="text-[#EAA722] text-xs font-mono uppercase tracking-wider font-bold block mb-1">
-                  ॥ 100% निष्पक्ष किराया ॥ • Zero Hidden Charges
+                <span className="text-[#C9F24D] text-xs font-sans uppercase tracking-wider font-bold block mb-1">
+                  100% Transparent • Zero Hidden Charges
                 </span>
                 <h3 className="font-serif text-xl sm:text-2xl text-white font-medium mb-1.5 leading-tight">
                   100% Fixed Honest Fares
@@ -190,7 +184,7 @@ const TravelHome = () => {
             </div>
 
             {/* 4 */}
-            <div className="relative rounded-3xl overflow-hidden bg-slate-900 h-[360px] sm:h-[390px] lg:h-[410px] shadow-lg hover:shadow-xl hover:border-[#EAA722]/70 transition-all duration-300 border border-[#EAA722]/30 flex flex-col justify-end p-5 sm:p-6 group">
+            <div className="relative rounded-3xl overflow-hidden bg-slate-900 h-[360px] sm:h-[390px] lg:h-[410px] shadow-lg hover:shadow-xl hover:border-[#C9F24D] transition-all duration-300 border border-[#073125]/15 flex flex-col justify-end p-5 sm:p-6 group">
               <img
                 src={kathgodamStationImg}
                 alt="Kathgodam Station Meet & Greet"
@@ -198,8 +192,8 @@ const TravelHome = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
               <div className="relative z-10">
-                <span className="text-[#EAA722] text-xs font-mono uppercase tracking-wider font-bold block mb-1">
-                  ॥ समयबद्ध सेवा ॥ • On-Time Pickup
+                <span className="text-[#C9F24D] text-xs font-sans uppercase tracking-wider font-bold block mb-1">
+                  Guaranteed • On-Time Pickup
                 </span>
                 <h3 className="font-serif text-xl sm:text-2xl text-white font-medium mb-1.5 leading-tight">
                   Kathgodam Meet &amp; Greet
@@ -213,26 +207,26 @@ const TravelHome = () => {
         </Container>
       </section>
 
-      {/* 4. Fleet Showcase (Devotional Temple Maroon Rhythm) */}
+      {/* 4. Fleet Showcase */}
       <VehicleFleet
         onBookFleet={handleBookFleet}
         onQuickView={handleQuickView}
       />
 
-      {/* 5. Popular Pilgrimage Circuits (2-in-a-Row with Style on #FAF5EC) */}
+      {/* 5. Popular Pilgrimage Circuits */}
       <PilgrimageCircuits onSelectDestination={handleSelectCircuit} />
 
-      {/* 6. Live Transparent Fare Calculator Spotlight (Links to dedicated page) */}
-      <section id="calculator" className="py-16 sm:py-20 px-4 bg-gradient-to-b from-[#3D0F06] via-[#541508] to-[#3D0F06] text-white border-y border-[#EAA722]/30 relative overflow-hidden">
+      {/* 6. Live Transparent Fare Calculator Spotlight */}
+      <section id="calculator" className="py-16 sm:py-20 px-4 bg-gradient-to-b from-[#052219] via-[#073125] to-[#052219] text-white border-y border-white/10 relative overflow-hidden">
         <Container size="lg">
           <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12 reveal">
-            <span className="inline-block px-3.5 py-1 rounded-full bg-[#EAA722] text-[#541508] text-xs font-mono font-bold tracking-widest uppercase mb-2.5 shadow-xs">
-              ॥ पावन यात्रा किराया • TRANSPARENT PRICING ॥
+            <span className="inline-block px-3.5 py-1 rounded-full bg-[#C9F24D] text-[#073125] text-xs font-sans font-bold tracking-widest uppercase mb-2.5 shadow-xs">
+              TRANSPARENT PRICING &amp; ROUTES
             </span>
             <h2 className="font-serif text-3xl sm:text-5xl text-white font-normal">
               Calculate Your Trip Fare
             </h2>
-            <p className="mt-2 text-[#FAF5EC]/85 text-base sm:text-lg font-light">
+            <p className="mt-2 text-white/80 text-base sm:text-lg font-light">
               Select your route and cab to get an instant, transparent fixed fare.
             </p>
           </div>
@@ -245,26 +239,26 @@ const TravelHome = () => {
               { route: 'Almora ➔ Jageshwar 124 Temples', fare: '₹3,499', type: 'Heritage Day Tour', desc: '35 km round trip • Ancient pine forests' },
               { route: 'Delhi Airport ➔ Almora Heights', fare: '₹7,999', type: 'Expressway Drop', desc: '375 km door-to-door • Hill chauffeur' },
             ].map((item, idx) => (
-              <div key={idx} className="bg-white/[0.06] border border-[#EAA722]/35 hover:border-[#EAA722] p-5 sm:p-6 rounded-2xl transition-all duration-300 flex flex-col justify-between group">
+              <div key={idx} className="bg-white/[0.04] border border-white/15 hover:border-[#C9F24D] p-5 sm:p-6 rounded-2xl transition-all duration-300 flex flex-col justify-between group">
                 <div>
-                  <span className="text-xs font-mono uppercase tracking-wider text-[#EAA722] font-bold block mb-1.5">
+                  <span className="text-xs font-sans uppercase tracking-wider text-[#C9F24D] font-bold block mb-1.5">
                     {item.type}
                   </span>
                   <h4 className="font-serif text-lg sm:text-xl text-white font-medium mb-2 leading-snug">
                     {item.route}
                   </h4>
-                  <p className="text-sm sm:text-[14.5px] text-[#FAF5EC]/90 leading-relaxed font-normal mb-4">
+                  <p className="text-sm sm:text-[14.5px] text-white/80 leading-relaxed font-normal mb-4">
                     {item.desc}
                   </p>
                 </div>
                 <div className="pt-3.5 border-t border-white/10 flex items-center justify-between">
                   <div>
-                    <span className="text-[10px] uppercase tracking-wider text-[#FAF5EC]/70 block font-mono">Starts At</span>
+                    <span className="text-[10px] uppercase tracking-wider text-white/60 block font-sans">Starts At</span>
                     <span className="font-serif text-2xl font-bold text-white font-numeral">{item.fare}</span>
                   </div>
                   <Link
                     to="/calculator"
-                    className="text-xs sm:text-sm text-[#EAA722] font-mono uppercase tracking-wider font-bold group-hover:underline flex items-center gap-1"
+                    className="text-xs sm:text-sm text-[#C9F24D] font-sans uppercase tracking-wider font-bold group-hover:underline flex items-center gap-1"
                   >
                     <span>Calculate ↗</span>
                   </Link>
@@ -274,25 +268,25 @@ const TravelHome = () => {
           </div>
 
           {/* Launch Dedicated Calculator CTA Box */}
-          <div className="bg-[#FAF5EC] text-[#541508] p-7 sm:p-9 rounded-3xl border border-[#EAA722]/50 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-6 reveal">
+          <div className="bg-[#F4F7F3] text-[#073125] p-7 sm:p-9 rounded-3xl border border-[#D5E0D8] shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-6 reveal">
             <div className="text-center sm:text-left">
-              <span className="text-xs sm:text-sm font-mono font-bold text-[#EAA722] uppercase tracking-wider block mb-1">
+              <span className="text-xs sm:text-sm font-sans font-bold text-[#073125] uppercase tracking-wider block mb-1">
                 ✦ DEDICATED FARE CALCULATOR PAGE
               </span>
-              <h3 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-[#541508] font-normal leading-tight">
+              <h3 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-[#073125] font-normal leading-tight">
                 Want a Customized Route with Dynamic Fares?
               </h3>
-              <p className="text-base sm:text-lg text-[#3D0F06] mt-2 font-normal max-w-xl">
+              <p className="text-base sm:text-lg text-[#4A635A] mt-2 font-normal max-w-xl">
                 Choose your pickup station, vehicle, and temple halts for instant upfront pricing.
               </p>
             </div>
 
             <Link
               to="/calculator"
-              className="px-8 py-4 rounded-full text-xs sm:text-sm font-mono uppercase tracking-wider font-bold bg-[#EAA722] hover:bg-[#D98E16] text-[#541508] transition-all shadow-lg hover:scale-102 flex-shrink-0 flex items-center gap-2 cursor-pointer whitespace-nowrap"
+              className="px-8 py-4 rounded-full text-xs sm:text-sm font-sans uppercase tracking-wider font-bold bg-[#C9F24D] hover:bg-[#bde63d] text-[#073125] transition-all shadow-lg hover:scale-102 flex-shrink-0 flex items-center gap-2 cursor-pointer whitespace-nowrap"
             >
               <span>Open Dedicated Fare Calculator</span>
-              <ArrowUpRightIcon className="w-4 h-4 text-[#541508]" />
+              <ArrowUpRightIcon className="w-4 h-4 text-[#073125]" />
             </Link>
           </div>
         </Container>
@@ -307,26 +301,26 @@ const TravelHome = () => {
       {/* 9. Mountain Travel FAQs */}
       <TravelFaqSection />
 
-      {/* 10. Bottom Reservation Banner (Mountain Pine Green Theme) */}
-      <section className="py-16 sm:py-20 px-4 bg-[#073125] text-white relative overflow-hidden border-t border-b border-[#0C2B22]">
+      {/* 10. Bottom Reservation Banner */}
+      <section className="py-16 sm:py-20 px-4 bg-[#052219] text-white relative overflow-hidden border-t border-b border-white/10">
         <Container size="md">
-          <div className="relative z-10 text-center max-w-2xl mx-auto space-y-5 bg-[#0C241D] p-8 sm:p-12 rounded-3xl border border-[#EAA722]/35 shadow-2xl backdrop-blur-sm">
-            <span className="inline-block px-3.5 py-1 rounded-full bg-[#EAA722] text-[#073125] text-[11px] font-mono font-bold tracking-widest uppercase shadow-xs">
-              ॥ ॐ नमः शिवाय ॥ • ALMORA CAB DESK • 24/7 ASSISTANCE
+          <div className="relative z-10 text-center max-w-2xl mx-auto space-y-5 bg-[#073125] p-8 sm:p-12 rounded-3xl border border-white/15 shadow-2xl backdrop-blur-sm">
+            <span className="inline-block px-3.5 py-1 rounded-full bg-[#C9F24D] text-[#073125] text-[11px] font-sans font-bold tracking-widest uppercase shadow-xs">
+              ALMORA CAB DESK • 24/7 ASSISTANCE
             </span>
 
             <h2 className="font-serif text-2xl sm:text-4xl font-normal text-white">
               Ready for Your Sacred Pilgrimage or Mountain Journey?
             </h2>
 
-            <p className="text-[#D4DDD2] text-sm sm:text-base font-light leading-relaxed max-w-lg mx-auto">
+            <p className="text-[#DCE9E4] text-sm sm:text-base font-light leading-relaxed max-w-lg mx-auto">
               Book your private mountain cab in advance. Kathgodam pickups, Kainchi Dham darshan, and temple tours.
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
               <Link
                 to="/calculator"
-                className="px-7 py-3.5 rounded-full text-xs font-mono uppercase tracking-wider font-bold bg-[#EAA722] hover:bg-[#D98E16] text-[#073125] transition-all shadow-lg hover:scale-102 flex items-center gap-2 cursor-pointer"
+                className="px-7 py-3.5 rounded-full text-xs font-sans uppercase tracking-wider font-bold bg-[#C9F24D] hover:bg-[#bde63d] text-[#073125] transition-all shadow-lg hover:scale-102 flex items-center gap-2 cursor-pointer"
               >
                 <span>Calculate Trip Fare</span>
                 <ArrowUpRightIcon className="w-3.5 h-3.5 text-[#073125]" />
@@ -340,9 +334,9 @@ const TravelHome = () => {
                   );
                   window.open(`https://wa.me/${whatsappNumber}?text=${text}`, '_blank');
                 }}
-                className="px-6 py-3.5 rounded-full text-xs font-mono uppercase tracking-wider font-semibold border border-white/25 hover:bg-white/10 text-white transition-all flex items-center gap-2 cursor-pointer"
+                className="px-6 py-3.5 rounded-full text-xs font-sans uppercase tracking-wider font-semibold border border-white/25 hover:bg-white/10 text-white transition-all flex items-center gap-2 cursor-pointer"
               >
-                <WhatsAppIcon className="w-4 h-4 text-[#EAA722]" />
+                <WhatsAppIcon className="w-4 h-4 text-[#C9F24D]" />
                 <span>Chat on WhatsApp</span>
               </button>
             </div>
@@ -350,15 +344,15 @@ const TravelHome = () => {
             {/* Simple Perks */}
             <div className="pt-5 border-t border-white/15 flex flex-wrap items-center justify-center gap-5 text-xs text-white/80">
               <span className="flex items-center gap-1.5">
-                <CheckCircleIcon className="w-3.5 h-3.5 text-[#EAA722]" />
+                <CheckCircleIcon className="w-3.5 h-3.5 text-[#C9F24D]" />
                 <span>100% Fixed Upfront Pricing</span>
               </span>
               <span className="flex items-center gap-1.5">
-                <CheckCircleIcon className="w-3.5 h-3.5 text-[#EAA722]" />
+                <CheckCircleIcon className="w-3.5 h-3.5 text-[#C9F24D]" />
                 <span>Pahadi Hill Drivers</span>
               </span>
               <span className="flex items-center gap-1.5">
-                <CheckCircleIcon className="w-3.5 h-3.5 text-[#EAA722]" />
+                <CheckCircleIcon className="w-3.5 h-3.5 text-[#C9F24D]" />
                 <span>Free Train Delay Waiting</span>
               </span>
             </div>

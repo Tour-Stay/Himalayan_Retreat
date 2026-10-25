@@ -59,7 +59,7 @@ const FareSummaryPanel = ({
             <div className="relative">
               <span className="absolute -left-6 top-1 w-2.5 h-2.5 rounded-full bg-amber-500 ring-4 ring-[#FAF5EC]"></span>
               <span className="font-semibold text-amber-900 block text-xs sm:text-sm">
-                🪔 Kainchi Dham Ashram Darshan Halt
+                🛕 Kainchi Dham Ashram Darshan Halt
               </span>
               <span className="text-xs text-emerald-800 font-semibold">1.5 to 2 hours free halt for darshan &amp; prasad</span>
             </div>

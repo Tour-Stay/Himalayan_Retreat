@@ -37,22 +37,22 @@ const TravelReviews = () => {
   }, []);
 
   return (
-    <section id="reviews" className="py-16 sm:py-20 px-4 bg-[#FAF5EC] border-b border-[#EAA722]/30 relative">
+    <section id="reviews" className="py-16 sm:py-20 px-4 bg-[#F4F7F3] border-b border-[#D5E0D8] relative">
       <Container size="lg">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-14 reveal">
-          <span className="inline-block px-3.5 py-1 rounded-full bg-[#EAA722] text-[#541508] text-xs font-mono font-bold tracking-widest uppercase mb-2.5 shadow-xs">
-            ॥ पावन यात्रा अनुभव ॥ • REAL TRAVELER FEEDBACK • VERIFIED TOURS
+          <span className="inline-block px-3.5 py-1 rounded-full bg-[#073125] text-[#C9F24D] text-xs font-sans font-bold tracking-widest uppercase mb-2.5 shadow-xs">
+            REAL TRAVELER FEEDBACK • VERIFIED TOURS
           </span>
-          <h2 className="font-serif text-2xl sm:text-4xl text-[#541508] font-normal">
+          <h2 className="font-serif text-2xl sm:text-4xl text-[#073125] font-normal">
             Loved by Pilgrims &amp; Families
           </h2>
-          <p className="mt-2 text-[#541508]/85 text-sm sm:text-base font-light leading-relaxed mb-6">
+          <p className="mt-2 text-[#4A635A] text-sm sm:text-base font-light leading-relaxed mb-6">
             Real guest experiences and verified photos from pilgrims and families who traveled with our mountain chauffeurs.
           </p>
           <button
             onClick={() => setIsWriteModalOpen(true)}
-            className="px-6 py-2.5 bg-[#EAA722] text-[#541508] rounded-full text-sm font-bold hover:bg-[#D98E16] transition-colors shadow-md cursor-pointer"
+            className="px-6 py-2.5 bg-[#C9F24D] text-[#073125] rounded-full text-xs uppercase tracking-wider font-bold hover:bg-[#bde63d] transition-colors shadow-md cursor-pointer"
           >
             Write a Review
           </button>
@@ -65,40 +65,40 @@ const TravelReviews = () => {
 
         {loading ? (
           <div className="flex justify-center items-center py-16">
-            <div className="w-8 h-8 border-2 border-[#541508]/20 border-t-[#541508] rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-2 border-[#073125]/20 border-t-[#073125] rounded-full animate-spin"></div>
           </div>
         ) : reviews.length === 0 ? (
-          <div className="text-center py-12 text-[#541508]/70 bg-white rounded-3xl border border-[#EAA722]/30 p-8 max-w-md mx-auto">
-            <p className="font-serif text-lg text-[#541508]">No published travel reviews yet.</p>
-            <p className="text-xs mt-1">Book your mountain expedition and share your experience with us.</p>
+          <div className="text-center py-12 text-[#4A635A] bg-white rounded-3xl border border-[#D5E0D8] p-8 max-w-md mx-auto">
+            <p className="font-serif text-lg text-[#073125]">No published travel reviews yet.</p>
+            <p className="text-xs mt-1 text-[#4A635A]">Book your mountain expedition and share your experience with us.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 relative z-10 reveal">
             {reviews.map((rev) => (
               <div
                 key={rev._id || rev.name}
-                className="bg-white p-7 sm:p-8 rounded-3xl border border-[#EAA722]/25 hover:border-[#EAA722]/60 shadow-xs hover:shadow-md transition-all flex flex-col justify-between"
+                className="bg-white p-7 sm:p-8 rounded-3xl border border-[#D5E0D8] hover:border-[#073125]/40 shadow-xs hover:shadow-md transition-all flex flex-col justify-between"
               >
                 <div>
                   {/* Rating Stars */}
-                  <div className="flex items-center gap-1 text-[#EAA722] mb-4">
+                  <div className="flex items-center gap-1 text-[#073125] mb-4">
                     {[...Array(Number(rev.rating) || 5)].map((_, i) => (
-                      <StarIcon key={i} className="w-4 h-4 fill-current" />
+                      <StarIcon key={i} className="w-4 h-4 fill-[#073125] text-[#073125]" />
                     ))}
-                    <span className="text-xs text-[#541508] ml-1.5 font-mono font-bold">
+                    <span className="text-xs text-[#073125] ml-1.5 font-sans font-bold">
                       {(Number(rev.rating) || 5).toFixed(1)}
                     </span>
                   </div>
 
                   {/* Review Quote */}
-                  <p className="text-sm sm:text-base text-[#5C5350] leading-relaxed mb-5 font-light italic">
+                  <p className="text-sm sm:text-base text-[#4A635A] leading-relaxed mb-5 font-light italic">
                     &ldquo;{rev.review || rev.comment}&rdquo;
                   </p>
 
                   {/* Traveler Photos Strip */}
                   {rev.photos && rev.photos.length > 0 && (
                     <div className="mb-5">
-                      <span className="text-[10px] uppercase font-mono tracking-wider text-[#541508]/70 font-semibold block mb-2">
+                      <span className="text-[10px] uppercase font-sans tracking-wider text-[#4A635A] font-semibold block mb-2">
                         Trip Photos ({rev.photos.length})
                       </span>
                       <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
@@ -106,7 +106,7 @@ const TravelReviews = () => {
                           <button
                             key={pIdx}
                             onClick={() => setPreviewPhoto(photoUrl)}
-                            className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden border border-[#EAA722]/30 hover:border-[#EAA722] flex-shrink-0 cursor-pointer transition-transform hover:scale-105 shadow-xs"
+                            className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden border border-[#D5E0D8] hover:border-[#073125] flex-shrink-0 cursor-pointer transition-transform hover:scale-105 shadow-xs"
                             title="Click to view full photo"
                           >
                             <img
@@ -122,12 +122,12 @@ const TravelReviews = () => {
                 </div>
 
                 {/* Author & Expedition Details */}
-                <div className="pt-4 border-t border-[#EAA722]/20">
-                  <h4 className="font-serif text-lg font-medium text-[#541508]">{rev.name}</h4>
-                  <div className="flex items-center justify-between text-xs text-[#541508]/70 mt-0.5 font-sans">
+                <div className="pt-4 border-t border-[#D5E0D8]">
+                  <h4 className="font-serif text-lg font-medium text-[#073125]">{rev.name}</h4>
+                  <div className="flex items-center justify-between text-xs text-[#4A635A] mt-0.5 font-sans">
                     <span>{rev.location || rev.city || 'Pilgrim Guest'}</span>
                     {(rev.tripType || rev.trip) && (
-                      <span className="text-[#541508] bg-[#EAA722]/20 border border-[#EAA722]/30 px-2 py-0.5 rounded font-mono font-semibold truncate max-w-[170px] text-right">
+                      <span className="text-[#073125] bg-[#F4F7F3] border border-[#D5E0D8] px-2 py-0.5 rounded font-sans font-semibold truncate max-w-[170px] text-right">
                         {rev.tripType || rev.trip}
                       </span>
                     )}

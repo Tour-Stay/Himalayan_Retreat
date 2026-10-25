@@ -74,7 +74,7 @@ const HeroBookingBar = ({ onSearch, rooms }) => {
     <div className="w-full max-w-5xl mx-auto -mt-6 sm:-mt-10 relative z-30 px-3 sm:px-4">
       <form
         onSubmit={handleCheckAvailability}
-        className="bg-white/95 p-3 sm:p-4 rounded-3xl sm:rounded-full border border-[#073125]/15 shadow-2xl backdrop-blur-2xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-center"
+        className="bg-[#E2E6E8] p-3 sm:p-4 rounded-3xl sm:rounded-full border border-[#CBD2D7] shadow-2xl backdrop-blur-2xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-center"
       >
         {/* Field 1: Check-In (3 cols) */}
         <div className="lg:col-span-3 px-4 py-2 rounded-2xl hover:bg-[#EBF2EA] transition-colors cursor-pointer border sm:border-0 border-[#073125]/15">
