@@ -127,7 +127,7 @@ export const AdminDashboard = () => {
                 {activeTab === 'routes' && 'Temple & Sightseeing Fares'}
                 {activeTab === 'tours' && 'Tour Packages'}
                 {activeTab === 'announcements' && 'Website Notice Banner'}
-                {activeTab === 'landing-cms' && 'Main Website Page Content'}
+                {activeTab === 'landing-cms' && 'Mandir Mala & FAQs'}
                 {activeTab === 'company' && 'Phone Numbers, WhatsApp & Addresses'}
                 {activeTab === 'policies' && 'Hotel Rules, Timings & FAQs'}
                 {activeTab === 'reviews' && 'Guest Testimonials & Reviews'}
@@ -142,7 +142,7 @@ export const AdminDashboard = () => {
                 {activeTab === 'routes' && 'Set fixed taxi fares for trips to Kainchi Dham, Jageshwar, Kathgodam Station, and Nainital.'}
                 {activeTab === 'tours' && 'Create and edit multi-day pilgrimage and sightseeing packages across Kumaon.'}
                 {activeTab === 'announcements' && 'Write a notice or alert message that will display across the top of your websites.'}
-                {activeTab === 'landing-cms' && 'Edit the welcome message, Neem Karoli Baba quote, 3-day pilgrimage itinerary, and visitor FAQs.'}
+                {activeTab === 'landing-cms' && 'Edit the 7-stop Mandir Mala pilgrimage circuit and visitor FAQs displayed on the website.'}
                 {activeTab === 'company' && 'Update your hotel phone number, WhatsApp link, UPI ID, and property address.'}
                 {activeTab === 'policies' && 'Set check-in time, check-out time, restaurant meal hours, and cancellation terms.'}
                 {activeTab === 'reviews' && 'Approve guest reviews so they appear on your website, or hide unapproved comments.'}

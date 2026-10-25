@@ -2,101 +2,161 @@ import { useState, useEffect } from 'react';
 import { useSiteSettings, apiClient, APP_URLS } from '@shared';
 import { useToast } from './Toast';
 
+// Canonical 7 Sacred Stops for Mandir Mala
+const DEFAULT_MANDIR_MALA = [
+  {
+    id: 'base-camp',
+    num: '01',
+    name: 'River Base Camp (Haldwani)',
+    shortName: 'Haldwani Base',
+    artworkLabel: 'EXPEDITION GATEWAY • THE JOURNEY BEGINS',
+    distance: '0 km • Pickup Point',
+    fromHotel: '88 km to Kasar Hotel',
+    altitude: '1,450 FT',
+    desc: 'The official pickup hub and journey start where the plains meet the first pine foothills. Open campfire chai, vehicle prep, and mountain briefing along rushing glacial waters.',
+    highlights: [
+      'Primary railway (Kathgodam) & cab pickup hub from Delhi/plains.',
+      'Campfire chai orientation and mountain safety guidance.',
+      'Scenic departure orientation and sacred route guidance for the Kumaon circuit.',
+    ],
+    safetyTip: 'Start mountain ascent in early daylight; hydrate well as elevation climbs.',
+    shrineBlessing: 'ॐ तत्सत् • Om Tat Sat',
+  },
+  {
+    id: 'kainchi-dham',
+    num: '02',
+    name: 'Kainchi Dham Ashram',
+    shortName: 'Kainchi Dham',
+    artworkLabel: 'SANCTUARY OF BABA NEEM KAROLI MAHARAJ',
+    distance: '42 km from Haldwani',
+    fromHotel: '46 km to Kasar Hotel',
+    altitude: '4,600 FT',
+    desc: 'World-renowned spiritual sanctuary of Sri Neem Karoli Baba Maharaj in the Shipra river canyon. A sacred haven of selfless love, deep stillness, and miraculous grace.',
+    highlights: [
+      'Darshan of Baba Neem Karoli Maharaj sanctum & Hanuman temple.',
+      'Peaceful japa and contemplation along sacred Shipra stream.',
+      'Participating in evening aarti and receiving satvik prasad.',
+    ],
+    safetyTip: 'Narrow canyon route with devotee traffic; use licensed mountain chauffeurs.',
+    shrineBlessing: 'जय बाबा नीम करोली • Jai Gurudev',
+  },
+  {
+    id: 'kasar-devi',
+    num: '03',
+    name: 'The Kasar Himalayan Heights',
+    shortName: 'Kasar Hotel Base',
+    artworkLabel: "OUR RETREAT HOTEL • CRANK'S RIDGE",
+    distance: '88 km from Haldwani',
+    fromHotel: '★ Your Retreat Base ★',
+    altitude: '6,942 FT',
+    desc: 'Our boutique heated chalet hotel perched on Crank’s Ridge with 180° Greater Himalayan snow peak panoramas and unique geomagnetic cosmic energy (Van Allen belt).',
+    highlights: [
+      'Heated wooden chalet suites with direct Nanda Devi sunrise views.',
+      'Silent meditation inside the 1890 Swami Vivekananda Rock Cave.',
+      'Central launchpad for daily excursions to Chitai, Jageshwar & beyond.',
+    ],
+    safetyTip: 'Central expedition base. Keep warm fleece layers ready for evening mountain breezes.',
+    shrineBlessing: 'ॐ ऐं ह्रीं क्लीं चामुण्डायै विच्चे • Kasar Devi Sharanam',
+  },
+  {
+    id: 'chitai-golu',
+    num: '04',
+    name: 'Chitai Golu Devta Mandir',
+    shortName: 'Chitai Golu',
+    artworkLabel: 'TEMPLE OF 10,000 BRASS BELLS',
+    distance: '98 km from Haldwani',
+    fromHotel: '10 km from Kasar Hotel (~20 min)',
+    altitude: '6,200 FT',
+    desc: 'The supreme spiritual court of Kumaon where Lord Golu dispenses swift justice. The hill reverberates continuously with thousands of brass bells hung by grateful devotees.',
+    highlights: [
+      'Ringing the sacred brass temple bells to awaken divine consciousness.',
+      'Reading handwritten stamp-paper petitions hung by pilgrims.',
+      'Walking beneath the ancient deodar cedar canopy surrounding the hill.',
+    ],
+    safetyTip: 'Just 10 km from our retreat; an effortless morning or afternoon cultural drive.',
+    shrineBlessing: 'जय गोलू देवता • Nyay ke Devta',
+  },
+  {
+    id: 'jageshwar-dham',
+    num: '05',
+    name: 'Jageshwar Dham Temples',
+    shortName: 'Jageshwar Dham',
+    artworkLabel: '124 ANCIENT 8TH-CENTURY STONE SHRINES',
+    distance: '125 km from Haldwani',
+    fromHotel: '36 km from Kasar Hotel (~1 hr)',
+    altitude: '6,140 FT',
+    desc: 'Nestled in a sheltered deodar valley along the Jata Ganga river, housing 124 monolithic stone Nagara-style temples dedicated to Lord Shiva as Mahamrityunjaya.',
+    highlights: [
+      'Darshan at the sacred Mahamrityunjaya Jyotirlinga sanctum.',
+      'Deep deodar forest bathing (Shinrin-yoku) along the gentle river.',
+      'Studying 8th-century Katyuri stone monolithic carvings and spires.',
+    ],
+    safetyTip: 'Valley floor is 4-6°C cooler than Almora; bring warm layers and wrap up by dusk.',
+    shrineBlessing: 'ॐ नमः शिवाय • Har Har Mahadev',
+  },
+  {
+    id: 'patal-bhuvaneshwar',
+    num: '06',
+    name: 'Patal Bhuvaneshwar Cave',
+    shortName: 'Patal Cave',
+    artworkLabel: 'SUBTERRANEAN LIMESTONE SANCTUM',
+    distance: '195 km from Haldwani',
+    fromHotel: '110 km from Kasar Hotel (~3.5 hrs)',
+    altitude: '4,430 FT (Sanctum 90 FT Underground)',
+    desc: 'An awe-inspiring underground limestone cavern entered via steep chain-assisted passages, where the Skanda Purana describes the presence of all 33 koti deities in stone.',
+    highlights: [
+      'Descend 90 ft underground via steep iron-chain rock passage.',
+      'Darshan of natural rock formations of Sheshnag and Shiva’s locks.',
+      'Suspension footbridge view over the dramatic wild mountain gorge.',
+    ],
+    safetyTip: 'Requires moderate agility and rubber-sole shoes; not suited for acute claustrophobia.',
+    shrineBlessing: 'ॐ भुवनपतये नमः • Cave Sanctum',
+  },
+  {
+    id: 'adi-kailash',
+    num: '07',
+    name: 'Adi Kailash & Om Parvat',
+    shortName: 'Adi Kailash',
+    artworkLabel: 'THE CROWNING HIGH-HIMALAYAN PEAK',
+    distance: '365 km from Haldwani',
+    fromHotel: '275 km from Kasar Hotel (High Traverse)',
+    altitude: '14,750 FT',
+    desc: 'The crowning jewel of the Mandir Mala circuit in the frontier borderlands. The sacred pyramidal twin of Mount Kailash with crystal Parvati Sarovar and miraculous Om Parvat.',
+    highlights: [
+      'Sacred parikrama circumambulation around Parvati Sarovar at 14,500+ ft.',
+      'Darshan of the miraculous natural snow-formed "Om" on Om Parvat.',
+      'High-altitude 4x4 traverse through Dharchula, Gunji and Kali river gorges.',
+    ],
+    safetyTip: 'Inner Line Permit (ILP), dedicated 4x4 SUV, and acclimatization halt at Gunji mandatory.',
+    shrineBlessing: 'ॐ नमः शिवाय • Jai Badri Vishal',
+  },
+];
+
 export const LandingCmsManager = () => {
   const { settings, refreshSettings } = useSiteSettings();
   const toastContext = useToast();
   const showToast = toastContext.addToast || toastContext.showToast;
 
-  const [activeSubTab, setActiveSubTab] = useState('hero'); // 'hero' | 'announcement' | 'itinerary' | 'faqs'
+  const [activeSubTab, setActiveSubTab] = useState('mandirMala'); // 'mandirMala' | 'faqs'
+  const [selectedStopIdx, setSelectedStopIdx] = useState(0);
 
-  // 1. Hero Content
-  const [landingHero, setLandingHero] = useState({
-    devotionalGreeting: '',
-    devotionalSubGreeting: '',
-    teachingQuote: '',
-    quoteAttribution: '',
-    welcomeStatement: '',
-  });
+  // 1. Mandir Mala 7-Stop State
+  const [mandirMala, setMandirMala] = useState(DEFAULT_MANDIR_MALA);
 
-  // 2. Announcement Ribbon
-  const [announcement, setAnnouncement] = useState({
-    enabled: true,
-    message: '',
-    linkText: '',
-    linkHref: '',
-  });
-
-  // 3. Itinerary
-  const [itinerary, setItinerary] = useState([
-    {
-      num: '01',
-      tag: 'Day 1 • Arrival & Kainchi Darshan',
-      title: 'Kathgodam to Kainchi Dham & Kasar Ridge',
-      items: [
-        'Direct train station pickup from Kathgodam by private mountain cab.',
-        'Sacred stop at Kainchi Dham Ashram for evening darshan and aarti.',
-        'Drive up to Kasar Devi for check-in to your heated room and hot satvik dinner.',
-      ],
-      note: '85 km • ~3 hrs scenic mountain drive',
-    },
-    {
-      num: '02',
-      tag: 'Day 2 • Himalayan Sunrise & Jageshwar Valley',
-      title: 'Trishul Peak Dawn & Ancient Shiva Temples',
-      items: [
-        'Enjoy golden morning sunrise over Mount Trishul from your private balcony.',
-        'Peaceful morning walk to historic Kasar Devi Temple and Vivekananda Caves.',
-        'Comfortable cab visit to the ancient 124 stone Shiva temples of Jageshwar Dham.',
-      ],
-      note: '70 km round-trip through cedar forests',
-    },
-    {
-      num: '03',
-      tag: 'Day 3 • Ridge Walk & Departure',
-      title: 'Pine Forest Peace & Safe Return',
-      items: [
-        'Quiet morning walk along Crank’s Ridge with fresh mountain pine air.',
-        'Fresh home-style satvik breakfast before departure.',
-        'Safe, on-time cab drop to Kathgodam railway station for your train home.',
-      ],
-      note: 'Safe & relaxing return journey',
-    },
-  ]);
-
-  // 4. FAQs
+  // 2. FAQs State
   const [faqs, setFaqs] = useState([]);
   const [newFaq, setNewFaq] = useState({ q: '', a: '' });
 
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
-    if (settings?.landingHero) {
-      setLandingHero({
-        devotionalGreeting: settings.landingHero.devotionalGreeting || '',
-        devotionalSubGreeting: settings.landingHero.devotionalSubGreeting || '',
-        teachingQuote: settings.landingHero.teachingQuote || '',
-        quoteAttribution: settings.landingHero.quoteAttribution || '',
-        welcomeStatement: settings.landingHero.welcomeStatement || '',
-      });
-    }
-
-    if (settings?.announcement) {
-      setAnnouncement({
-        enabled: settings.announcement.enabled !== false,
-        message: settings.announcement.message || '',
-        linkText: settings.announcement.linkText || '',
-        linkHref: settings.announcement.linkHref || '',
-      });
-    }
-
-    if (settings?.landingContent?.itinerary && settings.landingContent.itinerary.length > 0) {
-      setItinerary(settings.landingContent.itinerary);
+    if (settings?.landingContent?.mandirMala && settings.landingContent.mandirMala.length > 0) {
+      setMandirMala(settings.landingContent.mandirMala);
     }
 
     if (settings?.landingContent?.faqs && settings.landingContent.faqs.length > 0) {
       setFaqs(settings.landingContent.faqs);
     } else {
-      // Seed initial landing faqs if empty
       setFaqs([
         {
           q: 'How do I arrange a darshan at Kainchi Dham Ashram from The Kasar Himalayan Heights?',
@@ -126,44 +186,44 @@ export const LandingCmsManager = () => {
     }
   }, [settings]);
 
-  // Itinerary helpers
-  const handleUpdateDay = (index, field, value) => {
-    setItinerary((prev) => {
+  // Mandir Mala Stop Handlers
+  const handleUpdateStop = (index, field, value) => {
+    setMandirMala((prev) => {
       const updated = [...prev];
       updated[index] = { ...updated[index], [field]: value };
       return updated;
     });
   };
 
-  const handleUpdateDayItem = (dayIdx, itemIdx, value) => {
-    setItinerary((prev) => {
+  const handleUpdateHighlight = (stopIdx, hlIdx, value) => {
+    setMandirMala((prev) => {
       const updated = [...prev];
-      const items = [...updated[dayIdx].items];
-      items[itemIdx] = value;
-      updated[dayIdx] = { ...updated[dayIdx], items };
+      const highlights = [...(updated[stopIdx].highlights || [])];
+      highlights[hlIdx] = value;
+      updated[stopIdx] = { ...updated[stopIdx], highlights };
       return updated;
     });
   };
 
-  const handleAddDayItem = (dayIdx) => {
-    setItinerary((prev) => {
+  const handleAddHighlight = (stopIdx) => {
+    setMandirMala((prev) => {
       const updated = [...prev];
-      const items = [...updated[dayIdx].items, 'New pilgrimage highlight'];
-      updated[dayIdx] = { ...updated[dayIdx], items };
+      const highlights = [...(updated[stopIdx].highlights || []), 'New sacred experience'];
+      updated[stopIdx] = { ...updated[stopIdx], highlights };
       return updated;
     });
   };
 
-  const handleRemoveDayItem = (dayIdx, itemIdx) => {
-    setItinerary((prev) => {
+  const handleRemoveHighlight = (stopIdx, hlIdx) => {
+    setMandirMala((prev) => {
       const updated = [...prev];
-      const items = updated[dayIdx].items.filter((_, i) => i !== itemIdx);
-      updated[dayIdx] = { ...updated[dayIdx], items };
+      const highlights = (updated[stopIdx].highlights || []).filter((_, i) => i !== hlIdx);
+      updated[stopIdx] = { ...updated[stopIdx], highlights };
       return updated;
     });
   };
 
-  // FAQ helpers
+  // FAQ Handlers
   const handleAddFaq = () => {
     if (!newFaq.q.trim() || !newFaq.a.trim()) return;
     setFaqs((prev) => [...prev, { ...newFaq }]);
@@ -182,25 +242,21 @@ export const LandingCmsManager = () => {
     });
   };
 
-  // Save all Landing CMS content
+  // Save Mandir Mala and FAQ to Database
   const handleSave = async (e) => {
     if (e) e.preventDefault();
     setIsSaving(true);
     try {
-      await Promise.all([
-        apiClient.patch('/settings/landingHero', landingHero),
-        apiClient.patch('/settings/announcement', announcement),
-        apiClient.patch('/settings/landingContent', {
-          itinerary,
-          faqs,
-        }),
-      ]);
+      await apiClient.patch('/settings/landingContent', {
+        mandirMala,
+        faqs,
+      });
 
-      showToast('Landing website content successfully published!', 'success');
+      showToast('Mandir Mala circuit & FAQs published live to Landing Page!', 'success');
       await refreshSettings();
     } catch (err) {
       console.error('Error saving landing content:', err);
-      showToast(err.response?.data?.message || 'Failed to update landing content', 'error');
+      showToast(err.response?.data?.message || 'Failed to update content', 'error');
     } finally {
       setIsSaving(false);
     }
@@ -213,20 +269,21 @@ export const LandingCmsManager = () => {
         <div className="flex items-center gap-3">
           <div className="w-11 h-11 bg-[#0B1118] text-[#C5A059] flex items-center justify-center border border-[#C5A059]/40 shadow-xs shrink-0">
             <svg className="w-5 h-5 text-[#C5A059]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           </div>
           <div>
             <div className="flex items-center gap-2">
               <h3 className="font-serif text-lg sm:text-xl font-bold text-[#0F172A]">
-                Main Website Page Content
+                Mandir Mala &amp; Visitor FAQ CMS
               </h3>
               <span className="px-2.5 py-0.5 text-[10px] font-cinzel font-bold bg-[#FAF8F5] text-[#C5A059] border border-[#C5A059]/40 tracking-wider">
-                Public Website
+                Landing Page
               </span>
             </div>
             <p className="text-xs text-slate-500 mt-0.5">
-              Edit the Neem Karoli Baba devotional quote, top notice banner, 3-day pilgrimage itinerary, and visitor FAQs.
+              Manage the 7-stop Mandir Mala pilgrimage circuit and visitor FAQs displayed on the main website.
             </p>
           </div>
         </div>
@@ -267,47 +324,18 @@ export const LandingCmsManager = () => {
       <div className="flex items-center gap-2 border-b border-[#C5A059]/30 pb-2 overflow-x-auto">
         <button
           type="button"
-          onClick={() => setActiveSubTab('hero')}
+          onClick={() => setActiveSubTab('mandirMala')}
           className={`px-4 py-2 text-xs font-cinzel font-semibold transition cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
-            activeSubTab === 'hero'
+            activeSubTab === 'mandirMala'
               ? 'bg-[#0B1118] text-white border border-[#C5A059]/50 shadow-xs font-bold'
               : 'text-slate-600 hover:text-[#0F172A] hover:bg-[#FAF8F5] border border-transparent'
           }`}
         >
           <svg className="w-3.5 h-3.5 text-[#C5A059]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
-          <span>1. Welcome & Baba Maharaj Quote</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveSubTab('announcement')}
-          className={`px-4 py-2 text-xs font-cinzel font-semibold transition cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
-            activeSubTab === 'announcement'
-              ? 'bg-[#0B1118] text-white border border-[#C5A059]/50 shadow-xs font-bold'
-              : 'text-slate-600 hover:text-[#0F172A] hover:bg-[#FAF8F5] border border-transparent'
-          }`}
-        >
-          <svg className="w-3.5 h-3.5 text-[#C5A059]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
-          </svg>
-          <span>2. Top Notice Banner</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveSubTab('itinerary')}
-          className={`px-4 py-2 text-xs font-cinzel font-semibold transition cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
-            activeSubTab === 'itinerary'
-              ? 'bg-[#0B1118] text-white border border-[#C5A059]/50 shadow-xs font-bold'
-              : 'text-slate-600 hover:text-[#0F172A] hover:bg-[#FAF8F5] border border-transparent'
-          }`}
-        >
-          <svg className="w-3.5 h-3.5 text-[#C5A059]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-          </svg>
-          <span>3. 3-Day Pilgrimage Plan</span>
+          <span>1. Mandir Mala Circuit (7 Sacred Stops)</span>
         </button>
 
         <button
@@ -322,330 +350,217 @@ export const LandingCmsManager = () => {
           <svg className="w-3.5 h-3.5 text-[#C5A059]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <span>4. Visitor Questions ({faqs.length})</span>
+          <span>2. Visitor Questions ({faqs.length})</span>
         </button>
       </div>
 
-      {/* Tab 1: Devotional Hero & Ashram Tribute */}
-      {activeSubTab === 'hero' && (
-        <form onSubmit={handleSave} className="space-y-6">
-          <div className="bg-white p-4 sm:p-6 border border-[#C5A059]/30 shadow-xs space-y-5">
-            <div>
-              <h4 className="font-serif text-lg font-bold text-[#0F172A]">
-                Neem Karoli Baba Maharaj Devotional Greetings
-              </h4>
-              <p className="text-xs text-slate-500 mt-0.5">
-                These sacred titles, quotes, and spiritual statements appear prominently on the Landing page hero and header.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-cinzel font-bold text-[#0F172A] mb-1">
-                  Primary Devotional Greeting (Hindi / Sanskrit)
-                </label>
-                <input
-                  type="text"
-                  value={landingHero.devotionalGreeting}
-                  onChange={(e) =>
-                    setLandingHero({ ...landingHero, devotionalGreeting: e.target.value })
-                  }
-                  placeholder="जय श्री बाबा नीम करोली महाराज की"
-                  className="w-full px-3.5 py-2.5 border border-slate-200 bg-[#FAF8F5] text-sm text-[#0F172A] focus:outline-none focus:border-[#C5A059] font-serif transition"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-cinzel font-bold text-[#0F172A] mb-1">
-                  Sub-Greeting & Chants
-                </label>
-                <input
-                  type="text"
-                  value={landingHero.devotionalSubGreeting}
-                  onChange={(e) =>
-                    setLandingHero({ ...landingHero, devotionalSubGreeting: e.target.value })
-                  }
-                  placeholder="Ram Ram • Jai Sri Hanuman"
-                  className="w-full px-3.5 py-2.5 border border-slate-200 bg-[#FAF8F5] text-sm text-[#0F172A] focus:outline-none focus:border-[#C5A059] font-serif transition"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-cinzel font-bold text-[#0F172A] mb-1">
-                  Maharaj-ji Core Teaching Quote
-                </label>
-                <input
-                  type="text"
-                  value={landingHero.teachingQuote}
-                  onChange={(e) =>
-                    setLandingHero({ ...landingHero, teachingQuote: e.target.value })
-                  }
-                  placeholder="Love. Serve. Remember."
-                  className="w-full px-3.5 py-2.5 border border-slate-200 bg-[#FAF8F5] text-sm text-[#0F172A] focus:outline-none focus:border-[#C5A059] font-serif italic transition"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-cinzel font-bold text-[#0F172A] mb-1">
-                  Quote Attribution
-                </label>
-                <input
-                  type="text"
-                  value={landingHero.quoteAttribution}
-                  onChange={(e) =>
-                    setLandingHero({ ...landingHero, quoteAttribution: e.target.value })
-                  }
-                  placeholder="Teachings of Sri Neem Karoli Baba Maharaj"
-                  className="w-full px-3.5 py-2.5 border border-slate-200 bg-[#FAF8F5] text-sm text-[#0F172A] focus:outline-none focus:border-[#C5A059] transition"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-xs font-cinzel font-bold text-[#0F172A] mb-1">
-                Kasar Devi Welcome Statement
-              </label>
-              <textarea
-                rows={3}
-                value={landingHero.welcomeStatement}
-                onChange={(e) =>
-                  setLandingHero({ ...landingHero, welcomeStatement: e.target.value })
-                }
-                placeholder="Kasar Devi and the Kumaon Himalayas have welcomed spiritual seekers..."
-                className="w-full px-3.5 py-2.5 border border-slate-200 bg-[#FAF8F5] text-sm text-[#0F172A] focus:outline-none focus:border-[#C5A059] font-serif transition"
-              />
-            </div>
-
-            {/* Live Hero Preview Box */}
-            <div className="bg-[#0B1118] text-white p-5 border border-[#C5A059]/40 relative overflow-hidden shadow-xs">
-              <span className="text-[10px] uppercase font-cinzel font-bold tracking-widest text-[#C5A059] block mb-2">
-                Live Hero Card Preview
-              </span>
-              <p className="font-serif text-lg sm:text-xl text-[#C5A059] font-semibold">
-                {landingHero.devotionalGreeting || 'जय श्री बाबा नीम करोली महाराज की'}
-              </p>
-              <p className="text-xs text-slate-300 font-cinzel mt-0.5">
-                {landingHero.devotionalSubGreeting || 'Ram Ram • Jai Sri Hanuman'}
-              </p>
-              <blockquote className="my-3 pl-3 border-l-2 border-[#C5A059] text-sm italic text-slate-200 font-serif">
-                "{landingHero.teachingQuote || 'Love. Serve. Remember.'}"
-                <cite className="block text-[11px] not-italic text-[#D4AF37] mt-1 font-sans">
-                  — {landingHero.quoteAttribution || 'Sri Neem Karoli Baba'}
-                </cite>
-              </blockquote>
-            </div>
-
-            <div className="flex justify-end">
-              <button
-                type="submit"
-                disabled={isSaving}
-                className="px-6 py-2.5 text-xs font-cinzel font-bold bg-[#0B1118] hover:bg-[#111827] text-white border border-[#C5A059]/40 shadow-xs cursor-pointer disabled:opacity-50 transition"
-              >
-                {isSaving ? 'Publishing...' : 'Save Devotional Hero'}
-              </button>
-            </div>
-          </div>
-        </form>
-      )}
-
-      {/* Tab 2: Universal Announcement Ribbon */}
-      {activeSubTab === 'announcement' && (
-        <form onSubmit={handleSave} className="space-y-6">
-          <div className="bg-white p-4 sm:p-6 border border-[#C5A059]/30 shadow-xs space-y-5">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div>
-                <h4 className="font-serif text-lg font-bold text-[#0F172A]">
-                  Cross-Site Notice Ribbon
-                </h4>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Appears at the very top of all 3 websites (Landing, Hotel, and Travel) for road updates, weather, and seasonal yatras.
-                </p>
-              </div>
-
-              <label className="flex items-center gap-2 cursor-pointer bg-[#FAF8F5] px-3.5 py-1.5 border border-[#C5A059]/40 self-start sm:self-center">
-                <input
-                  type="checkbox"
-                  checked={announcement.enabled}
-                  onChange={(e) =>
-                    setAnnouncement({ ...announcement, enabled: e.target.checked })
-                  }
-                  className="w-4 h-4 text-[#0B1118] focus:ring-0 cursor-pointer accent-[#0B1118]"
-                />
-                <span className="text-xs font-cinzel font-bold text-[#0F172A]">
-                  {announcement.enabled ? 'Ribbon Active' : 'Ribbon Hidden'}
-                </span>
-              </label>
-            </div>
-
-            <div>
-              <label className="block text-xs font-cinzel font-bold text-[#0F172A] mb-1">
-                Announcement Message
-              </label>
-              <textarea
-                rows={2}
-                value={announcement.message}
-                onChange={(e) =>
-                  setAnnouncement({ ...announcement, message: e.target.value })
-                }
-                placeholder="॥ ॐ नमः शिवाय • जय श्री नीब करौरी महाराज ॥ Visiting Kainchi Dham or Kasar Devi?..."
-                className="w-full px-3.5 py-2.5 border border-slate-200 bg-[#FAF8F5] text-sm text-[#0F172A] focus:outline-none focus:border-[#C5A059] font-serif transition"
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-cinzel font-bold text-[#0F172A] mb-1">
-                  Action Link Text (Optional)
-                </label>
-                <input
-                  type="text"
-                  value={announcement.linkText}
-                  onChange={(e) =>
-                    setAnnouncement({ ...announcement, linkText: e.target.value })
-                  }
-                  placeholder="Yatra Booking ↗"
-                  className="w-full px-3.5 py-2.5 border border-slate-200 bg-[#FAF8F5] text-sm text-[#0F172A] focus:outline-none focus:border-[#C5A059] transition"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-cinzel font-bold text-[#0F172A] mb-1">
-                  Action Link Target / URL
-                </label>
-                <input
-                  type="text"
-                  value={announcement.linkHref}
-                  onChange={(e) =>
-                    setAnnouncement({ ...announcement, linkHref: e.target.value })
-                  }
-                  placeholder="#enquiry or https://..."
-                  className="w-full px-3.5 py-2.5 border border-slate-200 bg-[#FAF8F5] text-sm text-[#0F172A] focus:outline-none focus:border-[#C5A059] transition"
-                />
-              </div>
-            </div>
-
-            {/* Live Ribbon Preview */}
-            <div className="p-4 bg-[#FAF8F5] border border-[#C5A059]/30">
-              <span className="text-[10px] font-cinzel font-bold uppercase tracking-wider text-[#C5A059] block mb-2">
-                Live Ribbon Bar Preview
-              </span>
-              {announcement.enabled ? (
-                <div className="bg-[#0B1118] text-white py-2 px-4 border border-[#C5A059]/40 text-xs flex flex-wrap items-center justify-between gap-3 shadow-xs">
-                  <span className="font-serif tracking-wide">{announcement.message}</span>
-                  {announcement.linkText && (
-                    <span className="text-[10px] font-bold text-[#D4AF37] underline underline-offset-2">
-                      {announcement.linkText}
-                    </span>
-                  )}
-                </div>
-              ) : (
-                <div className="py-2.5 px-4 text-xs bg-slate-100 text-slate-500 italic border border-slate-200">
-                  Ribbon is currently disabled. It will not render on guest websites.
-                </div>
-              )}
-            </div>
-
-            <div className="flex justify-end">
-              <button
-                type="submit"
-                disabled={isSaving}
-                className="px-6 py-2.5 text-xs font-cinzel font-bold bg-[#0B1118] hover:bg-[#111827] text-white border border-[#C5A059]/40 shadow-xs cursor-pointer disabled:opacity-50 transition"
-              >
-                {isSaving ? 'Publishing...' : 'Save Notice Ribbon'}
-              </button>
-            </div>
-          </div>
-        </form>
-      )}
-
-      {/* Tab 3: 3-Day Pilgrimage Itinerary */}
-      {activeSubTab === 'itinerary' && (
+      {/* Tab 1: Mandir Mala Circuit (7 Stops) */}
+      {activeSubTab === 'mandirMala' && (
         <form onSubmit={handleSave} className="space-y-6">
           <div className="bg-white p-4 sm:p-6 border border-[#C5A059]/30 shadow-xs space-y-6">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#C5A059]/20 pb-4">
               <div>
-                <h4 className="font-serif text-lg font-bold text-[#0F172A]">
-                  Curated 3-Day Pilgrimage Itinerary
+                <h4 className="font-serif text-lg font-bold text-[#0F172A] flex items-center gap-2">
+                  <span>Mandir Mala 7-Stop Sacred Himalayan Expedition</span>
+                  <span className="px-2.5 py-0.5 text-[10px] font-cinzel font-bold bg-[#FAF8F5] text-[#C5A059] border border-[#C5A059]/40 tracking-wider">
+                    7 Stops
+                  </span>
                 </h4>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  Displays on the Landing page under the "3-Day Sacred Pilgrimage" section.
+                  Controls the live interactive 2D map and waypoint detail drawer displayed on the Landing page.
                 </p>
               </div>
 
-              <span className="text-xs font-mono font-bold text-[#0F172A] bg-[#FAF8F5] px-3 py-1 border border-[#C5A059]/30">
-                {itinerary.length} Days Configured
+              <span className="text-xs font-mono font-bold text-[#0F172A] bg-[#FAF8F5] px-3 py-1 border border-[#C5A059]/30 self-start sm:self-center">
+                Stop {mandirMala[selectedStopIdx]?.num || '01'} of 07 Selected
               </span>
             </div>
 
-            <div className="space-y-5">
-              {itinerary.map((day, dIdx) => (
-                <div
-                  key={dIdx}
-                  className="bg-[#FAF8F5] p-4 sm:p-5 border border-slate-200 space-y-4"
-                >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-3">
-                    <div className="flex items-center gap-2">
+            {/* Stop Selector Tabs (01 to 07) */}
+            <div className="flex items-center gap-2 overflow-x-auto pb-2 [scrollbar-width:thin]">
+              {mandirMala.map((stop, sIdx) => {
+                const isSelected = selectedStopIdx === sIdx;
+                return (
+                  <button
+                    key={stop.id || sIdx}
+                    type="button"
+                    onClick={() => setSelectedStopIdx(sIdx)}
+                    className={`px-3.5 py-2 text-xs font-cinzel font-semibold transition cursor-pointer whitespace-nowrap flex items-center gap-2 flex-shrink-0 border ${
+                      isSelected
+                        ? 'bg-[#0B1118] text-[#C5A059] border-[#C5A059] shadow-xs font-bold'
+                        : 'bg-[#FAF8F5] text-slate-700 hover:text-[#0F172A] hover:bg-white border-slate-300'
+                    }`}
+                  >
+                    <span
+                      className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[10px] ${
+                        isSelected ? 'bg-[#C5A059] text-[#0B1118]' : 'bg-slate-200 text-slate-700'
+                      }`}
+                    >
+                      {stop.num || `0${sIdx + 1}`}
+                    </span>
+                    <span>{stop.shortName || stop.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Currently Selected Stop Editing Form */}
+            {(() => {
+              const stop = mandirMala[selectedStopIdx] || mandirMala[0];
+              const sIdx = selectedStopIdx;
+              if (!stop) return null;
+
+              return (
+                <div className="bg-[#FAF8F5] p-4 sm:p-6 border border-slate-300 space-y-5">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-3">
+                    <div className="flex items-center gap-2.5">
                       <span className="w-8 h-8 bg-[#0B1118] text-[#C5A059] font-serif font-bold text-sm flex items-center justify-center border border-[#C5A059]/30">
-                        {day.num || `0${dIdx + 1}`}
+                        {stop.num}
                       </span>
-                      <span className="font-serif text-base font-bold text-[#0F172A]">
-                        Day {dIdx + 1} Circuit
-                      </span>
+                      <div>
+                        <span className="font-serif text-base font-bold text-[#0F172A] block">
+                          Stop {stop.num}: {stop.name}
+                        </span>
+                        <span className="text-[11px] font-mono text-slate-500">
+                          {stop.artworkLabel || 'MANDIR MALA WAYPOINT'}
+                        </span>
+                      </div>
                     </div>
 
-                    <input
-                      type="text"
-                      value={day.tag}
-                      onChange={(e) => handleUpdateDay(dIdx, 'tag', e.target.value)}
-                      placeholder="e.g. Day 1 • Arrival & Kainchi Darshan"
-                      className="px-3 py-1 border border-slate-200 bg-white text-xs font-serif text-[#0F172A] max-w-xs focus:outline-none focus:border-[#C5A059]"
-                    />
+                    <span className="text-xs font-mono font-bold text-[#C5A059] bg-[#0B1118] px-3 py-1 self-start sm:self-center">
+                      {stop.altitude}
+                    </span>
                   </div>
 
+                  {/* Row 1: Name, Short Name & Artwork Banner */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-[11px] font-cinzel font-bold text-[#0F172A] mb-1">
+                        Full Stop Name
+                      </label>
+                      <input
+                        type="text"
+                        value={stop.name || ''}
+                        onChange={(e) => handleUpdateStop(sIdx, 'name', e.target.value)}
+                        placeholder="e.g. Kainchi Dham Ashram"
+                        className="w-full px-3.5 py-2 border border-slate-300 bg-white text-sm font-serif text-[#0F172A] focus:outline-none focus:border-[#C5A059]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-cinzel font-bold text-[#0F172A] mb-1">
+                        Short Name (Map &amp; Tabs)
+                      </label>
+                      <input
+                        type="text"
+                        value={stop.shortName || ''}
+                        onChange={(e) => handleUpdateStop(sIdx, 'shortName', e.target.value)}
+                        placeholder="e.g. Kainchi Dham"
+                        className="w-full px-3.5 py-2 border border-slate-300 bg-white text-sm font-serif text-[#0F172A] focus:outline-none focus:border-[#C5A059]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-cinzel font-bold text-[#0F172A] mb-1">
+                        Artwork Badge / Banner Label
+                      </label>
+                      <input
+                        type="text"
+                        value={stop.artworkLabel || ''}
+                        onChange={(e) => handleUpdateStop(sIdx, 'artworkLabel', e.target.value)}
+                        placeholder="e.g. SANCTUARY OF BABA NEEM KAROLI MAHARAJ"
+                        className="w-full px-3.5 py-2 border border-slate-300 bg-white text-xs font-mono text-[#0F172A] focus:outline-none focus:border-[#C5A059]"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Row 2: Distances & Elevation */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-[11px] font-cinzel font-bold text-[#0F172A] mb-1">
+                        Altitude (Elevation)
+                      </label>
+                      <input
+                        type="text"
+                        value={stop.altitude || ''}
+                        onChange={(e) => handleUpdateStop(sIdx, 'altitude', e.target.value)}
+                        placeholder="e.g. 4,600 FT"
+                        className="w-full px-3.5 py-2 border border-slate-300 bg-white text-xs font-mono text-[#0F172A] focus:outline-none focus:border-[#C5A059]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-cinzel font-bold text-[#0F172A] mb-1">
+                        Distance from Gateway (Haldwani)
+                      </label>
+                      <input
+                        type="text"
+                        value={stop.distance || ''}
+                        onChange={(e) => handleUpdateStop(sIdx, 'distance', e.target.value)}
+                        placeholder="e.g. 42 km from Haldwani"
+                        className="w-full px-3.5 py-2 border border-slate-300 bg-white text-xs text-[#0F172A] focus:outline-none focus:border-[#C5A059]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-cinzel font-bold text-[#0F172A] mb-1">
+                        Distance / Time from Kasar Hotel
+                      </label>
+                      <input
+                        type="text"
+                        value={stop.fromHotel || ''}
+                        onChange={(e) => handleUpdateStop(sIdx, 'fromHotel', e.target.value)}
+                        placeholder="e.g. 46 km to Kasar Hotel (~1.5 hrs)"
+                        className="w-full px-3.5 py-2 border border-slate-300 bg-white text-xs text-[#0F172A] focus:outline-none focus:border-[#C5A059]"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Row 3: Description */}
                   <div>
                     <label className="block text-[11px] font-cinzel font-bold text-[#0F172A] mb-1">
-                      Day Title & Main Journey
+                      Stop Description &amp; Spiritual Overview
                     </label>
-                    <input
-                      type="text"
-                      value={day.title}
-                      onChange={(e) => handleUpdateDay(dIdx, 'title', e.target.value)}
-                      placeholder="Kathgodam to Kainchi Dham & Kasar Ridge"
-                      className="w-full px-3.5 py-2 border border-slate-200 bg-white text-sm font-serif text-[#0F172A] focus:outline-none focus:border-[#C5A059]"
+                    <textarea
+                      rows={3}
+                      value={stop.desc || ''}
+                      onChange={(e) => handleUpdateStop(sIdx, 'desc', e.target.value)}
+                      placeholder="Detailed spiritual history and landscape overview of this waypoint..."
+                      className="w-full px-3.5 py-2.5 border border-slate-300 bg-white text-sm font-serif text-[#0F172A] focus:outline-none focus:border-[#C5A059] leading-relaxed"
                     />
                   </div>
 
+                  {/* Row 4: Key Highlights & Experiences */}
                   <div>
                     <div className="flex items-center justify-between mb-1.5">
                       <label className="block text-[11px] font-cinzel font-bold text-[#0F172A]">
-                        Key Highlights & Stops
+                        Key Highlights &amp; Sacred Experiences (Bullet Points)
                       </label>
                       <button
                         type="button"
-                        onClick={() => handleAddDayItem(dIdx)}
-                        className="text-[11px] font-cinzel font-bold text-[#C5A059] hover:text-[#0B1118] cursor-pointer"
+                        onClick={() => handleAddHighlight(sIdx)}
+                        className="text-[11px] font-cinzel font-bold text-[#C5A059] hover:text-[#0B1118] cursor-pointer flex items-center gap-1"
                       >
-                        + Add Bullet Point
+                        <span>+ Add Highlight</span>
                       </button>
                     </div>
 
                     <div className="space-y-2">
-                      {day.items?.map((item, iIdx) => (
-                        <div key={iIdx} className="flex items-center gap-2">
-                          <span className="text-[#C5A059] font-bold text-xs">•</span>
+                      {(stop.highlights || []).map((hl, hlIdx) => (
+                        <div key={hlIdx} className="flex items-center gap-2">
+                          <span className="text-[#C5A059] font-bold text-xs shrink-0">•</span>
                           <input
                             type="text"
-                            value={item}
-                            onChange={(e) => handleUpdateDayItem(dIdx, iIdx, e.target.value)}
-                            className="flex-1 px-3 py-1.5 border border-slate-200 bg-white text-xs text-[#0F172A] focus:outline-none focus:border-[#C5A059]"
+                            value={hl}
+                            onChange={(e) => handleUpdateHighlight(sIdx, hlIdx, e.target.value)}
+                            placeholder="e.g. Darshan of Baba Neem Karoli Maharaj sanctum & Hanuman temple."
+                            className="flex-1 px-3 py-1.5 border border-slate-300 bg-white text-xs text-[#0F172A] focus:outline-none focus:border-[#C5A059]"
                           />
                           <button
                             type="button"
-                            onClick={() => handleRemoveDayItem(dIdx, iIdx)}
-                            className="text-slate-400 hover:text-rose-600 text-xs px-2 py-1 cursor-pointer border border-transparent hover:border-slate-200"
-                            title="Remove bullet point"
+                            onClick={() => handleRemoveHighlight(sIdx, hlIdx)}
+                            className="text-slate-400 hover:text-rose-600 text-xs px-2 py-1 cursor-pointer border border-transparent hover:border-slate-300"
+                            title="Remove highlight"
                           >
                             ✕
                           </button>
@@ -654,36 +569,52 @@ export const LandingCmsManager = () => {
                     </div>
                   </div>
 
-                  <div>
-                    <label className="block text-[11px] font-cinzel font-bold text-[#0F172A] mb-1">
-                      Footer Distance / Journey Note
-                    </label>
-                    <input
-                      type="text"
-                      value={day.note}
-                      onChange={(e) => handleUpdateDay(dIdx, 'note', e.target.value)}
-                      placeholder="e.g. 85 km • ~3 hrs scenic mountain drive"
-                      className="w-full px-3.5 py-1.5 border border-slate-200 bg-white text-xs text-slate-600 focus:outline-none focus:border-[#C5A059]"
-                    />
+                  {/* Row 5: Sacred Chant & Safety Tip */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-slate-200">
+                    <div>
+                      <label className="block text-[11px] font-cinzel font-bold text-[#0F172A] mb-1">
+                        Shrine Blessing / Sacred Chant
+                      </label>
+                      <input
+                        type="text"
+                        value={stop.shrineBlessing || ''}
+                        onChange={(e) => handleUpdateStop(sIdx, 'shrineBlessing', e.target.value)}
+                        placeholder="e.g. जय बाबा नीम करोली • Jai Gurudev"
+                        className="w-full px-3.5 py-2 border border-slate-300 bg-white text-xs font-serif text-[#0F172A] focus:outline-none focus:border-[#C5A059]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-cinzel font-bold text-[#0F172A] mb-1">
+                        Mountain Road &amp; Safety Tip
+                      </label>
+                      <input
+                        type="text"
+                        value={stop.safetyTip || ''}
+                        onChange={(e) => handleUpdateStop(sIdx, 'safetyTip', e.target.value)}
+                        placeholder="e.g. Narrow canyon route with devotee traffic; use licensed mountain chauffeurs."
+                        className="w-full px-3.5 py-2 border border-slate-300 bg-white text-xs text-slate-700 focus:outline-none focus:border-[#C5A059]"
+                      />
+                    </div>
                   </div>
                 </div>
-              ))}
-            </div>
+              );
+            })()}
 
-            <div className="flex justify-end">
+            <div className="flex justify-end pt-2">
               <button
                 type="submit"
                 disabled={isSaving}
                 className="px-6 py-2.5 text-xs font-cinzel font-bold bg-[#0B1118] hover:bg-[#111827] text-white border border-[#C5A059]/40 shadow-xs cursor-pointer disabled:opacity-50 transition"
               >
-                {isSaving ? 'Publishing...' : 'Save 3-Day Itinerary'}
+                {isSaving ? 'Publishing...' : 'Save Mandir Mala Circuit'}
               </button>
             </div>
           </div>
         </form>
       )}
 
-      {/* Tab 4: Authentic Visitor FAQs */}
+      {/* Tab 2: Authentic Visitor FAQs */}
       {activeSubTab === 'faqs' && (
         <form onSubmit={handleSave} className="space-y-6">
           <div className="bg-white p-4 sm:p-6 border border-[#C5A059]/30 shadow-xs space-y-6">

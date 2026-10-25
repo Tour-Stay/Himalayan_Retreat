@@ -70,6 +70,22 @@ const siteSettingsSchema = new mongoose.Schema(
           note: { type: String, default: '85 km • ~3 hrs scenic mountain drive' },
         },
       ],
+      mandirMala: [
+        {
+          id: { type: String },
+          num: { type: String },
+          name: { type: String },
+          shortName: { type: String },
+          artworkLabel: { type: String },
+          distance: { type: String },
+          fromHotel: { type: String },
+          altitude: { type: String },
+          desc: { type: String },
+          highlights: [{ type: String }],
+          safetyTip: { type: String },
+          shrineBlessing: { type: String },
+        },
+      ],
       faqs: [
         {
           q: { type: String, default: '' },

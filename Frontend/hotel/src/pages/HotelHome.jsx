@@ -342,22 +342,10 @@ export default function HotelHome() {
   }, [lightboxIndex, filteredGallery.length]);
 
   // Today's date ISO
-<<<<<<< HEAD
-  const [minDate, setMinDate] = useState('');
-
-  useEffect(() => {
-    const now = new Date();
-    const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
-      .toISOString()
-      .slice(0, 10);
-    setMinDate(today);
-  }, []);
-=======
   const now = new Date();
   const minDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
     .toISOString()
     .slice(0, 10);
->>>>>>> 322a316534a6e06ddf8daabda404cfe34bef3474
 
   const getDepartureMin = () => {
     if (!arrivalDate) return minDate;
