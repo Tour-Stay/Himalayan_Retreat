@@ -154,7 +154,7 @@ export const DriverManager = () => {
       <div className="bg-white p-5 sm:p-6 border border-slate-300 shadow-sm">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 mb-5 border-b border-slate-200">
           <div>
-            <span className="text-[10px] uppercase tracking-[0.2em] text-[#242A10] font-cinzel font-bold inline-block px-2 py-0.5 bg-[#AEAC78]/20 border border-[#AEAC78]/40 mb-1">
+            <span className="text-[10px] uppercase tracking-[0.2em] text-[#073125] font-cinzel font-bold inline-block px-2 py-0.5 bg-[#073125]/10 border border-[#073125]/20 mb-1">
               Travel Logistics &amp; Driver Authority Desk
             </span>
             <h3 className="font-serif text-lg sm:text-2xl font-bold text-[#0F172A]">
@@ -193,7 +193,7 @@ export const DriverManager = () => {
             <div>
               <div className="flex items-center justify-between gap-2 mb-2">
                 <span className="text-xl">⛰️</span>
-                <span className="text-[10px] font-mono uppercase text-[#0F172A] font-bold bg-[#AEAC78]/25 px-2 py-0.5 border border-[#AEAC78]/40">
+                <span className="text-[10px] font-mono uppercase text-[#073125] font-bold bg-[#073125]/10 px-2 py-0.5 border border-[#073125]/20">
                   High Altitude
                 </span>
               </div>

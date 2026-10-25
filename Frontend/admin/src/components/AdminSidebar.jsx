@@ -185,24 +185,24 @@ export const AdminSidebar = ({
 
   return (
     <>
-      {/* ── 1. Desktop Sidebar (#AEAC78) - Supports Expanded & Minimized Mode ── */}
+      {/* ── 1. Desktop Sidebar (#073125) - Supports Expanded & Minimized Mode ── */}
       <aside
-        className={`hidden lg:flex shrink-0 bg-[#AEAC78] border-r border-[#8F8D5D] flex-col justify-between h-full overflow-y-auto z-20 text-[#1B1E0C] transition-all duration-200 ${
+        className={`hidden lg:flex shrink-0 bg-[#073125] border-r border-[#052219] flex-col justify-between h-full overflow-y-auto z-20 text-[#DCE9E4] transition-all duration-200 ${
           isDesktopSidebarCollapsed ? 'w-16 xl:w-18 p-2' : 'w-64 xl:w-72 p-4'
         }`}
       >
         <div className="space-y-4">
           {/* Top Collapse/Expand Toggle Header on Desktop */}
-          <div className="flex items-center justify-between pb-2.5 border-b border-[#1B1E0C]/15">
+          <div className="flex items-center justify-between pb-2.5 border-b border-white/10">
             {!isDesktopSidebarCollapsed ? (
               <>
-                <span className="text-[10px] font-cinzel uppercase tracking-widest text-[#1B1E0C] font-bold">
+                <span className="text-[10px] font-cinzel uppercase tracking-widest text-[#C9F24D] font-bold">
                   Operations Desk
                 </span>
                 <button
                   type="button"
                   onClick={onToggleDesktopSidebar}
-                  className="flex items-center gap-1 px-2 py-1 bg-white/70 hover:bg-white text-[#1B1E0C] text-[10px] font-cinzel font-bold border border-[#1B1E0C]/20 transition cursor-pointer shadow-2xs"
+                  className="flex items-center gap-1 px-2 py-1 bg-white/10 hover:bg-white/20 text-[#DCE9E4] text-[10px] font-cinzel font-bold border border-white/15 transition cursor-pointer shadow-2xs"
                   title="Minimize Sidebar to icons (Widescreen Mode)"
                 >
                   <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -215,7 +215,7 @@ export const AdminSidebar = ({
               <button
                 type="button"
                 onClick={onToggleDesktopSidebar}
-                className="w-full flex items-center justify-center p-2 bg-white/80 hover:bg-white text-[#1B1E0C] border border-[#1B1E0C]/20 transition cursor-pointer shadow-2xs"
+                className="w-full flex items-center justify-center p-2 bg-white/10 hover:bg-white/20 text-[#DCE9E4] border border-white/15 transition cursor-pointer shadow-2xs"
                 title="Expand Sidebar (Show full titles)"
               >
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -230,9 +230,9 @@ export const AdminSidebar = ({
             <div key={sIdx} className="space-y-1">
               {/* Section Header (Hidden when collapsed) */}
               {!isDesktopSidebarCollapsed && (
-                <div className="flex items-center justify-between px-2.5 py-1 text-[11px] font-cinzel font-bold text-[#1B1E0C] uppercase tracking-wider border-b border-[#1B1E0C]/15">
+                <div className="flex items-center justify-between px-2.5 py-1 text-[11px] font-cinzel font-bold text-[#C9F24D] uppercase tracking-wider border-b border-white/10">
                   <span>{section.title}</span>
-                  <span className="text-[10px] opacity-70 font-sans font-medium">
+                  <span className="text-[10px] text-white/50 font-sans font-medium">
                     {section.badge}
                   </span>
                 </div>
@@ -253,17 +253,17 @@ export const AdminSidebar = ({
                         onClick={() => onSelectTab && onSelectTab(item.id)}
                         className={`p-2.5 flex items-center justify-center transition cursor-pointer relative group ${
                           isActive
-                            ? 'bg-white text-[#1B1E0C] font-bold shadow-xs border border-[#1B1E0C]/20'
-                            : 'text-[#1B1E0C] hover:bg-white/40'
+                            ? 'bg-[#C9F24D] text-[#073125] font-bold shadow-xs border border-[#C9F24D]'
+                            : 'text-[#DCE9E4]/80 hover:bg-white/10 hover:text-white'
                         }`}
                         title={`${item.label} (${section.title})`}
                       >
-                        <span className={isActive ? 'text-black' : 'text-[#1B1E0C]'}>
+                        <span className={isActive ? 'text-[#073125]' : 'text-[#DCE9E4]'}>
                           {item.icon}
                         </span>
 
                         {item.alertCount > 0 && (
-                          <span className="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-rose-600 animate-pulse" />
+                          <span className="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse" />
                         )}
                       </Link>
                     );
@@ -277,12 +277,12 @@ export const AdminSidebar = ({
                       onClick={() => onSelectTab && onSelectTab(item.id)}
                       className={`flex items-center justify-between gap-3 px-3 py-2 text-xs transition cursor-pointer ${
                         isActive
-                          ? 'bg-white text-[#1B1E0C] font-bold shadow-xs border border-white'
-                          : 'text-[#1B1E0C] hover:bg-white/40'
+                          ? 'bg-[#C9F24D] text-[#073125] font-bold shadow-xs border border-[#C9F24D]'
+                          : 'text-[#DCE9E4]/80 hover:bg-white/10 hover:text-white'
                       }`}
                     >
                       <div className="flex items-center gap-2.5">
-                        <span className={isActive ? 'text-black' : 'text-[#1B1E0C]'}>
+                        <span className={isActive ? 'text-[#073125]' : 'text-[#DCE9E4]'}>
                           {item.icon}
                         </span>
                         <span className="font-medium tracking-wide">{item.label}</span>
@@ -293,8 +293,8 @@ export const AdminSidebar = ({
                           <span
                             className={`px-1.5 py-0.5 text-[10px] font-bold ${
                               isActive
-                                ? 'bg-amber-100 text-amber-900 border border-amber-300'
-                                : 'bg-rose-100 text-rose-800 border border-rose-300 animate-pulse'
+                                ? 'bg-[#073125] text-amber-300 border border-[#073125]/20'
+                                : 'bg-rose-500/20 text-rose-300 border border-rose-500/40 animate-pulse'
                             }`}
                             title={`${item.alertCount} action items`}
                           >
@@ -306,8 +306,8 @@ export const AdminSidebar = ({
                           <span
                             className={`px-2 py-0.5 text-[11px] font-mono font-semibold ${
                               isActive
-                                ? 'bg-[#FAF8F5] text-[#1B1E0C] border border-slate-300'
-                                : 'bg-white/60 text-[#1B1E0C] border border-[#1B1E0C]/20'
+                                ? 'bg-[#073125] text-[#C9F24D] border border-[#073125]/20'
+                                : 'bg-white/10 text-white/90 border border-white/15'
                             }`}
                           >
                             {item.count}
@@ -318,8 +318,8 @@ export const AdminSidebar = ({
                           <span
                             className={`px-1.5 py-0.5 text-[9px] uppercase font-bold tracking-wider ${
                               isActive
-                                ? 'bg-[#FAF8F5] text-[#1B1E0C]'
-                                : 'bg-white/50 text-[#1B1E0C]'
+                                ? 'bg-[#073125] text-[#C9F24D]'
+                                : 'bg-white/10 text-[#DCE9E4]/80 border border-white/10'
                             }`}
                           >
                             {item.badgeText}
@@ -336,16 +336,16 @@ export const AdminSidebar = ({
 
         {/* Desktop Property Info Box */}
         {!isDesktopSidebarCollapsed && (
-          <div className="mt-6 pt-4 border-t border-[#1B1E0C]/15">
-            <div className="p-3 bg-white/70 border border-[#1B1E0C]/20 text-xs">
+          <div className="mt-6 pt-4 border-t border-white/10">
+            <div className="p-3 bg-black/20 border border-white/10 text-xs">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-[11px] font-cinzel font-bold text-[#1B1E0C] flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+                <span className="text-[11px] font-cinzel font-bold text-white flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#C9F24D]" />
                   Hotel Operations Desk
                 </span>
-                <span className="text-[10px] text-emerald-800 font-semibold font-mono">Live</span>
+                <span className="text-[10px] text-[#C9F24D] font-semibold font-mono">Live</span>
               </div>
-              <p className="text-[10px] text-slate-700 mt-0.5 font-sans">
+              <p className="text-[10px] text-[#DCE9E4]/70 mt-0.5 font-sans">
                 Kasar Devi, Almora • 2,116m Elevation
               </p>
             </div>
@@ -353,15 +353,15 @@ export const AdminSidebar = ({
         )}
       </aside>
 
-      {/* ── 2. Mobile Fixed Bottom Navigation Bar (#AEAC78) ── */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#AEAC78] border-t border-[#8F8D5D] h-16 flex items-center justify-around px-2 shadow-lg">
+      {/* ── 2. Mobile Fixed Bottom Navigation Bar (#073125) ── */}
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#073125] border-t border-[#052219] h-16 flex items-center justify-around px-2 shadow-2xl">
         
         {/* Tab 1: Bookings */}
         <button
           type="button"
           onClick={() => handleMobileNavSelect('hotel-bookings')}
           className={`flex-1 py-1 flex flex-col items-center justify-center transition relative ${
-            activeTab === 'hotel-bookings' ? 'text-white font-bold bg-[#828052]/70' : 'text-[#1B1E0C] hover:text-black'
+            activeTab === 'hotel-bookings' ? 'text-[#073125] font-bold bg-[#C9F24D]' : 'text-[#DCE9E4]/75 hover:text-white'
           }`}
         >
           <div className="relative">
@@ -382,7 +382,7 @@ export const AdminSidebar = ({
           type="button"
           onClick={() => handleMobileNavSelect('rooms')}
           className={`flex-1 py-1 flex flex-col items-center justify-center transition relative ${
-            activeTab === 'rooms' ? 'text-white font-bold bg-[#828052]/70' : 'text-[#1B1E0C] hover:text-black'
+            activeTab === 'rooms' ? 'text-[#073125] font-bold bg-[#C9F24D]' : 'text-[#DCE9E4]/75 hover:text-white'
           }`}
         >
           <div className="relative">
@@ -390,7 +390,7 @@ export const AdminSidebar = ({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
             </svg>
             {stats.availableRooms !== undefined && (
-              <span className="absolute -top-1 -right-2 px-1 bg-white border border-slate-400 text-[#1B1E0C] text-[8px] font-mono font-bold">
+              <span className="absolute -top-1 -right-2 px-1 bg-white/20 border border-white/30 text-white text-[8px] font-mono font-bold">
                 {stats.availableRooms}
               </span>
             )}
@@ -403,7 +403,7 @@ export const AdminSidebar = ({
           type="button"
           onClick={() => handleMobileNavSelect('travel-bookings')}
           className={`flex-1 py-1 flex flex-col items-center justify-center transition relative ${
-            activeTab === 'travel-bookings' ? 'text-white font-bold bg-[#828052]/70' : 'text-[#1B1E0C] hover:text-black'
+            activeTab === 'travel-bookings' ? 'text-[#073125] font-bold bg-[#C9F24D]' : 'text-[#DCE9E4]/75 hover:text-white'
           }`}
         >
           <div className="relative">
@@ -431,7 +431,7 @@ export const AdminSidebar = ({
             }
           }}
           className={`flex-1 py-1 flex flex-col items-center justify-center transition relative ${
-            isMobileDrawerOpen ? 'text-white font-bold bg-[#828052]/70' : 'text-[#1B1E0C] hover:text-black'
+            isMobileDrawerOpen ? 'text-[#073125] font-bold bg-[#C9F24D]' : 'text-[#DCE9E4]/75 hover:text-white'
           }`}
           title="Open complete navigation menu"
         >
@@ -442,7 +442,7 @@ export const AdminSidebar = ({
         </button>
       </nav>
 
-      {/* ── 3. Mobile Slide-Out Management Drawer (#AEAC78) ── */}
+      {/* ── 3. Mobile Slide-Out Management Drawer (#073125) ── */}
       {isMobileDrawerOpen && (
         <div className="lg:hidden fixed inset-0 z-50 flex justify-end">
           
@@ -453,21 +453,21 @@ export const AdminSidebar = ({
           />
 
           {/* Drawer Body */}
-          <div className="relative w-4/5 max-w-sm bg-[#AEAC78] border-l border-[#8F8D5D] h-full flex flex-col justify-between p-5 z-10 text-[#1B1E0C] shadow-2xl overflow-y-auto">
+          <div className="relative w-4/5 max-w-sm bg-[#073125] border-l border-[#052219] h-full flex flex-col justify-between p-5 z-10 text-[#DCE9E4] shadow-2xl overflow-y-auto">
             
             <div className="space-y-6">
               {/* Drawer Top Header */}
-              <div className="flex items-center justify-between pb-4 border-b border-[#1B1E0C]/20">
+              <div className="flex items-center justify-between pb-4 border-b border-white/10">
                 <div>
-                  <span className="text-[10px] font-cinzel uppercase tracking-[0.2em] text-[#1B1E0C] font-bold block">
+                  <span className="text-[10px] font-cinzel uppercase tracking-[0.2em] text-[#C9F24D] font-bold block">
                     Management Desk
                   </span>
-                  <h3 className="font-serif text-lg font-bold text-[#1B1E0C]">All Hotel Modules</h3>
+                  <h3 className="font-serif text-lg font-bold text-white">All Hotel Modules</h3>
                 </div>
                 <button
                   type="button"
                   onClick={onCloseMobileDrawer}
-                  className="w-8 h-8 bg-white/80 border border-[#1B1E0C]/20 text-[#1B1E0C] hover:bg-white flex items-center justify-center font-bold text-sm cursor-pointer"
+                  className="w-8 h-8 bg-white/10 border border-white/20 text-white hover:bg-white/20 flex items-center justify-center font-bold text-sm cursor-pointer"
                 >
                   ✕
                 </button>
@@ -476,7 +476,7 @@ export const AdminSidebar = ({
               {/* Module Groups */}
               {sections.map((section, sIdx) => (
                 <div key={sIdx} className="space-y-1.5">
-                  <div className="text-[10px] font-cinzel uppercase tracking-widest text-[#1B1E0C] font-bold border-b border-[#1B1E0C]/15 pb-1">
+                  <div className="text-[10px] font-cinzel uppercase tracking-widest text-[#C9F24D] font-bold border-b border-white/10 pb-1">
                     {section.title}
                   </div>
                   <div className="flex flex-col gap-1">
@@ -491,18 +491,20 @@ export const AdminSidebar = ({
                           onClick={() => handleMobileNavSelect(item.id)}
                           className={`flex items-center justify-between px-3 py-2.5 text-xs transition ${
                             isActive
-                              ? 'bg-white text-[#1B1E0C] font-bold shadow-xs'
-                              : 'text-[#1B1E0C] hover:bg-white/40'
+                              ? 'bg-[#C9F24D] text-[#073125] font-bold shadow-xs'
+                              : 'text-[#DCE9E4]/85 hover:bg-white/10 hover:text-white'
                           }`}
                         >
                           <div className="flex items-center gap-2.5">
-                            <span className={isActive ? 'text-black' : 'text-[#1B1E0C]'}>
+                            <span className={isActive ? 'text-[#073125]' : 'text-[#DCE9E4]'}>
                               {item.icon}
                             </span>
                             <span>{item.label}</span>
                           </div>
                           {item.count !== undefined && (
-                            <span className="text-[11px] font-mono opacity-80">{item.count}</span>
+                            <span className={`text-[11px] font-mono ${isActive ? 'text-[#073125] font-bold' : 'opacity-80'}`}>
+                              {item.count}
+                            </span>
                           )}
                         </Link>
                       );
@@ -512,8 +514,8 @@ export const AdminSidebar = ({
               ))}
 
               {/* Live Website Links */}
-              <div className="space-y-2 pt-2 border-t border-[#1B1E0C]/20">
-                <span className="text-[10px] font-cinzel uppercase tracking-widest text-[#1B1E0C] font-bold block">
+              <div className="space-y-2 pt-2 border-t border-white/10">
+                <span className="text-[10px] font-cinzel uppercase tracking-widest text-[#C9F24D] font-bold block">
                   Public Websites
                 </span>
                 <div className="grid grid-cols-3 gap-1.5 text-center text-xs">
@@ -521,7 +523,7 @@ export const AdminSidebar = ({
                     href={APP_URLS.landing}
                     target="_blank"
                     rel="noreferrer"
-                    className="p-2 bg-white/70 border border-[#1B1E0C]/20 text-[#1B1E0C] hover:bg-white font-medium"
+                    className="p-2 bg-white/10 border border-white/15 text-white hover:bg-white/20 font-medium"
                   >
                     Main ↗
                   </a>
@@ -529,7 +531,7 @@ export const AdminSidebar = ({
                     href={APP_URLS.hotel}
                     target="_blank"
                     rel="noreferrer"
-                    className="p-2 bg-white/70 border border-[#1B1E0C]/20 text-[#1B1E0C] hover:bg-white font-medium"
+                    className="p-2 bg-white/10 border border-white/15 text-white hover:bg-white/20 font-medium"
                   >
                     Hotel ↗
                   </a>
@@ -537,7 +539,7 @@ export const AdminSidebar = ({
                     href={APP_URLS.travel}
                     target="_blank"
                     rel="noreferrer"
-                    className="p-2 bg-white/70 border border-[#1B1E0C]/20 text-[#1B1E0C] hover:bg-white font-medium"
+                    className="p-2 bg-white/10 border border-white/15 text-white hover:bg-white/20 font-medium"
                   >
                     Cabs ↗
                   </a>
@@ -546,11 +548,11 @@ export const AdminSidebar = ({
             </div>
 
             {/* Logout Row in Mobile Drawer */}
-            <div className="pt-6 border-t border-[#1B1E0C]/20 mt-6">
+            <div className="pt-6 border-t border-white/10 mt-6">
               <button
                 type="button"
                 onClick={handleLogout}
-                className="w-full py-2.5 bg-rose-900 hover:bg-rose-800 text-white text-xs font-cinzel font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-xs"
+                className="w-full py-2.5 bg-rose-900/90 hover:bg-rose-900 text-white text-xs font-cinzel font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-xs border border-rose-700/50"
               >
                 <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />

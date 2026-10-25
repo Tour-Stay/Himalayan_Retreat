@@ -1,4 +1,4 @@
-const { uploadToCloudinary } = require('./config/cloudinary');
+const { uploadToCloudinary } = require('../config/cloudinary');
 
 async function test() {
   try {

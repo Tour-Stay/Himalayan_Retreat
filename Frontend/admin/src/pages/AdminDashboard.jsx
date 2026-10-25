@@ -78,7 +78,7 @@ export const AdminDashboard = () => {
 
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-[#97D7FF] text-[#0F172A] flex flex-col font-sans selection:bg-[#0F172A]/20 selection:text-[#0F172A]">
+    <div className="h-screen w-screen overflow-hidden bg-[#F8FAF7] text-[#0F172A] flex flex-col font-sans selection:bg-[#073125]/20 selection:text-[#073125]">
       {/* Top Navbar (#ACC5A6) */}
       <AdminHeader
         onRefresh={refreshData}
@@ -91,7 +91,7 @@ export const AdminDashboard = () => {
         onToggleDesktopSidebar={() => setIsDesktopSidebarCollapsed((prev) => !prev)}
       />
 
-      {/* Strict Workspace: Fixed Sidebar (#AEAC78) + Scrollable Content Area (#97D7FF) */}
+      {/* Strict Workspace: Fixed Sidebar (#073125) + Scrollable Content Area (#F8FAF7) */}
       <div className="flex-1 w-full overflow-hidden flex flex-col lg:flex-row min-h-0">
         {/* Desktop Sidebar & Mobile Bottom Navigation Bar / Management Drawer */}
         <AdminSidebar
@@ -106,15 +106,15 @@ export const AdminDashboard = () => {
           onToggleDesktopSidebar={() => setIsDesktopSidebarCollapsed((prev) => !prev)}
         />
 
-        {/* Scrollable Middle Content Page ONLY (#97D7FF Background) */}
-        <main className="flex-1 h-full overflow-y-auto overflow-x-hidden p-3.5 sm:p-6 lg:p-8 min-w-0 bg-[#97D7FF] admin-table-container pb-24 lg:pb-8">
+        {/* Scrollable Middle Content Page ONLY (#F8FAF7 Background) */}
+        <main className="flex-1 h-full overflow-y-auto overflow-x-hidden p-3.5 sm:p-6 lg:p-8 min-w-0 bg-[#F8FAF7] admin-table-container pb-24 lg:pb-8">
           {/* Top KPI Metrics Strip */}
           <KpiCards stats={stats} onSelectTab={handleSelectTab} />
 
-          {/* Tab Header Banner (Clean White Architectural Card on #97D7FF) */}
+          {/* Tab Header Banner (Clean White Architectural Card on #F8FAF7) */}
           <div className="bg-white p-4 sm:p-5 border border-slate-300 shadow-sm mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <span className="text-[10px] uppercase tracking-[0.2em] text-[#242A10] font-cinzel font-bold inline-block px-2 py-0.5 bg-[#AEAC78]/25 border border-[#AEAC78]/50 mb-1">
+              <span className="text-[10px] uppercase tracking-[0.2em] text-[#073125] font-cinzel font-bold inline-block px-2 py-0.5 bg-[#073125]/10 border border-[#073125]/20 mb-1">
                 The Kasar Himalayan Heights • Operations Desk
               </span>
               <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#0F172A] tracking-tight">
