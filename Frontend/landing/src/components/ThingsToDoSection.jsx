@@ -137,7 +137,12 @@ const ThingsToDoSection = () => {
   const { settings } = useSiteSettings();
   const [activeIdx, setActiveIdx] = useState(0); // Starts at Base Camp (01)
 
-  const activeStop = WAYPOINTS[activeIdx] || WAYPOINTS[0];
+  const waypoints =
+    settings?.landingContent?.mandirMala && settings.landingContent.mandirMala.length > 0
+      ? settings.landingContent.mandirMala
+      : WAYPOINTS;
+
+  const activeStop = waypoints[activeIdx] || waypoints[0];
 
   return (
     <section
@@ -195,7 +200,7 @@ const ThingsToDoSection = () => {
               <MandirMalaMap2D
                 activeIdx={activeIdx}
                 onSelectStop={setActiveIdx}
-                waypoints={WAYPOINTS}
+                waypoints={waypoints}
               />
             </div>
           </div>
@@ -220,7 +225,7 @@ const ThingsToDoSection = () => {
             {/* Horizontal Scrollable Stop Selector Tabs */}
             <div className="w-full flex-shrink-0 mb-3.5">
               <div className="flex items-center gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden w-full">
-                {WAYPOINTS.map((wp, idx) => {
+                {waypoints.map((wp, idx) => {
                   const isActive = activeIdx === idx;
                   return (
                     <button

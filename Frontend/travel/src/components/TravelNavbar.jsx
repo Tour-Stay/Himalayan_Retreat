@@ -49,20 +49,20 @@ const TravelNavbar = () => {
 
       {/* 2. MAIN HEADER NAVBAR — Matches Hotel Deep Teal #073125 Style */}
       <div className="w-full bg-[#073125] text-white border-b border-white/10 shadow-md">
-        <div className="w-[min(1240px,calc(100%-36px))] min-h-[76px] sm:min-h-[82px] mx-auto flex items-center justify-between gap-6 py-2">
+        <div className="w-[min(1240px,calc(100%-24px))] sm:w-[min(1240px,calc(100%-36px))] min-h-[72px] sm:min-h-[82px] mx-auto flex items-center justify-between gap-3 sm:gap-6 py-2">
           {/* Brand Logo & Name */}
-          <Link to="/" className="inline-flex items-center gap-3 text-inherit no-underline flex-shrink-0 group">
+          <Link to="/" className="inline-flex items-center gap-2.5 sm:gap-3 text-inherit no-underline min-w-0 flex-1 group">
             <img
               src="/logo.svg"
-              alt="The Kasar Himalayan Expeditions"
-              className="h-12 sm:h-14 w-auto object-contain filter drop-shadow brightness-110 group-hover:scale-105 transition-transform"
+              alt="The Kasar Himalayan Heights (Satya’s)"
+              className="h-11 sm:h-14 w-auto object-contain filter drop-shadow brightness-110 group-hover:scale-105 transition-transform shrink-0"
             />
-            <span className="flex flex-col leading-tight">
-              <strong className="font-serif text-[1.22rem] sm:text-[1.32rem] font-medium text-white tracking-wide">
-                The Kasar
+            <span className="flex flex-col leading-tight min-w-0">
+              <strong className="font-serif text-[1.12rem] sm:text-[1.32rem] font-medium text-white tracking-wide truncate">
+                The Kasar Himalayan Heights
               </strong>
-              <span className="text-[#C9F24D] text-[0.62rem] tracking-[0.2em] uppercase font-sans font-semibold">
-                Himalayan Expeditions · Satya’s
+              <span className="text-[#C9F24D] text-[0.60rem] sm:text-[0.62rem] tracking-[0.16em] uppercase font-sans font-semibold truncate">
+                (Satya’s) • Chauffeured Mountain Fleet
               </span>
             </span>
           </Link>
@@ -118,7 +118,7 @@ const TravelNavbar = () => {
           </nav>
 
           {/* Mobile Menu Button */}
-          <div className="flex md:hidden items-center">
+          <div className="flex md:hidden items-center shrink-0">
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

@@ -7,18 +7,12 @@ const bcrypt = require('bcrypt');
 const check = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URI);
-    const admin = await Admin.findOne({ email: 'admin@himalayan.com' }) || await Admin.findOne({});
-    if (!admin) {
-      console.log('No admin found in database!');
-    } else {
-      console.log('Admin found:', admin.email);
-      console.log('Hashed Password in DB:', admin.password);
-      
-      const pepper = process.env.PASSWORD_PEPPER || '';
-      console.log('Pepper from env:', pepper ? 'Configured' : 'Missing');
-      
-      const isMatch = await admin.comparePassword('Admin@2026Secure!');
-      console.log('Does Admin@2026Secure! match default seed?', isMatch);
+    const admins = await Admin.find({});
+    console.log(`Total admins in DB: ${admins.length}`);
+    for (const a of admins) {
+      console.log(`- Admin: ${a.email}`);
+      const isMatch = await a.comparePassword('himalayan123');
+      console.log(`  Password 'himalayan123' valid: ${isMatch}`);
     }
   } catch (err) {
     console.error('Error checking admin:', err);

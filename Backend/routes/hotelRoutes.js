@@ -46,6 +46,7 @@ router.get('/rooms-admin', authMiddleware, getAllRoomsAdmin);  // Fetch ALL room
 router.post('/rooms', authMiddleware, upload.array('images', 10), addRoom);  // Add room with up to 10 images
 router.put('/rooms/:id', authMiddleware, upload.array('images', 10), updateRoom);  // Update room (with optional new images)
 router.put('/rooms/:id/toggle', authMiddleware, toggleRoomAvailability);  // Toggle room availability
+router.put('/rooms/:id/availability', authMiddleware, toggleRoomAvailability);  // Alias for availability toggle
 router.delete('/rooms/:id', authMiddleware, deleteRoom); // Delete a room
 router.get('/bookings', authMiddleware, getAllBookings);  // View all reservations
 router.get('/bookings/police-register', authMiddleware, exportPoliceRegister); // Export police verification register (CSV)

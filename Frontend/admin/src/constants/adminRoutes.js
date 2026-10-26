@@ -58,9 +58,9 @@ export const PATH_TO_TAB = {
   'routes': 'routes',
   'settings/routes': 'routes',
   'dashboard/routes': 'routes',
-  'announcements': 'announcements',
-  'settings/announcements': 'announcements',
-  'dashboard/announcements': 'announcements',
+  'announcements': 'landing-cms',
+  'settings/announcements': 'landing-cms',
+  'dashboard/announcements': 'landing-cms',
   'landing-cms': 'landing-cms',
   'landing': 'landing-cms',
   'settings/landing-cms': 'landing-cms',
@@ -82,7 +82,7 @@ export const ADMIN_TAB_TITLES = {
   drivers: 'Chauffeur Tariffs, Night Charges & Driver Directory | Admin CMS',
   routes: 'Temple & Sightseeing Route Fares | Admin CMS',
   announcements: 'Emergency Notice Ribbon & Devotional Hero | Admin CMS',
-  'landing-cms': 'Landing Website CMS & Pilgrimage Itinerary | Admin CMS',
+  'landing-cms': 'Mandir Mala (7 Sacred Stops) & Visitor FAQs | Admin CMS',
   policies: 'Resort Policies, Dining Hours & FAQs | Admin CMS',
 };
 

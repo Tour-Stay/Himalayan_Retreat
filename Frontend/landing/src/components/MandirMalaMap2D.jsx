@@ -748,7 +748,7 @@ const MandirMalaMap2D = ({ activeIdx, onSelectStop, waypoints }) => {
         </button>
         <div className="flex min-w-0 flex-col items-center text-center">
           <span className="truncate font-heading font-medium text-xs sm:text-sm text-white tracking-wide">
-            Stop {String(activeIdx + 1).padStart(2, '0')} · {nameOf(cur)}
+            Stop {String(activeIdx + 1).padStart(2, '0')} · {waypoints?.[activeIdx]?.name || nameOf(cur)}
           </span>
           <button
             type="button"
