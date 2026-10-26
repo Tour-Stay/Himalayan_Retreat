@@ -19,26 +19,26 @@ const seedAdmin = async () => {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('Connected to MongoDB...');
 
-    const adminEmail = process.env.ADMIN_EMAIL || 'divyanthakur856@gmail.com';
-    const adminPassword = process.env.ADMIN_PASSWORD || 'Deepak&Lalit';
+    const adminEmail = process.env.ADMIN_EMAIL || 'himalayan@gmail.com';
+    const adminPassword = process.env.ADMIN_PASSWORD || 'himalayan123';
 
-    // Check if admin already exists
-    const existingAdmin = await Admin.findOne({ email: adminEmail });
-    if (existingAdmin) {
-      console.log(`⚠️  Admin (${adminEmail}) already exists. No action taken.`);
-      process.exit(0);
-    }
+    // Remove all previous admin accounts from the database
+    const deleteResult = await Admin.deleteMany({});
+    console.log(`🗑️ Removed ${deleteResult.deletedCount} old admin account(s) from database.`);
 
-    // Create the admin (password auto-hashed with pepper by pre-save hook)
+    // Create the new admin (password auto-hashed with salt & pepper by pre-save hook)
     const admin = await Admin.create({
       email: adminEmail,
       password: adminPassword,
     });
 
+    // Verification check
+    const isValid = await admin.comparePassword(adminPassword);
+
     console.log('✅ Admin created successfully!');
     console.log(`   Email: ${admin.email}`);
     console.log(`   Password: ${adminPassword}`);
-    console.log('🔒 Remember to change the password or remove this file in production.');
+    console.log(`   Verification Test: ${isValid ? 'PASSED (Ready to log in)' : 'FAILED'}`);
     process.exit(0);
   } catch (error) {
     console.error('❌ Error seeding admin:', error.message);

@@ -24,7 +24,6 @@ export const AdminSidebar = ({
   const sections = [
     {
       title: 'Hotel & Stays',
-      badge: 'Rooms',
       items: [
         {
           id: 'hotel-bookings',
@@ -46,7 +45,6 @@ export const AdminSidebar = ({
             </svg>
           ),
           count: stats.totalRooms,
-          badgeText: `${stats.availableRooms || 0} Open`,
         },
         {
           id: 'yield',
@@ -56,13 +54,11 @@ export const AdminSidebar = ({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
             </svg>
           ),
-          badgeText: 'Tariffs',
         },
       ],
     },
     {
       title: 'Cabs & Drivers',
-      badge: 'Fleet',
       items: [
         {
           id: 'travel-bookings',
@@ -84,7 +80,6 @@ export const AdminSidebar = ({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           ),
-          badgeText: 'Per-KM',
         },
         {
           id: 'drivers',
@@ -94,7 +89,6 @@ export const AdminSidebar = ({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
           ),
-          badgeText: 'Batta',
         },
         {
           id: 'routes',
@@ -105,7 +99,6 @@ export const AdminSidebar = ({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           ),
-          badgeText: 'Fares',
         },
         {
           id: 'tours',
@@ -121,27 +114,15 @@ export const AdminSidebar = ({
     },
     {
       title: 'Website Settings',
-      badge: 'Manage',
       items: [
         {
-          id: 'announcements',
-          label: 'Notice Banner',
-          icon: (
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
-            </svg>
-          ),
-          badgeText: 'Top Bar',
-        },
-        {
           id: 'landing-cms',
-          label: 'Main Page Content',
+          label: 'Mandir Mala & FAQs',
           icon: (
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
             </svg>
           ),
-          badgeText: 'Quote & FAQ',
         },
         {
           id: 'company',
@@ -151,7 +132,6 @@ export const AdminSidebar = ({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
             </svg>
           ),
-          badgeText: 'Contacts',
         },
         {
           id: 'policies',
@@ -161,7 +141,6 @@ export const AdminSidebar = ({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
           ),
-          badgeText: 'Rules',
         },
         {
           id: 'reviews',
@@ -232,9 +211,11 @@ export const AdminSidebar = ({
               {!isDesktopSidebarCollapsed && (
                 <div className="flex items-center justify-between px-2.5 py-1 text-[11px] font-cinzel font-bold text-[#C9F24D] uppercase tracking-wider border-b border-white/10">
                   <span>{section.title}</span>
-                  <span className="text-[10px] text-white/50 font-sans font-medium">
-                    {section.badge}
-                  </span>
+                  {section.badge && (
+                    <span className="text-[10px] text-white/50 font-sans font-medium">
+                      {section.badge}
+                    </span>
+                  )}
                 </div>
               )}
 

@@ -210,7 +210,7 @@ ${itemsSummary}
 💵 *Net Balance Due at Checkout:* ₹${balanceDue.toLocaleString('en-IN')}
 ────────────────────────
 UPI Settlement ID: ${settings.company?.upiId || 'kasarhimalayan@upi'}
-Reception Front Desk: ${settings.company?.conciergePhone || '+91 96906 21247'}
+Reception Front Desk: ${settings.company?.conciergePhone || '+91 88999 33339'}
 
 Thank you for staying with us at Kasar Devi! 🙏`;
 
@@ -554,7 +554,7 @@ Thank you for staying with us at Kasar Devi! 🙏`;
                     {company.hotelAddress || "Crank's Ridge, Kasar Devi, Almora, Uttarakhand, India (6,942 ft)"}
                   </p>
                   <p className="text-xs font-sans text-slate-500">
-                    Phone: {company.conciergePhone || '+91 96906 21247'} • Email: {company.email || 'concierge@kasarhimalayanheights.com'}
+                    Phone: {company.conciergePhone || '+91 88999 33339'} • Email: {company.email || 'concierge@kasarhimalayanheights.com'}
                   </p>
                   <p className="text-[11px] font-mono text-slate-600 mt-0.5">
                     GSTIN: 05AAACH1234F1Z9 • SAC Code: 996311 (Hotel Accommodation)

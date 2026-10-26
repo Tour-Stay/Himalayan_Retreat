@@ -29,15 +29,15 @@ const TravelFooter = () => {
             <a href="/" className="inline-flex items-center gap-3 text-inherit no-underline group">
               <img
                 src="/logo.svg"
-                alt="The Kasar Himalayan Expeditions"
+                alt="The Kasar Himalayan Heights (Satya’s)"
                 className="h-12 sm:h-14 w-auto object-contain filter drop-shadow brightness-110 group-hover:scale-105 transition-transform"
               />
               <div className="flex flex-col leading-tight">
                 <strong className="font-serif text-[1.25rem] font-medium text-white tracking-wide">
-                  The Kasar
+                  The Kasar Himalayan Heights
                 </strong>
-                <span className="text-[#C9F24D] text-[0.62rem] tracking-[0.2em] uppercase font-sans font-semibold">
-                  Himalayan Expeditions · Satya’s
+                <span className="text-[#C9F24D] text-[0.62rem] tracking-[0.16em] uppercase font-sans font-semibold">
+                  (Satya’s) • Chauffeured Mountain Fleet
                 </span>
               </div>
             </a>

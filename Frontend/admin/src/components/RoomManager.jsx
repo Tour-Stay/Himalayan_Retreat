@@ -331,7 +331,7 @@ export const RoomManager = ({ rooms = [], setRooms, onRefresh }) => {
           </div>
 
           {/* Filter Pills */}
-          <div className="flex items-center gap-1 bg-slate-50 p-1 border border-slate-200 text-xs shrink-0">
+          <div className="flex items-center gap-1 bg-slate-50 p-1 border border-slate-200 text-xs overflow-x-auto max-w-full scrollbar-none">
             <button
               onClick={() => setFilterAvailability('all')}
               className={`px-3 py-1 font-cinzel font-semibold transition cursor-pointer ${
@@ -402,7 +402,7 @@ export const RoomManager = ({ rooms = [], setRooms, onRefresh }) => {
             <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
             </svg>
-            <span>+ Add Suite</span>
+            <span>Add Suite</span>
           </button>
         </div>
       </div>

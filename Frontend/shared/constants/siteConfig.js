@@ -27,15 +27,15 @@ export const APP_URLS = {
 // Core Brand Metadata & Geolocation Details
 export const SITE_CONFIG = {
   brandName: 'The Kasar Himalayan Heights & Expeditions',
-  hotelName: 'The Kasar Himalayan Heights',
+  hotelName: 'The Kasar Himalayan Heights (Satya’s)',
   travelName: 'Himalayan Expeditions',
   elevation: '6,942 ft',
   tagline: 'High-Altitude Luxury Boutique Chalet & Chauffeured Mountain Expeditions',
   hotelLocation: 'Kasar Devi, Almora, Uttarakhand, India (6,942 ft)',
   travelHub: 'Almora Station Base, Uttarakhand, India',
-  conciergePhone: '+91 96906 21247',
-  whatsappNumber: '919690621247',
-  whatsappDisplay: '+91 96906 21247',
+  conciergePhone: '+91 88999 33339',
+  whatsappNumber: '918899933339',
+  whatsappDisplay: '+91 88999 33339',
   email: 'concierge@kasarhimalayanheights.com',
   mapsUrl: 'https://maps.google.com/?q=The+Kasar+Himalayan+Heights,+Kasar+Devi,+Almora,+Uttarakhand',
   socials: {
