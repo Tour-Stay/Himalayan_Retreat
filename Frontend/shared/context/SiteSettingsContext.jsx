@@ -9,13 +9,13 @@ import { broadcastUpdate, subscribeToUpdates } from '../utils/syncBroadcaster';
 const fallbackSettings = {
   company: {
     brandName: SITE_CONFIG.brandName || 'The Kasar Himalayan Heights & Expeditions',
-    hotelName: SITE_CONFIG.hotelName || 'The Kasar Himalayan Heights',
+    hotelName: SITE_CONFIG.hotelName || 'The Kasar Himalayan Heights (Satya’s)',
     travelName: SITE_CONFIG.travelName || 'Himalayan Expeditions',
     tagline: SITE_CONFIG.tagline || 'High-Altitude Luxury Boutique Chalet & Chauffeured Mountain Expeditions',
     elevation: SITE_CONFIG.elevation || '6,942 ft',
-    conciergePhone: SITE_CONFIG.conciergePhone || '+91 96906 21247',
-    whatsappNumber: SITE_CONFIG.whatsappNumber || '919690621247',
-    whatsappDisplay: SITE_CONFIG.whatsappDisplay || '+91 96906 21247',
+    conciergePhone: SITE_CONFIG.conciergePhone || '+91 88999 33339',
+    whatsappNumber: SITE_CONFIG.whatsappNumber || '918899933339',
+    whatsappDisplay: SITE_CONFIG.whatsappDisplay || '+91 88999 33339',
     email: SITE_CONFIG.email || 'concierge@kasarhimalayanheights.com',
     hotelAddress: SITE_CONFIG.hotelLocation || "Crank's Ridge, Kasar Devi, Almora, Uttarakhand, India (6,942 ft)",
     travelHubAddress: SITE_CONFIG.travelHub || 'Almora Station Base, Uttarakhand, India',

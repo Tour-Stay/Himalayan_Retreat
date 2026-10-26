@@ -50,7 +50,7 @@ const sendHotelBookingEmail = async (booking, room) => {
               <td style="padding: 10px 0; font-weight: bold; text-align: right; color: #2d6a4f; font-size: 18px;">₹${booking.totalAmount}</td>
             </tr>
           </table>
-          <p style="color: #555;">If you have any questions, feel free to reach out via WhatsApp or call us at <strong>+91 96906 21247</strong>.</p>
+          <p style="color: #555;">If you have any questions, feel free to reach out via WhatsApp or call us at <strong>+91 88999 33339</strong>.</p>
           <p style="color: #888; font-size: 12px; margin-top: 30px;">This is an automated confirmation. Please do not reply to this email.</p>
         </div>
       </div>
@@ -139,7 +139,7 @@ const sendTravelBookingEmail = async (booking, tourPackage) => {
               <td style="padding: 10px 0; font-weight: bold; text-align: right; color: #2d6a4f; font-size: 18px;">₹${booking.totalAmount}</td>
             </tr>
           </table>
-          <p style="color: #555;">We'll be in touch with more details closer to your travel date. If you need immediate assistance, call or WhatsApp our Admin desk at <strong>+91 96906 21247</strong>.</p>
+          <p style="color: #555;">We'll be in touch with more details closer to your travel date. If you need immediate assistance, call or WhatsApp our Admin desk at <strong>+91 88999 33339</strong>.</p>
           <p style="color: #888; font-size: 12px; margin-top: 30px;">This is an automated confirmation. Please do not reply to this email.</p>
         </div>
       </div>

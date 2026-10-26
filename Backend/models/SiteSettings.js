@@ -12,9 +12,9 @@ const siteSettingsSchema = new mongoose.Schema(
         default: 'High-Altitude Luxury Boutique Chalet & Chauffeured Mountain Expeditions',
       },
       elevation: { type: String, default: '6,942 ft' },
-      conciergePhone: { type: String, default: '+91 96906 21247' },
-      whatsappNumber: { type: String, default: '919690621247' },
-      whatsappDisplay: { type: String, default: '+91 96906 21247' },
+      conciergePhone: { type: String, default: '+91 88999 33339' },
+      whatsappNumber: { type: String, default: '918899933339' },
+      whatsappDisplay: { type: String, default: '+91 88999 33339' },
       email: { type: String, default: 'concierge@kasarhimalayanheights.com' },
       hotelAddress: {
         type: String,

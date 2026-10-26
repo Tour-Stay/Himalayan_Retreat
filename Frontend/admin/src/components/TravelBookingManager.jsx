@@ -200,7 +200,7 @@ export const TravelBookingManager = ({ bookings, setBookings, onRefresh }) => {
     const travelDate = formatDate(b.travelDate);
     const pickup = b.pickupLocation || 'Kathgodam / Kasar Devi';
 
-    const message = `Namaste ${guestName} ji! 🚙 Greetings from The Kasar Himalayan Heights Travel Desk.\n\nWe have received your trip inquiry:\n🎯 Route: *${destination}*\n🚘 Vehicle: ${vehicle}\n📍 Pickup Point: ${pickup}\n📅 Date: ${travelDate}\n👥 Travelers: ${b.travelers || 2} Persons\n💵 Fare: ₹${Number(b.totalAmount || 0).toLocaleString('en-IN')}\n\nOur mountain driver coordinator will call you a day prior with the driver name and vehicle number. For immediate assistance, feel free to call our desk at +91 96906 21247!`;
+    const message = `Namaste ${guestName} ji! 🚙 Greetings from The Kasar Himalayan Heights Travel Desk.\n\nWe have received your trip inquiry:\n🎯 Route: *${destination}*\n🚘 Vehicle: ${vehicle}\n📍 Pickup Point: ${pickup}\n📅 Date: ${travelDate}\n👥 Travelers: ${b.travelers || 2} Persons\n💵 Fare: ₹${Number(b.totalAmount || 0).toLocaleString('en-IN')}\n\nOur mountain driver coordinator will call you a day prior with the driver name and vehicle number. For immediate assistance, feel free to call our desk at +91 88999 33339!`;
 
     const url = `https://wa.me/${phoneWithCountry}?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank', 'noopener,noreferrer');
@@ -308,13 +308,13 @@ export const TravelBookingManager = ({ bookings, setBookings, onRefresh }) => {
         </div>
 
         {/* Status Filters */}
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex items-center gap-2 overflow-x-auto max-w-full pb-1 lg:pb-0 scrollbar-none">
           {/* Trip Status filter */}
-          <div className="flex items-center gap-1 bg-[#FAF8F5] p-1 border border-slate-200 text-xs overflow-x-auto scrollbar-none">
-            <span className="text-[10px] uppercase font-cinzel px-2 text-slate-500 font-semibold">Trip:</span>
+          <div className="flex items-center gap-1 bg-[#FAF8F5] p-1 border border-slate-200 text-xs shrink-0 w-max">
+            <span className="text-[10px] uppercase font-cinzel px-2 text-slate-500 font-semibold shrink-0">Trip:</span>
             <button
               onClick={() => setStatusFilter('all')}
-              className={`px-2.5 py-1 capitalize font-cinzel font-semibold transition cursor-pointer ${
+              className={`px-2.5 py-1 capitalize font-cinzel font-semibold transition cursor-pointer shrink-0 whitespace-nowrap ${
                 statusFilter === 'all'
                   ? 'bg-[#0B1118] text-[#D4AF37] shadow-xs'
                   : 'text-slate-600 hover:text-[#0F172A]'
@@ -324,13 +324,13 @@ export const TravelBookingManager = ({ bookings, setBookings, onRefresh }) => {
             </button>
             <button
               onClick={() => setStatusFilter('today')}
-              className={`px-2.5 py-1 font-cinzel font-semibold transition cursor-pointer flex items-center gap-1.5 ${
+              className={`px-2.5 py-1 font-cinzel font-semibold transition cursor-pointer shrink-0 whitespace-nowrap flex items-center gap-1.5 ${
                 statusFilter === 'today'
                   ? 'bg-[#0B1118] text-[#D4AF37] shadow-xs font-bold'
                   : 'text-slate-600 hover:text-[#0F172A]'
               }`}
             >
-              <svg className="w-3.5 h-3.5 text-[#C5A059]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-3.5 h-3.5 text-[#C5A059] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
               <span>Today ({summary.todayTrips})</span>
@@ -339,7 +339,7 @@ export const TravelBookingManager = ({ bookings, setBookings, onRefresh }) => {
               <button
                 key={status}
                 onClick={() => setStatusFilter(status)}
-                className={`px-2.5 py-1 capitalize font-cinzel font-semibold transition cursor-pointer ${
+                className={`px-2.5 py-1 capitalize font-cinzel font-semibold transition cursor-pointer shrink-0 whitespace-nowrap ${
                   statusFilter === status
                     ? 'bg-[#0B1118] text-[#D4AF37] shadow-xs'
                     : 'text-slate-600 hover:text-[#0F172A]'
@@ -351,13 +351,13 @@ export const TravelBookingManager = ({ bookings, setBookings, onRefresh }) => {
           </div>
 
           {/* Payment Status filter */}
-          <div className="flex items-center gap-1 bg-[#FAF8F5] p-1 border border-slate-200 text-xs">
-            <span className="text-[10px] uppercase font-cinzel px-2 text-slate-500 font-semibold">Pay:</span>
+          <div className="flex items-center gap-1 bg-[#FAF8F5] p-1 border border-slate-200 text-xs shrink-0 w-max">
+            <span className="text-[10px] uppercase font-cinzel px-2 text-slate-500 font-semibold shrink-0">Pay:</span>
             {['all', 'pending', 'paid', 'refunded'].map((pay) => (
               <button
                 key={pay}
                 onClick={() => setPaymentFilter(pay)}
-                className={`px-2.5 py-1 capitalize font-cinzel font-semibold transition cursor-pointer ${
+                className={`px-2.5 py-1 capitalize font-cinzel font-semibold transition cursor-pointer shrink-0 whitespace-nowrap ${
                   paymentFilter === pay
                     ? 'bg-[#0B1118] text-[#D4AF37] shadow-xs'
                     : 'text-slate-600 hover:text-[#0F172A]'
@@ -371,10 +371,10 @@ export const TravelBookingManager = ({ bookings, setBookings, onRefresh }) => {
           {/* Export CSV button */}
           <button
             onClick={handleExportCSV}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-cinzel font-semibold bg-[#FAF8F5] hover:bg-slate-200 text-[#0F172A] border border-slate-300 transition cursor-pointer shrink-0 shadow-2xs"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-cinzel font-semibold bg-[#FAF8F5] hover:bg-slate-200 text-[#0F172A] border border-slate-300 transition cursor-pointer shrink-0 whitespace-nowrap shadow-2xs"
             title="Download CSV spreadsheet for cab operations"
           >
-            <svg className="w-3.5 h-3.5 text-[#C5A059]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-3.5 h-3.5 text-[#C5A059] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
             <span>Export CSV</span>
@@ -827,7 +827,7 @@ export const TravelBookingManager = ({ bookings, setBookings, onRefresh }) => {
                 The Kasar Himalayan Heights
               </span>
               <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#0F172A]">Chauffeur Trip Dispatch Slip</h3>
-              <p className="text-xs text-slate-500">Mountain Cab Operations • Almora Hub • Tel: +91 96906 21247</p>
+              <p className="text-xs text-slate-500">Mountain Cab Operations • Almora Hub • Tel: +91 88999 33339</p>
             </div>
 
             {/* Slip Details */}

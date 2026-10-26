@@ -25,18 +25,17 @@ const PilgrimageCircuits = ({ onSelectDestination }) => {
   };
 
   return (
-    <section id="circuits" className="py-16 sm:py-20 px-4 sm:px-6 bg-[#FAF5EC] border-b border-[#EAA722]/30 relative">
+    <section id="circuits" className="py-16 sm:py-20 px-4 sm:px-6 bg-[#F4F7F3] border-b border-[#D5E0D8] relative">
       <div className="max-w-[1560px] mx-auto">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12 reveal">
-          <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#EAA722] text-[#541508] text-[11px] font-mono font-bold tracking-widest uppercase mb-2.5 shadow-xs">
-            <span className="text-xs">🪔</span>
-            <span>॥ पावन तीर्थ यात्रा एवं दर्शनीय स्थल ॥</span>
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#073125] text-[#C9F24D] text-[11px] font-sans font-bold tracking-widest uppercase mb-2.5 shadow-xs">
+            <span>POPULAR MOUNTAIN CIRCUITS</span>
           </span>
-          <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-[#541508] font-normal">
+          <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-[#073125] font-normal">
             Sacred Pilgrimage &amp; Mountain Circuits
           </h2>
-          <p className="mt-2 text-[#541508]/80 text-sm sm:text-base font-light">
+          <p className="mt-2 text-[#4A635A] text-sm sm:text-base font-light">
             Transparent fixed-fare cab tours from Almora and Kasar Devi to sacred temples and scenic viewpoints.
           </p>
 
@@ -52,10 +51,10 @@ const PilgrimageCircuits = ({ onSelectDestination }) => {
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-4 py-2 rounded-full text-xs font-mono uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                className={`px-4 py-2 rounded-full text-xs font-sans uppercase tracking-wider transition-all duration-300 cursor-pointer ${
                   activeTab === tab.id
-                    ? 'bg-[#541508] text-white font-bold shadow-md'
-                    : 'bg-white border border-[#541508]/20 text-[#541508] hover:bg-[#FAF0E6] font-medium'
+                    ? 'bg-[#073125] text-[#C9F24D] font-bold shadow-md'
+                    : 'bg-white border border-[#D5E0D8] text-[#073125] hover:bg-[#EDF2EC] font-medium'
                 }`}
               >
                 {tab.label}
@@ -69,7 +68,7 @@ const PilgrimageCircuits = ({ onSelectDestination }) => {
           {filtered.map((dest) => (
             <div
               key={dest.id}
-              className="bg-white rounded-3xl overflow-hidden border border-[#EAA722]/30 hover:border-[#EAA722]/70 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
+              className="bg-white rounded-3xl overflow-hidden border border-[#D5E0D8] hover:border-[#073125]/40 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
             >
               <div>
                 {/* Large Photo Showcase */}
@@ -89,11 +88,11 @@ const PilgrimageCircuits = ({ onSelectDestination }) => {
 
                   {/* Top Badges */}
                   <div className="absolute top-4 left-4 right-4 flex items-center justify-between gap-2">
-                    <span className="bg-[#EAA722] text-[#541508] text-xs font-mono uppercase tracking-wider font-bold px-3.5 py-1.5 rounded-full shadow-md">
+                    <span className="bg-[#073125] text-[#C9F24D] text-xs font-sans uppercase tracking-wider font-bold px-3.5 py-1.5 rounded-full shadow-md">
                       {dest.categoryLabel || 'Mountain Tour'}
                     </span>
                     {dest.saffronTag && (
-                      <span className="bg-black/65 backdrop-blur-md text-[#EAA722] text-xs font-devanagari px-3.5 py-1.5 rounded-full border border-white/20 font-semibold">
+                      <span className="bg-black/65 backdrop-blur-md text-[#C9F24D] text-xs font-sans px-3.5 py-1.5 rounded-full border border-white/20 font-semibold">
                         {dest.saffronTag}
                       </span>
                     )}
@@ -101,11 +100,11 @@ const PilgrimageCircuits = ({ onSelectDestination }) => {
 
                   {/* Bottom Image Specs */}
                   <div className="absolute bottom-3.5 left-4 right-4 flex items-center justify-between text-xs text-white">
-                    <span className="bg-black/65 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/20 font-mono font-medium flex items-center gap-1.5 text-xs">
-                      <MapPinIcon className="w-3.5 h-3.5 text-[#EAA722]" />
+                    <span className="bg-black/65 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/20 font-sans font-medium flex items-center gap-1.5 text-xs">
+                      <MapPinIcon className="w-3.5 h-3.5 text-[#C9F24D]" />
                       <span>{dest.distance}</span>
                     </span>
-                    <span className="bg-black/65 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/20 font-mono font-medium text-[#EAA722] text-xs">
+                    <span className="bg-black/65 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/20 font-sans font-medium text-[#C9F24D] text-xs">
                       {dest.elevationProfile || 'High-Altitude Ghat'}
                     </span>
                   </div>
@@ -113,11 +112,11 @@ const PilgrimageCircuits = ({ onSelectDestination }) => {
 
                 {/* Card Content */}
                 <div className="p-6 sm:p-7">
-                  <h3 className="font-serif text-2xl sm:text-3xl font-medium text-[#541508] mb-2 leading-snug">
+                  <h3 className="font-serif text-2xl sm:text-3xl font-medium text-[#073125] mb-2 leading-snug">
                     {dest.name}
                   </h3>
 
-                  <p className="text-[#5C5350] text-sm leading-relaxed mb-5 font-light">
+                  <p className="text-[#4A635A] text-sm leading-relaxed mb-5 font-light">
                     {dest.description}
                   </p>
 
@@ -126,7 +125,7 @@ const PilgrimageCircuits = ({ onSelectDestination }) => {
                     {dest.highlights.map((h, i) => (
                       <span
                         key={i}
-                        className="text-xs text-[#541508] bg-[#FAF5EC] px-3 py-1 rounded-lg border border-[#EAA722]/30 font-medium"
+                        className="text-xs text-[#073125] bg-[#F4F7F3] px-3 py-1 rounded-lg border border-[#D5E0D8] font-medium"
                       >
                         ✦ {h}
                       </span>
@@ -136,21 +135,21 @@ const PilgrimageCircuits = ({ onSelectDestination }) => {
               </div>
 
               {/* Bottom Tariff & Action Bar */}
-              <div className="p-6 sm:p-7 pt-4 border-t border-[#EAA722]/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-auto bg-[#FAFDF9]">
+              <div className="p-6 sm:p-7 pt-4 border-t border-[#D5E0D8] flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-auto bg-[#F8FAF7]">
                 <div className="flex items-center gap-6">
                   <div>
-                    <span className="text-[10px] text-[#5C5350] block leading-none mb-1 uppercase tracking-wider font-mono">
+                    <span className="text-[10px] text-[#4A635A] block leading-none mb-1 uppercase tracking-wider font-sans">
                       Sedan (4-Seater)
                     </span>
-                    <span className="text-[#541508] font-serif text-xl sm:text-2xl font-semibold font-numeral">
+                    <span className="text-[#073125] font-serif text-xl sm:text-2xl font-semibold font-numeral">
                       {dest.typicalFareSedan}
                     </span>
                   </div>
-                  <div className="pl-4 border-l border-[#EAA722]/20">
-                    <span className="text-[10px] text-[#5C5350] block leading-none mb-1 uppercase tracking-wider font-mono">
+                  <div className="pl-4 border-l border-[#D5E0D8]">
+                    <span className="text-[10px] text-[#4A635A] block leading-none mb-1 uppercase tracking-wider font-sans">
                       Innova SUV (6-Seater)
                     </span>
-                    <span className="text-[#541508] font-serif text-xl sm:text-2xl font-semibold font-numeral">
+                    <span className="text-[#073125] font-serif text-xl sm:text-2xl font-semibold font-numeral">
                       {dest.typicalFareInnova}
                     </span>
                   </div>
@@ -159,10 +158,10 @@ const PilgrimageCircuits = ({ onSelectDestination }) => {
                 <button
                   type="button"
                   onClick={() => handleBookCircuit(dest)}
-                  className="px-6 py-3 rounded-full text-xs font-mono uppercase tracking-wider font-bold bg-[#EAA722] hover:bg-[#D98E16] text-[#541508] flex items-center justify-center gap-1.5 transition-all shadow-md cursor-pointer group/btn hover:scale-102"
+                  className="px-6 py-3 rounded-full text-xs font-sans uppercase tracking-wider font-bold bg-[#C9F24D] hover:bg-[#bde63d] text-[#073125] flex items-center justify-center gap-1.5 transition-all shadow-md cursor-pointer group/btn hover:scale-102"
                 >
                   <span>Select &amp; Check Fare</span>
-                  <ArrowUpRightIcon className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-300" />
+                  <ArrowUpRightIcon className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-300 text-[#073125]" />
                 </button>
               </div>
             </div>

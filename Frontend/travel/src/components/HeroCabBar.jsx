@@ -35,20 +35,20 @@ const HeroCabBar = ({ onSearch }) => {
     <div className="w-full max-w-5xl mx-auto px-4 -mt-12 sm:-mt-16 relative z-30">
       <form
         onSubmit={handleSearchSubmit}
-        className="bg-[#FAF5EC] p-4 sm:p-5 rounded-2xl sm:rounded-3xl border border-[#EAA722]/40 shadow-2xl backdrop-blur-md grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 sm:gap-4 items-center"
+        className="bg-[#E2E6E8] p-4 sm:p-5 rounded-2xl sm:rounded-3xl border border-[#CBD2D7] shadow-2xl backdrop-blur-md grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 sm:gap-4 items-center"
       >
         {/* Field 1: Pickup Location */}
-        <div className="lg:col-span-3 p-3 bg-white rounded-xl border border-[#EAA722]/25 shadow-xs flex items-center gap-3">
-          <MapPinIcon className="w-4 h-4 text-[#EAA722] flex-shrink-0" />
+        <div className="lg:col-span-3 p-3 bg-white rounded-xl border border-[#D5E0D8] shadow-xs flex items-center gap-3">
+          <MapPinIcon className="w-4 h-4 text-[#073125] flex-shrink-0" />
           <div className="flex-1 min-w-0">
-            <label htmlFor="hero-pickup" className="block text-[10px] font-sans uppercase font-bold text-[#541508]/80 tracking-wider">
+            <label htmlFor="hero-pickup" className="block text-[10px] font-sans uppercase font-bold text-[#4A635A] tracking-wider">
               Pickup Point
             </label>
             <select
               id="hero-pickup"
               value={pickup}
               onChange={(e) => setPickup(e.target.value)}
-              className="w-full bg-transparent text-xs font-bold text-[#541508] focus:outline-none cursor-pointer truncate"
+              className="w-full bg-transparent text-xs font-bold text-[#073125] focus:outline-none cursor-pointer truncate"
             >
               <option value="Kathgodam Railway Station">Kathgodam Railway Station</option>
               <option value="Pantnagar Airport">Pantnagar Airport</option>
@@ -59,17 +59,17 @@ const HeroCabBar = ({ onSearch }) => {
         </div>
 
         {/* Field 2: Destination */}
-        <div className="lg:col-span-3 p-3 bg-white rounded-xl border border-[#EAA722]/25 shadow-xs flex items-center gap-3">
-          <CarIcon className="w-4 h-4 text-[#EAA722] flex-shrink-0" />
+        <div className="lg:col-span-3 p-3 bg-white rounded-xl border border-[#D5E0D8] shadow-xs flex items-center gap-3">
+          <CarIcon className="w-4 h-4 text-[#073125] flex-shrink-0" />
           <div className="flex-1 min-w-0">
-            <label htmlFor="hero-dest" className="block text-[10px] font-sans uppercase font-bold text-[#541508]/80 tracking-wider">
+            <label htmlFor="hero-dest" className="block text-[10px] font-sans uppercase font-bold text-[#4A635A] tracking-wider">
               Destination / Tour
             </label>
             <select
               id="hero-dest"
               value={destination}
               onChange={(e) => setDestination(e.target.value)}
-              className="w-full bg-transparent text-xs font-bold text-[#541508] focus:outline-none cursor-pointer truncate"
+              className="w-full bg-transparent text-xs font-bold text-[#073125] focus:outline-none cursor-pointer truncate"
             >
               {destinationsList ? (
                 destinationsList.map((d) => (
@@ -93,10 +93,10 @@ const HeroCabBar = ({ onSearch }) => {
         </div>
 
         {/* Field 3: Date */}
-        <div className="lg:col-span-2 p-3 bg-white rounded-xl border border-[#EAA722]/25 shadow-xs flex items-center gap-3">
-          <CalendarIcon className="w-4 h-4 text-[#EAA722] flex-shrink-0" />
+        <div className="lg:col-span-2 p-3 bg-white rounded-xl border border-[#D5E0D8] shadow-xs flex items-center gap-3">
+          <CalendarIcon className="w-4 h-4 text-[#073125] flex-shrink-0" />
           <div className="flex-1 min-w-0">
-            <label htmlFor="hero-date" className="block text-[10px] font-sans uppercase font-bold text-[#541508]/80 tracking-wider">
+            <label htmlFor="hero-date" className="block text-[10px] font-sans uppercase font-bold text-[#4A635A] tracking-wider">
               Travel Date
             </label>
             <input
@@ -105,23 +105,24 @@ const HeroCabBar = ({ onSearch }) => {
               value={date}
               min={new Date().toISOString().split('T')[0]}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full bg-transparent text-xs font-bold text-[#541508] focus:outline-none cursor-pointer"
-            />
+              className="w-full bg-transparent text-xs font-bold text-[#073125] focus:outline-none cursor-pointer"
+            >
+            </input>
           </div>
         </div>
 
         {/* Field 4: Vehicle Type */}
-        <div className="lg:col-span-2 p-3 bg-white rounded-xl border border-[#EAA722]/25 shadow-xs flex items-center gap-3">
-          <UsersIcon className="w-4 h-4 text-[#EAA722] flex-shrink-0" />
+        <div className="lg:col-span-2 p-3 bg-white rounded-xl border border-[#D5E0D8] shadow-xs flex items-center gap-3">
+          <UsersIcon className="w-4 h-4 text-[#073125] flex-shrink-0" />
           <div className="flex-1 min-w-0">
-            <label htmlFor="hero-vehicle" className="block text-[10px] font-sans uppercase font-bold text-[#541508]/80 tracking-wider">
+            <label htmlFor="hero-vehicle" className="block text-[10px] font-sans uppercase font-bold text-[#4A635A] tracking-wider">
               Cab Size
             </label>
             <select
               id="hero-vehicle"
               value={vehicle}
               onChange={(e) => setVehicle(e.target.value)}
-              className="w-full bg-transparent text-xs font-bold text-[#541508] focus:outline-none cursor-pointer truncate"
+              className="w-full bg-transparent text-xs font-bold text-[#073125] focus:outline-none cursor-pointer truncate"
             >
               {fleetList ? (
                 fleetList.map((f) => (
@@ -144,10 +145,10 @@ const HeroCabBar = ({ onSearch }) => {
         <div className="lg:col-span-2">
           <button
             type="submit"
-            className="w-full py-3.5 px-4 rounded-xl text-xs uppercase tracking-wider font-bold bg-[#EAA722] hover:bg-[#D98E16] text-[#541508] shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer hover:scale-102"
+            className="w-full py-3.5 px-4 rounded-xl text-xs uppercase tracking-wider font-bold bg-[#C9F24D] hover:bg-[#bde63d] text-[#073125] shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer hover:scale-102"
           >
             <span>Check Fare</span>
-            <ArrowUpRightIcon className="w-4 h-4 text-[#541508]" />
+            <ArrowUpRightIcon className="w-4 h-4 text-[#073125]" />
           </button>
         </div>
       </form>

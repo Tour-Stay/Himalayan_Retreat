@@ -201,14 +201,14 @@ export const CompanyManager = () => {
                   value={formData.conciergePhone}
                   onChange={handleChange}
                   required
-                  placeholder="+91 96906 21247"
+                  placeholder="+91 88999 33339"
                   className="w-full px-3.5 py-2 text-xs bg-[#FAF8F5] border border-slate-300 text-[#0F172A] font-mono focus:outline-none focus:border-[#C5A059] focus:bg-white"
                 />
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  WhatsApp Number (e.g. 919690621247)
+                  WhatsApp Number (e.g. 918899933339)
                 </label>
                 <input
                   type="text"
@@ -229,7 +229,7 @@ export const CompanyManager = () => {
                   name="whatsappDisplay"
                   value={formData.whatsappDisplay}
                   onChange={handleChange}
-                  placeholder="+91 96906 21247"
+                  placeholder="+91 88999 33339"
                   className="w-full px-3.5 py-2 text-xs bg-[#FAF8F5] border border-slate-300 text-[#0F172A] font-mono focus:outline-none focus:border-[#C5A059] focus:bg-white"
                 />
               </div>

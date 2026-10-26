@@ -465,20 +465,29 @@ body {
 
 .story-stamp {
   position: absolute;
-  right: -24px;
-  bottom: 24px;
-  width: 130px;
-  height: 130px;
-  display: grid;
-  place-content: center;
-  padding: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  color: var(--brand-deep);
-  background: var(--saffron);
+  right: 20px;
+  bottom: 20px;
+  width: 140px;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  color: #073125;
+  background: #C9F24D;
   text-align: center;
-  font: 1.3rem/1.08 var(--serif);
-  transform: rotate(4deg);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  transform: rotate(-3deg);
+  border-radius: 1.25rem;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+  z-index: 20;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+.story-stamp:hover {
+  transform: rotate(0deg) scale(1.05);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
 }
 
 .map-art {

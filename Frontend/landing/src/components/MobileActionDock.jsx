@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { APP_URLS, SITE_CONFIG, useSiteSettings } from '@shared';
+import { APP_URLS, SITE_CONFIG, useSiteSettings, WhatsAppIcon } from '@shared';
 
 const MobileActionDock = () => {
   const { settings } = useSiteSettings();
@@ -40,8 +40,8 @@ const MobileActionDock = () => {
           rel="noreferrer"
           className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-full bg-[#0D332D] hover:bg-[#12433B] text-white border border-[#EAA722]/40 text-xs font-semibold tracking-wider transition-all shadow-md active:scale-95"
         >
-          <span className="text-emerald-400 text-sm">💬</span>
-          <span className="truncate">Concierge</span>
+          <WhatsAppIcon className="w-4 h-4 text-[#25D366] shrink-0" />
+          <span className="truncate font-bold">WhatsApp</span>
         </a>
 
         {/* Explore Suites / Tariffs */}

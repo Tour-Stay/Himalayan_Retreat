@@ -289,12 +289,12 @@ export const HotelBookingManager = ({ bookings = [], setBookings, onRefresh }) =
         </div>
 
         {/* Status Filters & Export Buttons */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 lg:pb-0 scrollbar-none">
+        <div className="flex items-center gap-2 overflow-x-auto max-w-full pb-1 lg:pb-0 scrollbar-none">
           
-          <div className="flex items-center gap-1 bg-slate-50 p-1 border border-slate-200 text-xs">
+          <div className="flex items-center gap-1 bg-slate-50 p-1 border border-slate-200 text-xs shrink-0 w-max">
             <button
               onClick={() => setStatusFilter('all')}
-              className={`px-3 py-1 font-cinzel font-semibold transition cursor-pointer shrink-0 ${
+              className={`px-3 py-1 font-cinzel font-semibold transition cursor-pointer shrink-0 whitespace-nowrap ${
                 statusFilter === 'all'
                   ? 'bg-[#0F172A] text-white shadow-xs'
                   : 'text-slate-600 hover:text-[#0F172A]'
@@ -304,7 +304,7 @@ export const HotelBookingManager = ({ bookings = [], setBookings, onRefresh }) =
             </button>
             <button
               onClick={() => setStatusFilter('today')}
-              className={`px-3 py-1 font-cinzel font-semibold transition cursor-pointer shrink-0 flex items-center gap-1 ${
+              className={`px-3 py-1 font-cinzel font-semibold transition cursor-pointer shrink-0 whitespace-nowrap flex items-center gap-1 ${
                 statusFilter === 'today'
                   ? 'bg-blue-900 text-white shadow-xs'
                   : 'text-blue-900 hover:bg-blue-100/50'
@@ -318,7 +318,7 @@ export const HotelBookingManager = ({ bookings = [], setBookings, onRefresh }) =
                 <button
                   key={status}
                   onClick={() => setStatusFilter(status)}
-                  className={`px-3 py-1 font-cinzel font-semibold capitalize transition cursor-pointer shrink-0 ${
+                  className={`px-3 py-1 font-cinzel font-semibold capitalize transition cursor-pointer shrink-0 whitespace-nowrap ${
                     statusFilter === status
                       ? 'bg-[#0F172A] text-white shadow-xs'
                       : 'text-slate-600 hover:text-[#0F172A]'
@@ -332,10 +332,10 @@ export const HotelBookingManager = ({ bookings = [], setBookings, onRefresh }) =
 
           <button
             onClick={handleExportCSV}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-cinzel font-semibold bg-white hover:bg-slate-100 text-[#0F172A] border border-slate-300 transition cursor-pointer shrink-0 shadow-2xs"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-cinzel font-semibold bg-white hover:bg-slate-100 text-[#0F172A] border border-slate-300 transition cursor-pointer shrink-0 whitespace-nowrap shadow-2xs"
             title="Download CSV spreadsheet for accounting"
           >
-            <svg className="w-3.5 h-3.5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
             <span className="hidden sm:inline">Export CSV</span>
@@ -343,10 +343,10 @@ export const HotelBookingManager = ({ bookings = [], setBookings, onRefresh }) =
 
           <button
             onClick={handleExportPoliceRegister}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-cinzel font-semibold bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 transition cursor-pointer shrink-0 shadow-2xs"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-cinzel font-semibold bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 transition cursor-pointer shrink-0 whitespace-nowrap shadow-2xs"
             title="Download Uttarakhand Tourism / Police Verification Register"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 text-emerald-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 text-emerald-800 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
             </svg>
             <span className="hidden sm:inline">Police Register</span>

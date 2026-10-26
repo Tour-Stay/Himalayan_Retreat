@@ -35,33 +35,33 @@ export const AdminHeader = ({
       <div className="w-full px-3.5 sm:px-6 lg:px-8 h-16 sm:h-18 flex items-center justify-between gap-3">
         
         {/* Left: Brand Crest & Desk Title */}
-        <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1 sm:flex-initial">
           <Link
             to="/hotel-bookings"
-            className="flex items-center gap-2.5 sm:gap-3 hover:opacity-95 transition group shrink-0"
+            className="flex items-center gap-2.5 sm:gap-3 hover:opacity-95 transition group min-w-0"
           >
-            <div className="p-1 sm:p-1.5 bg-[#0F172A] border border-[#AEAC78]/50 shadow-xs flex items-center justify-center">
+            <div className="p-1 sm:p-1.5 bg-[#0F172A] border border-[#AEAC78]/50 shadow-xs flex items-center justify-center shrink-0">
               <Logo size={32} />
             </div>
-            <div>
+            <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <span className="font-serif font-bold text-sm sm:text-base lg:text-lg tracking-tight text-[#0F172A] group-hover:text-black transition-colors">
+                <span className="font-serif font-bold text-sm sm:text-base lg:text-lg tracking-tight text-[#0F172A] group-hover:text-black transition-colors truncate">
                   The Kasar Himalayan Heights
                 </span>
-                <span className="hidden sm:inline-flex items-center px-2 py-0.5 text-[9px] font-cinzel font-bold uppercase bg-white/80 text-[#0F172A] border border-[#233A26]/30">
-                  Admin Panel
+                <span className="hidden sm:inline-flex items-center px-2 py-0.5 text-[9px] font-cinzel font-bold uppercase bg-white/80 text-[#0F172A] border border-[#233A26]/30 shrink-0">
+                  (Satya’s)
                 </span>
               </div>
-              <div className="flex items-center gap-2 text-[11px] text-[#233A26]">
-                <span className="flex items-center gap-1 font-medium">
-                  <svg className="w-3 h-3 text-[#233A26]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="hidden xs:flex items-center gap-2 text-[11px] text-[#233A26] truncate">
+                <span className="flex items-center gap-1 font-medium truncate">
+                  <svg className="w-3 h-3 text-[#233A26] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
-                  <span>Kasar Devi, Almora</span>
+                  <span className="truncate">Kasar Devi, Almora</span>
                 </span>
                 <span>•</span>
-                <span className="text-[#0F172A] font-semibold flex items-center gap-1 font-mono">
+                <span className="text-[#0F172A] font-semibold flex items-center gap-1 font-mono shrink-0">
                   <span>{currentDate || 'Today'}</span>
                 </span>
               </div>
@@ -119,25 +119,26 @@ export const AdminHeader = ({
         {/* Right: Quick Action Controls */}
         <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
           
-          {/* Create Booking Button (Single plus icon with clean 'Booking' text) */}
+          {/* Create Booking Button */}
           <button
             type="button"
             onClick={onNewBooking}
-            className="flex items-center gap-1.5 px-3 sm:px-4 py-2 text-xs font-cinzel font-bold bg-[#0F172A] hover:bg-[#1E293B] text-white transition-all cursor-pointer shadow-sm border border-[#0F172A] active:scale-95"
+            className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-4 py-2 text-xs font-cinzel font-bold bg-[#0F172A] hover:bg-[#1E293B] text-white transition-all cursor-pointer shadow-sm border border-[#0F172A] active:scale-95 shrink-0"
             title="Add a walk-in or phone reservation"
           >
-            <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
             </svg>
-            <span className="whitespace-nowrap">New Booking</span>
+            <span className="whitespace-nowrap sm:hidden">Book</span>
+            <span className="whitespace-nowrap hidden sm:inline">New Booking</span>
           </button>
 
-          {/* Refresh Button */}
+          {/* Refresh Button (Desktop only; on mobile, available in bottom nav drawer) */}
           <button
             type="button"
             onClick={onRefresh}
             disabled={isRefreshing}
-            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-2 text-xs font-cinzel font-semibold bg-white/70 hover:bg-white text-[#0F172A] border border-[#233A26]/25 transition cursor-pointer disabled:opacity-50"
+            className="hidden sm:flex items-center gap-1.5 px-2.5 sm:px-3 py-2 text-xs font-cinzel font-semibold bg-white/70 hover:bg-white text-[#0F172A] border border-[#233A26]/25 transition cursor-pointer disabled:opacity-50 shrink-0"
             title="Reload latest bookings and updates"
           >
             <svg
@@ -156,30 +157,17 @@ export const AdminHeader = ({
             <span className="hidden md:inline">{isRefreshing ? 'Updating...' : 'Refresh'}</span>
           </button>
 
-          {/* Logout Button (Visible on BOTH Mobile & Desktop) */}
+          {/* Logout Button (Desktop only; on mobile, available in bottom nav drawer) */}
           <button
             type="button"
             onClick={handleLogout}
-            className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-2 text-xs font-cinzel font-semibold bg-white/80 hover:bg-rose-50 text-rose-800 hover:text-rose-900 border border-rose-300 transition cursor-pointer shadow-2xs"
+            className="hidden sm:flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-2 text-xs font-cinzel font-semibold bg-white/80 hover:bg-rose-50 text-rose-800 hover:text-rose-900 border border-rose-300 transition cursor-pointer shadow-2xs shrink-0"
             title="Sign out from admin panel"
           >
             <svg className="w-3.5 h-3.5 text-rose-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
             </svg>
-            <span className="hidden xs:inline">Logout</span>
-          </button>
-
-          {/* Mobile Menu Hamburger Button */}
-          <button
-            type="button"
-            onClick={onOpenMobileDrawer}
-            className="lg:hidden p-2 bg-white/80 border border-[#233A26]/30 text-[#0F172A] hover:bg-white transition cursor-pointer shadow-2xs"
-            title="Open management drawer"
-            aria-label="Toggle navigation drawer"
-          >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
+            <span>Logout</span>
           </button>
 
         </div>

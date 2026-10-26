@@ -331,7 +331,7 @@ export const RoomManager = ({ rooms = [], setRooms, onRefresh }) => {
           </div>
 
           {/* Filter Pills */}
-          <div className="flex items-center gap-1 bg-slate-50 p-1 border border-slate-200 text-xs shrink-0">
+          <div className="flex items-center gap-1 bg-slate-50 p-1 border border-slate-200 text-xs overflow-x-auto max-w-full scrollbar-none">
             <button
               onClick={() => setFilterAvailability('all')}
               className={`px-3 py-1 font-cinzel font-semibold transition cursor-pointer ${

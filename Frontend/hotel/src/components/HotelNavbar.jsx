@@ -36,23 +36,28 @@ const HotelNavbar = () => {
       <header className="sticky top-0 z-50 w-full font-sans transition-all duration-300">
         <div className="topline">A mountain pause · peace · faith · renewal</div>
         <div className="w-full bg-[#104c46] text-[#fffefa] py-3.5 px-4 sm:px-8 border-b border-white/15 shadow-md">
-          <div className="max-w-[1240px] mx-auto flex items-center justify-between gap-4">
-            <Link to="/" className="inline-flex items-center gap-3 group text-inherit no-underline">
+          <div className="max-w-[1240px] mx-auto flex items-center justify-between gap-3 sm:gap-4">
+            <Link to="/" className="inline-flex items-center gap-2.5 sm:gap-3 group text-inherit no-underline min-w-0 flex-1">
               <img
                 src="/logo.svg"
-                alt="The Kasar Himalayan Heights"
-                className="h-11 w-auto object-contain filter drop-shadow brightness-110"
+                alt="The Kasar Himalayan Heights (Satya’s)"
+                className="h-10 sm:h-11 w-auto object-contain filter drop-shadow brightness-110 shrink-0"
               />
-              <div className="flex flex-col leading-tight">
-                <strong className="font-serif text-lg font-medium text-white tracking-wide">The Kasar</strong>
-                <span className="text-[#d6e3dc] text-[0.58rem] tracking-[0.17em] uppercase">Himalayan Heights · Satya’s</span>
+              <div className="flex flex-col leading-tight min-w-0">
+                <strong className="font-serif text-sm sm:text-lg font-medium text-white tracking-wide truncate">
+                  The Kasar Himalayan Heights
+                </strong>
+                <span className="text-[#d6e3dc] text-[0.58rem] sm:text-[0.62rem] tracking-[0.15em] uppercase truncate">
+                  (Satya’s) • Boutique Mountain Chalet
+                </span>
               </div>
             </Link>
             <Link
               to="/"
-              className="px-4 py-2 rounded-[2px] text-xs font-sans font-bold uppercase tracking-wider border border-white/30 bg-white/10 text-white hover:bg-white/20 transition-all"
+              className="px-3 sm:px-4 py-2 rounded-[2px] text-xs font-sans font-bold uppercase tracking-wider border border-white/30 bg-white/10 text-white hover:bg-white/20 transition-all shrink-0 whitespace-nowrap"
             >
-              &larr; Back to Stay
+              <span className="hidden sm:inline">&larr; Back to Stay</span>
+              <span className="sm:hidden">&larr; Back</span>
             </Link>
           </div>
         </div>
@@ -69,18 +74,20 @@ const HotelNavbar = () => {
 
       {/* 2. MAIN HEADER NAVBAR */}
       <div className="w-full bg-[#073125] text-white border-b border-white/10 shadow-md">
-        <div className="w-[min(1240px,calc(100%-36px))] min-h-[76px] sm:min-h-[82px] mx-auto flex items-center justify-between gap-6 py-2">
+        <div className="w-[min(1240px,calc(100%-24px))] sm:w-[min(1240px,calc(100%-36px))] min-h-[72px] sm:min-h-[82px] mx-auto flex items-center justify-between gap-3 sm:gap-6 py-2">
           {/* Brand Logo & Name */}
-          <Link to="/" className="inline-flex items-center gap-3 text-inherit no-underline flex-shrink-0 group">
+          <Link to="/" className="inline-flex items-center gap-2.5 sm:gap-3 text-inherit no-underline min-w-0 flex-1 group">
             <img
               src="/logo.svg"
-              alt="The Kasar Himalayan Heights"
-              className="h-12 sm:h-14 w-auto object-contain filter drop-shadow brightness-110 group-hover:scale-105 transition-transform"
+              alt="The Kasar Himalayan Heights (Satya’s)"
+              className="h-11 sm:h-14 w-auto object-contain filter drop-shadow brightness-110 group-hover:scale-105 transition-transform shrink-0"
             />
-            <span className="flex flex-col leading-tight">
-              <strong className="font-serif text-[1.22rem] sm:text-[1.32rem] font-medium text-white tracking-wide">The Kasar</strong>
-              <span className="text-[#C9F24D] text-[0.62rem] tracking-[0.2em] uppercase font-sans font-semibold">
-                Himalayan Heights · Satya’s
+            <span className="flex flex-col leading-tight min-w-0">
+              <strong className="font-serif text-[1.12rem] sm:text-[1.32rem] font-medium text-white tracking-wide truncate">
+                The Kasar Himalayan Heights
+              </strong>
+              <span className="text-[#C9F24D] text-[0.60rem] sm:text-[0.62rem] tracking-[0.16em] uppercase font-sans font-semibold truncate">
+                (Satya’s) • Kasar Devi, Almora
               </span>
             </span>
           </Link>
@@ -114,7 +121,7 @@ const HotelNavbar = () => {
           </nav>
 
           {/* Mobile Menu Button */}
-          <div className="flex md:hidden items-center">
+          <div className="flex md:hidden items-center shrink-0">
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

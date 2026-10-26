@@ -117,7 +117,7 @@ ${dispatchNotes ? `📝 *Special Instructions:* ${dispatchNotes}\n` : ''}
 2. Drive carefully on mountain hairpins & ghat roads.
 3. Keep complimentary mineral water inside cab.
 ────────────────────────
-Resort Travel Desk: ${settings.company?.conciergePhone || '+91 96906 21247'}`;
+Resort Travel Desk: ${settings.company?.conciergePhone || '+91 88999 33339'}`;
 
     window.open(`https://wa.me/${phoneWithCountry}?text=${encodeURIComponent(text)}`, '_blank');
   };
@@ -140,11 +140,11 @@ Your chauffeured mountain cab for *${formatDate(booking.travelDate)}* has been a
 
 🚘 *Vehicle:* ${booking.vehicleType || 'Hill Cab'} (${vehiclePlate ? `Reg: ${vehiclePlate}` : 'Commercial Tourist Permit'})
 👤 *Dedicated Chauffeur:* ${driverName || 'Experienced Pahadi Chauffeur'}
-📞 *Chauffeur Mobile:* ${driverPhone || settings.company?.conciergePhone || '+91 96906 21247'}
+📞 *Chauffeur Mobile:* ${driverPhone || settings.company?.conciergePhone || '+91 88999 33339'}
 📍 *Pickup Point:* ${booking.pickupLocation || 'Kathgodam / Kasar Devi'}
 ${trainNumber ? `🚆 *Train Monitored:* ${trainNumber} (ETA: ${trainEta || 'On Schedule'})\n` : ''}
 ${Number(fareToCollect) > 0 ? `💰 *Balance Fare to Settle:* ₹${Number(fareToCollect).toLocaleString('en-IN')}\n` : '💰 *Fare:* Fully Paid / Settlement Handled\n'}
-Our driver will greet you with a name board at the meeting point. For any transit assistance on the highway, feel free to contact our round-the-clock desk at ${settings.company?.conciergePhone || '+91 96906 21247'}.
+Our driver will greet you with a name board at the meeting point. For any transit assistance on the highway, feel free to contact our round-the-clock desk at ${settings.company?.conciergePhone || '+91 88999 33339'}.
 
 Wishing you a peaceful and scenic journey to the Himalayas! 🌲🏔️`;
 

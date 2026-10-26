@@ -11,7 +11,7 @@ const MountainAddons = ({
   return (
     <div>
       <label className="text-sm uppercase font-bold text-[#541508] tracking-wider flex items-center gap-2 mb-2.5 font-mono">
-        <span className="text-[#EAA722]">🪔</span>
+        <span className="text-[#EAA722]">🏔️</span>
         <span>3. Free Mountain Halts &amp; Add-ons</span>
       </label>
 
